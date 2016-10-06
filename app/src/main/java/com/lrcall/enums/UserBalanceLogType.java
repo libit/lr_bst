@@ -1,0 +1,52 @@
+package com.lrcall.enums;
+
+/**
+ * 用户余额变动记录类型
+ * 
+ * @author libit
+ */
+public enum UserBalanceLogType
+{
+    BUY_PRODUCT(0, "购买商品"), BUY_DATA_TRAFFIC(1, "购买流量");
+    private int type;
+    private String desc;
+
+    private UserBalanceLogType(int type, String desc)
+    {
+        this.type = type;
+        this.desc = desc;
+    }
+
+    public int getType()
+    {
+        return type;
+    }
+
+    public void setType(int type)
+    {
+        this.type = type;
+    }
+
+    public String getDesc()
+    {
+        return desc;
+    }
+
+    public void setDesc(String desc)
+    {
+        this.desc = desc;
+    }
+
+    public static String getLogString(int logType)
+    {
+        UserBalanceLogType[] orderLogTypes = new UserBalanceLogType[] { BUY_PRODUCT };
+        for (UserBalanceLogType orderLogType : orderLogTypes)
+        {
+            if (logType == orderLogType.type)
+            {
+                return orderLogType.desc;
+            }
+        }
+        return "";
+    }
+}

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Libit保留所有版权，如有疑问联系QQ：308062035
+  ~ Copyright (c) 2016.
+  -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_adapter_item"
+        android:measureWithLargestChild="true"
+        android:orientation="horizontal"
+        android:padding="6dp">
+        <ImageView
+            android:id="@+id/iv_pic"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="top|left"
+            android:background="@color/transparent"
+            android:gravity="center_vertical"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textColor="#ff485266"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_remark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textColor="#ff485266"
+                android:textSize="16sp"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/btn_recharge"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/btn_primary_normal"
+            android:gravity="center"
+            android:text="0.00元"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_default"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="top|left"
+        android:background="@color/transparent"
+        android:gravity="center_vertical"
+        android:src="@drawable/background_new_angle"
+        android:visibility="gone"/>
+</FrameLayout>

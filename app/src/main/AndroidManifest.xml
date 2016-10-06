@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Libit保留所有版权，如有疑问联系QQ：308062035
+  ~ Copyright (c) 2016.
+  -->
+<manifest
+    package="com.lrcall.appbst"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <!-- 窗口至于顶层 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW"/>
+    <!-- unavailable in API 23 -->
+    <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
+    <!-- Normal Permissions 不需要运行时注册 -->
+    <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!--这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
+    <!-- 请求网络 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- 需要运行时注册的权限 -->
+    <!--用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!--读取缓存数据-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--用于读取手机当前的状态-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!-- 更改设置 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <!-- 环信需要的权限Required -->
+    <!--<uses-permission android:name="android.permission.VIBRATE"/>-->
+    <!--<uses-permission android:name="android.permission.INTERNET"/>-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!--<uses-permission android:name="android.permission.CAMERA"/>-->
+    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>-->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>-->
+    <!--<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>-->
+    <!--<uses-permission android:name="android.permission.WAKE_LOCK"/>-->
+    <!--<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>-->
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE"/>-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- 环信需要的权限结束 -->
+    <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false"/>
+    <!-- TODO replace above two with next line after Android 4.2 -->
+    <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false"/>
+    <uses-feature android:name="android.hardware.screen.landscape"/>
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false"/>
+    <!-- This excludes Google TV, which is unfortunately included by virtue of not requiring a camera -->
+    <uses-feature android:name="android.hardware.touchscreen"/>
+    <application
+        android:name="com.lrcall.appbst.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/MyAppTheme">
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="ffc26ecb301d4dfde3f9d0770e3915ea">
+        </meta-data>
+
+        <activity
+            android:name="com.lrcall.ui.ActivitySplash"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lrcall.ui.ActivityWelcome"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityMain"
+            android:launchMode="singleTask">
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN"/>-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name="com.lrcall.ui.ActivityDial"
+            android:launchMode="singleTask">
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN"/>-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name="com.lrcall.ui.ActivityLogin"
+            android:label="@string/title_activity_login"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityRegister"
+            android:label="@string/title_activity_register"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityChangePwd"
+            android:label="@string/title_activity_change_pwd"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityBackups"
+            android:label="@string/title_activity_backups"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityContactDetail"
+            android:label="@string/activity_title_contact_detail"/>
+        <activity
+            android:name="com.lrcall.ui.ActivitySearchContacts"
+            android:label="@string/activity_title_search"/>
+        <activity
+            android:name="com.lrcall.ui.ActivitySearchProducts"
+            android:label="@string/activity_title_search"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityProduct"
+            android:label="@string/title_activity_product"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityStarList"
+            android:label="@string/title_activity_star_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityBalanceLog"
+            android:label="@string/title_activity_balance_log"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityPayList"
+            android:label="@string/title_activity_pay_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityUserAgentInfo"
+            android:label="@string/title_activity_user_agent_info"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityPayList1"
+            android:label="@string/title_activity_pay_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityDataTrafficPayList"
+            android:label="@string/title_activity_pay_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityProductHistoryList"
+            android:label="@string/title_activity_product_history_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityRechargeDataTraffic"
+            android:label="@string/title_activity_recharge_data_traffic"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityDataTrafficPayByBalance"
+            android:label="@string/title_activity_pay_by_balance"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityRechargeDataTrafficList"
+            android:label="@string/title_activity_recharge_data_traffic_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityWebView">
+            <!-- 拦截打开网址请求 -->
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.VIEW"/>-->
+            <!--<category android:name="android.intent.category.DEFAULT"/>-->
+            <!--<category android:name="android.intent.category.BROWSABLE"/>-->
+            <!--<data-->
+            <!--android:host="*"-->
+            <!--android:path="/*"-->
+            <!--android:scheme="http"/>-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name="com.lrcall.ui.ActivityNews"
+            android:label="@string/title_activity_news"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityOrderAdd"
+            android:label="@string/title_activity_add_order"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityOrderComment"
+            android:label="@string/title_activity_order_comment"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityAddressList"
+            android:label="@string/title_activity_address_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityAddressManage"
+            android:label="@string/title_activity_address_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivitySettings"
+            android:label="@string/title_activity_settings"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityOrders"
+            android:label="@string/title_activity_orders"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityUserWallet"
+            android:label="@string/title_activity_user_wallet"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityNewsList"
+            android:label="@string/title_activity_news_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityAddressAdd"
+            android:label="@string/title_activity_address_add"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityAddressEdit"
+            android:label="@string/title_activity_address_edit"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityAdvice"
+            android:label="@string/title_activity_advice"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityShopCart"
+            android:label="@string/title_activity_shop_cart"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityOrderDetail"
+            android:label="@string/title_activity_order_detail"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityPayByBalance"
+            android:label="@string/title_activity_pay_by_balance"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityPicView"/>
+        <!-- alipay sdk begin -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+        </activity>
+        <!-- alipay sdk end -->
+        <activity
+            android:name="com.google.zxing.client.android.CaptureActivity"
+            android:clearTaskOnLaunch="true"
+            android:label="@string/title_activity_qr"
+            android:stateNotNeeded="true"
+            android:windowSoftInputMode="stateAlwaysHidden"><!--android:screenOrientation="sensorLandscape" android:theme="@style/CaptureTheme"-->
+            <intent-filter>
+                <action android:name="com.google.zxing.client.android.SCAN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <!-- Allow web apps to launch Barcode Scanner by linking to http://zxing.appspot.com/scan. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="zxing.appspot.com"
+                    android:path="/scan"
+                    android:scheme="http"/>
+            </intent-filter>
+            <!-- We also support a Google Product Search URL. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="www.google.com"
+                    android:path="/m/products/scan"
+                    android:scheme="http"/>
+            </intent-filter>
+            <!-- And the UK version. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="www.google.co.uk"
+                    android:path="/m/products/scan"
+                    android:scheme="http"/>
+            </intent-filter>
+            <!-- Support zxing://scan/?... like iPhone app -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="scan"
+                    android:path="/"
+                    android:scheme="zxing"/>
+            </intent-filter>
+        </activity>
+        <provider
+            android:name="com.lrcall.db.DataBaseProvider"
+            android:authorities="lr_bst.db"
+            android:enabled="true"
+            android:exported="false">
+        </provider>
+        <!-- 定位需要的服务 -->
+        <service android:name="com.amap.api.location.APSService"/>
+        <!--&lt;!&ndash; 设置环信开始 &ndash;&gt;-->
+        <!--&lt;!&ndash; 设置环信应用的AppKey &ndash;&gt;-->
+        <!--<meta-data-->
+        <!--android:name="EASEMOB_APPKEY"-->
+        <!--android:value="YXA6QcPrQsnfsr88GKsu4mHgf4KIp_Q"/>-->
+        <!--&lt;!&ndash; 声明SDK所需的service SDK核心功能&ndash;&gt;-->
+        <!--<service-->
+        <!--android:name="com.hyphenate.chat.EMChatService"-->
+        <!--android:exported="true"/>-->
+        <!--&lt;!&ndash; 声明SDK所需的receiver &ndash;&gt;-->
+        <!--<receiver android:name="com.hyphenate.chat.EMMonitorReceiver">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.PACKAGE_REMOVED"/>-->
+        <!--<data android:scheme="package"/>-->
+        <!--</intent-filter>-->
+        <!--&lt;!&ndash; 可选filter &ndash;&gt;-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
+        <!--<action android:name="android.intent.action.USER_PRESENT"/>-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--&lt;!&ndash; 设置环信结束 &ndash;&gt;-->
+    </application>
+</manifest>
