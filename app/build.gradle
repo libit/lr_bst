@@ -21,15 +21,7 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
-    //配置keystore签名
-    signingConfigs {
-        release {
-            storeFile file("/Users/libit/android/key/libit.keystore")
-            storePassword "QQ:308062035"
-            keyAlias "libit.keystore"
-            keyPassword "QQ:308062035"
-        }
-    }
+
     buildTypes {
         release {
             minifyEnabled false
