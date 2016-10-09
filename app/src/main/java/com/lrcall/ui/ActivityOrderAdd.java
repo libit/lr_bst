@@ -17,6 +17,7 @@ import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ExpressInfo;
 import com.lrcall.appbst.models.OrderProductInfo;
 import com.lrcall.appbst.models.PayInfo;
+import com.lrcall.appbst.models.PayTypeInfo;
 import com.lrcall.appbst.models.ProductInfo;
 import com.lrcall.appbst.models.ProductPricePointInfo;
 import com.lrcall.appbst.models.ReturnInfo;
@@ -34,6 +35,7 @@ import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbProductInfoFactory;
 import com.lrcall.db.DbUserAddressInfoFactory;
 import com.lrcall.enums.NeedExpress;
+import com.lrcall.enums.PayType;
 import com.lrcall.models.FuncInfo;
 import com.lrcall.ui.adapter.BaseFuncsAdapter;
 import com.lrcall.ui.adapter.FuncsHorizontalAdapter;
@@ -271,20 +273,20 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 										{
 											dialogList.dismiss();
 										}
-//										payType = funcInfo.getId();
-//										String payName = funcInfo.getLabel();
-//										if (payName.contains("支付宝"))
-//										{
-//											payType = PAY_ALIPAY;
-//										}
-//										else if (payName.contains("微信"))
-//										{
-//											payType = PAY_WX;
-//										}
-//										else if (payName.contains("余额"))
-//										{
-//											payType = PAY_BALANCE;
-//										}
+										//										payType = funcInfo.getId();
+										//										String payName = funcInfo.getLabel();
+										//										if (payName.contains("支付宝"))
+										//										{
+										//											payType = PAY_ALIPAY;
+										//										}
+										//										else if (payName.contains("微信"))
+										//										{
+										//											payType = PAY_WX;
+										//										}
+										//										else if (payName.contains("余额"))
+										//										{
+										//											payType = DATA_PAY_AMOUNT;
+										//										}
 										tvPayName.setText(funcInfo.getLabel());
 										//										tvPayName.setTag(funcInfo.getIndex());
 									}
@@ -418,7 +420,7 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 				//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
 				//					startActivity(intent);
 				//				}
-				//				else if (payType == PAY_BALANCE)
+				//				else if (payType == DATA_PAY_AMOUNT)
 				//				{
 				//					Intent intent = new Intent(this, ActivityPayByBalance.class);
 				//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
@@ -427,7 +429,8 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 				//				else
 				{
 					Intent intent = new Intent(this, ActivityPayList.class);
-					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
+					//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
+					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_ORDER, totalPrice, "订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg())));
 					startActivity(intent);
 				}
 			}

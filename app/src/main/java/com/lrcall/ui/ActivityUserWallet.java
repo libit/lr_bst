@@ -17,7 +17,6 @@ import com.lrcall.appbst.models.UserBalanceInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UserService;
-import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
 
@@ -97,8 +96,8 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 		{
 			case R.id.layout_add_balance:
 			{
-				Intent intent = new Intent(this, ActivityPayList1.class);
-				intent.putExtra(ConstValues.DATA_PAY_CONTENT, ConstValues.PAY_BALANCE);
+				Intent intent = new Intent(this, ActivityBalanceRecharge.class);
+				//				intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_BALANCE, 10000, "账户充值", "")));
 				startActivity(intent);
 				break;
 			}

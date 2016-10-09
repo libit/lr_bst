@@ -56,8 +56,7 @@ public class ConstValues
 	public static final String DATA_PRODUCT_SORT_ID = "product_sort_id";
 	public static final String DATA_ORDER_PRODUCT_LIST = "order_product_list";
 	public static final String DATA_ADDRESS_ID = "address_id";
-	public static final String DATA_PAY_CONTENT = "pay_content";//支付的内容类型，比如是余额充值还是流量充值或者是订单支付
-	public static final String PAY_BALANCE = "pay_balance";
-	public static final String PAY_ORDER = "pay_order";
-	public static final String PAY_DATA_TRAFFIC_ORDER = "pay_data_traffic_order";
+	//	public static final String DATA_PAY_CONTENT = "pay_content";//支付的内容类型，比如是余额充值还是流量充值或者是订单支付
+	//	public static final String DATA_PAY_AMOUNT = "pay_amount";//支付金额
+	public static final String DATA_PAY_TYPE_INFO = "pay_type_info";//支付信息
 }

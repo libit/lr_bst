@@ -16,12 +16,14 @@ import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.OrderInfo;
+import com.lrcall.appbst.models.PayTypeInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.OrderService;
-import com.lrcall.enums.OrderType;
+import com.lrcall.enums.OrderStatus;
+import com.lrcall.enums.PayType;
 import com.lrcall.ui.adapter.OrderAdapter;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogCommon;
@@ -155,6 +157,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 				{
 					Intent intent = new Intent(FragmentOrderList.this.getContext(), ActivityPayList.class);
 					intent.putExtra(ConstValues.DATA_ORDER_ID, orderInfo.getOrderId());
+					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_ORDER, orderInfo.getTotalPrice(), "订单" + orderInfo.getOrderId() + "支付", orderInfo.getOrderId())));
 					startActivity(intent);
 				}
 
@@ -166,7 +169,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 						@Override
 						public void onOkClick()
 						{
-							if (orderInfo.getStatus() == OrderType.WAIT_PAY.getStatus())
+							if (orderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
 							{
 								mOrderService.deleteOrder(orderInfo.getOrderId(), "正在取消订单，请稍后...", false);
 							}

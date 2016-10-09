@@ -42,8 +42,10 @@
     <string name="action_open_in_browser">用浏览器打开</string>
     <string name="title_activity_login">用户登录</string>
     <string name="title_activity_change_pwd">修改密码</string>
-    <!-- 支出额Activity -->
+    <!-- 注册Activity -->
     <string name="title_activity_register">用户注册</string>
+    <!-- 账户充值Activity -->
+    <string name="title_activity_balance_recharge">账户充值</string>
     <!-- 备份Activity -->
     <string name="title_activity_backups">数据备份</string>
     <string name="title_activity_backup">联系人备份</string>

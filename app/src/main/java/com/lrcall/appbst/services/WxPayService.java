@@ -34,14 +34,14 @@ public class WxPayService extends BaseService
 	/**
 	 * 微信预付款
 	 *
-	 * @param orderId                订单号
+	 * @param payTypeInfoJson        付款信息
 	 * @param tips                   提示信息
 	 * @param needServiceProcessData
 	 */
-	public void wxPrePay(String orderId, String tips, final boolean needServiceProcessData)
+	public void wxPrePay(String payTypeInfoJson, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
-		params.put("orderId", orderId);
+		params.put("payTypeInfoJson", payTypeInfoJson);
 		ajaxStringCallback(ApiConfig.WX_PRE_PAY, params, tips, needServiceProcessData);
 	}
 

@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lrcall.appbst.R;
-import com.lrcall.enums.OrderType;
+import com.lrcall.enums.OrderStatus;
 import com.lrcall.models.TabInfo;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.DisplayTools;
@@ -36,7 +36,7 @@ public class ActivityOrders extends MyBaseActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_orders);
-		orderType = getIntent().getByteExtra(ConstValues.DATA_ORDER_TYPE, OrderType.WAIT_PAY.getStatus());
+		orderType = getIntent().getByteExtra(ConstValues.DATA_ORDER_TYPE, OrderStatus.WAIT_PAY.getStatus());
 		viewInit();
 	}
 
@@ -47,14 +47,14 @@ public class ActivityOrders extends MyBaseActivity
 		//设置滑动返回区域
 		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
-		tabInfos.add(new TabInfo(0, OrderType.WAIT_PAY.getDesc(), null));
-		tabInfos.add(new TabInfo(1, OrderType.PAYED.getDesc(), null));
-		tabInfos.add(new TabInfo(2, OrderType.EXPRESS.getDesc(), null));
-		tabInfos.add(new TabInfo(3, OrderType.FINISH.getDesc(), null));
-		fragmentList.add(FragmentOrderList.newInstance(OrderType.WAIT_PAY.getStatus()));
-		fragmentList.add(FragmentOrderList.newInstance(OrderType.PAYED.getStatus()));
-		fragmentList.add(FragmentOrderList.newInstance(OrderType.EXPRESS.getStatus()));
-		fragmentList.add(FragmentOrderList.newInstance(OrderType.FINISH.getStatus()));
+		tabInfos.add(new TabInfo(0, OrderStatus.WAIT_PAY.getDesc(), null));
+		tabInfos.add(new TabInfo(1, OrderStatus.PAYED.getDesc(), null));
+		tabInfos.add(new TabInfo(2, OrderStatus.EXPRESS.getDesc(), null));
+		tabInfos.add(new TabInfo(3, OrderStatus.FINISH.getDesc(), null));
+		fragmentList.add(FragmentOrderList.newInstance(OrderStatus.WAIT_PAY.getStatus()));
+		fragmentList.add(FragmentOrderList.newInstance(OrderStatus.PAYED.getStatus()));
+		fragmentList.add(FragmentOrderList.newInstance(OrderStatus.EXPRESS.getStatus()));
+		fragmentList.add(FragmentOrderList.newInstance(OrderStatus.FINISH.getStatus()));
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		final SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 		final LayoutInflater inflater = LayoutInflater.from(viewPagerTab.getContext());
@@ -74,19 +74,19 @@ public class ActivityOrders extends MyBaseActivity
 		SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager(), fragmentList);
 		viewPager.setAdapter(adapter);
 		viewPagerTab.setViewPager(viewPager);
-		if (orderType == OrderType.WAIT_PAY.getStatus())
+		if (orderType == OrderStatus.WAIT_PAY.getStatus())
 		{
 			viewPager.setCurrentItem(0);
 		}
-		else if (orderType == OrderType.PAYED.getStatus())
+		else if (orderType == OrderStatus.PAYED.getStatus())
 		{
 			viewPager.setCurrentItem(1);
 		}
-		else if (orderType == OrderType.EXPRESS.getStatus())
+		else if (orderType == OrderStatus.EXPRESS.getStatus())
 		{
 			viewPager.setCurrentItem(2);
 		}
-		else if (orderType == OrderType.FINISH.getStatus())
+		else if (orderType == OrderStatus.FINISH.getStatus())
 		{
 			viewPager.setCurrentItem(3);
 		}

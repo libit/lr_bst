@@ -18,7 +18,7 @@ import com.lrcall.appbst.models.OrderInfo;
 import com.lrcall.appbst.models.OrderProductInfo;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.OrderProductCommentService;
-import com.lrcall.enums.OrderType;
+import com.lrcall.enums.OrderStatus;
 import com.lrcall.utils.StringTools;
 
 import java.util.List;
@@ -77,9 +77,9 @@ public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 		viewHolder.tvOrderProductCount.setText(String.format("共%d件商品", count));
 		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(orderInfo.getTotalPrice()));
 		viewHolder.lvProducts.setAdapter(new OrderProductsAdapter(context, orderInfo.getOrderProductInfoList(), null));
-		if (orderInfo.getStatus() == OrderType.WAIT_PAY.getStatus())
+		if (orderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
 		{
-			viewHolder.tvOrderStatus.setText(OrderType.WAIT_PAY.getDesc());
+			viewHolder.tvOrderStatus.setText(OrderStatus.WAIT_PAY.getDesc());
 			convertView.findViewById(R.id.btn_order_pay).setVisibility(View.VISIBLE);
 			convertView.findViewById(R.id.btn_order_pay).setOnClickListener(new View.OnClickListener()
 			{
@@ -105,13 +105,13 @@ public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 				}
 			});
 		}
-		else if (orderInfo.getStatus() == OrderType.PAYED.getStatus())
+		else if (orderInfo.getStatus() == OrderStatus.PAYED.getStatus())
 		{
-			viewHolder.tvOrderStatus.setText(OrderType.PAYED.getDesc());
+			viewHolder.tvOrderStatus.setText(OrderStatus.PAYED.getDesc());
 		}
-		else if (orderInfo.getStatus() == OrderType.EXPRESS.getStatus())
+		else if (orderInfo.getStatus() == OrderStatus.EXPRESS.getStatus())
 		{
-			viewHolder.tvOrderStatus.setText(OrderType.EXPRESS.getDesc());
+			viewHolder.tvOrderStatus.setText(OrderStatus.EXPRESS.getDesc());
 			convertView.findViewById(R.id.btn_confirm_receive).setVisibility(View.VISIBLE);
 			convertView.findViewById(R.id.btn_confirm_receive).setOnClickListener(new View.OnClickListener()
 			{
@@ -125,9 +125,9 @@ public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 				}
 			});
 		}
-		else if (orderInfo.getStatus() == OrderType.FINISH.getStatus())
+		else if (orderInfo.getStatus() == OrderStatus.FINISH.getStatus())
 		{
-			viewHolder.tvOrderStatus.setText(OrderType.FINISH.getDesc());
+			viewHolder.tvOrderStatus.setText(OrderStatus.FINISH.getDesc());
 			if (orderInfo.getOrderProductInfoList() != null && orderInfo.getOrderProductInfoList().size() > 0)
 			{
 				final Button btnComment = (Button) convertView.findViewById(R.id.btn_order_comment);

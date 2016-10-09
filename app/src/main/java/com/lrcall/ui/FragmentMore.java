@@ -29,7 +29,7 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ProductStarService;
 import com.lrcall.appbst.services.UserService;
-import com.lrcall.enums.OrderType;
+import com.lrcall.enums.OrderStatus;
 import com.lrcall.enums.UserType;
 import com.lrcall.events.UserEvent;
 import com.lrcall.models.FuncInfo;
@@ -236,7 +236,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				if (isbLogin())
 				{
 					Intent intent = new Intent(this.getContext(), ActivityOrders.class);
-					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderType.WAIT_PAY.getStatus());
+					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderStatus.WAIT_PAY.getStatus());
 					startActivity(intent);
 				}
 				else
@@ -250,7 +250,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				if (isbLogin())
 				{
 					Intent intent = new Intent(this.getContext(), ActivityOrders.class);
-					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderType.WAIT_PAY.getStatus());
+					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderStatus.WAIT_PAY.getStatus());
 					startActivity(intent);
 				}
 				else
@@ -264,7 +264,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				if (isbLogin())
 				{
 					Intent intent = new Intent(this.getContext(), ActivityOrders.class);
-					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderType.PAYED.getStatus());
+					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderStatus.PAYED.getStatus());
 					startActivity(intent);
 				}
 				else
@@ -278,7 +278,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				if (isbLogin())
 				{
 					Intent intent = new Intent(this.getContext(), ActivityOrders.class);
-					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderType.EXPRESS.getStatus());
+					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderStatus.EXPRESS.getStatus());
 					startActivity(intent);
 				}
 				else
@@ -292,7 +292,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				if (isbLogin())
 				{
 					Intent intent = new Intent(this.getContext(), ActivityOrders.class);
-					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderType.FINISH.getStatus());
+					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderStatus.FINISH.getStatus());
 					startActivity(intent);
 				}
 				else

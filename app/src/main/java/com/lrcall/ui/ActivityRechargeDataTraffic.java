@@ -17,6 +17,7 @@ import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.DataTrafficInfo;
+import com.lrcall.appbst.models.PayTypeInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.models.UserBalanceInfo;
@@ -26,6 +27,7 @@ import com.lrcall.appbst.services.DataTrafficOrderService;
 import com.lrcall.appbst.services.DataTrafficService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UserService;
+import com.lrcall.enums.PayType;
 import com.lrcall.ui.adapter.DataTrafficAdapter;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogCommon;
@@ -230,8 +232,9 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 										ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 										if (ReturnInfo.isSuccess(returnInfo))
 										{
-											Intent intent = new Intent(ActivityRechargeDataTraffic.this, ActivityDataTrafficPayList.class);
-											intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
+											Intent intent = new Intent(ActivityRechargeDataTraffic.this, ActivityPayList.class);
+											//											intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
+											intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_DATA_TRAFFIC_ORDER, dataTrafficInfo.getPrice(), "流量订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg())));
 											startActivity(intent);
 										}
 										else

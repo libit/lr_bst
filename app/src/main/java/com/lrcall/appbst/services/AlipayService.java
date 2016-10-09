@@ -59,7 +59,7 @@ public class AlipayService extends BaseService
 	{
 		if (TextUtils.isEmpty(alipayConfigInfo.getPartner()) || TextUtils.isEmpty(alipayConfigInfo.getRsaPrivateKey()) || TextUtils.isEmpty(alipayConfigInfo.getSeller()))
 		{
-			ToastView.showCenterToast(context, R.drawable.ic_do_fail, "需要配置PARTNER | RSA_PRIVATE| SELLER");
+			ToastView.showCenterToast(context, R.drawable.ic_do_fail, "支付宝配置信息错误!");
 			return;
 		}
 		/**

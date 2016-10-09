@@ -12,11 +12,13 @@ import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.DataTrafficOrderInfo;
+import com.lrcall.appbst.models.PayTypeInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.DataTrafficOrderService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
-import com.lrcall.enums.OrderType;
+import com.lrcall.enums.OrderStatus;
+import com.lrcall.enums.PayType;
 import com.lrcall.ui.adapter.DataTrafficOrderAdapter;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogCommon;
@@ -98,8 +100,9 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 				@Override
 				public void onOrderPayClicked(DataTrafficOrderInfo dataTrafficOrderInfo)
 				{
-					Intent intent = new Intent(ActivityRechargeDataTrafficList.this, ActivityDataTrafficPayList.class);
-					intent.putExtra(ConstValues.DATA_ORDER_ID, dataTrafficOrderInfo.getOrderId());
+					Intent intent = new Intent(ActivityRechargeDataTrafficList.this, ActivityPayList.class);
+					//					intent.putExtra(ConstValues.DATA_ORDER_ID, dataTrafficOrderInfo.getOrderId());
+					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_DATA_TRAFFIC_ORDER, dataTrafficOrderInfo.getTotalPrice(), "流量订单" + dataTrafficOrderInfo.getOrderId() + "支付", dataTrafficOrderInfo.getOrderId())));
 					startActivityForResult(intent, REQ_PAY);
 				}
 
@@ -111,7 +114,7 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 						@Override
 						public void onOkClick()
 						{
-							if (dataTrafficOrderInfo.getStatus() == OrderType.WAIT_PAY.getStatus())
+							if (dataTrafficOrderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
 							{
 								mDataTrafficOrderService.deleteOrder(dataTrafficOrderInfo.getOrderId(), "正在取消订单，请稍后...", false);
 							}
@@ -160,7 +163,7 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-//		refreshData();
+		//		refreshData();
 		finish();
 	}
 }

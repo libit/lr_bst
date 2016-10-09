@@ -86,5 +86,5 @@
         android:layout_marginTop="10dp"
         android:autoLink="web"
         android:gravity="center_horizontal"
-        android:text="管理云端通话记录可登录 http://www.lrcall.com/lr_dialer/"/>
+        android:text="管理云端通话记录可登录 http://www.lrcall.com/lr_bst/"/>
 </LinearLayout>

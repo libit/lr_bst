@@ -132,6 +132,9 @@
             android:name="com.lrcall.ui.ActivityChangePwd"
             android:label="@string/title_activity_change_pwd"/>
         <activity
+            android:name="com.lrcall.ui.ActivityBalanceRecharge"
+            android:label="@string/title_activity_balance_recharge"/>
+        <activity
             android:name="com.lrcall.ui.ActivityBackups"
             android:label="@string/title_activity_backups"/>
         <activity
@@ -153,16 +156,10 @@
             android:name="com.lrcall.ui.ActivityBalanceLog"
             android:label="@string/title_activity_balance_log"/>
         <activity
-            android:name="com.lrcall.ui.ActivityPayList"
-            android:label="@string/title_activity_pay_list"/>
-        <activity
             android:name="com.lrcall.ui.ActivityUserAgentInfo"
             android:label="@string/title_activity_user_agent_info"/>
         <activity
-            android:name="com.lrcall.ui.ActivityPayList1"
-            android:label="@string/title_activity_pay_list"/>
-        <activity
-            android:name="com.lrcall.ui.ActivityDataTrafficPayList"
+            android:name="com.lrcall.ui.ActivityPayList"
             android:label="@string/title_activity_pay_list"/>
         <activity
             android:name="com.lrcall.ui.ActivityProductHistoryList"
