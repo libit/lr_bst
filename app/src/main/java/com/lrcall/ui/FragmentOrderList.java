@@ -29,12 +29,11 @@ import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogCommon;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataResponse
+public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataResponse, View.OnClickListener
 {
 	private static final String TAG = FragmentOrderList.class.getSimpleName();
 	private static final String ARG_ORDER_TYPE = "orderType";
@@ -87,6 +86,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 		xListView.setPullLoadEnable(true);
 		xListView.setAdapter(null);
 		xListView.setXListViewListener(this);
+		rootView.findViewById(R.id.btn_refresh).setOnClickListener(this);
 		super.viewInit(rootView);
 	}
 
@@ -105,6 +105,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 	{
 		mOrderAdapter = null;
 		mOrderInfoList.clear();
+		xListView.setPullLoadEnable(true);
 		loadMoreData();
 	}
 
@@ -135,7 +136,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 		}
 		layoutNoOrder.setVisibility(View.GONE);
 		xListView.setVisibility(View.VISIBLE);
-		mOrderInfoList.clear();
+		//		mOrderInfoList.clear();
 		for (OrderInfo orderInfo : orderInfoList)
 		{
 			mOrderInfoList.add(orderInfo);
@@ -156,7 +157,6 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 				public void onOrderPayClicked(OrderInfo orderInfo)
 				{
 					Intent intent = new Intent(FragmentOrderList.this.getContext(), ActivityPayList.class);
-					//					intent.putExtra(ConstValues.DATA_ORDER_ID, orderInfo.getOrderId());
 					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_ORDER, orderInfo.getTotalPrice(), "订单" + orderInfo.getOrderId() + "支付", orderInfo.getOrderId())));
 					startActivity(intent);
 				}
@@ -223,7 +223,6 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 	@Override
 	public boolean onAjaxDataResponse(String url, String result, AjaxStatus status)
 	{
-		LogcatTools.debug(TAG, "onAjaxDataResponse服务器返回数据了");
 		xListView.stopRefresh();
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_ORDER_LIST))
@@ -294,5 +293,18 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
+			case R.id.btn_refresh:
+			{
+				refreshData();
+				break;
+			}
+		}
 	}
 }
