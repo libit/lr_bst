@@ -156,7 +156,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 				public void onOrderPayClicked(OrderInfo orderInfo)
 				{
 					Intent intent = new Intent(FragmentOrderList.this.getContext(), ActivityPayList.class);
-					intent.putExtra(ConstValues.DATA_ORDER_ID, orderInfo.getOrderId());
+					//					intent.putExtra(ConstValues.DATA_ORDER_ID, orderInfo.getOrderId());
 					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_ORDER, orderInfo.getTotalPrice(), "订单" + orderInfo.getOrderId() + "支付", orderInfo.getOrderId())));
 					startActivity(intent);
 				}

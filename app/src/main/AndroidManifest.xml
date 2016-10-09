@@ -168,9 +168,6 @@
             android:name="com.lrcall.ui.ActivityRechargeDataTraffic"
             android:label="@string/title_activity_recharge_data_traffic"/>
         <activity
-            android:name="com.lrcall.ui.ActivityDataTrafficPayByBalance"
-            android:label="@string/title_activity_pay_by_balance"/>
-        <activity
             android:name="com.lrcall.ui.ActivityRechargeDataTrafficList"
             android:label="@string/title_activity_recharge_data_traffic_list"/>
         <activity

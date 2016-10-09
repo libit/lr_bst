@@ -8,18 +8,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
+import com.lrcall.appbst.models.DataTrafficOrderInfo;
 import com.lrcall.appbst.models.OrderInfo;
+import com.lrcall.appbst.models.PayTypeInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.UserBalanceInfo;
 import com.lrcall.appbst.services.ApiConfig;
+import com.lrcall.appbst.services.DataTrafficOrderService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.OrderService;
 import com.lrcall.appbst.services.PayService;
 import com.lrcall.appbst.services.UserService;
+import com.lrcall.enums.PayType;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
@@ -33,18 +36,44 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 	private UserService mUserService;
 	private PayService mPayService;
 	private OrderService mOrderService;
+	private DataTrafficOrderService mDataTrafficOrderService;
 	private String orderId;
+	private PayTypeInfo payTypeInfo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pay_by_balance);
-		orderId = getIntent().getStringExtra(ConstValues.DATA_ORDER_ID);
-		if (StringTools.isNull(orderId))
+		//		orderId = getIntent().getStringExtra(ConstValues.DATA_ORDER_ID);
+		//		if (StringTools.isNull(orderId))
+		//		{
+		//			finish();
+		//			Toast.makeText(this, "订单号为空！", Toast.LENGTH_LONG).show();
+		//		}
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null)
 		{
-			finish();
-			Toast.makeText(this, "订单号为空！", Toast.LENGTH_LONG).show();
+			String params = bundle.getString(ConstValues.DATA_PAY_TYPE_INFO);
+			payTypeInfo = GsonTools.getObject(params, PayTypeInfo.class);
+			if (payTypeInfo == null)
+			{
+				finish();
+				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "支付信息为空！");
+				return;
+			}
+			//			payTypeInfo.setPrice(1);
+			String type = payTypeInfo.getPayType().getType();
+			if (type.equals(PayType.PAY_ORDER.getType()) || type.equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()))
+			{
+				orderId = payTypeInfo.getComment();
+				if (StringTools.isNull(orderId))
+				{
+					finish();
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "订单号不能为空！");
+					return;
+				}
+			}
 		}
 		mUserService = new UserService(this);
 		mUserService.addDataResponse(this);
@@ -52,9 +81,18 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 		mPayService.addDataResponse(this);
 		mOrderService = new OrderService(this);
 		mOrderService.addDataResponse(this);
+		mDataTrafficOrderService = new DataTrafficOrderService(this);
+		mDataTrafficOrderService.addDataResponse(this);
 		viewInit();
 		initData();
-		mOrderService.getOrderInfo(orderId, "请稍后...", false);
+		if (payTypeInfo.getPayType().getType().equals(PayType.PAY_ORDER.getType()))
+		{
+			mOrderService.getOrderInfo(orderId, "请稍后...", false);
+		}
+		else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()))
+		{
+			mDataTrafficOrderService.getOrderInfo(orderId, "请稍后...", false);
+		}
 	}
 
 	@Override
@@ -87,7 +125,14 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 					etPassword.requestFocus();
 					return;
 				}
-				mPayService.payOrderByBalance(orderId, password, "正在支付，请稍后...", true);
+				if (payTypeInfo.getPayType().getType().equals(PayType.PAY_ORDER.getType()))
+				{
+					mPayService.payOrderByBalance(orderId, password, "正在支付，请稍后...", true);
+				}
+				else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()))
+				{
+					mPayService.payDataTrafficOrderByBalance(orderId, password, "正在支付，请稍后...", true);
+				}
 				break;
 			}
 		}
@@ -141,6 +186,35 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 			if (orderInfo != null)
 			{
 				tvTotalPay.setText(StringTools.getPrice(orderInfo.getTotalPrice()) + "元");
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.PAY_DATA_TRAFFIC_BY_BALANCE))
+		{
+			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			if (ReturnInfo.isSuccess(returnInfo))
+			{
+				ToastView.showCenterToast(this, R.drawable.ic_done, "支付成功！");
+				setResult(RESULT_OK);
+				finish();
+			}
+			else
+			{
+				String msg = result;
+				if (returnInfo != null)
+				{
+					msg = returnInfo.getErrmsg();
+				}
+				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "支付失败：" + msg);
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.GET_DATA_TRAFFIC_ORDER_INFO))
+		{
+			DataTrafficOrderInfo dataTrafficOrderInfo = GsonTools.getReturnObject(result, DataTrafficOrderInfo.class);
+			if (dataTrafficOrderInfo != null)
+			{
+				tvTotalPay.setText(StringTools.getPrice(dataTrafficOrderInfo.getTotalPrice()) + "元");
 			}
 			return true;
 		}

@@ -97,7 +97,6 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 			case R.id.layout_add_balance:
 			{
 				Intent intent = new Intent(this, ActivityBalanceRecharge.class);
-				//				intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_BALANCE, 10000, "账户充值", "")));
 				startActivity(intent);
 				break;
 			}

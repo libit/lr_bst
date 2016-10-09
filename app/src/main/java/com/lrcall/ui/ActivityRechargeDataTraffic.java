@@ -233,7 +233,6 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 										if (ReturnInfo.isSuccess(returnInfo))
 										{
 											Intent intent = new Intent(ActivityRechargeDataTraffic.this, ActivityPayList.class);
-											//											intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
 											intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_DATA_TRAFFIC_ORDER, dataTrafficInfo.getPrice(), "流量订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg())));
 											startActivity(intent);
 										}

@@ -101,7 +101,6 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 				public void onOrderPayClicked(DataTrafficOrderInfo dataTrafficOrderInfo)
 				{
 					Intent intent = new Intent(ActivityRechargeDataTrafficList.this, ActivityPayList.class);
-					//					intent.putExtra(ConstValues.DATA_ORDER_ID, dataTrafficOrderInfo.getOrderId());
 					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_DATA_TRAFFIC_ORDER, dataTrafficOrderInfo.getTotalPrice(), "流量订单" + dataTrafficOrderInfo.getOrderId() + "支付", dataTrafficOrderInfo.getOrderId())));
 					startActivityForResult(intent, REQ_PAY);
 				}

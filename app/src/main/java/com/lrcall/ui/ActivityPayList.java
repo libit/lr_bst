@@ -125,7 +125,7 @@ public class ActivityPayList extends MyBaseActivity implements PayAdapter.IPayAd
 					return;
 				}
 			}
-			else if (type.equals(PayType.PAY_ORDER.getType()))
+			else if (type.equals(PayType.PAY_BALANCE.getType()))
 			{
 				String userId = payTypeInfo.getComment();
 				if (StringTools.isNull(userId))
@@ -168,7 +168,8 @@ public class ActivityPayList extends MyBaseActivity implements PayAdapter.IPayAd
 			if (payInfo.getName().indexOf("余额") > -1)
 			{
 				Intent intent = new Intent(this, ActivityPayByBalance.class);
-				intent.putExtra(ConstValues.DATA_ORDER_ID, payTypeInfo.getComment());
+				//				intent.putExtra(ConstValues.DATA_ORDER_ID, payTypeInfo.getComment());
+				intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, params);
 				startActivityForResult(intent, REQ_PAY);
 			}
 			else if (payInfo.getName().indexOf("支付宝") > -1)
