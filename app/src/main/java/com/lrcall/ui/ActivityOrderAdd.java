@@ -429,7 +429,6 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 				//				else
 				{
 					Intent intent = new Intent(this, ActivityPayList.class);
-					//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
 					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_ORDER, totalPrice, "订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg())));
 					startActivity(intent);
 				}

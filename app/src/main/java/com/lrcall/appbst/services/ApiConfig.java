@@ -113,6 +113,7 @@ public class ApiConfig
 	public static final String USER_SIGN_TODAY = getServerUrl() + "/ajaxUserSignToday";//用户签到
 	//用户代理
 	public static final String USER_APPLY_AGENT = getServerUrl() + "/ajaxAddUserApplyAgent";//用户申请代理
+	public static final String GET_USER_LAST_APPLY_AGENT_INFO = getServerUrl() + "/ajaxGetLastUserApplyAgentInfo";//查询用户最后一次申请代理记录
 	public static final String GET_USER_AGENT_INFO = getServerUrl() + "/ajaxGetUserAgentInfo";//获取用户代理信息
 	//区域
 	public static final String GET_PROVINCE_LIST = getServerUrl() + "/ajaxGetProvinceList";//获取省列表

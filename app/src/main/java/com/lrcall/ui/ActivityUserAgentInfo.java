@@ -18,11 +18,13 @@ import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.UserAgentInfo;
+import com.lrcall.appbst.models.UserApplyAgentInfo;
 import com.lrcall.appbst.models.UserInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UserAgentService;
 import com.lrcall.appbst.services.UserService;
+import com.lrcall.enums.UserApplyStatus;
 import com.lrcall.enums.UserType;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.DisplayTools;
@@ -41,7 +43,7 @@ import java.util.List;
 public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivityUserAgentInfo.class.getSimpleName();
-	private TextView tvType;
+	private TextView tvType, tvApplyStatus;
 	private ImageView ivHead;
 	private ViewPager viewPager;
 	private SmartTabLayout viewPagerTab;
@@ -80,6 +82,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 	{
 		super.onResume();
 		mUserService.getUserInfo("请稍后...", false);
+		mUserAgentService.getUserLastApplyAgentInfo(null, false);
 	}
 
 	@Override
@@ -88,6 +91,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 		super.viewInit();
 		setBackButton();
 		tvType = (TextView) findViewById(R.id.tv_type);
+		tvApplyStatus = (TextView) findViewById(R.id.tv_apply_status);
 		ivHead = (ImageView) findViewById(R.id.iv_head);
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		//设置图片的长宽，这里便于制作图片
@@ -221,6 +225,27 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 				}
 				tvType.setText(String.format("%s(%s%s%s)", UserType.getDesc(userType), provinceName, cityName, countryName));
 			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.GET_USER_LAST_APPLY_AGENT_INFO))
+		{
+			UserApplyAgentInfo userApplyAgentInfo = GsonTools.getReturnObject(result, UserApplyAgentInfo.class);
+			if (userApplyAgentInfo != null)
+			{
+				if (userApplyAgentInfo.getStatus() == UserApplyStatus.VERIFY_FAIL.getStatus())
+				{
+					tvApplyStatus.setVisibility(View.VISIBLE);
+					tvApplyStatus.setText(String.format("申请 %s %s %s代理未通过!", userApplyAgentInfo.getProvinceId(), userApplyAgentInfo.getCityId(), userApplyAgentInfo.getCountryId()));
+					return true;
+				}
+				else if (userApplyAgentInfo.getStatus() == UserApplyStatus.APPLY.getStatus())
+				{
+					tvApplyStatus.setVisibility(View.VISIBLE);
+					tvApplyStatus.setText(String.format("正在申请 %s %s %s代理!", userApplyAgentInfo.getProvinceId(), userApplyAgentInfo.getCityId(), userApplyAgentInfo.getCountryId()));
+					return true;
+				}
+			}
+			tvApplyStatus.setVisibility(View.GONE);
 			return true;
 		}
 		return false;

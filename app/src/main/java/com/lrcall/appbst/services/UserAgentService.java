@@ -58,6 +58,18 @@ public class UserAgentService extends BaseService
 		ajaxStringCallback(ApiConfig.GET_USER_AGENT_INFO, params, tips, needServiceProcessData);
 	}
 
+	/**
+	 * 获取用户最后一次申请代理信息
+	 *
+	 * @param tips                   提示信息
+	 * @param needServiceProcessData 是否需要服务类处理
+	 */
+	public void getUserLastApplyAgentInfo(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.GET_USER_LAST_APPLY_AGENT_INFO, params, tips, needServiceProcessData);
+	}
+
 	@Override
 	public void parseData(String url, String result, AjaxStatus status)
 	{

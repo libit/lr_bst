@@ -59,13 +59,13 @@ import java.util.List;
 public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerToggle.ActionBarDrawerToggleStatusChanged, XListView.IXListViewListener, IAjaxDataResponse
 {
 	public static final int INDEX = 0;
-	public static final int INTERACT = 4;
-	public static final int USER = 1;
+	public static final int DIALER = 1;
+	public static final int USER = 2;
+	private static final int PAGE_COUNT = 3;
 	//暂时没用的
 	public static final int CATEGORY = 6;
-	public static final int DIALER = 5;
+	public static final int INTERACT = 4;
 	public static final int FIND = 7;
-	private static final int PAGE_COUNT = 2;
 	private static ActivityMain instance = null;
 	private final List<TabInfo> tabInfos = new ArrayList<>();
 	private View vHead;
@@ -96,7 +96,6 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		mUpdateService = new UpdateService(this);
 		mUpdateService.addDataResponse(this);
 		mUpdateService.checkUpdate(null, false);
-		//		new MyProgressDialog(this, "哈哈哈哈哈哈").show();
 	}
 
 	@Override
@@ -128,7 +127,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		tabInfos.add(new TabInfo(INDEX, "首页", R.drawable.ic_tab_dialer_normal, FragmentIndex.class));
 		//		tabInfos.add(new TabInfo(INTERACT, "互动", R.drawable.ic_tab_contacts_normal, FragmentInteract.class));
 		//		tabInfos.add(new TabInfo(CATEGORY, "分类", R.drawable.ic_tab_contacts_normal, FragmentCategory.class));
-		//		tabInfos.add(new TabInfo(DIALER, "电话", R.drawable.ic_tab_money_normal, FragmentDialer.class));
+		tabInfos.add(new TabInfo(DIALER, "电话", R.drawable.ic_tab_money_normal, FragmentDialer.class));
 		//		tabInfos.add(new TabInfo(FIND, "发现", R.drawable.ic_tab_money_normal, FragmentFind.class));
 		tabInfos.add(new TabInfo(USER, "我的", R.drawable.ic_tab_more_normal, FragmentMore.class));
 		ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
