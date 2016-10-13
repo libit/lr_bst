@@ -7,7 +7,7 @@ package com.lrcall.enums;
  */
 public enum UserBalanceLogType
 {
-    BUY_PRODUCT(0, "购买商品"), BUY_DATA_TRAFFIC(1, "购买流量");
+    BUY_PRODUCT(0, "购买商品"), BUY_DATA_TRAFFIC(1, "购买流量"), UPDATE_BALANCE(2, "更新余额"), SHARED_PROFIT(3, "分润");
     private int type;
     private String desc;
 

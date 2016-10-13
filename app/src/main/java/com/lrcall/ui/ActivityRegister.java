@@ -23,7 +23,7 @@ import com.lrcall.utils.StringTools;
 
 public class ActivityRegister extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
-	private EditText etUsername, etPassword, etRePassword, etPayPassword, etPayRePassword, etName, etNickname, etNumber, etEmail, etReferrerId;
+	private EditText etUsername, etPassword, etRePassword, etPayPassword, etPayRePassword, etName, etNickname, etNumber, etEmail, etReferrerId, etCode;
 	private UserService mUserService;
 	private Byte sex = 1;
 	private String picId = null;
@@ -53,6 +53,8 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 		etNumber = (EditText) findViewById(R.id.et_number);
 		etEmail = (EditText) findViewById(R.id.et_email);
 		etReferrerId = (EditText) findViewById(R.id.et_referrer);
+		etCode = (EditText) findViewById(R.id.et_code);
+		findViewById(R.id.btn_get_code).setOnClickListener(this);
 		findViewById(R.id.btn_register).setOnClickListener(this);
 	}
 
@@ -61,28 +63,53 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 	{
 		switch (v.getId())
 		{
-			case R.id.btn_register:
+			case R.id.btn_get_code:
 			{
 				String username = etUsername.getText().toString();
-				String password = etPassword.getText().toString();
-				String rePassword = etRePassword.getText().toString();
-				String payPassword = etPayPassword.getText().toString();
-				String payRePassword = etPayRePassword.getText().toString();
-				String name = etName.getText().toString();
-				String nickname = etNickname.getText().toString();
-				String number = etNumber.getText().toString();
-				String email = etEmail.getText().toString();
-				String referrerId = etReferrerId.getText().toString();
 				if (StringTools.isNull(username))
 				{
 					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "账号不能为空！");
 					etUsername.requestFocus();
 					return;
 				}
-				if (username.length() < 5 || username.length() > 16)
+				if (!CallTools.isChinaMobilePhoneNumber(username))
 				{
-					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "账号位数不正确，请输入5-16位的账号！");
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "手机号码格式不正确！");
 					etUsername.requestFocus();
+					return;
+				}
+				mUserService.getSmsCode(username, "正在请求短信验证码,请稍后...", false);
+				break;
+			}
+			case R.id.btn_register:
+			{
+				String username = etUsername.getText().toString();
+				String password = etPassword.getText().toString();
+				String rePassword = etPassword.getText().toString();//etRePassword.getText().toString();
+				String payPassword = etPayPassword.getText().toString();
+				String payRePassword = etPayPassword.getText().toString();//etPayRePassword.getText().toString();
+				String name = etUsername.getText().toString();//etName.getText().toString();
+				String nickname = etUsername.getText().toString();//etNickname.getText().toString();
+				String number = etUsername.getText().toString();//etNumber.getText().toString();
+				String email = etUsername.getText().toString() + "@qq.com";//etEmail.getText().toString();
+				String referrerId = etReferrerId.getText().toString();
+				String code = etCode.getText().toString();
+				if (StringTools.isNull(username))
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "账号不能为空！");
+					etUsername.requestFocus();
+					return;
+				}
+				//				if (username.length() < 5 || username.length() > 16)
+				//				{
+				//					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "账号位数不正确，请输入5-16位的账号！");
+				//					etUsername.requestFocus();
+				//					return;
+				//				}
+				if (StringTools.isNull(code))
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "验证码不能为空！");
+					etCode.requestFocus();
 					return;
 				}
 				if (StringTools.isNull(password))
@@ -170,7 +197,7 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 					etEmail.requestFocus();
 					return;
 				}
-				mUserService.register(username, password, payPassword, name, nickname, number, email, referrerId, sex, picId, "正在注册...", true);
+				mUserService.register(username, password, payPassword, name, nickname, number, email, referrerId, sex, picId, code, "正在注册...", true);
 				break;
 			}
 		}
@@ -191,7 +218,26 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 			{
 				setResult(ConstValues.RESULT_REGISTER_ERROR);
 			}
+			return true;
 		}
-		return true;
+		else if (url.endsWith(ApiConfig.GET_SMS_CODE))
+		{
+			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			if (ReturnInfo.isSuccess(returnInfo))
+			{
+				ToastView.showCenterToast(this, R.drawable.ic_done, returnInfo.getErrmsg());
+			}
+			else
+			{
+				String msg = result;
+				if (returnInfo != null)
+				{
+					msg = returnInfo.getErrmsg();
+				}
+				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "获取验证码失败:" + msg);
+			}
+			return true;
+		}
+		return false;
 	}
 }

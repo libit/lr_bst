@@ -36,7 +36,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
                     android:background="@null"
-                    android:hint="请输入您的账号"/>
+                    android:hint="请输入您的手机号码"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,11 +72,13 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -130,11 +132,13 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -159,11 +163,13 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -217,11 +223,13 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -246,11 +254,13 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -295,7 +305,40 @@
                     android:layout_marginRight="5dp"
                     android:background="@null"
                     android:hint="请输入您的推荐人账号"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="text"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center_vertical|right"
+                    android:minWidth="100dp"
+                    android:text="验证码："
+                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textSize="18sp"/>
+                <EditText
+                    android:id="@+id/et_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="请输入验证码"
+                    android:inputType="numberSigned"/>
+                <Button
+                    android:id="@+id/btn_get_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="获取注册码"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

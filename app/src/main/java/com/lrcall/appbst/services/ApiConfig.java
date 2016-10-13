@@ -19,6 +19,7 @@ public class ApiConfig
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
 	public static final String SUBMIT_ADVICE = getServerUrl() + "/ajaxAddAdviceInfo";//提交意见反馈
 	public static final String USER_LOGIN = getServerUrl() + "/ajaxLogin";//用户登录
+	public static final String GET_SMS_CODE = getServerUrl() + "/ajaxGetSmsCode";//获取手机验证码
 	public static final String USER_CHANGE_PWD = getServerUrl() + "/ajaxChangePwd";//用户修改密码
 	public static final String USER_REGISTER = getServerUrl() + "/ajaxRegister";//用户注册
 	public static final String GET_USER_INFO = getServerUrl() + "/ajaxGetUserInfo";//获取用户信息

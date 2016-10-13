@@ -52,6 +52,18 @@ public class UserService extends BaseService
 	}
 
 	/**
+	 * 获取验证码
+	 *
+	 * @param number 手机号码
+	 */
+	public void getSmsCode(String number, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("number", number);
+		ajaxStringCallback(ApiConfig.GET_SMS_CODE, params, tips, needServiceProcessData);
+	}
+
+	/**
 	 * 用户登录
 	 *
 	 * @param username 账号
@@ -77,8 +89,9 @@ public class UserService extends BaseService
 	 * @param email       邮箱
 	 * @param sex         性别
 	 * @param picId       图片ID
+	 * @param code        验证码
 	 */
-	public void register(String username, String password, String payPassword, String name, String nickname, String number, String email, String referrerId, Byte sex, String picId, String tips, final boolean needServiceProcessData)
+	public void register(String username, String password, String payPassword, String name, String nickname, String number, String email, String referrerId, Byte sex, String picId, String code, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("userId", username);
@@ -91,6 +104,7 @@ public class UserService extends BaseService
 		params.put("email", email);
 		params.put("referrerId", referrerId);
 		params.put("picId", picId);
+		params.put("code", code);
 		ajaxStringCallback(ApiConfig.USER_REGISTER, params, tips, needServiceProcessData);
 	}
 

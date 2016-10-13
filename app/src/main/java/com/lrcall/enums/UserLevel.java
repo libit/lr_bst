@@ -7,7 +7,7 @@ package com.lrcall.enums;
  */
 public enum UserLevel
 {
-    L1((byte) 0, "粉丝"), L2((byte) 10, "铜牌"), L3((byte) 20, "银牌"), L4((byte) 30, "金牌");
+    L1((byte) 0, "注册会员"), L2((byte) 10, "铜牌会员"), L3((byte) 20, "银牌会员"), L4((byte) 30, "金牌会员"), L5((byte) 40, "白金会员");
     private byte type;
     private String desc;
 
