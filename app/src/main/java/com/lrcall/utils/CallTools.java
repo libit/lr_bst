@@ -10,13 +10,11 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.androidquery.callback.AjaxStatus;
-import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ErrorInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.CallbackService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
-import com.lrcall.ui.customer.ToastView;
 
 import java.util.ArrayList;
 
@@ -266,26 +264,16 @@ public class CallTools
 				if (url.endsWith(ApiConfig.CALLBACK_MAKE_CALL))
 				{
 					ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-					if (ReturnInfo.isSuccess(returnInfo))
+					if (!ReturnInfo.isSuccess(returnInfo))
 					{
-						ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getErrmsg());
-					}
-					else
-					{
-						String msg = "呼叫失败！";
-						if (returnInfo != null)
-						{
-							msg = returnInfo.getErrmsg();
-						}
-						ToastView.showCenterToast(context, R.drawable.ic_do_fail, msg);
-						makeLocalCall(context, number);
+						//						makeLocalCall(context, number);
 					}
 					return true;
 				}
 				return false;
 			}
 		});
-		callbackService.makeCall(number, "正在回拨，请稍后...", false);
+		callbackService.makeCall(number, "正在回拨，请稍后...", true);
 		return new ReturnInfo(ErrorInfo.getSuccessId(), "呼叫号码成功！");
 	}
 

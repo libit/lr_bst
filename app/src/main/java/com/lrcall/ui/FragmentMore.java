@@ -30,6 +30,7 @@ import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ProductStarService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.enums.OrderStatus;
+import com.lrcall.enums.UserLevel;
 import com.lrcall.enums.UserType;
 import com.lrcall.events.UserEvent;
 import com.lrcall.models.FuncInfo;
@@ -55,18 +56,18 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.lrcall.appbst.R.id.layout_apply_agent;
 import static com.lrcall.appbst.R.id.layout_apply_shop;
 
 public class FragmentMore extends MyBaseFragment implements XListView.IXListViewListener, View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = FragmentMore.class.getSimpleName();
 	private XListView xListView;
-	private View headView;
-	private UserService mUserService;
-	private ProductStarService mProductStarService;
-	private View vLogined, vUnLogin;
+	private View headView, vLogined, vUnLogin;
 	private TextView tvName, tvUserType, tvOfficalWeb, tvServerPhone, tvBalance, tvFreezeBalance, tvPoint, tvStarCount, tvHistoryCount;
 	private ImageView ivPhoto;
+	private UserService mUserService;
+	private ProductStarService mProductStarService;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState)
@@ -133,6 +134,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		rootView.findViewById(R.id.layout_history).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_settings).setOnClickListener(this);
 		rootView.findViewById(layout_apply_shop).setOnClickListener(this);
+		rootView.findViewById(layout_apply_agent).setOnClickListener(this);
 		ivPhoto.setOnClickListener(this);
 		super.viewInit(rootView);
 	}
@@ -387,6 +389,18 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			{
 				if (isbLogin())
 				{
+					startActivity(new Intent(this.getContext(), ActivityShopInfo.class));
+				}
+				else
+				{
+					startActivityForResult(new Intent(this.getContext(), ActivityLogin.class), ConstValues.REQUEST_LOGIN_USER);
+				}
+				break;
+			}
+			case R.id.layout_apply_agent:
+			{
+				if (isbLogin())
+				{
 					startActivity(new Intent(this.getContext(), ActivityUserAgentInfo.class));
 				}
 				else
@@ -414,7 +428,13 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			else
 			{
 				setbLogin(true);
-				tvUserType.setText(UserType.getDesc(userInfo.getUserType()));
+				String level = UserLevel.getLevelDesc(userInfo.getUserLevel());
+				String agent = "";
+				if (userInfo.getUserType() > UserType.COMMON.getType())
+				{
+					agent = UserType.getDesc(userInfo.getUserType());
+				}
+				tvUserType.setText(level + " " + agent);
 			}
 		}
 		else if (url.endsWith(ApiConfig.GET_USER_BALANCE_INFO))

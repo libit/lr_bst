@@ -15,6 +15,8 @@ import com.lrcall.appbst.R;
 import com.lrcall.models.CallLogInfo;
 import com.lrcall.ui.customer.LocalTools;
 import com.lrcall.utils.DateTimeTools;
+import com.lrcall.utils.LogcatTools;
+import com.lrcall.utils.StringTools;
 
 import java.util.List;
 
@@ -50,35 +52,39 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 		{
 			viewHolder.clear();
 		}
+		LogcatTools.debug("CallLogsAdapter", "数组长度:" + list.size() + ",position1:" + position);
 		final CallLogInfo callLogInfo = list.get(position);
+		LogcatTools.debug("CallLogsAdapter", "position2:" + position);
+		String name = callLogInfo.getName();
+		if (StringTools.isNull(name))
+		{
+			name = "未知号码";
+		}
 		String number = callLogInfo.getNumber();
 		viewHolder.ivCallLogType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
-		viewHolder.tvName.setText(callLogInfo.getName());
+		viewHolder.tvName.setText(name);
 		viewHolder.tvNumber.setText(number);
 		viewHolder.tvDuration.setText(CallLogInfo.getDurationString(callLogInfo.getDuration()));
 		viewHolder.tvTime.setText(DateTimeTools.getRelativeTimeSpanString(callLogInfo.getDate()));
-		convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
+		if (callLogsAdapterItemClicked != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
 			{
-				if (callLogsAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
 					callLogsAdapterItemClicked.onCallClicked(callLogInfo);
 				}
-			}
-		});
-		convertView.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
+			});
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (callLogsAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
 					callLogsAdapterItemClicked.onItemClicked(callLogInfo);
 				}
-			}
-		});
+			});
+		}
 		LocalTools.setLocal(context, viewHolder.tvLocal, number, true);
 		return convertView;
 	}

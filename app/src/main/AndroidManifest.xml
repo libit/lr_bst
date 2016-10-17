@@ -230,6 +230,34 @@
             android:label="@string/title_activity_pay_by_balance"/>
         <activity
             android:name="com.lrcall.ui.ActivityPicView"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityCallbackInfo"
+            android:label="@string/title_activity_callback_info"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityCallbackRecharge"
+            android:label="@string/title_activity_callback_recharge"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityCallbackCallLogList"
+            android:label="@string/title_activity_callback_call_log_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityCallbackRechargeLogList"
+            android:label="@string/title_activity_callback_recharge_log_list"/>
+        <!-- 商家 -->
+        <activity
+            android:name="com.lrcall.ui.ActivityShopRegister"
+            android:label="@string/title_activity_shop_register"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityShopAuth"
+            android:label="@string/title_activity_shop_auth"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityShopInfo"
+            android:label="@string/title_activity_shop_info"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityShopProductsManage"
+            android:label="@string/title_activity_shop_products_manage"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityProductAdd"
+            android:label="@string/title_activity_product_add"/>
         <!-- alipay sdk begin -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"

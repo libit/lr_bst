@@ -39,7 +39,7 @@ public enum UserType
 
 	public static String getDesc(byte type)
 	{
-		UserType[] list = new UserType[]{COMMON, DISTRICT, CITY, PROVINCE};
+		UserType[] list = UserType.values();
 		{
 			for (UserType userType : list)
 			{

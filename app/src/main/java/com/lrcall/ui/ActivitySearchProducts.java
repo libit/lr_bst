@@ -32,7 +32,7 @@ import com.lrcall.utils.StringTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivitySearchProducts extends MyBasePageActivity implements View.OnClickListener, SearchProductsAdapter.IProductsAdapterItemClicked, IAjaxDataResponse
+public class ActivitySearchProducts extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivitySearchProducts.class.getSimpleName();
 	private EditText etSearch;
@@ -188,14 +188,6 @@ public class ActivitySearchProducts extends MyBasePageActivity implements View.O
 		{
 			searchProductsAdapter.notifyDataSetChanged();
 		}
-	}
-
-	@Override
-	public void onProductClicked(ProductInfo productInfo)
-	{
-		Intent intent = new Intent(this, ActivityProduct.class);
-		intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
-		startActivity(intent);
 	}
 
 	@Override

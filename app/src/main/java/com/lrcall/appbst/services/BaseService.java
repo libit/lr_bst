@@ -95,7 +95,7 @@ public abstract class BaseService
 		params.put("platform", AppConfig.PLATFORM);
 		params.put("deviceName", AppFactory.getInstance().getDeviceName());
 		params.put("sysVersion", AppFactory.getInstance().getSysVersion());
-		params.put("versionCode", AppFactory.getInstance().getVersionCode() + "");
+		params.put("versionCode", AppFactory.getInstance().getVersionCode());
 		String signData = CryptoTools.getSignValue(params.values());
 		params.put("sign", signData);
 		params.put("picQuality", AppConfig.PLATFORM);

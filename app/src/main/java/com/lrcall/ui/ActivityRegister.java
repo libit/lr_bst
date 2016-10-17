@@ -15,6 +15,7 @@ import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UserService;
+import com.lrcall.enums.SmsCodeType;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.CallTools;
 import com.lrcall.utils.ConstValues;
@@ -78,7 +79,7 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 					etUsername.requestFocus();
 					return;
 				}
-				mUserService.getSmsCode(username, "正在请求短信验证码,请稍后...", false);
+				mUserService.getSmsCode(username, SmsCodeType.REGISTER.getType(), "正在请求短信验证码,请稍后...", false);
 				break;
 			}
 			case R.id.btn_register:

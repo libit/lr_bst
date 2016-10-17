@@ -19,7 +19,7 @@ public class ApiConfig
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
 	public static final String SUBMIT_ADVICE = getServerUrl() + "/ajaxAddAdviceInfo";//提交意见反馈
 	public static final String USER_LOGIN = getServerUrl() + "/ajaxLogin";//用户登录
-	public static final String GET_SMS_CODE = getServerUrl() + "/ajaxGetSmsCode";//获取手机验证码
+	public static final String GET_SMS_CODE = getServerUrl() + "/../ajaxGetSmsCode";//获取手机验证码
 	public static final String USER_CHANGE_PWD = getServerUrl() + "/ajaxChangePwd";//用户修改密码
 	public static final String USER_REGISTER = getServerUrl() + "/ajaxRegister";//用户注册
 	public static final String GET_USER_INFO = getServerUrl() + "/ajaxGetUserInfo";//获取用户信息
@@ -107,7 +107,12 @@ public class ApiConfig
 	public static final String DATA_TRAFFIC_RECHARGE_BY_CARD = getServerUrl() + "/ajaxAddDataTrafficOrderByCard";//流量卡充值
 	public static final String GET_PACKAGE_DATA_TRAFFIC = getServerUrl() + "/ajaxUserGetPackageDataTraffic";//套餐用户每月领取流量卡
 	//回拨接口
+	public static final String CALLBACK_REGISTER = getServerUrl() + "/ajaxCallbackRegister";//回拨注册
+	public static final String CALLBACK_GET_BALANCE_INFO = getServerUrl() + "/ajaxCallbackGetBalance";//回拨查余额
+	public static final String CALLBACK_RECHARGE = getServerUrl() + "/ajaxCallbackRecharge";//回拨充值
 	public static final String CALLBACK_MAKE_CALL = getServerUrl() + "/ajaxCallbackMakecall";//回拨呼叫
+	public static final String CALLBACK_GET_CALL_LOG_LIST = getServerUrl() + "/ajaxCallbackCallList";//回拨呼叫记录列表
+	public static final String CALLBACK_GET_RECHARGE_LOG_LIST = getServerUrl() + "/ajaxCallbackRechargeList";//回拨充值记录列表
 	//商品积分抵扣
 	public static final String GET_PRICE_POINT_INFO = getServerUrl() + "/ajaxGetProductPricePointInfo";//获取商品积分抵扣信息
 	public static final String GET_PRICE_POINT_INFO_LIST = getServerUrl() + "/ajaxGetProductPricePointInfoList";//批量获取商品积分抵扣信息
@@ -127,6 +132,14 @@ public class ApiConfig
 	public static final String GET_PRODUCT_HISTORY_INFO = getServerUrl() + "/ajaxGetProductStarInfo";//获取用户商品浏览信息
 	//用户余额变动日志
 	public static final String GET_USER_BALANCE_LOG_LIST = getServerUrl() + "/ajaxGetUserBalanceLogList";//用户余额变动日志列表
+	//商家相关
+	public static final String SHOP_REGISTER = getServerUrl() + "/../shop/ajaxRegister";//商家注册
+	public static final String SHOP_AUTH = getServerUrl() + "/../shop/ajaxShopAuth";//商家认证
+	public static final String GET_SHOP_INFO = getServerUrl() + "/../shop/ajaxGetShopInfo";//获取商家信息
+	public static final String GET_SHOP_PRODUCT_LIST = getServerUrl() + "/../shop/ajaxGetProductList";//获取商家商品列表
+	public static final String SHOP_ADD_PRODUCT = getServerUrl() + "/../shop/ajaxAddProductInfo";//商家添加商品
+	public static final String GET_SHOP_PRODUCT_SORT_LIST = getServerUrl() + "/../shop/ajaxGetProductSortList";//获取商家商品类别列表
+	public static final String GET_BRAND_LIST = getServerUrl() + "/../shop/ajaxGetBrandList";//获取商家品牌列表
 
 	public static String getServerUrl()
 	{

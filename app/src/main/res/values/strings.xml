@@ -89,6 +89,14 @@
     <string name="title_activity_order_detail">订单详情</string>
     <!-- 余额支付Activity -->
     <string name="title_activity_pay_by_balance">余额支付</string>
+    <!-- 回拨信息Activity -->
+    <string name="title_activity_callback_info">回拨信息</string>
+    <!-- 回拨充值Activity -->
+    <string name="title_activity_callback_recharge">回拨充值卡充值</string>
+    <!-- 回拨呼叫记录列表Activity -->
+    <string name="title_activity_callback_call_log_list">呼叫记录</string>
+    <!-- 回拨充值记录列表Activity -->
+    <string name="title_activity_callback_recharge_log_list">充值记录</string>
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="downloading">正在下载</string>
@@ -236,4 +244,14 @@
     <string name="sbc_name">Google 图书搜索</string>
     <string name="wifi_changing_network">连接到 Wi-Fi \u2026</string>
     <!-- 二维码结束 -->
+    <!-- 商家注册Activity -->
+    <string name="title_activity_shop_register">商家注册</string>
+    <!-- 商家认证Activity -->
+    <string name="title_activity_shop_auth">商家认证</string>
+    <!-- 商家信息Activity -->
+    <string name="title_activity_shop_info">商家信息</string>
+    <!-- 商家商品列表Activity -->
+    <string name="title_activity_shop_products_manage">商品管理</string>
+    <!-- 添加商品Activity -->
+    <string name="title_activity_product_add">添加商品</string>
 </resources>

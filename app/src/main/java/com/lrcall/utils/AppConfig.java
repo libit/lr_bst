@@ -107,6 +107,17 @@ public class AppConfig
 	}
 
 	/**
+	 * 获取商家头像缓存路径
+	 *
+	 * @param userId
+	 * @return
+	 */
+	public static String getShopPicCacheDir(String userId)
+	{
+		return getCacheDir() + "/head/shop_" + userId + "_temp.jpg";
+	}
+
+	/**
 	 * 升级程序的文件夹
 	 *
 	 * @return

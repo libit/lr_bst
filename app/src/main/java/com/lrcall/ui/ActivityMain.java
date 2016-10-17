@@ -261,6 +261,11 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 			startActivity(new Intent(this, ActivitySearchProducts.class));
 			return true;
 		}
+		else if (id == R.id.action_callback_info)
+		{
+			startActivity(new Intent(this, ActivityCallbackInfo.class));
+			return true;
+		}
 		else if (id == R.id.action_settings)
 		{
 			startActivity(new Intent(this, ActivitySettings.class));
@@ -409,6 +414,14 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		else
 		{
 			menu.findItem(R.id.action_search).setVisible(false);
+		}
+		if (index == DIALER)
+		{
+			menu.findItem(R.id.action_callback_info).setVisible(true);
+		}
+		else
+		{
+			menu.findItem(R.id.action_callback_info).setVisible(false);
 		}
 	}
 

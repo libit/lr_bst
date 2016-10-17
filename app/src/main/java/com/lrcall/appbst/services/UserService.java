@@ -56,10 +56,11 @@ public class UserService extends BaseService
 	 *
 	 * @param number 手机号码
 	 */
-	public void getSmsCode(String number, String tips, final boolean needServiceProcessData)
+	public void getSmsCode(String number, int type, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("number", number);
+		params.put("type", type);
 		ajaxStringCallback(ApiConfig.GET_SMS_CODE, params, tips, needServiceProcessData);
 	}
 
@@ -106,6 +107,18 @@ public class UserService extends BaseService
 		params.put("picId", picId);
 		params.put("code", code);
 		ajaxStringCallback(ApiConfig.USER_REGISTER, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 回拨注册
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void registerCallback(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.CALLBACK_REGISTER, params, tips, needServiceProcessData);
 	}
 
 	/**
@@ -262,6 +275,7 @@ public class UserService extends BaseService
 					PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
 					PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
 					EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
+					registerCallback(null, true);
 				}
 			}
 			else

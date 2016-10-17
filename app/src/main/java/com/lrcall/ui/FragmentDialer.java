@@ -41,7 +41,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentDialer extends MyBaseFragment implements XListView.IXListViewListener, View.OnClickListener, AddressText.InputNumberChangedListener, CallLogsAdapter.ICallLogsAdapterItemClicked, ContactsSearchAdapter.IContactsSearchAdapterItemClick
+public class FragmentDialer extends MyBaseFragment implements XListView.IXListViewListener, View.OnClickListener, AddressText.InputNumberChangedListener
 {
 	private static final String TAG = FragmentDialer.class.getSimpleName();
 	private static final int count = 200;
@@ -285,43 +285,6 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 		getAllCallLog();
 	}
 
-	@Override
-	public void onItemClicked(CallLogInfo callLogInfo)
-	{
-		setPadVisible(true);
-		if (callLogInfo != null)
-		{
-			mAddress.setText(callLogInfo.getNumber());
-			setAddressCursorIndex();
-		}
-	}
-
-	@Override
-	public void onCallClicked(CallLogInfo callLogInfo)
-	{
-		setPadVisible(true);
-		if (callLogInfo != null)
-		{
-			ReturnInfo returnInfo = CallTools.makeCall(this.getContext(), callLogInfo.getNumber());
-			if (!ReturnInfo.isSuccess(returnInfo))
-			{
-				Toast.makeText(this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
-			}
-			mAddress.setText("");
-		}
-	}
-
-	@Override
-	public void onItemClicked(ContactInfo contactInfo)
-	{
-		setPadVisible(true);
-		if (contactInfo != null && contactInfo.getPhoneInfoList() != null && contactInfo.getPhoneInfoList().size() > 0)
-		{
-			mAddress.setText(contactInfo.getPhoneInfoList().get(0).getNumber());
-			setAddressCursorIndex();
-		}
-	}
-
 	// 隐藏软键盘
 	private void hideSoftPad()
 	{
@@ -362,8 +325,12 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 				}
 				if (list != null && list.size() > 0)
 				{
-					bAdd = true;
-					callLogInfoList.addAll(list);
+					//					bAdd = true;
+					//					for (CallLogInfo callLogInfo : list)
+					//					{
+					//						callLogInfoList.add(callLogInfo);
+					//					}
+					bAdd = callLogInfoList.addAll(list);
 				}
 			}
 			return bAdd;
@@ -377,7 +344,34 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 			xListView.stopLoadMore();
 			if (adapterCalllogs == null || start == 0)
 			{
-				adapterCalllogs = new CallLogsAdapter(FragmentDialer.this.getContext(), callLogInfoList, FragmentDialer.this);
+				adapterCalllogs = new CallLogsAdapter(FragmentDialer.this.getContext(), callLogInfoList, new CallLogsAdapter.ICallLogsAdapterItemClicked()
+				{
+					@Override
+					public void onItemClicked(CallLogInfo callLogInfo)
+					{
+						setPadVisible(true);
+						if (callLogInfo != null)
+						{
+							mAddress.setText(callLogInfo.getNumber());
+							setAddressCursorIndex();
+						}
+					}
+
+					@Override
+					public void onCallClicked(CallLogInfo callLogInfo)
+					{
+						setPadVisible(true);
+						if (callLogInfo != null)
+						{
+							ReturnInfo returnInfo = CallTools.makeCall(FragmentDialer.this.getContext(), callLogInfo.getNumber());
+							if (!ReturnInfo.isSuccess(returnInfo))
+							{
+								Toast.makeText(FragmentDialer.this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+							}
+							mAddress.setText("");
+						}
+					}
+				});
 				xListView.setAdapter(adapterCalllogs);
 			}
 			else
@@ -415,7 +409,19 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 			super.onPostExecute(contactInfoList);
 			//			if (contactInfoList.size() > 0)
 			{
-				contactsSearchAdapter = new ContactsSearchAdapter(FragmentDialer.this.getContext(), contactInfoList, FragmentDialer.this);
+				contactsSearchAdapter = new ContactsSearchAdapter(FragmentDialer.this.getContext(), contactInfoList, new ContactsSearchAdapter.IContactsSearchAdapterItemClick()
+				{
+					@Override
+					public void onItemClicked(ContactInfo contactInfo)
+					{
+						setPadVisible(true);
+						if (contactInfo != null && contactInfo.getPhoneInfoList() != null && contactInfo.getPhoneInfoList().size() > 0)
+						{
+							mAddress.setText(contactInfo.getPhoneInfoList().get(0).getNumber());
+							setAddressCursorIndex();
+						}
+					}
+				});
 				xListView.setPullLoadEnable(false);
 				xListView.setPullRefreshEnable(false);
 				xListView.setAdapter(contactsSearchAdapter);

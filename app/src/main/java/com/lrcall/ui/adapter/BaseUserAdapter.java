@@ -32,7 +32,7 @@ public abstract class BaseUserAdapter<T> extends BaseAdapter
 	@Override
 	public Object getItem(int position)
 	{
-		return list != null ? list.get(position) : null;
+		return (list != null && list.size() > position) ? list.get(position) : null;
 	}
 
 	@Override

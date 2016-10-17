@@ -72,11 +72,17 @@ public class PreferenceUtils
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	synchronized public static PreferenceUtils getInstance()
+	public static PreferenceUtils getInstance()
 	{
 		if (instance == null)
 		{
-			instance = new PreferenceUtils();
+			synchronized (PreferenceUtils.class)
+			{
+				if (instance == null)
+				{
+					instance = new PreferenceUtils();
+				}
+			}
 		}
 		return instance;
 	}
@@ -154,7 +160,15 @@ public class PreferenceUtils
 		{
 			Log.e(TAG, "Invalid " + key + " format : expect a int");
 		}
-		return Integer.parseInt(STRING_PREFS.get(key));
+		try
+		{
+			return Integer.parseInt(STRING_PREFS.get(key));
+		}
+		catch (NumberFormatException e)
+		{
+			Log.e(TAG, "Invalid " + key + " format : expect a int");
+		}
+		return -1;
 	}
 
 	/**
