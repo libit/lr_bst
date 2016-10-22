@@ -56,9 +56,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lrcall.appbst.R.id.layout_apply_agent;
-import static com.lrcall.appbst.R.id.layout_apply_shop;
-
 public class FragmentMore extends MyBaseFragment implements XListView.IXListViewListener, View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = FragmentMore.class.getSimpleName();
@@ -133,8 +130,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		rootView.findViewById(R.id.layout_star).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_history).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_settings).setOnClickListener(this);
-		rootView.findViewById(layout_apply_shop).setOnClickListener(this);
-		rootView.findViewById(layout_apply_agent).setOnClickListener(this);
+		rootView.findViewById(R.id.layout_apply_shop).setOnClickListener(this);
+		rootView.findViewById(R.id.layout_apply_agent).setOnClickListener(this);
 		ivPhoto.setOnClickListener(this);
 		super.viewInit(rootView);
 	}

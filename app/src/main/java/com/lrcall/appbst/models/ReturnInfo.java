@@ -10,7 +10,7 @@ import com.lrcall.utils.GsonTools;
 public class ReturnInfo
 {
 	@SerializedName("errcode")
-	private Integer errcode;
+	private int errcode;
 	@SerializedName("errmsg")
 	private String errmsg;
 
@@ -19,7 +19,7 @@ public class ReturnInfo
 		super();
 	}
 
-	public ReturnInfo(Integer errcode, String errmsg)
+	public ReturnInfo(int errcode, String errmsg)
 	{
 		super();
 		this.errcode = errcode;
@@ -28,15 +28,22 @@ public class ReturnInfo
 
 	public static boolean isSuccess(ReturnInfo info)
 	{
-		return (info != null && info.getErrcode() != null && info.getErrcode() == 0);
+		if (info != null && info.getErrcode() == ErrorInfo.getSuccessId()) // && info.getErrcode() != null && info.getErrcode().intValue() == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
-	public Integer getErrcode()
+	public int getErrcode()
 	{
 		return errcode;
 	}
 
-	public void setErrcode(Integer errcode)
+	public void setErrcode(int errcode)
 	{
 		this.errcode = errcode;
 	}

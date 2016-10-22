@@ -22,7 +22,6 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -42,10 +41,11 @@ import java.io.File;
 
 public class ActivityWebView extends MyBaseActivity implements XListView.IXListViewListener
 {
+	private static final String TAG = ActivityWebView.class.getSimpleName();
 	private final static int FILECHOOSER_RESULTCODE = 1;
 	private final static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
-	private static final String TAG = ActivityWebView.class.getSimpleName();
 	private ValueCallback<Uri[]> mUploadMessageForAndroid5;
+	private ValueCallback<Uri> mUploadMessage;
 	private XListView xListView;
 	private View headView;
 	private FrameLayout layoutWeb;
@@ -53,7 +53,6 @@ public class ActivityWebView extends MyBaseActivity implements XListView.IXListV
 	private View videoView;
 	private ProgressBar progressBar;
 	private String webTitle, mUrl;
-	private ValueCallback<Uri> mUploadMessage;
 	private WebChromeClient.CustomViewCallback customViewCallback;
 
 	public static void startWebActivity(Context c, String title, String url)
@@ -255,18 +254,26 @@ public class ActivityWebView extends MyBaseActivity implements XListView.IXListV
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl)
 			{
 				super.onReceivedError(view, errorCode, description, failingUrl);
+				//				LogcatTools.debug(TAG, "过时的onReceivedError:errorCode->" + errorCode);
+				//				if (errorCode == 404)
+				//				{
 				webView.loadUrl("file:///android_asset/error.html");
+				//				}
 			}
 
+			@Override
 			public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error)
 			{
+				//				LogcatTools.debug(TAG, "onReceivedError:errorCode->" + error.getErrorCode());
 				webView.loadUrl("file:///android_asset/error.html");
 			}
-
-			public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse)
-			{
-				webView.loadUrl("file:///android_asset/error.html");
-			}
+			//这个方法容易误拦截正常的页面
+			//			@Override
+			//			public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse)
+			//			{
+			//				LogcatTools.debug(TAG, "onReceivedHttpError:errorCode->" + errorResponse.getStatusCode());
+			//				webView.loadUrl("file:///android_asset/error.html");
+			//			}
 		});
 		webView.setDownloadListener(new DownloadListener()
 		{
@@ -399,6 +406,10 @@ public class ActivityWebView extends MyBaseActivity implements XListView.IXListV
 			if (webView.canGoBack())
 			{
 				webView.goBack();
+			}
+			else
+			{
+				loadUrl();
 			}
 			return true;
 		}

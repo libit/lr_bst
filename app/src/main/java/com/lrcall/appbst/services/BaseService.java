@@ -12,6 +12,7 @@ import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ErrorInfo;
 import com.lrcall.appbst.models.ReturnInfo;
+import com.lrcall.events.UserEvent;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.MyProgressDialog;
 import com.lrcall.utils.AppConfig;
@@ -21,6 +22,8 @@ import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 import com.lrcall.utils.apptools.AppFactory;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.HashSet;
@@ -345,9 +348,11 @@ public abstract class BaseService
 		}
 		else
 		{
+			//如果是密码错误,则需要登出
 			if (returnInfo.getErrcode() == ErrorInfo.getPasswordErrorId())
 			{
 				PreferenceUtils.getInstance().setSessionId("");
+				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGOUT));
 			}
 		}
 		return false;

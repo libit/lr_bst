@@ -47,7 +47,7 @@ public class PreferenceUtils
 			put(DIAL_PRESS_TONE_MODE, ModType.GENERIC_TYPE_PREVENT.getType() + "");
 			put(DIAL_PRESS_VIBRATE_MODE, ModType.GENERIC_TYPE_PREVENT.getType() + "");
 			put(PIC_QUALITY, PicQuality.HIGH.getLevel() + "");
-			put(WX_APP_ID, "wxc3320fbd81b3b089");
+			put(WX_APP_ID, "");
 			put(CLIENT_CONFIG, "");
 			put(PREF_CALLBACK_AUTO_ANSWER_KEY, AutoAnswerType.AUTO_ANSWER2.getType() + "");
 		}
