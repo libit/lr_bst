@@ -207,7 +207,8 @@
                 android:layout_marginRight="@dimen/margin0"
                 android:layout_marginTop="@dimen/margin10"
                 android:background="@color/white"
-                android:contentDescription="@null">
+                android:contentDescription="@null"
+                android:visibility="gone">
                 <TextView
                     android:id="@+id/app_setting_about"
                     android:layout_width="wrap_content"
@@ -246,13 +247,15 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="@dimen/margin15"
                 android:layout_marginRight="@dimen/margin15"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <RelativeLayout
                 android:id="@+id/layout_advice"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/app_setting_relativeLayout_h"
                 android:layout_marginLeft="@dimen/margin0"
                 android:layout_marginRight="@dimen/margin0"
+                android:layout_marginTop="@dimen/margin10"
                 android:background="@color/white"
                 android:contentDescription="@null">
                 <TextView
@@ -387,7 +390,8 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="@dimen/margin15"
                 android:layout_marginRight="@dimen/margin15"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <RelativeLayout
                 android:id="@+id/layout_more_app"
                 android:layout_width="match_parent"
@@ -395,7 +399,8 @@
                 android:layout_marginLeft="@dimen/margin0"
                 android:layout_marginRight="@dimen/margin0"
                 android:background="@color/white"
-                android:contentDescription="@null">
+                android:contentDescription="@null"
+                android:visibility="gone">
                 <TextView
                     android:id="@+id/app_setting_more_app"
                     android:layout_width="wrap_content"

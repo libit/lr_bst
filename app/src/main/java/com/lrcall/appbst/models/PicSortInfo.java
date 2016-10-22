@@ -11,8 +11,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class PicSortInfo
 {
-	@SerializedName("id")
-	private Integer id;
 	@SerializedName("sortId")
 	private String sortId;
 	@SerializedName("name")
@@ -26,16 +24,6 @@ public class PicSortInfo
 	{
 		this.sortId = sortId;
 		this.name = name;
-	}
-
-	public Integer getId()
-	{
-		return id;
-	}
-
-	public void setId(Integer id)
-	{
-		this.id = id;
 	}
 
 	public String getSortId()

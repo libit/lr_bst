@@ -20,8 +20,6 @@ public class BannerInfo extends DbObject
 	public static final String FIELD_CLICK_TYPE = "click_type";
 	public static final String FIELD_CONTENT = "content";
 	public static final String FIELD_DATE = "date";
-	@SerializedName("id")
-	private String id;// 主键
 	@SerializedName("bannerId")
 	private String bannerId;//ID
 	@SerializedName("picId")
@@ -65,7 +63,7 @@ public class BannerInfo extends DbObject
 	public static BannerInfo getObjectFromDb(Cursor cursor)
 	{
 		BannerInfo bannerInfo = new BannerInfo();
-		bannerInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
+
 		bannerInfo.setBannerId(cursor.getString(cursor.getColumnIndex(FIELD_BANNER_ID)));
 		bannerInfo.setPicUrl(cursor.getString(cursor.getColumnIndex(FIELD_PIC_URL)));
 		bannerInfo.setClickType(cursor.getString(cursor.getColumnIndex(FIELD_CLICK_TYPE)));
@@ -82,26 +80,12 @@ public class BannerInfo extends DbObject
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		if (id != null)
-		{
-			contentValues.put(FIELD_ID, id);
-		}
 		contentValues.put(FIELD_BANNER_ID, bannerId);
 		contentValues.put(FIELD_PIC_URL, picUrl);
 		contentValues.put(FIELD_CLICK_TYPE, clickType);
 		contentValues.put(FIELD_CONTENT, content);
 		contentValues.put(FIELD_DATE, date);
 		return contentValues;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getBannerId()

@@ -92,7 +92,7 @@ public class ActivityLogin extends MyBaseActivity implements View.OnClickListene
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == ConstValues.REQUEST_REGISTER)

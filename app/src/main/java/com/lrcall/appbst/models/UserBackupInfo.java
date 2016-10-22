@@ -8,8 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserBackupInfo
 {
-	@SerializedName("id")
-	private Integer id;
 	@SerializedName("userId")
 	private String userId;
 	@SerializedName("dataType")
@@ -29,9 +27,8 @@ public class UserBackupInfo
 	{
 	}
 
-	public UserBackupInfo(Integer id, String userId, String dataType, String name, String data, String description, String signData, long addDateLong)
+	public UserBackupInfo(String userId, String dataType, String name, String data, String description, String signData, long addDateLong)
 	{
-		this.id = id;
 		this.userId = userId;
 		this.dataType = dataType;
 		this.name = name;
@@ -39,16 +36,6 @@ public class UserBackupInfo
 		this.description = description;
 		this.signData = signData;
 		this.addDateLong = addDateLong;
-	}
-
-	public Integer getId()
-	{
-		return id;
-	}
-
-	public void setId(Integer id)
-	{
-		this.id = id;
 	}
 
 	public String getUserId()

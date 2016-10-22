@@ -5,6 +5,8 @@
 package com.lrcall.ui;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -57,6 +59,29 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 		etCode = (EditText) findViewById(R.id.et_code);
 		findViewById(R.id.btn_get_code).setOnClickListener(this);
 		findViewById(R.id.btn_register).setOnClickListener(this);
+		etUsername.addTextChangedListener(new TextWatcher()
+		{
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after)
+			{
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count)
+			{
+			}
+
+			@Override
+			public void afterTextChanged(Editable s)
+			{
+				String username = etUsername.getText().toString();
+				if (CallTools.isChinaMobilePhoneNumber(username))
+				{
+					mUserService.getSmsCode(username, SmsCodeType.REGISTER.getType(), null, false);
+					return;
+				}
+			}
+		});
 	}
 
 	@Override
@@ -87,17 +112,17 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 				String username = etUsername.getText().toString();
 				String password = etPassword.getText().toString();
 				String rePassword = etPassword.getText().toString();//etRePassword.getText().toString();
-				String payPassword = etPayPassword.getText().toString();
-				String payRePassword = etPayPassword.getText().toString();//etPayRePassword.getText().toString();
+				String payPassword = etPassword.getText().toString();
+				String payRePassword = etPassword.getText().toString();//etPayRePassword.getText().toString();
 				String name = etUsername.getText().toString();//etName.getText().toString();
 				String nickname = etUsername.getText().toString();//etNickname.getText().toString();
 				String number = etUsername.getText().toString();//etNumber.getText().toString();
 				String email = etUsername.getText().toString() + "@qq.com";//etEmail.getText().toString();
 				String referrerId = etReferrerId.getText().toString();
-				String code = etCode.getText().toString();
+				String code = "1234";//etCode.getText().toString();
 				if (StringTools.isNull(username))
 				{
-					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "账号不能为空！");
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "手机号码不能为空！");
 					etUsername.requestFocus();
 					return;
 				}
@@ -177,13 +202,13 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 				if (StringTools.isNull(number))
 				{
 					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "手机号码不能为空！");
-					etNumber.requestFocus();
+					etUsername.requestFocus();
 					return;
 				}
 				if (!CallTools.isChinaMobilePhoneNumber(number))
 				{
 					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "手机号码格式不正确！");
-					etNumber.requestFocus();
+					etUsername.requestFocus();
 					return;
 				}
 				if (StringTools.isNull(email))
@@ -223,20 +248,20 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 		}
 		else if (url.endsWith(ApiConfig.GET_SMS_CODE))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, returnInfo.getErrmsg());
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "获取验证码失败:" + msg);
-			}
+			//			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			//			if (ReturnInfo.isSuccess(returnInfo))
+			//			{
+			//				ToastView.showCenterToast(this, R.drawable.ic_done, returnInfo.getErrmsg());
+			//			}
+			//			else
+			//			{
+			//				String msg = result;
+			//				if (returnInfo != null)
+			//				{
+			//					msg = returnInfo.getErrmsg();
+			//				}
+			//				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "获取验证码失败:" + msg);
+			//			}
 			return true;
 		}
 		return false;

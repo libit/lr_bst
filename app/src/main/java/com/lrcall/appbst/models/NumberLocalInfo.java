@@ -12,6 +12,8 @@ import com.lrcall.db.DbConstant;
 
 import java.util.Comparator;
 
+import static android.R.attr.id;
+
 /**
  * Created by libit on 15/8/19.
  */
@@ -19,8 +21,6 @@ public class NumberLocalInfo extends DbObject implements Comparator<NumberLocalI
 {
 	public static final String FIELD_NUMBER = "number";
 	public static final String FIELD_LOCAL_INFO = "local_info";
-	@SerializedName("id")
-	private String id;// 主键
 	@SerializedName("number")
 	private String number;//电话号码
 	@SerializedName("localInfo")
@@ -56,7 +56,6 @@ public class NumberLocalInfo extends DbObject implements Comparator<NumberLocalI
 	public static NumberLocalInfo getObjectFromDb(Cursor cursor)
 	{
 		NumberLocalInfo numberLocalInfo = new NumberLocalInfo();
-		numberLocalInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
 		numberLocalInfo.setNumber(cursor.getString(cursor.getColumnIndex(FIELD_NUMBER)));
 		numberLocalInfo.setLocalInfo(cursor.getString(cursor.getColumnIndex(FIELD_LOCAL_INFO)));
 		return numberLocalInfo;
@@ -70,23 +69,9 @@ public class NumberLocalInfo extends DbObject implements Comparator<NumberLocalI
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		if (id != null)
-		{
-			contentValues.put(FIELD_ID, id);
-		}
 		contentValues.put(FIELD_NUMBER, number);
 		contentValues.put(FIELD_LOCAL_INFO, localInfo);
 		return contentValues;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getNumber()

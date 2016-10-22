@@ -242,6 +242,9 @@
         <activity
             android:name="com.lrcall.ui.ActivityCallbackRechargeLogList"
             android:label="@string/title_activity_callback_recharge_log_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityDialWaiting"
+            android:label="@string/title_activity_callback_call_waiting"/>
         <!-- 商家 -->
         <activity
             android:name="com.lrcall.ui.ActivityShopRegister"
@@ -258,6 +261,15 @@
         <activity
             android:name="com.lrcall.ui.ActivityProductAdd"
             android:label="@string/title_activity_product_add"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityProductEdit"
+            android:label="@string/title_activity_product_edit"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityShopOrdersManage"
+            android:label="@string/title_activity_orders_manage"/>
+
+        <service android:name="com.lrcall.services.AutoAnswerIntentService"/>
+        <service android:name="com.lrcall.services.AutoAnswerIntentService2"/>
         <!-- alipay sdk begin -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"

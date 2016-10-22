@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.androidquery.AQuery;
+import com.lrcall.appbst.MyApplication;
+import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.LogcatTools;
 
@@ -60,7 +62,7 @@ public class PicService extends BaseService
 		if (bitmap != null)
 		{
 			LogcatTools.debug("aQuery", "从缓存读取图片:" + url);
-			bitmap = BmpTools.createRoundConerImage(bitmap, width, width, 50, 50);
+			bitmap = BmpTools.createRoundConerImage(bitmap, width, width, 50 * width / DisplayTools.getWindowWidth(MyApplication.getContext()), 50 * width / DisplayTools.getWindowWidth(MyApplication.getContext()));
 			imageView.setImageBitmap(bitmap);
 		}
 		else

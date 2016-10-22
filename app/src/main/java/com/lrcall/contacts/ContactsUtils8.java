@@ -252,30 +252,40 @@ public class ContactsUtils8 extends ContactsFactory
 		{
 			return null;
 		}
+		number = CallTools.convertToCallPhoneNumber(number);
+		//		String sortOrder = getSortKey() + " COLLATE LOCALIZED ASC";
+		//		String[] nums = CallTools.parseSqlNumber(number);
+		//		String where = "";
+		//		if (nums != null && nums.length > 0)
+		//		{
+		//			for (int i = 0; i < nums.length; i++)
+		//			{
+		//				if (i < nums.length - 1)
+		//				{
+		//					where += " (" + NUMBER8 + " like '%" + nums[i] + "%') or ";
+		//				}
+		//				else
+		//				{
+		//					where += " (" + NUMBER8 + " like '%" + nums[i] + "%') ";
+		//				}
+		//			}
+		//		}
+		//		Log.d("getContactInfosByNumber", "where:" + where);
+		//		Cursor cursor = context.getContentResolver().query(CONTENT_URI8, projection8, where, null, sortOrder);
+		//		List<ContactInfo> contactInfos = buildContactInfos(context, cursor, showPhoto);
+		//		if (cursor != null && !cursor.isClosed())
+		//		{
+		//			cursor.close();
+		//		}
+		Uri uri = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI, number);
 		String sortOrder = getSortKey() + " COLLATE LOCALIZED ASC";
-		String[] nums = CallTools.parseSqlNumber(number);
-		String where = "";
-		if (nums != null && nums.length > 0)
-		{
-			for (int i = 0; i < nums.length; i++)
-			{
-				if (i < nums.length - 1)
-				{
-					where += " (" + NUMBER8 + " like '%" + nums[i] + "%') or ";
-				}
-				else
-				{
-					where += " (" + NUMBER8 + " like '%" + nums[i] + "%') ";
-				}
-			}
-		}
-		Cursor cursor = context.getContentResolver().query(CONTENT_URI8, projection8, where, null, sortOrder);
-		List<ContactInfo> contactInfos = buildContactInfos(context, cursor, showPhoto);
+		Cursor cursor = context.getContentResolver().query(uri, projection8, null, null, sortOrder);
+		List<ContactInfo> list = buildContactInfos(context, cursor, showPhoto);
 		if (cursor != null && !cursor.isClosed())
 		{
 			cursor.close();
 		}
-		return contactInfos;
+		return list;
 	}
 
 	/**
@@ -448,7 +458,7 @@ public class ContactsUtils8 extends ContactsFactory
 			// 添加姓名
 			uri = Uri.parse("content://com.android.contacts/data");
 			values.put("raw_contact_id", contactId);
-			values.put("mimetype", "vnd.android.cursor.item/tvName");
+			values.put("mimetype", "vnd.android.cursor.item/name");
 			values.put("data2", contactInfo.getName());
 			Uri contactUri = resolver.insert(uri, values);
 			if (contactUri == null)

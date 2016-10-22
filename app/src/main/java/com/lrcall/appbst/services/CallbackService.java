@@ -5,12 +5,19 @@
 package com.lrcall.appbst.services;
 
 import android.content.Context;
+import android.provider.CallLog;
 
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ReturnInfo;
+import com.lrcall.calllogs.CallLogsFactory;
+import com.lrcall.contacts.ContactsFactory;
+import com.lrcall.models.CallLogInfo;
+import com.lrcall.models.ContactInfo;
 import com.lrcall.ui.customer.ToastView;
+import com.lrcall.utils.CallTools;
 import com.lrcall.utils.GsonTools;
+import com.lrcall.utils.StringTools;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +68,19 @@ public class CallbackService extends BaseService
 	 */
 	public void makeCall(String number, String tips, final boolean needServiceProcessData)
 	{
+		number = CallTools.convertToCallPhoneNumber(number);
+		if (!StringTools.isNull(number))
+		{
+			ContactInfo contactInfo = ContactsFactory.getInstance().getFirstContactInfoByNumber(context, number, false);
+			String name = number;
+			if (contactInfo != null)
+			{
+				name = contactInfo.getName();
+			}
+			CallLogInfo callLogInfo = new CallLogInfo(System.currentTimeMillis() + "", name, number, CallLog.Calls.OUTGOING_TYPE, System.currentTimeMillis(), 0, "", "");
+			CallLogsFactory.getInstance().addCallLogInfo(context, callLogInfo);
+		}
+		number = CallTools.convertToCallPhoneNumber(number);
 		Map<String, Object> params = new HashMap<>();
 		params.put("number", number);
 		ajaxStringCallback(ApiConfig.CALLBACK_MAKE_CALL, params, tips, needServiceProcessData);

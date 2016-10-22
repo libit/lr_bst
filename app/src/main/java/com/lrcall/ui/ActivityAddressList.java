@@ -144,7 +144,7 @@ public class ActivityAddressList extends MyBaseActivity implements IAjaxDataResp
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQ_ADD || requestCode == REQ_EDIT)

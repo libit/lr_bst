@@ -9,12 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.models.ErrorInfo;
 import com.lrcall.appbst.models.ReturnInfo;
-import com.lrcall.appbst.services.ApiConfig;
-import com.lrcall.appbst.services.CallbackService;
-import com.lrcall.appbst.services.IAjaxDataResponse;
+import com.lrcall.appbst.services.UserService;
+import com.lrcall.ui.ActivityDialWaiting;
+import com.lrcall.ui.ActivityLogin;
 
 import java.util.ArrayList;
 
@@ -255,25 +254,33 @@ public class CallTools
 		{
 			return new ReturnInfo(ErrorInfo.getForbiddenErrorId(), "呼叫号码不能为空！");
 		}
-		CallbackService callbackService = new CallbackService(context);
-		callbackService.addDataResponse(new IAjaxDataResponse()
+		if (!UserService.isLogin())
 		{
-			@Override
-			public boolean onAjaxDataResponse(String url, String result, AjaxStatus status)
-			{
-				if (url.endsWith(ApiConfig.CALLBACK_MAKE_CALL))
-				{
-					ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-					if (!ReturnInfo.isSuccess(returnInfo))
-					{
-						//						makeLocalCall(context, number);
-					}
-					return true;
-				}
-				return false;
-			}
-		});
-		callbackService.makeCall(number, "正在回拨，请稍后...", true);
+			context.startActivity(new Intent(context, ActivityLogin.class));
+			return new ReturnInfo(ErrorInfo.getSuccessId(), "用户未登录！");
+		}
+		Intent intent = new Intent(context, ActivityDialWaiting.class);
+		intent.putExtra(ConstValues.DATA_NUMBER, number);
+		context.startActivity(intent);
+		//		CallbackService callbackService = new CallbackService(context);
+		//		callbackService.addDataResponse(new IAjaxDataResponse()
+		//		{
+		//			@Override
+		//			public boolean onAjaxDataResponse(String url, String result, AjaxStatus status)
+		//			{
+		//				if (url.endsWith(ApiConfig.CALLBACK_MAKE_CALL))
+		//				{
+		//					ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+		//					if (!ReturnInfo.isSuccess(returnInfo))
+		//					{
+		//						//						makeLocalCall(context, number);
+		//					}
+		//					return true;
+		//				}
+		//				return false;
+		//			}
+		//		});
+		//		callbackService.makeCall(number, "正在回拨，请稍后...", true);
 		return new ReturnInfo(ErrorInfo.getSuccessId(), "呼叫号码成功！");
 	}
 

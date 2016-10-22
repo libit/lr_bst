@@ -29,6 +29,7 @@ public class ConstValues
 	public static final String DATA_WEB_URL = "data.web.url";
 	public static final String DATA_PACKAGE_NAME = "data.package.name";
 	public static final String DATA_ACTION = "data.action";
+	public static final String DATA_NUMBER = "number";
 	// 登录结果
 	public static final int REQUEST_LOGIN = 1000;//登录代码
 	public static final int REQUEST_LOGIN_USER = 1001;//登录代码，跳转到用户中心
@@ -52,6 +53,7 @@ public class ConstValues
 	public static final String DATA_ORDER_TYPE = "order_type";
 	public static final String DATA_NEWS_ID = "news_id";
 	public static final String DATA_PRODUCT_ID = "product_id";
+	public static final String DATA_PRODUCT = "product_info";
 	public static final String DATA_PRODUCT_SHOW_PIC_URLS = "product_show_pic_urls";
 	public static final String DATA_PRODUCT_SORT_ID = "product_sort_id";
 	public static final String DATA_ORDER_PRODUCT_LIST = "order_product_list";
@@ -59,4 +61,5 @@ public class ConstValues
 	//	public static final String DATA_PAY_CONTENT = "pay_content";//支付的内容类型，比如是余额充值还是流量充值或者是订单支付
 	//	public static final String DATA_PAY_AMOUNT = "pay_amount";//支付金额
 	public static final String DATA_PAY_TYPE_INFO = "pay_type_info";//支付信息
+	public static final String DATA_SHOW_PAD = "show_pad";
 }

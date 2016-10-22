@@ -10,6 +10,8 @@ import android.content.Context;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
+import com.lrcall.appbst.models.ErrorInfo;
+import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.MyProgressDialog;
 import com.lrcall.utils.AppConfig;
@@ -335,12 +337,19 @@ public abstract class BaseService
 			ToastView.showCenterToast(context, R.drawable.ic_do_fail, "网络错误，请检查网络设置！");
 			return true;
 		}
-		//		ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-		//		if (returnInfo == null)
-		//		{
-		//			ToastView.showCenterToast(context, R.drawable.ic_do_fail, "网络错误，请检查网络设置！");
-		//			return true;
-		//		}
+		ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+		if (returnInfo == null)
+		{
+			//			ToastView.showCenterToast(context, R.drawable.ic_do_fail, "网络错误，请检查网络设置！");
+			//			return true;
+		}
+		else
+		{
+			if (returnInfo.getErrcode() == ErrorInfo.getPasswordErrorId())
+			{
+				PreferenceUtils.getInstance().setSessionId("");
+			}
+		}
 		return false;
 	}
 }

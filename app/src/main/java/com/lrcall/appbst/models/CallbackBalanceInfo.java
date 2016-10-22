@@ -4,9 +4,13 @@
  */
 package com.lrcall.appbst.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CallbackBalanceInfo
 {
+	@SerializedName("balance")
 	private double balance;
+	@SerializedName("validateDate")
 	private String validateDate;
 
 	public CallbackBalanceInfo()

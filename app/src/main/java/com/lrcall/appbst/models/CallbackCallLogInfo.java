@@ -4,15 +4,25 @@
  */
 package com.lrcall.appbst.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CallbackCallLogInfo
 {
+	@SerializedName("userId")
 	private String userId;
+	@SerializedName("number")
 	private String number;
+	@SerializedName("platform")
 	private String platform;
+	@SerializedName("versionCode")
 	private Integer versionCode;
+	@SerializedName("duration")
 	private int duration;
+	@SerializedName("callDateLong")
 	private long callDateLong;
+	@SerializedName("status")
 	private byte status;
+	@SerializedName("remark")
 	private String remark;
 
 	public CallbackCallLogInfo()

@@ -73,20 +73,20 @@ public class IndexNewProductsAdapter extends BaseUserAdapter<ProductInfo>
 		}
 		//设置控件的值
 		final ProductInfo productInfo = list.get(position);
-		PicService.ajaxGetRoundTopPic(viewHolder.ivHead, ApiConfig.getServerPicUrl(productInfo.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3, 15);
+		PicService.ajaxGetRoundTopPic(viewHolder.ivHead, ApiConfig.getServerPicUrl(productInfo.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 4, 15);
 		viewHolder.tvName.setText(productInfo.getName());
 		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(productInfo.getPrice()));
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iNewProductsAdapter != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (iNewProductsAdapter != null)
+				@Override
+				public void onClick(View v)
 				{
 					iNewProductsAdapter.onProductClicked(productInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 

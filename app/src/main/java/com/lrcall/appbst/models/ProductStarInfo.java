@@ -19,8 +19,6 @@ public class ProductStarInfo extends DbObject
 	public static final String FIELD_USER_ID = "user_id";
 	public static final String FIELD_PRODUCT_ID = "product_id";
 	public static final String FIELD_DATE = "date";
-	@SerializedName("id")
-	private String id;
 	@SerializedName("starId")
 	private String starId;
 	@SerializedName("userId")
@@ -49,7 +47,6 @@ public class ProductStarInfo extends DbObject
 	public static ProductStarInfo getObjectFromDb(Cursor cursor)
 	{
 		ProductStarInfo productStarInfo = new ProductStarInfo();
-		productStarInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
 		productStarInfo.setStarId(cursor.getString(cursor.getColumnIndex(FIELD_STAR_ID)));
 		productStarInfo.setUserId(cursor.getString(cursor.getColumnIndex(FIELD_USER_ID)));
 		productStarInfo.setProductId(cursor.getString(cursor.getColumnIndex(FIELD_PRODUCT_ID)));
@@ -65,10 +62,6 @@ public class ProductStarInfo extends DbObject
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		if (id != null)
-		{
-			contentValues.put(FIELD_ID, id);
-		}
 		contentValues.put(FIELD_STAR_ID, starId);
 		contentValues.put(FIELD_USER_ID, userId);
 		contentValues.put(FIELD_PRODUCT_ID, productId);
@@ -86,16 +79,6 @@ public class ProductStarInfo extends DbObject
 		this.userId = userId;
 		this.productId = productId;
 		this.date = date;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getStarId()

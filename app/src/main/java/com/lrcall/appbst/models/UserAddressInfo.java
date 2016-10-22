@@ -26,8 +26,6 @@ public class UserAddressInfo extends DbObject
 	public static final String FIELD_ADDRESS = "address";
 	public static final String FIELD_STATUS = "status";
 	public static final String FIELD_DATE = "date";
-	@SerializedName("id")
-	private String id;
 	@SerializedName("addressId")
 	private String addressId;
 	@SerializedName("userId")
@@ -70,7 +68,6 @@ public class UserAddressInfo extends DbObject
 	public static UserAddressInfo getObjectFromDb(Cursor cursor)
 	{
 		UserAddressInfo userAddressInfo = new UserAddressInfo();
-		userAddressInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
 		userAddressInfo.setAddressId(cursor.getString(cursor.getColumnIndex(FIELD_ADDRESS_ID)));
 		userAddressInfo.setUserId(cursor.getString(cursor.getColumnIndex(FIELD_USER_ID)));
 		userAddressInfo.setName(cursor.getString(cursor.getColumnIndex(FIELD_NAME)));
@@ -93,10 +90,6 @@ public class UserAddressInfo extends DbObject
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		if (id != null)
-		{
-			contentValues.put(FIELD_ID, id);
-		}
 		contentValues.put(FIELD_ADDRESS_ID, addressId);
 		contentValues.put(FIELD_USER_ID, userId);
 		contentValues.put(FIELD_NAME, name);
@@ -128,16 +121,6 @@ public class UserAddressInfo extends DbObject
 		this.address = address;
 		this.status = status;
 		this.updateDateLong = updateDateLong;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getAddressId()

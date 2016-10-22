@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.lrcall.appbst.MyApplication;
+import com.lrcall.enums.AutoAnswerType;
 import com.lrcall.enums.LogLevel;
 import com.lrcall.enums.ModType;
 import com.lrcall.enums.PicQuality;
@@ -33,6 +34,7 @@ public class PreferenceUtils
 	public static final String WX_APP_ID = "wx_app_id";
 	public static final String IS_DEBUG = "is_debug";
 	public static final String CLIENT_CONFIG = "client_config";
+	public static final String PREF_CALLBACK_AUTO_ANSWER_KEY = "pref_callback_answer_key";
 	private final static HashMap<String, String> STRING_PREFS = new HashMap<String, String>()
 	{
 		private static final long serialVersionUID = 1L;
@@ -47,6 +49,7 @@ public class PreferenceUtils
 			put(PIC_QUALITY, PicQuality.HIGH.getLevel() + "");
 			put(WX_APP_ID, "wxc3320fbd81b3b089");
 			put(CLIENT_CONFIG, "");
+			put(PREF_CALLBACK_AUTO_ANSWER_KEY, AutoAnswerType.AUTO_ANSWER2.getType() + "");
 		}
 	};
 	private final static HashMap<String, Boolean> BOOLEAN_PREFS = new HashMap<String, Boolean>()

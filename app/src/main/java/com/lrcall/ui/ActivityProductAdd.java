@@ -4,23 +4,31 @@
  */
 package com.lrcall.ui;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.androidquery.callback.AjaxStatus;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.BrandInfo;
+import com.lrcall.appbst.models.PicInfo;
 import com.lrcall.appbst.models.ProductSortInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
+import com.lrcall.appbst.services.PicService;
 import com.lrcall.appbst.services.ShopProductService;
+import com.lrcall.appbst.services.ShopService;
+import com.lrcall.enums.NeedExpress;
+import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LogcatTools;
@@ -29,20 +37,18 @@ import com.lrcall.utils.StringTools;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lrcall.appbst.R.id.et_config;
-import static com.lrcall.appbst.R.id.et_content;
-import static com.lrcall.appbst.R.id.et_desc;
-import static com.lrcall.appbst.R.id.et_sort_index;
-
 public class ActivityProductAdd extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivityProductAdd.class.getSimpleName();
 	private EditText etName, etPrice, etPoint, etMarketPrice, etExpressPrice, etAgentShare, etAddShare, etCount, etSortIndex, etDesc, etConfig, etContent;
-	private ArrayAdapter spSortsAdapter, spBrandsAdapter;
+	private CheckBox cbNeedExpress;
+	private ImageView ivProduct;
 	private Spinner spSorts, spBrands;
+	private ArrayAdapter spSortsAdapter, spBrandsAdapter;
 	private List<ProductSortInfo> mSortsList = new ArrayList<>();
 	private List<BrandInfo> mBrandsList = new ArrayList<>();
 	private ShopProductService mShopProductService;
+	private String mPicId = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -71,11 +77,14 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 		etAgentShare = (EditText) findViewById(R.id.et_agent_share);
 		etAddShare = (EditText) findViewById(R.id.et_add_share);
 		etCount = (EditText) findViewById(R.id.et_count);
-		etSortIndex = (EditText) findViewById(et_sort_index);
-		etDesc = (EditText) findViewById(et_desc);
-		etConfig = (EditText) findViewById(et_config);
-		etContent = (EditText) findViewById(et_content);
+		etSortIndex = (EditText) findViewById(R.id.et_sort_index);
+		etDesc = (EditText) findViewById(R.id.et_desc);
+		etConfig = (EditText) findViewById(R.id.et_config);
+		etContent = (EditText) findViewById(R.id.et_content);
+		cbNeedExpress = (CheckBox) findViewById(R.id.cb_need_express);
+		ivProduct = (ImageView) findViewById(R.id.iv_product);
 		findViewById(R.id.btn_add).setOnClickListener(this);
+		ivProduct.setOnClickListener(this);
 		spSorts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
 		{
 			@Override
@@ -105,10 +114,24 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 	}
 
 	@Override
+	protected void picSelected(Bitmap bitmap)
+	{
+		super.picSelected(bitmap);
+		ShopService shopService = new ShopService(this);
+		shopService.addDataResponse(this);
+		shopService.updateShopPic(bitmap, "正在上传图片,请稍后...", true);
+	}
+
+	@Override
 	public void onClick(View v)
 	{
 		switch (v.getId())
 		{
+			case R.id.iv_product:
+			{
+				selectPhoto();
+				break;
+			}
 			case R.id.btn_add:
 			{
 				String name = etName.getText().toString();
@@ -123,8 +146,7 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 				String desc = etDesc.getText().toString();
 				String config = etConfig.getText().toString();
 				String content = etContent.getText().toString();
-				String picId = "";
-				byte needExpress = 1;
+				byte needExpress = cbNeedExpress.isChecked() ? NeedExpress.NEED.getStatus() : NeedExpress.NOT_NEED.getStatus();
 				int position = spSorts.getSelectedItemPosition();
 				String sortId = "";
 				if (position >= 0)
@@ -145,12 +167,12 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 				}
 				if (StringTools.isNull(sortId))
 				{
-					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "请选择省份!");
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "请选择分类!");
 					return;
 				}
 				if (StringTools.isNull(brandId))
 				{
-					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "请选择市!");
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "请选择品牌!");
 					return;
 				}
 				if (StringTools.isNull(desc))
@@ -171,7 +193,12 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 					etContent.requestFocus();
 					return;
 				}
-				mShopProductService.addProduct(sortId, brandId, name, picId, price, marketPrice, expressPrice, count, agentShare, addShare, desc, config, content, needExpress, sortIndex, point, "正在添加，请稍后...", true);
+				if (StringTools.isNull(mPicId))
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "未上传图片！");
+					return;
+				}
+				mShopProductService.addProduct(sortId, brandId, name, mPicId, price, marketPrice, expressPrice, count, agentShare, addShare, desc, config, content, needExpress, sortIndex, point, "正在添加，请稍后...", true);
 				break;
 			}
 		}
@@ -185,8 +212,9 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
+				setResult(RESULT_OK);
 				finish();
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "添加地址成功！");
+				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "添加商品成功！");
 			}
 			else
 			{
@@ -195,7 +223,7 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 				{
 					msg = returnInfo.getErrmsg();
 				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "添加地址失败：" + msg);
+				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "添加商品失败：" + msg);
 			}
 			return true;
 		}
@@ -246,6 +274,26 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 					spBrandsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 					spBrands.setAdapter(spBrandsAdapter);
 				}
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.SHOP_UPDATE_PIC))
+		{
+			PicInfo picInfo = GsonTools.getReturnObject(result, PicInfo.class);
+			if (picInfo != null)
+			{
+				mPicId = picInfo.getPicId();
+				PicService.ajaxGetPic(ivProduct, ApiConfig.getServerPicUrl(picInfo.getPicUrl()), DisplayTools.getWindowWidth(this) / 3);
+			}
+			else
+			{
+				String msg = result;
+				ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+				if (returnInfo != null)
+				{
+					msg = returnInfo.getErrmsg();
+				}
+				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "上传图片失败:" + msg);
 			}
 			return true;
 		}

@@ -52,10 +52,10 @@ public class CallbackRechargeLogsAdapter extends BaseUserAdapter<CallbackRecharg
 			viewHolder.clear();
 		}
 		final CallbackRechargeLogInfo callbackRechargeLogInfo = list.get(position);
-		viewHolder.tvType.setText(CallbackRechargeType.getTypeDesc(callbackRechargeLogInfo.getRechargeType()));
-		viewHolder.tvAmount.setText(callbackRechargeLogInfo.getAmount() + "");
-		viewHolder.tvRechargeDate.setText(DateTimeTools.getRelativeTimeSpanString(callbackRechargeLogInfo.getRechargeDateLong()));
-		viewHolder.tvRemark.setText(callbackRechargeLogInfo.getRemark());
+		viewHolder.tvType.setText("充值类型:" + CallbackRechargeType.getTypeDesc(callbackRechargeLogInfo.getRechargeType()));
+		viewHolder.tvAmount.setText("充值金额:" + callbackRechargeLogInfo.getAmount() + "(充值卡充值默认为0)");
+		viewHolder.tvRechargeDate.setText("充值时间:" + DateTimeTools.getRelativeTimeSpanString(callbackRechargeLogInfo.getRechargeDateLong()));
+		viewHolder.tvRemark.setText("备注:" + callbackRechargeLogInfo.getRemark());
 		if (iCallbackRechargeLogsAdapterItemClicked != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()

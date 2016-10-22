@@ -5,25 +5,27 @@
 package com.lrcall.ui;
 
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Toast;
 
 import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.CallbackCallLogInfo;
+import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.CallbackService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.ui.adapter.CallbackCallLogsAdapter;
 import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.CallTools;
 import com.lrcall.utils.GsonTools;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityCallbackCallLogList extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
+public class ActivityCallbackCallLogList extends MyBasePageActivity implements IAjaxDataResponse
 {
 	private static final String TAG = ActivityCallbackCallLogList.class.getSimpleName();
 	private CallbackCallLogsAdapter mCallbackCallLogsAdapter;
@@ -70,19 +72,6 @@ public class ActivityCallbackCallLogList extends MyBasePageActivity implements V
 		mCallbackService.getCallLogList(mDataStart, getPageSize(), null, true);
 	}
 
-	@Override
-	public void onClick(View v)
-	{
-		switch (v.getId())
-		{
-			//			case R.id.search_icon:
-			//			{
-			//				search();
-			//				break;
-			//			}
-		}
-	}
-
 	synchronized private void refreshCallLogs(List<CallbackCallLogInfo> callbackCallLogInfoList)
 	{
 		if (callbackCallLogInfoList == null || callbackCallLogInfoList.size() < 1)
@@ -110,6 +99,14 @@ public class ActivityCallbackCallLogList extends MyBasePageActivity implements V
 				@Override
 				public void onCallClicked(CallbackCallLogInfo callLogInfo)
 				{
+					if (callLogInfo != null)
+					{
+						ReturnInfo returnInfo = CallTools.makeCall(ActivityCallbackCallLogList.this, callLogInfo.getNumber());
+						if (!ReturnInfo.isSuccess(returnInfo))
+						{
+							Toast.makeText(ActivityCallbackCallLogList.this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+						}
+					}
 				}
 			});
 			xListView.setAdapter(mCallbackCallLogsAdapter);

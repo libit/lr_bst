@@ -5,6 +5,7 @@
 package com.lrcall.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,11 +15,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import com.external.xlistview.XListView;
 import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.ReturnInfo;
+import com.lrcall.appbst.services.UserService;
 import com.lrcall.calllogs.CallLogsFactory;
 import com.lrcall.contacts.ContactsFactory;
 import com.lrcall.events.CallLogEvent;
@@ -31,7 +31,7 @@ import com.lrcall.ui.customer.AddressText;
 import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.DraftImageView;
 import com.lrcall.ui.customer.EraseButton;
-import com.lrcall.utils.CallTools;
+import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
@@ -44,17 +44,17 @@ import java.util.List;
 public class FragmentDialer extends MyBaseFragment implements XListView.IXListViewListener, View.OnClickListener, AddressText.InputNumberChangedListener
 {
 	private static final String TAG = FragmentDialer.class.getSimpleName();
-	private static final int count = 200;
+	private static final int count = 50;
 	private static FragmentDialer instance = null;
 	private XListView xListView;
 	private EraseButton erase;
 	private AddressText mAddress;
 	private View vPad, vDigitPad, layoutInput, layoutSwitchPad;
 	private DraftImageView vSwitchPad;
-	private ContactsSearchAdapter contactsSearchAdapter = null;
+	private ContactsSearchAdapter mContactsSearchAdapter = null;
 	private int start = 0;
-	private final List<CallLogInfo> callLogInfoList = new ArrayList<>();
-	private CallLogsAdapter adapterCalllogs = null;
+	private final List<CallLogInfo> mCallLogInfoList = new ArrayList<>();
+	private CallLogsAdapter mCallLogsAdapter = null;
 
 	//设置号码
 	public static void setAddressNumber(String number)
@@ -142,9 +142,11 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 	@Override
 	public void onDestroyView()
 	{
-		LogcatTools.debug(TAG, "fragment onDestroyView");
-		callLogInfoList.clear();
-		adapterCalllogs = null;
+		synchronized (mCallLogInfoList)
+		{
+			mCallLogInfoList.clear();
+			mCallLogsAdapter = null;
+		}
 		EventBus.getDefault().unregister(this);
 		instance = null;
 		super.onDestroyView();
@@ -175,12 +177,13 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 			case R.id.layout_make_call:
 			{
 				String number = mAddress.getText().toString();
-				ReturnInfo returnInfo = CallTools.makeCall(this.getContext(), number);
-				if (!ReturnInfo.isSuccess(returnInfo))
-				{
-					Toast.makeText(this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
-				}
-				mAddress.setText("");
+				//				ReturnInfo returnInfo = CallTools.makeCall(this.getContext(), number);
+				//				if (!ReturnInfo.isSuccess(returnInfo))
+				//				{
+				//					Toast.makeText(this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+				//				}
+				//				mAddress.setText("");
+				makeCall(number);
 				break;
 			}
 			case R.id.btn_switch_pad:
@@ -195,11 +198,14 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 			}
 			case R.id.btn_add_contact:
 			{
-				String number = mAddress.getText().toString();
-				if (!StringTools.isNull(number))
-				{
-					ContactsFactory.getInstance().toSystemAddContactActivity(this.getContext(), number);
-				}
+				//				String number = mAddress.getText().toString();
+				//				if (!StringTools.isNull(number))
+				//				{
+				//					ContactsFactory.getInstance().toSystemAddContactActivity(this.getContext(), number);
+				//				}
+				Intent intent = new Intent(this.getContext(), ActivityDial.class);
+				intent.putExtra(ConstValues.DATA_SHOW_PAD, false);
+				startActivity(intent);
 			}
 		}
 	}
@@ -249,19 +255,10 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 	public void onInputNumberChanged(String condition)
 	{
 		hideSoftPad();
-		//		List<ContactInfo> contactInfoList;
 		if (!StringTools.isNull(condition))
 		{
 			layoutInput.setVisibility(View.VISIBLE);
 			new SearchContactsTask(condition).execute();
-			//			contactInfoList = ContactsFactory.getInstance().getContactInfos(getContext(), condition);
-			//			if (contactInfoList.size() > 0)
-			//			{
-			//				contactsSearchAdapter = new ContactsSearchAdapter(getContext(), contactInfoList, this);
-			//				xListView.setPullLoadEnable(false);
-			//				xListView.setPullRefreshEnable(false);
-			//				xListView.setAdapter(contactsSearchAdapter);
-			//			}
 		}
 		else
 		{
@@ -274,7 +271,10 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 	public void onRefresh()
 	{
 		start = 0;
-		callLogInfoList.clear();
+		synchronized (mCallLogInfoList)
+		{
+			mCallLogInfoList.clear();
+		}
 		getAllCallLog();
 	}
 
@@ -315,7 +315,7 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 		protected Boolean doInBackground(Long... params)
 		{
 			boolean bAdd = false;
-			synchronized (callLogInfoList)
+			synchronized (mCallLogInfoList)
 			{
 				Cursor cursor = CallLogsFactory.getInstance().getCallLogs(FragmentDialer.this.getContext());
 				List<CallLogInfo> list = CallLogsFactory.getInstance().createListSort(cursor, start, count);
@@ -325,12 +325,7 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 				}
 				if (list != null && list.size() > 0)
 				{
-					//					bAdd = true;
-					//					for (CallLogInfo callLogInfo : list)
-					//					{
-					//						callLogInfoList.add(callLogInfo);
-					//					}
-					bAdd = callLogInfoList.addAll(list);
+					bAdd = mCallLogInfoList.addAll(list);
 				}
 			}
 			return bAdd;
@@ -342,9 +337,9 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 			super.onPostExecute(bAdd);
 			xListView.stopRefresh();
 			xListView.stopLoadMore();
-			if (adapterCalllogs == null || start == 0)
+			if (mCallLogsAdapter == null || start == 0)
 			{
-				adapterCalllogs = new CallLogsAdapter(FragmentDialer.this.getContext(), callLogInfoList, new CallLogsAdapter.ICallLogsAdapterItemClicked()
+				mCallLogsAdapter = new CallLogsAdapter(FragmentDialer.this.getContext(), mCallLogInfoList, new CallLogsAdapter.ICallLogsAdapterItemClicked()
 				{
 					@Override
 					public void onItemClicked(CallLogInfo callLogInfo)
@@ -363,22 +358,23 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 						setPadVisible(true);
 						if (callLogInfo != null)
 						{
-							ReturnInfo returnInfo = CallTools.makeCall(FragmentDialer.this.getContext(), callLogInfo.getNumber());
-							if (!ReturnInfo.isSuccess(returnInfo))
-							{
-								Toast.makeText(FragmentDialer.this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
-							}
-							mAddress.setText("");
+							//							ReturnInfo returnInfo = CallTools.makeCall(FragmentDialer.this.getContext(), callLogInfo.getNumber());
+							//							if (!ReturnInfo.isSuccess(returnInfo))
+							//							{
+							//								Toast.makeText(FragmentDialer.this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+							//							}
+							//							mAddress.setText("");
+							makeCall(callLogInfo.getNumber());
 						}
 					}
 				});
-				xListView.setAdapter(adapterCalllogs);
+				xListView.setAdapter(mCallLogsAdapter);
 			}
 			else
 			{
 				if (bAdd)
 				{
-					adapterCalllogs.notifyDataSetChanged();
+					mCallLogsAdapter.notifyDataSetChanged();
 				}
 			}
 		}
@@ -409,7 +405,7 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 			super.onPostExecute(contactInfoList);
 			//			if (contactInfoList.size() > 0)
 			{
-				contactsSearchAdapter = new ContactsSearchAdapter(FragmentDialer.this.getContext(), contactInfoList, new ContactsSearchAdapter.IContactsSearchAdapterItemClick()
+				mContactsSearchAdapter = new ContactsSearchAdapter(FragmentDialer.this.getContext(), contactInfoList, new ContactsSearchAdapter.IContactsSearchAdapterItemClick()
 				{
 					@Override
 					public void onItemClicked(ContactInfo contactInfo)
@@ -424,8 +420,23 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 				});
 				xListView.setPullLoadEnable(false);
 				xListView.setPullRefreshEnable(false);
-				xListView.setAdapter(contactsSearchAdapter);
+				xListView.setAdapter(mContactsSearchAdapter);
 			}
+		}
+	}
+
+	private void makeCall(String number)
+	{
+		if (UserService.isLogin())
+		{
+			Intent intent = new Intent(this.getContext(), ActivityDialWaiting.class);
+			intent.putExtra(ConstValues.DATA_NUMBER, number);
+			startActivity(intent);
+			mAddress.setText("");
+		}
+		else
+		{
+			startActivity(new Intent(this.getContext(), ActivityLogin.class));
 		}
 	}
 }

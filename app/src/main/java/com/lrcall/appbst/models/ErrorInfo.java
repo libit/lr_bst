@@ -18,21 +18,6 @@ public class ErrorInfo
 	private static final int NETWORK_ERROR = -200;
 	private static final int FORBIDDEN_ERROR = -300;
 	private static final int UNKNOWN_ERROR = -10000;
-	public final static HashMap<Integer, String> ERROR_INFO = new HashMap<Integer, String>()
-	{
-		private static final long serialVersionUID = 111L;
-
-		{
-			put(SUCCESS, "操作成功");
-			put(PARAM_ERROR, "参数错误");
-			put(EXIST_ERROR, "对象已存在");
-			put(NOT_EXIST_ERROR, "对象不存在");
-			put(HIBERNATE_ERROR, "数据库错误");
-			put(NETWORK_ERROR, "网络错误");
-			put(FORBIDDEN_ERROR, "禁止访问");
-			put(UNKNOWN_ERROR, "未知错误");
-		}
-	};
 	private static final int PASSWORD_ERROR = -20000;
 
 	public static int getSuccessId()
@@ -89,4 +74,20 @@ public class ErrorInfo
 		}
 		return errInfo;
 	}
+
+	public final static HashMap<Integer, String> ERROR_INFO = new HashMap<Integer, String>()
+	{
+		private static final long serialVersionUID = 111L;
+
+		{
+			put(SUCCESS, "操作成功");
+			put(PARAM_ERROR, "参数错误");
+			put(EXIST_ERROR, "对象已存在");
+			put(NOT_EXIST_ERROR, "对象不存在");
+			put(HIBERNATE_ERROR, "数据库错误");
+			put(NETWORK_ERROR, "网络错误");
+			put(FORBIDDEN_ERROR, "禁止访问");
+			put(UNKNOWN_ERROR, "未知错误");
+		}
+	};
 }

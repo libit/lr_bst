@@ -5,15 +5,18 @@
 package com.lrcall.appbst.services;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.AppConfig;
+import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -101,18 +104,24 @@ public class ShopService extends BaseService
 	}
 
 	/**
-	 * 上传用户头像
+	 * 上传图片
 	 *
-	 * @param data 图片数据
+	 * @param bitmap 图片
 	 */
-	public void updateHead(byte[] data, String tips, final boolean needServiceProcessData)
+	public void updateShopPic(Bitmap bitmap, String tips, final boolean needServiceProcessData)
 	{
+		byte[] data = null;
+		ByteArrayOutputStream b = BmpTools.compressToByteArrayOutputStream(bitmap);
+		if (b != null)
+		{
+			data = b.toByteArray();
+		}
 		Map<String, Object> params = new HashMap<>();
 		params.put("pic", data);
 		params.put("picFileName", "shop_" + System.currentTimeMillis() + ".jpg");
 		params.put("picContentType", "jpg");
 		params.put("sortId", 6);
-		ajaxStringCallback(ApiConfig.UPDATE_PIC, params, tips, needServiceProcessData);
+		ajaxStringCallback(ApiConfig.SHOP_UPDATE_PIC, params, tips, needServiceProcessData);
 	}
 
 	/**
@@ -159,7 +168,7 @@ public class ShopService extends BaseService
 			{
 				String userId = PreferenceUtils.getInstance().getUsername();
 				String headPath = AppConfig.getShopPicCacheDir(userId);
-				File headFile = new File(headPath);//new File(headPath.substring(0, headPath.lastIndexOf("/")));
+				File headFile = new File(headPath);
 				File f = new File(headPath.substring(0, headPath.lastIndexOf("/")));
 				if (!f.exists())
 				{

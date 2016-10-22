@@ -4,23 +4,39 @@
  */
 package com.lrcall.appbst.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class DataTrafficOrderInfo
 {
-	private Integer id;
+	@SerializedName("orderId")
 	private String orderId;
+	@SerializedName("userId")
 	private String userId;
+	@SerializedName("productId")
 	private String productId;
+	@SerializedName("count")
 	private int count;
+	@SerializedName("number")
 	private String number;
+	@SerializedName("productsPrice")
 	private int productsPrice;
+	@SerializedName("discountPrice")
 	private int discountPrice;
+	@SerializedName("totalPrice")
 	private int totalPrice;
+	@SerializedName("marketPrice")
 	private int marketPrice;
+	@SerializedName("comment")
 	private String comment;
+	@SerializedName("status")
 	private byte status;
+	@SerializedName("remark")
 	private String remark;
+	@SerializedName("addDateLong")
 	private long addDateLong;
+	@SerializedName("updateDateLong")
 	private long updateDateLong;
+	@SerializedName("dataTrafficInfo")
 	private DataTrafficInfo dataTrafficInfo;
 
 	public DataTrafficOrderInfo()
@@ -44,16 +60,6 @@ public class DataTrafficOrderInfo
 		this.addDateLong = addDateLong;
 		this.updateDateLong = updateDateLong;
 		this.dataTrafficInfo = dataTrafficInfo;
-	}
-
-	public Integer getId()
-	{
-		return id;
-	}
-
-	public void setId(Integer id)
-	{
-		this.id = id;
 	}
 
 	public String getOrderId()

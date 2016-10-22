@@ -18,8 +18,6 @@ public class NumberLabelInfo extends DbObject
 	public static final String FIELD_NUMBER = "number";
 	public static final String FIELD_LABEL = "label";
 	public static final String FIELD_COUNT = "count";
-	@SerializedName("id")
-	private String id;// 主键
 	@SerializedName("number")
 	private String number;//电话号码
 	@SerializedName("label")
@@ -58,7 +56,6 @@ public class NumberLabelInfo extends DbObject
 	public static NumberLabelInfo getObjectFromDb(Cursor cursor)
 	{
 		NumberLabelInfo numberLabelInfo = new NumberLabelInfo();
-		numberLabelInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
 		numberLabelInfo.setNumber(cursor.getString(cursor.getColumnIndex(FIELD_NUMBER)));
 		numberLabelInfo.setLabel(cursor.getString(cursor.getColumnIndex(FIELD_LABEL)));
 		numberLabelInfo.setCount(cursor.getInt(cursor.getColumnIndex(FIELD_COUNT)));
@@ -73,24 +70,10 @@ public class NumberLabelInfo extends DbObject
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		if (id != null)
-		{
-			contentValues.put(FIELD_ID, id);
-		}
 		contentValues.put(FIELD_NUMBER, number);
 		contentValues.put(FIELD_LABEL, label);
 		contentValues.put(FIELD_COUNT, count);
 		return contentValues;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getNumber()

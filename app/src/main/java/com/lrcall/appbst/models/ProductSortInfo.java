@@ -22,8 +22,6 @@ public class ProductSortInfo extends DbObject implements Comparator<ProductSortI
 	public static final String FIELD_PARENT_ID = "parent_id";
 	public static final String FIELD_LEVEL_ID = "level_id";
 	public static final String FIELD_PIC_URL = "pic_url";
-	@SerializedName("id")
-	private String id;// 主键
 	@SerializedName("sortId")
 	private String sortId;//分类ID
 	@SerializedName("name")
@@ -69,7 +67,6 @@ public class ProductSortInfo extends DbObject implements Comparator<ProductSortI
 	public static ProductSortInfo getObjectFromDb(Cursor cursor)
 	{
 		ProductSortInfo productSortInfo = new ProductSortInfo();
-		productSortInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
 		productSortInfo.setSortId(cursor.getString(cursor.getColumnIndex(FIELD_SORT_ID)));
 		productSortInfo.setName(cursor.getString(cursor.getColumnIndex(FIELD_NAME)));
 		productSortInfo.setParentId(cursor.getString(cursor.getColumnIndex(FIELD_PARENT_ID)));
@@ -86,26 +83,12 @@ public class ProductSortInfo extends DbObject implements Comparator<ProductSortI
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		if (id != null)
-		{
-			contentValues.put(FIELD_ID, id);
-		}
 		contentValues.put(FIELD_SORT_ID, sortId);
 		contentValues.put(FIELD_NAME, name);
 		contentValues.put(FIELD_PARENT_ID, parentId);
 		contentValues.put(FIELD_LEVEL_ID, levelId);
 		contentValues.put(FIELD_PIC_URL, picId);
 		return contentValues;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getSortId()

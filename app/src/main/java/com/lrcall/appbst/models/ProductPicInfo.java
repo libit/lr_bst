@@ -11,8 +11,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ProductPicInfo
 {
-	@SerializedName("id")
-	private String id;
 	@SerializedName("productId")
 	private String productId;
 	@SerializedName("picId")
@@ -32,16 +30,6 @@ public class ProductPicInfo
 		this.picUrl = picUrl;
 		this.picType = picType;
 		this.description = description;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getProductId()

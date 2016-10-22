@@ -25,8 +25,6 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 	public static final String FIELD_CONTENT = "content";
 	public static final String FIELD_DATE_LONG = "date";
 	public static final String FIELD_IS_READ = "read";
-	@SerializedName("id")
-	private String id;// 主键
 	@SerializedName("newsId")
 	private String newsId;//消息ID
 	@SerializedName("title")
@@ -79,7 +77,6 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 	public static NewsInfo getObjectFromDb(Cursor cursor)
 	{
 		NewsInfo newsInfo = new NewsInfo();
-		newsInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
 		newsInfo.setNewsId(cursor.getString(cursor.getColumnIndex(FIELD_NEWS_ID)));
 		newsInfo.setTitle(cursor.getString(cursor.getColumnIndex(FIELD_TITLE)));
 		newsInfo.setSortId(cursor.getString(cursor.getColumnIndex(FIELD_SORT_ID)));
@@ -99,10 +96,6 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		if (id != null)
-		{
-			contentValues.put(FIELD_ID, id);
-		}
 		contentValues.put(FIELD_NEWS_ID, newsId);
 		contentValues.put(FIELD_TITLE, title);
 		contentValues.put(FIELD_SORT_ID, sortId);
@@ -112,16 +105,6 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 		contentValues.put(FIELD_DATE_LONG, updateDateLong);
 		//		contentValues.put(FIELD_IS_READ, isRead);
 		return contentValues;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getNewsId()

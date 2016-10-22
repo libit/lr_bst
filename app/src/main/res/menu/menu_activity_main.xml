@@ -13,9 +13,16 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_callback_info"
-        android:icon="@drawable/ic_user_info"
+        android:icon="@drawable/contact"
         android:orderInCategory="100"
         android:title="回拨信息"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_contacts"
+        android:icon="@drawable/ic_tab_contacts_pressed"
+        android:orderInCategory="100"
+        android:title="通讯录"
+        android:visible="false"
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_settings"
@@ -34,6 +41,12 @@
         android:icon="@android:drawable/ic_menu_upload"
         android:orderInCategory="104"
         android:title="检查更新"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_logout"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:orderInCategory="104"
+        android:title="切换账户"
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_exit"

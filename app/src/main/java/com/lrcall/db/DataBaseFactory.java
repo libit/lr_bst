@@ -28,7 +28,7 @@ public class DataBaseFactory
 {
 	public static class DBHelper extends SQLiteOpenHelper
 	{
-		private static final int DATABASE_VERSION = 17;
+		private static final int DATABASE_VERSION = 18;
 		private static final String[] TABLES = new String[]{NumberLocalInfo.getCreateTableSQL()// 归属地信息表
 				, NumberLabelInfo.getCreateTableSQL()//号码标记信息
 				, BlackNumberInfo.getCreateTableSQL()//号码黑名单
@@ -114,6 +114,10 @@ public class DataBaseFactory
 			if (oldVersion < 17)
 			{
 				db.execSQL("DROP TABLE IF EXISTS " + DbConstant.TABLE_NAME_DATA_TRAFFIC);
+			}
+			if (oldVersion < 18)
+			{
+				db.execSQL("DROP TABLE IF EXISTS " + DbConstant.TABLE_NAME_PRODUCT);
 			}
 			onCreate(db);
 		}

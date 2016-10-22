@@ -20,6 +20,7 @@ import com.lrcall.appbst.R;
 import com.lrcall.contacts.ContactsFactory;
 import com.lrcall.models.TabInfo;
 import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.ConstValues;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -33,12 +34,18 @@ public class ActivityDial extends MyBaseActivity
 	private final List<TabInfo> tabInfos = new ArrayList<>();
 	private ViewPager viewPager;
 	private Menu menu;
+	private Boolean bShowPad = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dial);
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null)
+		{
+			bShowPad = bundle.getBoolean(ConstValues.DATA_SHOW_PAD, true);
+		}
 		viewInit();
 	}
 
@@ -76,7 +83,10 @@ public class ActivityDial extends MyBaseActivity
 		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
 		//初始化Tab
-		tabInfos.add(new TabInfo(0, "拨号", R.drawable.ic_tab_dialer_normal, FragmentDialer.class));
+		if (bShowPad)
+		{
+			tabInfos.add(new TabInfo(0, "拨号", R.drawable.ic_tab_dialer_normal, FragmentDialer.class));
+		}
 		tabInfos.add(new TabInfo(1, "联系人", R.drawable.ic_tab_contacts_normal, FragmentContacts.class));
 		ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
 		//加载tab布局
@@ -142,6 +152,11 @@ public class ActivityDial extends MyBaseActivity
 		viewPagerTab.setViewPager(viewPager);
 		setTitle("拨号");
 		tabInfos.get(0).getTvLabel().setTextColor(getResources().getColor(R.color.icon_enabled));
+		if (!bShowPad)
+		{
+			setTitle("联系人");
+			findViewById(R.id.tab).setVisibility(View.GONE);
+		}
 	}
 
 	/**

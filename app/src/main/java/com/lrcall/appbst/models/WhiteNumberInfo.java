@@ -12,6 +12,8 @@ import com.lrcall.db.DbConstant;
 
 import java.util.Comparator;
 
+import static android.R.attr.id;
+
 /**
  * Created by libit on 15/8/19.
  */
@@ -20,8 +22,6 @@ public class WhiteNumberInfo extends DbObject implements Comparator<WhiteNumberI
 	public static final String FIELD_NUMBER = "number";
 	public static final String FIELD_NAME = "name";
 	public static final String FIELD_REMARK = "remark";
-	@SerializedName("id")
-	private String id;// 主键
 	@SerializedName("number")
 	private String number;//电话号码
 	@SerializedName("name")
@@ -60,7 +60,6 @@ public class WhiteNumberInfo extends DbObject implements Comparator<WhiteNumberI
 	public static WhiteNumberInfo getObjectFromDb(Cursor cursor)
 	{
 		WhiteNumberInfo whiteNumberInfo = new WhiteNumberInfo();
-		whiteNumberInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
 		whiteNumberInfo.setNumber(cursor.getString(cursor.getColumnIndex(FIELD_NUMBER)));
 		whiteNumberInfo.setName(cursor.getString(cursor.getColumnIndex(FIELD_NAME)));
 		whiteNumberInfo.setRemark(cursor.getString(cursor.getColumnIndex(FIELD_REMARK)));
@@ -75,24 +74,10 @@ public class WhiteNumberInfo extends DbObject implements Comparator<WhiteNumberI
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		if (id != null)
-		{
-			contentValues.put(FIELD_ID, id);
-		}
 		contentValues.put(FIELD_NUMBER, number);
 		contentValues.put(FIELD_NAME, name);
 		contentValues.put(FIELD_REMARK, remark);
 		return contentValues;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getNumber()

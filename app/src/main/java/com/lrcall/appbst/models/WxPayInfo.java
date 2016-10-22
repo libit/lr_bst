@@ -4,14 +4,23 @@
  */
 package com.lrcall.appbst.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class WxPayInfo
 {
+	@SerializedName("appId")
 	private String appId;
+	@SerializedName("partnerId")
 	private String partnerId;
+	@SerializedName("prepayId")
 	private String prepayId;
+	@SerializedName("nonceStr")
 	private String nonceStr;
+	@SerializedName("timeStamp")
 	private String timeStamp;
+	@SerializedName("packageValue")
 	private String packageValue;
+	@SerializedName("sign")
 	private String sign;
 
 	public WxPayInfo()

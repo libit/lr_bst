@@ -11,7 +11,7 @@ package com.lrcall.enums;
  */
 public enum ShopAuthStatus
 {
-	UNAUTH((byte) 10, "未认证"), AUTHED((byte) 20, "已认证");
+	UNAUTH((byte) 10, "未认证"), AUTHING((byte) 15, "认证中"), AUTHED((byte) 20, "已认证");
 	private byte status;
 	private String desc;
 

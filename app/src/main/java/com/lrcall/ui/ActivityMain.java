@@ -7,7 +7,6 @@ package com.lrcall.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -33,6 +32,7 @@ import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UpdateService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.enums.EventTypeLayoutSideMain;
+import com.lrcall.events.UserEvent;
 import com.lrcall.models.TabInfo;
 import com.lrcall.ui.customer.MyActionBarDrawerToggle;
 import com.lrcall.utils.AppConfig;
@@ -127,7 +127,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		tabInfos.add(new TabInfo(INDEX, "首页", R.drawable.ic_tab_dialer_normal, FragmentIndex.class));
 		//		tabInfos.add(new TabInfo(INTERACT, "互动", R.drawable.ic_tab_contacts_normal, FragmentInteract.class));
 		//		tabInfos.add(new TabInfo(CATEGORY, "分类", R.drawable.ic_tab_contacts_normal, FragmentCategory.class));
-		tabInfos.add(new TabInfo(DIALER, "电话", R.drawable.ic_tab_money_normal, FragmentDialer.class));
+		tabInfos.add(new TabInfo(DIALER, "电话", R.drawable.ic_tab_money_normal, FragmentDialer2.class));
 		//		tabInfos.add(new TabInfo(FIND, "发现", R.drawable.ic_tab_money_normal, FragmentFind.class));
 		tabInfos.add(new TabInfo(USER, "我的", R.drawable.ic_tab_more_normal, FragmentMore.class));
 		ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
@@ -157,10 +157,10 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 							LogcatTools.debug("onPageSelected", "点击事件");
 							if (viewPager.getCurrentItem() == DIALER)
 							{
-								if (FragmentDialer.getInstance() != null)
+								if (FragmentDialer2.getInstance() != null)
 								{
 									LogcatTools.debug("onPageSelected", "切换键盘2");
-									FragmentDialer.getInstance().switchPad();
+									FragmentDialer2.getInstance().switchPad();
 								}
 							}
 							else
@@ -263,7 +263,19 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		}
 		else if (id == R.id.action_callback_info)
 		{
-			startActivity(new Intent(this, ActivityCallbackInfo.class));
+			if (!UserService.isLogin())
+			{
+				startActivity(new Intent(this, ActivityLogin.class));
+			}
+			else
+			{
+				startActivity(new Intent(this, ActivityCallbackInfo.class));
+			}
+			return true;
+		}
+		else if (id == R.id.action_contacts)
+		{
+			startActivity(new Intent(this, ActivityDial.class));
 			return true;
 		}
 		else if (id == R.id.action_settings)
@@ -282,6 +294,12 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 			new UserService(this).share("请稍后...", true);
 			return true;
 		}
+		else if (id == R.id.action_logout)
+		{
+			new UserService(this).logout();
+			startActivity(new Intent(this, ActivityLogin.class));
+			return true;
+		}
 		else if (id == R.id.action_exit)
 		{
 			exit();
@@ -291,7 +309,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == ConstValues.REQUEST_LOGIN_USER)
@@ -306,56 +324,13 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 				Toast.makeText(ActivityMain.this, "登录失败！", Toast.LENGTH_SHORT).show();
 			}
 		}
-		else if (requestCode == ConstValues.REQUEST_CAPTURE_SET_PIC)
-		{
-			if (resultCode == Activity.RESULT_OK)
-			{
-				Uri uri = data.getData();
-				clipPhoto(uri);
-			}
-		}
 		else if (requestCode == ConstValues.REQUEST_EDIT_PIC)
 		{
 			if (resultCode == Activity.RESULT_OK)
 			{
 				Bundle bundle = data.getExtras();
 				Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
-				String userId = PreferenceUtils.getInstance().getUsername();
-				String userHeadPath = AppConfig.getUserPicCacheDir(userId);
-				File file = new File(userHeadPath.substring(0, userHeadPath.lastIndexOf("/")));
-				if (!file.exists())
-				{
-					file.mkdirs();
-				}
-				ByteArrayOutputStream b = BmpTools.compressToByteArrayOutputStream(bitmap);
-				if (b != null)
-				{
-					new UserService(this).updateUserHead(b.toByteArray(), "正在上传图片...", true);
-				}
-				else
-				{
-					Toast.makeText(this, "上传图片失败：数据为空！", Toast.LENGTH_LONG).show();
-				}
-				FileOutputStream f = BmpTools.compressToFileOutputStream(bitmap, userHeadPath);
-				if (f == null)
-				{
-					Toast.makeText(this, "保存图片到手机失败！", Toast.LENGTH_LONG).show();
-				}
-				mDrawerLayout.openDrawer(Gravity.LEFT);
-				layoutSideMain.refresh();
-				layoutSideMain.setHeader(bitmap);
-			}
-			else
-			{
-				Toast.makeText(ActivityMain.this, "用户取消操作！", Toast.LENGTH_SHORT).show();
-			}
-		}
-		else if (requestCode == ConstValues.REQUEST_PICK_SET_PIC)
-		{
-			if (resultCode == Activity.RESULT_OK)
-			{
-				Uri uri = data.getData();
-				clipPhoto(uri);
+				picSelected(bitmap);
 			}
 			else
 			{
@@ -364,24 +339,34 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		}
 	}
 
-	/**
-	 * 裁剪图片方法实现
-	 *
-	 * @param uri 图片来源
-	 */
-	private void clipPhoto(Uri uri)
+	@Override
+	protected void picSelected(Bitmap bitmap)
 	{
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		intent.putExtra("crop", "true");
-		// aspectX aspectY 是宽高的比例，这里设置的是正方形（长宽比为1:1）
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 300);
-		intent.putExtra("outputY", 300);
-		intent.putExtra("return-data", true);
-		startActivityForResult(intent, ConstValues.REQUEST_EDIT_PIC);
+		super.picSelected(bitmap);
+		String userId = PreferenceUtils.getInstance().getUsername();
+		String userHeadPath = AppConfig.getUserPicCacheDir(userId);
+		File file = new File(userHeadPath.substring(0, userHeadPath.lastIndexOf("/")));
+		if (!file.exists())
+		{
+			file.mkdirs();
+		}
+		ByteArrayOutputStream b = BmpTools.compressToByteArrayOutputStream(bitmap);
+		if (b != null)
+		{
+			new UserService(this).updateUserHead(b.toByteArray(), "正在上传图片...", true);
+		}
+		else
+		{
+			Toast.makeText(this, "上传图片失败：数据为空！", Toast.LENGTH_LONG).show();
+		}
+		FileOutputStream f = BmpTools.compressToFileOutputStream(bitmap, userHeadPath);
+		if (f == null)
+		{
+			Toast.makeText(this, "保存图片到手机失败！", Toast.LENGTH_LONG).show();
+		}
+		mDrawerLayout.openDrawer(Gravity.LEFT);
+		layoutSideMain.refresh();
+		layoutSideMain.setHeader(bitmap);
 	}
 
 	/**
@@ -418,10 +403,12 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		if (index == DIALER)
 		{
 			menu.findItem(R.id.action_callback_info).setVisible(true);
+			//			menu.findItem(R.id.action_contacts).setVisible(true);
 		}
 		else
 		{
 			menu.findItem(R.id.action_callback_info).setVisible(false);
+			//			menu.findItem(R.id.action_contacts).setVisible(false);
 		}
 	}
 
@@ -473,6 +460,12 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		{
 			closeDrawerLayout();
 		}
+	}
+
+	@Subscribe
+	public void onEventMainThread(UserEvent userEvent)
+	{
+		menu.findItem(R.id.action_logout).setVisible(UserService.isLogin());
 	}
 
 	//关闭侧滑

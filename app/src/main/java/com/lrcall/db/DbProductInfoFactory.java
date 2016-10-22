@@ -49,15 +49,15 @@ public class DbProductInfoFactory
 	 * @param content     内容
 	 * @return
 	 */
-	public boolean addOrUpdateProductInfo(String productId, String name, String sortId, String brandId, String picId, int price, int marketPrice, int expressPrice, int count, String description, String config, String content, byte needExpress)
-	{
-		if (StringTools.isNull(productId) || StringTools.isNull(name) || StringTools.isNull(sortId) || StringTools.isNull(brandId) || StringTools.isNull(picId) || StringTools.isNull(description))
-		{
-			return false;
-		}
-		ProductInfo productInfo = new ProductInfo(productId, name, sortId, brandId, picId, price, marketPrice, expressPrice, count, description, config, content, needExpress);
-		return addOrUpdateProductInfo(productInfo);
-	}
+//	public boolean addOrUpdateProductInfo(String productId, String name, String sortId, String brandId, String picId, int price, int marketPrice, int expressPrice, int count, String description, String config, String content, byte needExpress)
+//	{
+//		if (StringTools.isNull(productId) || StringTools.isNull(name) || StringTools.isNull(sortId) || StringTools.isNull(brandId) || StringTools.isNull(picId) || StringTools.isNull(description))
+//		{
+//			return false;
+//		}
+//		ProductInfo productInfo = new ProductInfo(productId, name, sortId, brandId, picId, price, marketPrice, expressPrice, count, description, config, content, needExpress);
+//		return addOrUpdateProductInfo(productInfo);
+//	}
 
 	/**
 	 * 增加或更新商品信息

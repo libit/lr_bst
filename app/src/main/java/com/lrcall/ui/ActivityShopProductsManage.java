@@ -46,7 +46,7 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_search_products);
+		setContentView(R.layout.activity_shop_products_manage);
 		viewInit();
 		mProductService = new ShopProductService(this);
 		mProductService.addDataResponse(this);
@@ -177,8 +177,8 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 				@Override
 				public void onProductClicked(ProductInfo productInfo)
 				{
-					Intent intent = new Intent(ActivityShopProductsManage.this, ActivityProduct.class);
-					intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
+					Intent intent = new Intent(ActivityShopProductsManage.this, ActivityProductEdit.class);
+					intent.putExtra(ConstValues.DATA_PRODUCT, GsonTools.toJson(productInfo));
 					startActivity(intent);
 				}
 			});
@@ -207,5 +207,15 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 			}
 		}
 		return false;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK)
+		{
+			refreshData();
+		}
 	}
 }

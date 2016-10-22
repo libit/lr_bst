@@ -11,8 +11,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ProductCommentInfo
 {
-	@SerializedName("id")
-	private Integer id;
 	@SerializedName("commentId")
 	private String commentId;
 	@SerializedName("orderId")
@@ -46,16 +44,6 @@ public class ProductCommentInfo
 		this.level = level;
 		this.content = content;
 		this.date = date;
-	}
-
-	public Integer getId()
-	{
-		return id;
-	}
-
-	public void setId(Integer id)
-	{
-		this.id = id;
 	}
 
 	public String getCommentId()

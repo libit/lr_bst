@@ -29,7 +29,7 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 	private static final String TAG = ActivityShopInfo.class.getSimpleName();
 	private TextView tvType, tvApplyStatus;
 	private ImageView ivHead;
-	private View btnRegister;
+	private View btnRegister, btnAuth, layoutFuncs;
 	private ShopService mShopService;
 
 	@Override
@@ -51,6 +51,11 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 	protected void onResume()
 	{
 		super.onResume();
+		refreshData();
+	}
+
+	private void refreshData()
+	{
 		mShopService.getShopInfo("请稍后...", false);
 	}
 
@@ -63,7 +68,10 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 		tvApplyStatus = (TextView) findViewById(R.id.tv_apply_status);
 		ivHead = (ImageView) findViewById(R.id.iv_head);
 		btnRegister = findViewById(R.id.btn_register);
+		btnAuth = findViewById(R.id.btn_auth);
+		layoutFuncs = findViewById(R.id.layout_funcs);
 		btnRegister.setOnClickListener(this);
+		btnAuth.setOnClickListener(this);
 		findViewById(R.id.layout_products_manage).setOnClickListener(this);
 		findViewById(R.id.layout_orders_manage).setOnClickListener(this);
 		findViewById(R.id.layout_profits_list).setOnClickListener(this);
@@ -79,9 +87,23 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 				startActivity(new Intent(this, ActivityShopRegister.class));
 				break;
 			}
+			case R.id.btn_auth:
+			{
+				startActivity(new Intent(this, ActivityShopAuth.class));
+				break;
+			}
 			case R.id.layout_products_manage:
 			{
 				startActivity(new Intent(this, ActivityShopProductsManage.class));
+				break;
+			}
+			case R.id.layout_orders_manage:
+			{
+				startActivity(new Intent(this, ActivityShopOrdersManage.class));
+				break;
+			}
+			case R.id.layout_profits_list:
+			{
 				break;
 			}
 		}
@@ -97,15 +119,39 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 			{
 				btnRegister.setVisibility(View.GONE);
 				tvType.setText(ShopLevel.getLevelDesc(shopInfo.getLevelId()));
+				tvApplyStatus.setVisibility(View.VISIBLE);
 				tvApplyStatus.setText(ShopAuthStatus.getAuthDesc(shopInfo.getAuthStatus()));
+				if (shopInfo.getAuthStatus() == ShopAuthStatus.UNAUTH.getStatus())
+				{
+					btnAuth.setVisibility(View.VISIBLE);
+				}
+				if (shopInfo.getAuthStatus() == ShopAuthStatus.AUTHED.getStatus())
+				{
+					layoutFuncs.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					layoutFuncs.setVisibility(View.GONE);
+				}
 			}
 			else
 			{
 				tvType.setText("您还没申请开店!");
 				btnRegister.setVisibility(View.VISIBLE);
+				btnAuth.setVisibility(View.GONE);
+				layoutFuncs.setVisibility(View.GONE);
 			}
 			return true;
 		}
 		return false;
 	}
+	//	@Override
+	//	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	//	{
+	//		super.onActivityResult(requestCode, resultCode, data);
+	//		if (requestCode == RESULT_OK)
+	//		{
+	//			refreshData();
+	//		}
+	//	}
 }

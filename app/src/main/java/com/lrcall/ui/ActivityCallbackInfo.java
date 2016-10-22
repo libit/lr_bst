@@ -29,7 +29,7 @@ public class ActivityCallbackInfo extends MyBaseActivity implements View.OnClick
 	private static final String TAG = ActivityCallbackInfo.class.getSimpleName();
 	private TextView tvInfo;
 	private ImageView ivHead;
-	private View btnRegister, btnRecharge;
+	private View btnRegister, btnRecharge, layoutFuncs;
 	private CallbackService mCallbackService;
 
 	@Override
@@ -68,6 +68,7 @@ public class ActivityCallbackInfo extends MyBaseActivity implements View.OnClick
 		ivHead = (ImageView) findViewById(R.id.iv_head);
 		btnRegister = findViewById(R.id.btn_register);
 		btnRecharge = findViewById(R.id.btn_recharge);
+		layoutFuncs = findViewById(R.id.layout_funcs);
 		btnRegister.setOnClickListener(this);
 		btnRecharge.setOnClickListener(this);
 		findViewById(R.id.layout_calllog).setOnClickListener(this);
@@ -113,12 +114,14 @@ public class ActivityCallbackInfo extends MyBaseActivity implements View.OnClick
 				tvInfo.setText(String.format("当前余额:%.2f元\n有效期至:%s", callbackBalanceInfo.getBalance(), callbackBalanceInfo.getValidateDate()));
 				btnRegister.setVisibility(View.GONE);
 				btnRecharge.setVisibility(View.VISIBLE);
+				layoutFuncs.setVisibility(View.VISIBLE);
 			}
 			else
 			{
 				tvInfo.setText("您还没有开通回拨服务!");
 				btnRegister.setVisibility(View.VISIBLE);
 				btnRecharge.setVisibility(View.GONE);
+				layoutFuncs.setVisibility(View.GONE);
 			}
 			return true;
 		}

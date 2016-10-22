@@ -8,17 +8,6 @@ import android.content.Context;
 import android.widget.TextView;
 
 import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
-import com.lrcall.appbst.models.NumberLabelInfo;
-import com.lrcall.db.DbNumberLabelInfoFactory;
-import com.lrcall.db.DbNumberLocalInfoFactory;
-import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
-import com.lrcall.utils.StringTools;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 归属地服务类
@@ -40,29 +29,29 @@ public class NumberService extends BaseService
 	 */
 	public void getLocalInfo(final String number, final boolean append)
 	{
-		Map<String, Object> params = new HashMap<>();
-		params.put("number", number);
-		aQuery.ajax(new AjaxCallback<String>()
-		{
-			@Override
-			public void callback(String url, String result, AjaxStatus status)
-			{
-				LogcatTools.debug("ajaxStringCallback", "url:" + url + " , params:" + params.get("number") + ", result:" + result);
-				if (!StringTools.isNull(result))
-				{
-					DbNumberLocalInfoFactory.getInstance().addOrUpdateNumberLocalInfo(number, result);
-					if (append)
-					{
-						aQuery.getTextView().setText(aQuery.getText() + "  " + result);
-					}
-					else
-					{
-						aQuery.getTextView().setText(result);
-					}
-				}
-				getNumberLabelInfo(number, true);
-			}
-		}.url(ApiConfig.GET_NUMBER_LOCAL).type(String.class).params(params));
+//		Map<String, Object> params = new HashMap<>();
+//		params.put("number", number);
+//		aQuery.ajax(new AjaxCallback<String>()
+//		{
+//			@Override
+//			public void callback(String url, String result, AjaxStatus status)
+//			{
+//				LogcatTools.debug("ajaxStringCallback", "url:" + url + " , params:" + params.get("number") + ", result:" + result);
+//				if (!StringTools.isNull(result))
+//				{
+//					DbNumberLocalInfoFactory.getInstance().addOrUpdateNumberLocalInfo(number, result);
+//					if (append)
+//					{
+//						aQuery.getTextView().setText(aQuery.getText() + "  " + result);
+//					}
+//					else
+//					{
+//						aQuery.getTextView().setText(result);
+//					}
+//				}
+//				getNumberLabelInfo(number, true);
+//			}
+//		}.url(ApiConfig.GET_NUMBER_LOCAL).type(String.class).params(params));
 	}
 
 	/**
@@ -73,31 +62,31 @@ public class NumberService extends BaseService
 	 */
 	public void getNumberLabelInfo(final String number, final boolean append)
 	{
-		Map<String, Object> params = new HashMap<>();
-		params.put("number", number);
-		aQuery.ajax(new AjaxCallback<String>()
-		{
-			@Override
-			public void callback(String url, String result, AjaxStatus status)
-			{
-				LogcatTools.debug("ajaxStringCallback", "url:" + url + " , params:" + params.get("number") + ", result:" + result);
-				if (!StringTools.isNull(result))
-				{
-					NumberLabelInfo numberLabelInfo = GsonTools.getReturnObject(result, NumberLabelInfo.class);
-					if (numberLabelInfo != null)
-					{
-						DbNumberLabelInfoFactory.getInstance().addOrUpdateNumberLabelInfo(number, numberLabelInfo.getLabel(), numberLabelInfo.getCount());
-						if (append)
-						{
-							aQuery.getTextView().setText(aQuery.getText() + "  " + numberLabelInfo.getLabel());
-						}
-						else
-						{
-							aQuery.getTextView().setText(result);
-						}
-					}
-				}
-			}
-		}.url(ApiConfig.GET_NUMBER_LABEL).type(String.class).params(params));
+//		Map<String, Object> params = new HashMap<>();
+//		params.put("number", number);
+//		aQuery.ajax(new AjaxCallback<String>()
+//		{
+//			@Override
+//			public void callback(String url, String result, AjaxStatus status)
+//			{
+//				LogcatTools.debug("ajaxStringCallback", "url:" + url + " , params:" + params.get("number") + ", result:" + result);
+//				if (!StringTools.isNull(result))
+//				{
+//					NumberLabelInfo numberLabelInfo = GsonTools.getReturnObject(result, NumberLabelInfo.class);
+//					if (numberLabelInfo != null)
+//					{
+//						DbNumberLabelInfoFactory.getInstance().addOrUpdateNumberLabelInfo(number, numberLabelInfo.getLabel(), numberLabelInfo.getCount());
+//						if (append)
+//						{
+//							aQuery.getTextView().setText(aQuery.getText() + "  " + numberLabelInfo.getLabel());
+//						}
+//						else
+//						{
+//							aQuery.getTextView().setText(result);
+//						}
+//					}
+//				}
+//			}
+//		}.url(ApiConfig.GET_NUMBER_LABEL).type(String.class).params(params));
 	}
 }

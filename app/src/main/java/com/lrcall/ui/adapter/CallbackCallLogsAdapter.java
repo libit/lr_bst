@@ -54,14 +54,14 @@ public class CallbackCallLogsAdapter extends BaseUserAdapter<CallbackCallLogInfo
 		}
 		final CallbackCallLogInfo callLogInfo = list.get(position);
 		String name = callLogInfo.getNumber();
-		List<ContactInfo> contactInfoList = ContactsFactory.getInstance().getContactInfosByNumber(context, callLogInfo.getNumber(), false);
-		if (contactInfoList != null && contactInfoList.size() > 0)
+		ContactInfo contactInfo = ContactsFactory.getInstance().getFirstContactInfoByNumber(context, callLogInfo.getNumber(), false);
+		if (contactInfo != null)
 		{
-			name = contactInfoList.get(0).getName();
+			name = contactInfo.getName();
 		}
 		String number = callLogInfo.getNumber();
 		viewHolder.tvName.setText(name);
-		viewHolder.tvNumber.setText(number);
+		//		viewHolder.tvNumber.setText(number);
 		viewHolder.tvDuration.setText(CallLogInfo.getDurationString(callLogInfo.getDuration()));
 		viewHolder.tvTime.setText(DateTimeTools.getRelativeTimeSpanString(callLogInfo.getCallDateLong()));
 		if (callLogsAdapterItemClicked != null)
@@ -104,11 +104,11 @@ public class CallbackCallLogsAdapter extends BaseUserAdapter<CallbackCallLogInfo
 
 		public void viewInit(View convertView)
 		{
-			tvName = (TextView) convertView.findViewById(R.id.call_log_name);
-			tvNumber = (TextView) convertView.findViewById(R.id.call_log_number);
+			tvName = (TextView) convertView.findViewById(R.id.tv_name);
+			tvNumber = (TextView) convertView.findViewById(R.id.tv_number);
 			tvLocal = (TextView) convertView.findViewById(R.id.tv_local);
-			tvDuration = (TextView) convertView.findViewById(R.id.call_log_duration);
-			tvTime = (TextView) convertView.findViewById(R.id.call_log_date);
+			tvDuration = (TextView) convertView.findViewById(R.id.tv_call_duration);
+			tvTime = (TextView) convertView.findViewById(R.id.tv_call_date);
 		}
 
 		public void clear()

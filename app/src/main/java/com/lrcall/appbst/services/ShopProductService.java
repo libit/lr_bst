@@ -59,6 +59,7 @@ public class ShopProductService extends BaseService
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
 		params.put("length", size);
+		params.put("showCommon", true);
 		if (!StringTools.isNull(condition))
 		{
 			params.put("search[value]", condition);
@@ -77,6 +78,7 @@ public class ShopProductService extends BaseService
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
 		params.put("length", size);
+		params.put("showCommon", true);
 		if (!StringTools.isNull(condition))
 		{
 			params.put("search[value]", condition);
@@ -125,6 +127,51 @@ public class ShopProductService extends BaseService
 		params.put("sortIndex", sortIndex);
 		params.put("pointAmount", pointAmount);
 		ajaxStringCallback(ApiConfig.SHOP_ADD_PRODUCT, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 更新商品
+	 *
+	 * @param sortId
+	 * @param brandId
+	 * @param name
+	 * @param picId
+	 * @param price
+	 * @param marketPrice
+	 * @param expressPrice
+	 * @param count
+	 * @param sharePrice
+	 * @param shareAddPrice
+	 * @param description
+	 * @param config
+	 * @param content
+	 * @param needExpress
+	 * @param sortIndex
+	 * @param pointAmount
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void updateProduct(String productId, String sortId, String brandId, String name, String picId, int price, int marketPrice, int expressPrice, int count, int sharePrice, int shareAddPrice, String description, String config, String content, byte needExpress, int sortIndex, Integer pointAmount, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("productId", productId);
+		params.put("sortId", sortId);
+		params.put("brandId", brandId);
+		params.put("name", name);
+		params.put("picId", picId);
+		params.put("price", price);
+		params.put("marketPrice", marketPrice);
+		params.put("expressPrice", expressPrice);
+		params.put("count", count);
+		params.put("sharePrice", sharePrice);
+		params.put("shareAddPrice", shareAddPrice);
+		params.put("description", description);
+		params.put("config", config);
+		params.put("content", content);
+		params.put("needExpress", needExpress);
+		params.put("sortIndex", sortIndex);
+		params.put("pointAmount", pointAmount);
+		ajaxStringCallback(ApiConfig.SHOP_UPDATE_PRODUCT, params, tips, needServiceProcessData);
 	}
 
 	@Override

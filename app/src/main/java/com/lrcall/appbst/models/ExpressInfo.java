@@ -11,8 +11,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ExpressInfo
 {
-	@SerializedName("id")
-	private Integer id;
 	@SerializedName("orderExpressId")
 	private String orderExpressId;
 	@SerializedName("orderSubId")
@@ -47,16 +45,6 @@ public class ExpressInfo
 		this.status = status;
 		this.addDateLong = addDateLong;
 		this.updateDateLong = updateDateLong;
-	}
-
-	public Integer getId()
-	{
-		return id;
-	}
-
-	public void setId(Integer id)
-	{
-		this.id = id;
 	}
 
 	public String getOrderExpressId()

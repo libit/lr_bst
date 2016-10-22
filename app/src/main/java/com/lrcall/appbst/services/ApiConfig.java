@@ -12,8 +12,9 @@ import com.lrcall.utils.AppConfig;
 public class ApiConfig
 {
 	public static final String API_VERSION = "1";
-	private static final String RELEASE_URL = "http://115.29.140.222/lr_bst/user";
-	private static final String DEBUG_URL = "http://192.168.0.103:8080/lr_bst/user";
+	//	private static final String RELEASE_URL = "http://115.29.140.222/lr_bst/user";
+	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
 	public static final String CHECK_UPDATE = RELEASE_URL + "/ajaxGetLastClientInfo";//检查更新
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
@@ -140,6 +141,9 @@ public class ApiConfig
 	public static final String SHOP_ADD_PRODUCT = getServerUrl() + "/../shop/ajaxAddProductInfo";//商家添加商品
 	public static final String GET_SHOP_PRODUCT_SORT_LIST = getServerUrl() + "/../shop/ajaxGetProductSortList";//获取商家商品类别列表
 	public static final String GET_BRAND_LIST = getServerUrl() + "/../shop/ajaxGetBrandList";//获取商家品牌列表
+	public static final String SHOP_UPDATE_PIC = getServerUrl() + "/../shop/uploadPic";//商家上传图片
+	public static final String SHOP_UPDATE_PRODUCT = getServerUrl() + "/../shop/ajaxUpdateProductInfo";//商家更新商品
+	public static final String GET_SHOP_ORDER_LIST = getServerUrl() + "/../shop/ajaxGetOrderSubInfoList";//商家订单列表
 
 	public static String getServerUrl()
 	{

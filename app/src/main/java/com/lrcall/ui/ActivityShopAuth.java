@@ -4,16 +4,11 @@
  */
 package com.lrcall.ui;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
@@ -21,29 +16,21 @@ import com.lrcall.appbst.models.PicInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
+import com.lrcall.appbst.services.PicService;
 import com.lrcall.appbst.services.ShopService;
-import com.lrcall.models.FuncInfo;
-import com.lrcall.ui.adapter.FuncsHorizontalAdapter;
-import com.lrcall.ui.adapter.FuncsVerticalAdapter;
+import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
-import com.lrcall.ui.dialog.DialogList;
-import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.CallTools;
-import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
-
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ActivityShopAuth extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private EditText etName, etNumber, etAddress, etEmail, etIdentity, etBusinessLicense;
 	private ImageView ivIdentityCardPicId1, ivIdentityCardPicId2, ivBusinessLicensePicId;
 	private ShopService mShopService;
-	private String picId = null;
+	private String picId, identityCardPicId1, identityCardPicId2, businessLicensePicId;
+	private int currentIndex = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -81,34 +68,21 @@ public class ActivityShopAuth extends MyBaseActivity implements View.OnClickList
 		switch (v.getId())
 		{
 			case R.id.iv_identity1:
+			{
+				currentIndex = 1;
+				selectPhoto();
+				break;
+			}
 			case R.id.iv_identity2:
+			{
+				currentIndex = 2;
+				selectPhoto();
+				break;
+			}
 			case R.id.iv_business_license:
 			{
-				final List<FuncInfo> list = new ArrayList<>();
-				list.add(new FuncInfo(R.drawable.ic_done_grey600_18dp, "使用手机拍照"));
-				list.add(new FuncInfo(R.drawable.ic_done_grey600_18dp, "从相册选择"));
-				final DialogList dialogList = new DialogList(this);
-				FuncsHorizontalAdapter adapter = new FuncsHorizontalAdapter(this, list, new FuncsVerticalAdapter.IFuncsAdapterItemClicked()
-				{
-					@Override
-					public void onFuncClicked(FuncInfo funcInfo)
-					{
-						dialogList.dismiss();
-						if (funcInfo.getLabel().equalsIgnoreCase(list.get(0).getLabel()))
-						{
-							Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-							startActivityForResult(intent, ConstValues.REQUEST_CAPTURE_SET_PIC);
-						}
-						else if (funcInfo.getLabel().equalsIgnoreCase(list.get(1).getLabel()))
-						{
-							Intent albumIntent = new Intent(Intent.ACTION_PICK, null);
-							albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-							startActivityForResult(albumIntent, ConstValues.REQUEST_PICK_SET_PIC);
-						}
-					}
-				});
-				dialogList.setAdapter(adapter);
-				dialogList.show();
+				currentIndex = 3;
+				selectPhoto();
 				break;
 			}
 			case R.id.btn_submit:
@@ -120,9 +94,9 @@ public class ActivityShopAuth extends MyBaseActivity implements View.OnClickList
 				String identityCard = etIdentity.getText().toString();
 				String businessLicense = etBusinessLicense.getText().toString();
 				byte sex = (byte) 2;
-				String identityCardPicId1 = (String) ivIdentityCardPicId1.getTag();
-				String identityCardPicId2 = (String) ivIdentityCardPicId2.getTag();
-				String businessLicensePicId = (String) ivBusinessLicensePicId.getTag();
+				//				identityCardPicId1 = (String) ivIdentityCardPicId1.getTag();
+				//				identityCardPicId2 = (String) ivIdentityCardPicId2.getTag();
+				//				businessLicensePicId = (String) ivBusinessLicensePicId.getTag();
 				String remark = null;
 				if (StringTools.isNull(name))
 				{
@@ -204,7 +178,9 @@ public class ActivityShopAuth extends MyBaseActivity implements View.OnClickList
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				Toast.makeText(this, "审核资料上传成功,请等待管理员审核！", Toast.LENGTH_SHORT).show();
+				setResult(RESULT_OK);
+				finish();
+				ToastView.showCenterToast(this, R.drawable.ic_done, "审核资料上传成功,请等待管理员审核！");
 			}
 			else
 			{
@@ -217,12 +193,36 @@ public class ActivityShopAuth extends MyBaseActivity implements View.OnClickList
 			}
 			return true;
 		}
-		else if (url.endsWith(ApiConfig.UPDATE_PIC))
+		else if (url.endsWith(ApiConfig.SHOP_UPDATE_PIC))
 		{
 			PicInfo picInfo = GsonTools.getReturnObject(result, PicInfo.class);
 			if (picInfo != null)
 			{
-				LogcatTools.debug("UPDATE_PIC", "picInfo:" + picInfo.toString());
+				ToastView.showCenterToast(this, R.drawable.ic_done, "图片上传成功！");
+				ImageView iv = null;
+				if (currentIndex == 0)
+				{
+					picId = picInfo.getPicId();
+				}
+				else if (currentIndex == 1)
+				{
+					identityCardPicId1 = picInfo.getPicId();
+					iv = ivIdentityCardPicId1;
+				}
+				else if (currentIndex == 2)
+				{
+					identityCardPicId2 = picInfo.getPicId();
+					iv = ivIdentityCardPicId2;
+				}
+				else if (currentIndex == 3)
+				{
+					businessLicensePicId = picInfo.getPicId();
+					iv = ivBusinessLicensePicId;
+				}
+				if (iv != null)
+				{
+					PicService.ajaxGetPic(iv, ApiConfig.getServerPicUrl(picInfo.getPicUrl()), DisplayTools.getWindowWidth(this) / 3);
+				}
 			}
 			return true;
 		}
@@ -230,81 +230,11 @@ public class ActivityShopAuth extends MyBaseActivity implements View.OnClickList
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	protected void picSelected(Bitmap bitmap)
 	{
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == ConstValues.REQUEST_CAPTURE_SET_PIC)
-		{
-			if (resultCode == Activity.RESULT_OK)
-			{
-				Uri uri = data.getData();
-				clipPhoto(uri);
-			}
-		}
-		else if (requestCode == ConstValues.REQUEST_EDIT_PIC)
-		{
-			if (resultCode == Activity.RESULT_OK)
-			{
-				Bundle bundle = data.getExtras();
-				Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
-				//				String userId = PreferenceUtils.getInstance().getUsername();
-				//				String userHeadPath = AppConfig.getUserPicCacheDir(userId);
-				//				File file = new File(userHeadPath.substring(0, userHeadPath.lastIndexOf("/")));
-				//				if (!file.exists())
-				//				{
-				//					file.mkdirs();
-				//				}
-				ByteArrayOutputStream b = BmpTools.compressToByteArrayOutputStream(bitmap);
-				if (b != null)
-				{
-					mShopService.updateHead(b.toByteArray(), "正在上传图片...", true);
-				}
-				else
-				{
-					Toast.makeText(this, "上传图片失败：数据为空！", Toast.LENGTH_LONG).show();
-				}
-				//				FileOutputStream f = BmpTools.compressToFileOutputStream(bitmap, userHeadPath);
-				//				if (f == null)
-				//				{
-				//					Toast.makeText(this, "保存图片到手机失败！", Toast.LENGTH_LONG).show();
-				//				}
-			}
-			else
-			{
-				Toast.makeText(this, "用户取消操作！", Toast.LENGTH_SHORT).show();
-			}
-		}
-		else if (requestCode == ConstValues.REQUEST_PICK_SET_PIC)
-		{
-			if (resultCode == Activity.RESULT_OK)
-			{
-				Uri uri = data.getData();
-				clipPhoto(uri);
-			}
-			else
-			{
-				Toast.makeText(this, "用户取消操作！", Toast.LENGTH_SHORT).show();
-			}
-		}
-	}
-
-	/**
-	 * 裁剪图片方法实现
-	 *
-	 * @param uri 图片来源
-	 */
-	public void clipPhoto(Uri uri)
-	{
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		intent.putExtra("crop", "true");
-		// aspectX aspectY 是宽高的比例，这里设置的是正方形（长宽比为1:1）
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 300);
-		intent.putExtra("outputY", 300);
-		intent.putExtra("return-data", true);
-		startActivityForResult(intent, ConstValues.REQUEST_EDIT_PIC);
+		super.picSelected(bitmap);
+		ShopService shopService = new ShopService(this);
+		shopService.addDataResponse(this);
+		shopService.updateShopPic(bitmap, "正在上传图片,请稍后...", true);
 	}
 }

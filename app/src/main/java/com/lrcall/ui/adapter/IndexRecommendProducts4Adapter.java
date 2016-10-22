@@ -114,7 +114,7 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 		}
 		if (productInfo2 != null)
 		{
-			PicService.ajaxGetRoundPic(viewHolder.ivProduct2, ApiConfig.getServerPicUrl(productInfo2.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()));
+			PicService.ajaxGetRoundPic(viewHolder.ivProduct2, ApiConfig.getServerPicUrl(productInfo2.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
 			if (iRecommendProductsAdapter != null)
 			{
 				viewHolder.ivProduct2.setOnClickListener(new View.OnClickListener()
@@ -129,7 +129,7 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 		}
 		if (productInfo3 != null)
 		{
-			PicService.ajaxGetRoundPic(viewHolder.ivProduct3, ApiConfig.getServerPicUrl(productInfo3.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()));
+			PicService.ajaxGetRoundPic(viewHolder.ivProduct3, ApiConfig.getServerPicUrl(productInfo3.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
 			if (iRecommendProductsAdapter != null)
 			{
 				viewHolder.ivProduct3.setOnClickListener(new View.OnClickListener()
@@ -144,7 +144,7 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 		}
 		if (productInfo4 != null)
 		{
-			PicService.ajaxGetRoundPic(viewHolder.ivProduct4, ApiConfig.getServerPicUrl(productInfo4.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()));
+			PicService.ajaxGetRoundPic(viewHolder.ivProduct4, ApiConfig.getServerPicUrl(productInfo4.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
 			if (iRecommendProductsAdapter != null)
 			{
 				viewHolder.ivProduct4.setOnClickListener(new View.OnClickListener()

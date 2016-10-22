@@ -60,6 +60,10 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 		{
 			name = "未知号码";
 		}
+		else if (name.startsWith("("))
+		{
+			name = "未知号码" + name;
+		}
 		String number = callLogInfo.getNumber();
 		viewHolder.ivCallLogType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
 		viewHolder.tvName.setText(name);

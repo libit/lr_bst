@@ -20,8 +20,6 @@ public class ShopCartInfo extends DbObject
 	public static final String FIELD_PRODUCT_ID = "product_id";
 	public static final String FIELD_AMOUNT = "amount";
 	public static final String FIELD_DATE = "date";
-	@SerializedName("id")
-	private String id;// 主键
 	@SerializedName("cartId")
 	private String cartId;//ID
 	@SerializedName("userId")
@@ -52,7 +50,6 @@ public class ShopCartInfo extends DbObject
 	public static ShopCartInfo getObjectFromDb(Cursor cursor)
 	{
 		ShopCartInfo shopCartInfo = new ShopCartInfo();
-		shopCartInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
 		shopCartInfo.setCartId(cursor.getString(cursor.getColumnIndex(FIELD_CART_ID)));
 		shopCartInfo.setUserId(cursor.getString(cursor.getColumnIndex(FIELD_USER_ID)));
 		shopCartInfo.setProductId(cursor.getString(cursor.getColumnIndex(FIELD_PRODUCT_ID)));
@@ -69,10 +66,6 @@ public class ShopCartInfo extends DbObject
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		//		if (id != null)
-		//		{
-		//			contentValues.put(FIELD_ID, id);
-		//		}
 		contentValues.put(FIELD_CART_ID, cartId);
 		contentValues.put(FIELD_USER_ID, userId);
 		contentValues.put(FIELD_PRODUCT_ID, productId);
@@ -92,16 +85,6 @@ public class ShopCartInfo extends DbObject
 		this.productId = productId;
 		this.amount = amount;
 		this.date = date;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getCartId()

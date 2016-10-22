@@ -27,7 +27,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
                     android:minWidth="100dp"
-                    android:text="账号："
+                    android:text="手机号码："
                     android:textColor="@android:color/widget_edittext_dark"
                     android:textSize="18sp"/>
                 <EditText
@@ -103,11 +103,13 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -295,7 +297,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
                     android:minWidth="100dp"
-                    android:text="推荐人："
+                    android:text="推荐人手机号码："
                     android:textColor="@android:color/widget_edittext_dark"
                     android:textSize="18sp"/>
                 <EditText
@@ -304,17 +306,19 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
                     android:background="@null"
-                    android:hint="请输入您的推荐人账号"
+                    android:hint="请输入您的推荐人手机号码"
                     android:inputType="text"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

@@ -24,8 +24,6 @@ public class DataTrafficInfo extends DbObject
 	public static final String FIELD_DESCRIPTION = "description";
 	public static final String FIELD_VALIDATE_DATE = "validate_date";
 	public static final String FIELD_STATUS = "status";
-	@SerializedName("id")
-	private String id;
 	@SerializedName("productId")
 	private String productId;
 	@SerializedName("sortId")
@@ -68,7 +66,6 @@ public class DataTrafficInfo extends DbObject
 	public static DataTrafficInfo getObjectFromDb(Cursor cursor)
 	{
 		DataTrafficInfo dataTrafficInfo = new DataTrafficInfo();
-		dataTrafficInfo.setId(cursor.getString(cursor.getColumnIndex(FIELD_ID)));
 		dataTrafficInfo.setProductId(cursor.getString(cursor.getColumnIndex(FIELD_PRODUCT_ID)));
 		dataTrafficInfo.setSortName(cursor.getString(cursor.getColumnIndex(FIELD_SORT_NAME)));
 		dataTrafficInfo.setDataType(cursor.getString(cursor.getColumnIndex(FIELD_DATA_TYPE)));
@@ -91,10 +88,6 @@ public class DataTrafficInfo extends DbObject
 	public ContentValues getObjectContentValues()
 	{
 		ContentValues contentValues = new ContentValues();
-		//		if (id != null)
-		//		{
-		//			contentValues.put(FIELD_ID, id);
-		//		}
 		contentValues.put(FIELD_PRODUCT_ID, productId);
 		contentValues.put(FIELD_SORT_NAME, sortName);
 		contentValues.put(FIELD_DATA_TYPE, dataType);
@@ -125,16 +118,6 @@ public class DataTrafficInfo extends DbObject
 		this.description = description;
 		this.validateDate = validateDate;
 		this.status = status;
-	}
-
-	public String getId()
-	{
-		return id;
-	}
-
-	public void setId(String id)
-	{
-		this.id = id;
 	}
 
 	public String getProductId()
