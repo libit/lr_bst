@@ -16,13 +16,14 @@ import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.OrderInfo;
+import com.lrcall.appbst.models.OrderSubInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ShopOrderService;
 import com.lrcall.ui.adapter.ShopOrdersAdapter;
 import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
 
@@ -35,7 +36,7 @@ public class ActivityShopOrdersManage extends MyBasePageActivity implements View
 	private EditText etSearch;
 	private ShopOrdersAdapter mShopOrdersAdapter;
 	private ShopOrderService mShopOrderService;
-	private final List<OrderInfo> mOrderInfoList = new ArrayList<>();
+	private final List<OrderSubInfo> mOrderInfoList = new ArrayList<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -131,7 +132,7 @@ public class ActivityShopOrdersManage extends MyBasePageActivity implements View
 		}
 	}
 
-	synchronized private void refreshOrders(List<OrderInfo> orderInfoList)
+	synchronized private void refreshOrders(List<OrderSubInfo> orderInfoList)
 	{
 		if (orderInfoList == null || orderInfoList.size() < 1)
 		{
@@ -142,7 +143,7 @@ public class ActivityShopOrdersManage extends MyBasePageActivity implements View
 		{
 			xListView.setPullLoadEnable(false);
 		}
-		for (OrderInfo orderInfo : orderInfoList)
+		for (OrderSubInfo orderInfo : orderInfoList)
 		{
 			mOrderInfoList.add(orderInfo);
 		}
@@ -151,15 +152,15 @@ public class ActivityShopOrdersManage extends MyBasePageActivity implements View
 			mShopOrdersAdapter = new ShopOrdersAdapter(this, mOrderInfoList, new ShopOrdersAdapter.IOrdersAdapterItemClicked()
 			{
 				@Override
-				public void onOrderClicked(OrderInfo orderInfo)
+				public void onOrderClicked(OrderSubInfo orderInfo)
 				{
-//					Intent intent = new Intent(ActivityShopOrdersManage.this, ActivityProductEdit.class);
-//					intent.putExtra(ConstValues.DATA_PRODUCT, GsonTools.toJson(orderInfo));
-//					startActivity(intent);
+					Intent intent = new Intent(ActivityShopOrdersManage.this, ActivityShopOrderInfo.class);
+					intent.putExtra(ConstValues.DATA_ORDER_ID, orderInfo.getOrderSubId());
+					startActivity(intent);
 				}
 
 				@Override
-				public void onOrderSendExpressClicked(OrderInfo orderInfo)
+				public void onOrderSendExpressClicked(OrderSubInfo orderInfo)
 				{
 				}
 			});
@@ -181,7 +182,7 @@ public class ActivityShopOrdersManage extends MyBasePageActivity implements View
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<OrderInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<OrderInfo>>()
+				List<OrderSubInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<OrderSubInfo>>()
 				{
 				}.getType());
 				refreshOrders(list);

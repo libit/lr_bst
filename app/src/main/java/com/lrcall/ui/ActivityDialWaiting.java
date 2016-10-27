@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.lrcall.utils.StringTools;
 public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivityDialWaiting.class.getSimpleName();
+	private ImageView ivHead;
 	private TextView tvName, tvNumber, tvResult;
 	private CallbackService mCallbackService;
 	private String number = "";
@@ -53,7 +55,7 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 		mCallbackService.addDataResponse(this);
 		viewInit();
 		tvNumber.setText(number);
-		ContactInfo contactInfo = ContactsFactory.getInstance().getFirstContactInfoByNumber(this, number, false);
+		ContactInfo contactInfo = ContactsFactory.getInstance().getFirstContactInfoByNumber(this, number, true);
 		String name = "陌生号码";
 		if (contactInfo != null)
 		{
@@ -61,6 +63,10 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 		}
 		tvName.setText(name);
 		tvResult.setText("正在呼叫,请稍后...");
+		if (contactInfo.getContactPhoto() != null)
+		{
+			ivHead.setImageBitmap(contactInfo.getContactPhoto());
+		}
 		mCallbackService.makeCall(number, null, false);
 		IntentFilter filter = new IntentFilter("android.intent.action.PHONE_STATE");
 		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
@@ -72,6 +78,7 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 	{
 		super.viewInit();
 		setBackButton();
+		ivHead = (ImageView) findViewById(R.id.iv_head);
 		tvName = (TextView) findViewById(R.id.tv_name);
 		tvNumber = (TextView) findViewById(R.id.tv_number);
 		tvResult = (TextView) findViewById(R.id.tv_result);

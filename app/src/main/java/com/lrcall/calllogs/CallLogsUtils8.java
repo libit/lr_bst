@@ -147,6 +147,7 @@ public class CallLogsUtils8 extends CallLogsFactory
 	public boolean addCallLogInfo(Context context, CallLogInfo callLogInfo)
 	{
 		ContentValues values = new ContentValues();
+		values.put(CallLog.Calls.CACHED_NAME, callLogInfo.getName());
 		values.put(CallLog.Calls.NUMBER, callLogInfo.getNumber());
 		values.put(CallLog.Calls.DATE, callLogInfo.getDate());
 		values.put(CallLog.Calls.DURATION, callLogInfo.getDuration());

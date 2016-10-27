@@ -12,12 +12,15 @@ import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.calllogs.CallLogsFactory;
 import com.lrcall.contacts.ContactsFactory;
+import com.lrcall.events.CallLogEvent;
 import com.lrcall.models.CallLogInfo;
 import com.lrcall.models.ContactInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.CallTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +72,7 @@ public class CallbackService extends BaseService
 	public void makeCall(String number, String tips, final boolean needServiceProcessData)
 	{
 		number = CallTools.convertToCallPhoneNumber(number);
-		if (!StringTools.isNull(number))
+		if (!StringTools.isNull(number))//加入通话记录
 		{
 			ContactInfo contactInfo = ContactsFactory.getInstance().getFirstContactInfoByNumber(context, number, false);
 			String name = number;
@@ -79,8 +82,8 @@ public class CallbackService extends BaseService
 			}
 			CallLogInfo callLogInfo = new CallLogInfo(System.currentTimeMillis() + "", name, number, CallLog.Calls.OUTGOING_TYPE, System.currentTimeMillis(), 0, "", "");
 			CallLogsFactory.getInstance().addCallLogInfo(context, callLogInfo);
+			EventBus.getDefault().post(new CallLogEvent(CallLogEvent.EVENT_CALLLOG_ADD));
 		}
-		number = CallTools.convertToCallPhoneNumber(number);
 		Map<String, Object> params = new HashMap<>();
 		params.put("number", number);
 		ajaxStringCallback(ApiConfig.CALLBACK_MAKE_CALL, params, tips, needServiceProcessData);

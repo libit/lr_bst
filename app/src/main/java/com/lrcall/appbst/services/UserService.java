@@ -172,6 +172,24 @@ public class UserService extends BaseService
 	}
 
 	/**
+	 * 重置密码
+	 *
+	 * @param userId                 账号
+	 * @param newPassword            新密码
+	 * @param code                   验证码
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void resetPwd(String userId, String newPassword, String code, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("userId", userId);
+		params.put("newPassword", newPassword);
+		params.put("code", code);
+		ajaxStringCallback(ApiConfig.USER_RESET_PWD, params, tips, needServiceProcessData);
+	}
+
+	/**
 	 * 上传用户头像
 	 *
 	 * @param data 图片数据

@@ -53,7 +53,6 @@ public class ActivityProductEdit extends MyBaseActivity implements View.OnClickL
 	private List<ProductSortInfo> mSortsList = new ArrayList<>();
 	private List<BrandInfo> mBrandsList = new ArrayList<>();
 	private ShopProductService mShopProductService;
-	//	private ProductService mProductService;
 	private String mPicId = null;
 	private ProductInfo mProductInfo;
 
@@ -71,8 +70,6 @@ public class ActivityProductEdit extends MyBaseActivity implements View.OnClickL
 		}
 		mShopProductService = new ShopProductService(this);
 		mShopProductService.addDataResponse(this);
-		//		mProductService = new ProductService(this);
-		//		mProductService.addDataResponse(this);
 		viewInit();
 		mShopProductService.getProductSortList(null, 0, -1, null, null, false, null, false);
 		mShopProductService.getBrandList(null, 0, -1, null, null, false, null, false);
@@ -183,7 +180,7 @@ public class ActivityProductEdit extends MyBaseActivity implements View.OnClickL
 				String desc = etDesc.getText().toString();
 				String config = etConfig.getText().toString();
 				String content = etContent.getText().toString();
-				byte needExpress = cbNeedExpress.isChecked() ? NeedExpress.NEED.getStatus() : NeedExpress.NOT_NEED.getStatus();
+				byte needExpress = cbNeedExpress.isChecked() ? NeedExpress.NOT_NEED.getStatus() : NeedExpress.NEED.getStatus();//更新的这个为了跟服务端的网页兼容，取相反值
 				int position = spSorts.getSelectedItemPosition();
 				String sortId = "";
 				if (position >= 0)

@@ -7,7 +7,7 @@ package com.lrcall.enums;
  */
 public enum SmsCodeType
 {
-	REGISTER(1, "注册验证码"), FIND_PWD(2, "找回密码"), SHOP_REGISTER(3, "商家注册");
+	REGISTER(1, "注册验证码"), RESET_PWD(2, "重置密码"), SHOP_REGISTER(3, "商家注册");
 	private int type;
 	private String desc;
 

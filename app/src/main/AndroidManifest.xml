@@ -245,6 +245,9 @@
         <activity
             android:name="com.lrcall.ui.ActivityDialWaiting"
             android:label="@string/title_activity_callback_call_waiting"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityResetPwd"
+            android:label="@string/title_activity_reset_pwd"/>
         <!-- 商家 -->
         <activity
             android:name="com.lrcall.ui.ActivityShopRegister"
@@ -267,6 +270,12 @@
         <activity
             android:name="com.lrcall.ui.ActivityShopOrdersManage"
             android:label="@string/title_activity_orders_manage"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityShopOrderInfo"
+            android:label="@string/title_activity_order_info"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityOrderShip"
+            android:label="@string/title_activity_order_ship"/>
 
         <service android:name="com.lrcall.services.AutoAnswerIntentService"/>
         <service android:name="com.lrcall.services.AutoAnswerIntentService2"/>

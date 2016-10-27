@@ -12,8 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.OrderInfo;
 import com.lrcall.appbst.models.OrderProductInfo;
+import com.lrcall.appbst.models.OrderSubInfo;
 import com.lrcall.enums.OrderStatus;
 import com.lrcall.utils.StringTools;
 
@@ -22,11 +22,11 @@ import java.util.List;
 /**
  * Created by libit on 16/4/30.
  */
-public class ShopOrdersAdapter extends BaseUserAdapter<OrderInfo>
+public class ShopOrdersAdapter extends BaseUserAdapter<OrderSubInfo>
 {
 	protected final IOrdersAdapterItemClicked iOrdersAdapterItemClicked;
 
-	public ShopOrdersAdapter(Context context, List<OrderInfo> list, IOrdersAdapterItemClicked iOrdersAdapterItemClicked)
+	public ShopOrdersAdapter(Context context, List<OrderSubInfo> list, IOrdersAdapterItemClicked iOrdersAdapterItemClicked)
 	{
 		super(context, list);
 		this.iOrdersAdapterItemClicked = iOrdersAdapterItemClicked;
@@ -53,7 +53,7 @@ public class ShopOrdersAdapter extends BaseUserAdapter<OrderInfo>
 			viewHolder.clear();
 		}
 		//设置控件的值
-		final OrderInfo orderInfo = list.get(position);
+		final OrderSubInfo orderInfo = list.get(position);
 		viewHolder.tvOrderId.setText(orderInfo.getOrderId());
 		int count = 0;
 		if (orderInfo.getOrderProductInfoList() != null)
@@ -110,9 +110,9 @@ public class ShopOrdersAdapter extends BaseUserAdapter<OrderInfo>
 
 	public interface IOrdersAdapterItemClicked
 	{
-		void onOrderClicked(OrderInfo orderInfo);
+		void onOrderClicked(OrderSubInfo orderInfo);
 
-		void onOrderSendExpressClicked(OrderInfo orderInfo);
+		void onOrderSendExpressClicked(OrderSubInfo orderInfo);
 	}
 
 	public static class SearchProductViewHolder

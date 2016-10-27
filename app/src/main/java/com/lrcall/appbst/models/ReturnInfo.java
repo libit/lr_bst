@@ -28,7 +28,7 @@ public class ReturnInfo
 
 	public static boolean isSuccess(ReturnInfo info)
 	{
-		if (info != null && info.getErrcode() == ErrorInfo.getSuccessId()) // && info.getErrcode() != null && info.getErrcode().intValue() == 0)
+		if (info != null && info.getErrcode() == ErrorInfo.getSuccessId())
 		{
 			return true;
 		}

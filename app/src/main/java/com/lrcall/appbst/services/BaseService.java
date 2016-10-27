@@ -245,7 +245,7 @@ public abstract class BaseService
 			@Override
 			public void callback(String url, File file, AjaxStatus status)
 			{
-				LogcatTools.debug("ajaxFileCallback", "url:" + url + ",result:" + result);
+				LogcatTools.debug("ajaxFileCallback", "url:" + url);
 				if (needServiceProcess)
 				{
 					parseData(url, file, status);

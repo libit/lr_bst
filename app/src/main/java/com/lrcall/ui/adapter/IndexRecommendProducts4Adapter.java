@@ -92,70 +92,76 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 		{
 			viewHolder.clear();
 		}
-		//设置控件的值
-		final ProductInfo productInfo1 = list.get(position);
-		final ProductInfo productInfo2 = list.get(position + 1);
-		final ProductInfo productInfo3 = list.get(position + 2);
-		final ProductInfo productInfo4 = list.get(position + 3);
-		if (productInfo1 != null)
+		try
 		{
-			PicService.ajaxGetRoundPic(viewHolder.ivProduct1, ApiConfig.getServerPicUrl(productInfo1.getPicId()), DisplayTools.getWindowWidth(context) - DisplayTools.dip2px(context, 20), DisplayTools.getWindowWidth(context) - DisplayTools.dip2px(context, 20) * 2 / 5, 20, 50);
-			if (iRecommendProductsAdapter != null)
+			//设置控件的值
+			final ProductInfo productInfo1 = list.get(position);
+			if (productInfo1 != null)
 			{
-				viewHolder.ivProduct1.setOnClickListener(new View.OnClickListener()
+				PicService.ajaxGetRoundPic(viewHolder.ivProduct1, ApiConfig.getServerPicUrl(productInfo1.getPicId()), DisplayTools.getWindowWidth(context) - DisplayTools.dip2px(context, 20), DisplayTools.getWindowWidth(context) - DisplayTools.dip2px(context, 20) * 2 / 5, 20, 50);
+				if (iRecommendProductsAdapter != null)
 				{
-					@Override
-					public void onClick(View v)
+					viewHolder.ivProduct1.setOnClickListener(new View.OnClickListener()
 					{
-						iRecommendProductsAdapter.onProduct1Clicked(productInfo1);
-					}
-				});
+						@Override
+						public void onClick(View v)
+						{
+							iRecommendProductsAdapter.onProduct1Clicked(productInfo1);
+						}
+					});
+				}
+			}
+			final ProductInfo productInfo2 = list.get(position + 1);
+			if (productInfo2 != null)
+			{
+				PicService.ajaxGetRoundPic(viewHolder.ivProduct2, ApiConfig.getServerPicUrl(productInfo2.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
+				if (iRecommendProductsAdapter != null)
+				{
+					viewHolder.ivProduct2.setOnClickListener(new View.OnClickListener()
+					{
+						@Override
+						public void onClick(View v)
+						{
+							iRecommendProductsAdapter.onProduct2Clicked(productInfo2);
+						}
+					});
+				}
+			}
+			final ProductInfo productInfo3 = list.get(position + 2);
+			if (productInfo3 != null)
+			{
+				PicService.ajaxGetRoundPic(viewHolder.ivProduct3, ApiConfig.getServerPicUrl(productInfo3.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
+				if (iRecommendProductsAdapter != null)
+				{
+					viewHolder.ivProduct3.setOnClickListener(new View.OnClickListener()
+					{
+						@Override
+						public void onClick(View v)
+						{
+							iRecommendProductsAdapter.onProduct3Clicked(productInfo3);
+						}
+					});
+				}
+			}
+			final ProductInfo productInfo4 = list.get(position + 3);
+			if (productInfo4 != null)
+			{
+				PicService.ajaxGetRoundPic(viewHolder.ivProduct4, ApiConfig.getServerPicUrl(productInfo4.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
+				if (iRecommendProductsAdapter != null)
+				{
+					viewHolder.ivProduct4.setOnClickListener(new View.OnClickListener()
+					{
+						@Override
+						public void onClick(View v)
+						{
+							iRecommendProductsAdapter.onProduct4Clicked(productInfo4);
+						}
+					});
+				}
 			}
 		}
-		if (productInfo2 != null)
+		catch (Exception e)
 		{
-			PicService.ajaxGetRoundPic(viewHolder.ivProduct2, ApiConfig.getServerPicUrl(productInfo2.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
-			if (iRecommendProductsAdapter != null)
-			{
-				viewHolder.ivProduct2.setOnClickListener(new View.OnClickListener()
-				{
-					@Override
-					public void onClick(View v)
-					{
-						iRecommendProductsAdapter.onProduct2Clicked(productInfo2);
-					}
-				});
-			}
-		}
-		if (productInfo3 != null)
-		{
-			PicService.ajaxGetRoundPic(viewHolder.ivProduct3, ApiConfig.getServerPicUrl(productInfo3.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
-			if (iRecommendProductsAdapter != null)
-			{
-				viewHolder.ivProduct3.setOnClickListener(new View.OnClickListener()
-				{
-					@Override
-					public void onClick(View v)
-					{
-						iRecommendProductsAdapter.onProduct3Clicked(productInfo3);
-					}
-				});
-			}
-		}
-		if (productInfo4 != null)
-		{
-			PicService.ajaxGetRoundPic(viewHolder.ivProduct4, ApiConfig.getServerPicUrl(productInfo4.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
-			if (iRecommendProductsAdapter != null)
-			{
-				viewHolder.ivProduct4.setOnClickListener(new View.OnClickListener()
-				{
-					@Override
-					public void onClick(View v)
-					{
-						iRecommendProductsAdapter.onProduct4Clicked(productInfo4);
-					}
-				});
-			}
 		}
 		return convertView;
 	}

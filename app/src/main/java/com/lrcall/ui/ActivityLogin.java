@@ -42,6 +42,7 @@ public class ActivityLogin extends MyBaseActivity implements View.OnClickListene
 		etPassword = (EditText) findViewById(R.id.et_password);
 		findViewById(R.id.btn_login).setOnClickListener(this);
 		findViewById(R.id.btn_register).setOnClickListener(this);
+		findViewById(R.id.tv_reset_pwd).setOnClickListener(this);
 		etUsername.setText(PreferenceUtils.getInstance().getUsername());
 	}
 
@@ -88,6 +89,11 @@ public class ActivityLogin extends MyBaseActivity implements View.OnClickListene
 				startActivityForResult(new Intent(this, ActivityRegister.class), ConstValues.REQUEST_REGISTER);
 				break;
 			}
+			case R.id.tv_reset_pwd:
+			{
+				startActivityForResult(new Intent(this, ActivityResetPwd.class), ConstValues.REQUEST_RESET_PWD);
+				break;
+			}
 		}
 	}
 
@@ -98,6 +104,19 @@ public class ActivityLogin extends MyBaseActivity implements View.OnClickListene
 		if (requestCode == ConstValues.REQUEST_REGISTER)
 		{
 			if (resultCode == ConstValues.RESULT_REGISTER_SUCCESS)
+			{
+				setResult(ConstValues.RESULT_LOGIN_SUCCESS);
+				finish();
+			}
+			else
+			{
+				setResult(ConstValues.RESULT_LOGIN_ERROR);
+				finish();
+			}
+		}
+		else if (requestCode == ConstValues.REQUEST_RESET_PWD)
+		{
+			if (resultCode == ConstValues.RESULT_RESET_PWD_SUCCESS)
 			{
 				setResult(ConstValues.RESULT_LOGIN_SUCCESS);
 				finish();

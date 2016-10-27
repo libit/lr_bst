@@ -40,6 +40,10 @@ public class ConstValues
 	public static final int REQUEST_REGISTER = 1100;//注册代码
 	public static final int RESULT_REGISTER_SUCCESS = 2002;//注册成功代码
 	public static final int RESULT_REGISTER_ERROR = 2003;//注册失败代码
+	// 重置密码结果
+	public static final int REQUEST_RESET_PWD = 2100;//重置密码代码
+	public static final int RESULT_RESET_PWD_SUCCESS = 2102;//重置密码成功代码
+	public static final int RESULT_RESET_PWD_ERROR = 2103;//重置密码失败代码
 	// 请求拍照
 	public static final int REQUEST_CAPTURE_SET_PIC = 1003;//请求拍照，完成后跳转到设置头像
 	public static final int REQUEST_PICK_SET_PIC = 1004;//请求相册，完成后跳转到设置头像

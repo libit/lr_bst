@@ -49,129 +49,49 @@ public class ShopOrderService extends BaseService
 	}
 
 	/**
-	 * 获取商品列表
+	 * 获取订单信息
 	 *
-	 * @param tips                   提示信息
-	 * @param needServiceProcessData
-	 */
-	public void getProductSortList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
-	{
-		Map<String, Object> params = new HashMap<>();
-		params.put("start", start);
-		params.put("length", size);
-		params.put("showCommon", true);
-		if (!StringTools.isNull(condition))
-		{
-			params.put("search[value]", condition);
-		}
-		ajaxStringCallback(ApiConfig.GET_SHOP_PRODUCT_SORT_LIST, params, tips, needServiceProcessData);
-	}
-
-	/**
-	 * 获取商品列表
-	 *
-	 * @param tips                   提示信息
-	 * @param needServiceProcessData
-	 */
-	public void getBrandList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
-	{
-		Map<String, Object> params = new HashMap<>();
-		params.put("start", start);
-		params.put("length", size);
-		params.put("showCommon", true);
-		if (!StringTools.isNull(condition))
-		{
-			params.put("search[value]", condition);
-		}
-		ajaxStringCallback(ApiConfig.GET_BRAND_LIST, params, tips, needServiceProcessData);
-	}
-
-	/**
-	 * 添加商品
-	 *
-	 * @param sortId
-	 * @param brandId
-	 * @param name
-	 * @param picId
-	 * @param price
-	 * @param marketPrice
-	 * @param expressPrice
-	 * @param count
-	 * @param sharePrice
-	 * @param shareAddPrice
-	 * @param description
-	 * @param config
-	 * @param content
-	 * @param needExpress
-	 * @param sortIndex
+	 * @param orderSubId             订单ID
 	 * @param tips
 	 * @param needServiceProcessData
 	 */
-	public void addProduct(String sortId, String brandId, String name, String picId, int price, int marketPrice, int expressPrice, int count, int sharePrice, int shareAddPrice, String description, String config, String content, byte needExpress, int sortIndex, int pointAmount, String tips, final boolean needServiceProcessData)
+	public void getOrderInfo(String orderSubId, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
-		params.put("sortId", sortId);
-		params.put("brandId", brandId);
-		params.put("name", name);
-		params.put("picId", picId);
-		params.put("price", price);
-		params.put("marketPrice", marketPrice);
-		params.put("expressPrice", expressPrice);
-		params.put("count", count);
-		params.put("sharePrice", sharePrice);
-		params.put("shareAddPrice", shareAddPrice);
-		params.put("description", description);
-		params.put("config", config);
-		params.put("content", content);
-		params.put("needExpress", needExpress);
-		params.put("sortIndex", sortIndex);
-		params.put("pointAmount", pointAmount);
-		ajaxStringCallback(ApiConfig.SHOP_ADD_PRODUCT, params, tips, needServiceProcessData);
+		params.put("orderSubId", orderSubId);
+		ajaxStringCallback(ApiConfig.GET_SHOP_ORDER_INFO, params, tips, needServiceProcessData);
 	}
 
 	/**
-	 * 更新商品
+	 * 获取订单的快递信息
 	 *
-	 * @param sortId
-	 * @param brandId
-	 * @param name
-	 * @param picId
-	 * @param price
-	 * @param marketPrice
-	 * @param expressPrice
-	 * @param count
-	 * @param sharePrice
-	 * @param shareAddPrice
-	 * @param description
-	 * @param config
-	 * @param content
-	 * @param needExpress
-	 * @param sortIndex
-	 * @param pointAmount
+	 * @param orderSubId             订单ID
 	 * @param tips
 	 * @param needServiceProcessData
 	 */
-	public void updateProduct(String productId, String sortId, String brandId, String name, String picId, int price, int marketPrice, int expressPrice, int count, int sharePrice, int shareAddPrice, String description, String config, String content, byte needExpress, int sortIndex, Integer pointAmount, String tips, final boolean needServiceProcessData)
+	public void getOrderExpressInfo(String orderSubId, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
-		params.put("productId", productId);
-		params.put("sortId", sortId);
-		params.put("brandId", brandId);
-		params.put("name", name);
-		params.put("picId", picId);
-		params.put("price", price);
-		params.put("marketPrice", marketPrice);
-		params.put("expressPrice", expressPrice);
-		params.put("count", count);
-		params.put("sharePrice", sharePrice);
-		params.put("shareAddPrice", shareAddPrice);
-		params.put("description", description);
-		params.put("config", config);
-		params.put("content", content);
-		params.put("needExpress", needExpress);
-		params.put("sortIndex", sortIndex);
-		params.put("pointAmount", pointAmount);
-		ajaxStringCallback(ApiConfig.SHOP_UPDATE_PRODUCT, params, tips, needServiceProcessData);
+		params.put("orderSubId", orderSubId);
+		ajaxStringCallback(ApiConfig.GET_SHOP_ORDER_EXPRESS_INFO, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 订单发货
+	 *
+	 * @param orderSubId             订单ID
+	 * @param expressName            快递名
+	 * @param expressId              快递单号
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void orderShip(String orderSubId, String expressName, String expressId, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("orderSubId", orderSubId);
+		params.put("expressName", expressName);
+		params.put("expressId", expressId);
+		ajaxStringCallback(ApiConfig.SHOP_ORDER_SHIP, params, tips, needServiceProcessData);
 	}
 
 	@Override

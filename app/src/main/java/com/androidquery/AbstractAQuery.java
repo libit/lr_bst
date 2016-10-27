@@ -573,7 +573,7 @@ public abstract class AbstractAQuery<T extends AbstractAQuery<T>> implements Con
 	/**
 	 * Set the text color of a TextView from  a color resource id.
 	 *
-	 * @param color color resource id
+	 * @param id color resource id
 	 * @return self
 	 */
 	public T textColorId(int id)
@@ -584,7 +584,7 @@ public abstract class AbstractAQuery<T extends AbstractAQuery<T>> implements Con
 	/**
 	 * Set the text typeface of a TextView.
 	 *
-	 * @param typeface typeface
+	 * @param tf typeface
 	 * @return self
 	 */
 	public T typeface(Typeface tf)

@@ -12,9 +12,10 @@ import com.lrcall.utils.AppConfig;
 public class ApiConfig
 {
 	public static final String API_VERSION = "1";
-	//	private static final String RELEASE_URL = "http://115.29.140.222/lr_bst/user";
-	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
+	private static final String DEBUG_URL = "http://192.168.0.103:8080/lr_bst/user";
+	//			private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	//			private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
 	public static final String CHECK_UPDATE = RELEASE_URL + "/ajaxGetLastClientInfo";//检查更新
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
@@ -22,6 +23,7 @@ public class ApiConfig
 	public static final String USER_LOGIN = getServerUrl() + "/ajaxLogin";//用户登录
 	public static final String GET_SMS_CODE = getServerUrl() + "/../ajaxGetSmsCode";//获取手机验证码
 	public static final String USER_CHANGE_PWD = getServerUrl() + "/ajaxChangePwd";//用户修改密码
+	public static final String USER_RESET_PWD = getServerUrl() + "/ajaxResetPwd";//用户重置密码
 	public static final String USER_REGISTER = getServerUrl() + "/ajaxRegister";//用户注册
 	public static final String GET_USER_INFO = getServerUrl() + "/ajaxGetUserInfo";//获取用户信息
 	public static final String GET_USER_BALANCE_INFO = getServerUrl() + "/ajaxGetUserBalanceInfo";//获取用户余额信息
@@ -78,7 +80,7 @@ public class ApiConfig
 	public static final String DELETE_ORDER = getServerUrl() + "/ajaxDeleteOrderInfo";//删除用户订单
 	public static final String GET_ORDER_INFO = getServerUrl() + "/ajaxGetOrderInfo";// 获取用户订单
 	public static final String ORDER_FINISH = getServerUrl() + "/ajaxOrderConfirmReceive";// 订单完成
-	public static final String GET_ORDER_EXPRESS_LIST = getServerUrl() + "/ajaxGetOrderExpressInfoList";// 订单完成
+	public static final String GET_ORDER_EXPRESS_LIST = getServerUrl() + "/ajaxGetOrderExpressInfoList";//订单快递列表
 	//商品评价
 	public static final String ADD_PRODUCT_COMMENT = getServerUrl() + "/ajaxAddProductCommentInfo";//添加商品评价
 	public static final String GET_PRODUCT_COMMENT_LIST = getServerUrl() + "/ajaxGetProductCommentInfoList";//获取商品评价列表
@@ -144,6 +146,11 @@ public class ApiConfig
 	public static final String SHOP_UPDATE_PIC = getServerUrl() + "/../shop/uploadPic";//商家上传图片
 	public static final String SHOP_UPDATE_PRODUCT = getServerUrl() + "/../shop/ajaxUpdateProductInfo";//商家更新商品
 	public static final String GET_SHOP_ORDER_LIST = getServerUrl() + "/../shop/ajaxGetOrderSubInfoList";//商家订单列表
+	public static final String SHOP_ORDER_CHANGE_EXPRESS_PRICE = getServerUrl() + "/../shop/ajaxOrderSubChangeExpressPrice";//商家订单修改运费
+	public static final String SHOP_ORDER_SHIP = getServerUrl() + "/../shop/ajaxOrderSubShip";//商家订单发货
+	public static final String GET_SHOP_ORDER_INFO = getServerUrl() + "/../shop/ajaxGetOrderSubInfo";//商家订单详情
+	public static final String GET_SHOP_ORDER_EXPRESS_INFO = getServerUrl() + "/../shop/ajaxGetOrderSubExpressInfo";//商家订单快递信息
+	public static final String GET_EXPRESS_LIST = getServerUrl() + "/ajaxGetExpressInfoList";//快递列表
 
 	public static String getServerUrl()
 	{

@@ -85,7 +85,7 @@ public class ActivityDial extends MyBaseActivity
 		//初始化Tab
 		if (bShowPad)
 		{
-			tabInfos.add(new TabInfo(0, "拨号", R.drawable.ic_tab_dialer_normal, FragmentDialer.class));
+			tabInfos.add(new TabInfo(0, "拨号", R.drawable.ic_tab_dialer_normal, FragmentDialer2.class));
 		}
 		tabInfos.add(new TabInfo(1, "联系人", R.drawable.ic_tab_contacts_normal, FragmentContacts.class));
 		ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
