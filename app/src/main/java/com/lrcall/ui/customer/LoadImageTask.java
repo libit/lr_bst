@@ -56,12 +56,16 @@ public class LoadImageTask
 		protected Bitmap doInBackground(Long... params)
 		{
 			ContactInfo contactInfo = ContactsFactory.getInstance().getContactInfoById(context, params[0], true);
-			Bitmap bitmap = contactInfo.getContactPhoto();
-			if (bitmap != null)
+			if (contactInfo != null)
 			{
-				BitmapCacheTools.addBitmapToMemoryCache(getStoreKey(params[0]), bitmap);
+				Bitmap bitmap = contactInfo.getContactPhoto();
+				if (bitmap != null)
+				{
+					BitmapCacheTools.addBitmapToMemoryCache(getStoreKey(params[0]), bitmap);
+				}
+				return bitmap;
 			}
-			return bitmap;
+			return null;
 		}
 
 		@Override

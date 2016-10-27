@@ -55,6 +55,10 @@ public class ActivitySearchProducts extends MyBasePageActivity implements View.O
 		{
 			mProductService.getProductList(mSortId, mDataStart, getPageSize(), null, null, false, null, true);
 		}
+		else
+		{
+			refreshData();
+		}
 	}
 
 	@Override

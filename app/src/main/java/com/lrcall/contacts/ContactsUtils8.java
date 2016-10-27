@@ -184,17 +184,32 @@ public class ContactsUtils8 extends ContactsFactory
 	@Override
 	public List<ContactInfo> getContactInfos(Context context, String condition)
 	{
-		Uri uri = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI, condition);
-		//		String selection = CommonDataKinds.Phone.HAS_PHONE_NUMBER + " = '1'";
-		//		String selection = CommonDataKinds.Phone.NUMBER + " LIKE '%" + condition + "%' OR " + CommonDataKinds.Phone.DISPLAY_NAME + " LIKE '%" + condition + "%'";
-		String sortOrder = getSortKey() + " COLLATE LOCALIZED ASC";
-		Cursor cursor = context.getContentResolver().query(uri, projection8, null, null, sortOrder);
-		List<ContactInfo> list = buildContactInfos(context, cursor, false);
-		if (cursor != null && !cursor.isClosed())
+		try
 		{
-			cursor.close();
+			Uri uri = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI, condition);
+			//		String selection = CommonDataKinds.Phone.HAS_PHONE_NUMBER + " = '1'";
+			//		String selection = CommonDataKinds.Phone.NUMBER + " LIKE '%" + condition + "%' OR " + CommonDataKinds.Phone.DISPLAY_NAME + " LIKE '%" + condition + "%'";
+			String sortOrder = getSortKey() + " COLLATE LOCALIZED ASC";
+			Cursor cursor = context.getContentResolver().query(uri, projection8, null, null, sortOrder);
+			List<ContactInfo> list = buildContactInfos(context, cursor, false);
+			if (cursor != null && !cursor.isClosed())
+			{
+				cursor.close();
+			}
+			return list;
 		}
-		return list;
+		catch (Exception e)
+		{
+			Uri uri = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI, condition);
+			String sortOrder = getSortKey() + " COLLATE LOCALIZED ASC";
+			Cursor cursor = context.getContentResolver().query(uri, new String[]{CONTACT_ID8, NAME8, NUMBER8, TYPE8, PHOTO_ID8, STARRED8, ContactsContract.Contacts.SORT_KEY_PRIMARY}, null, null, sortOrder);
+			List<ContactInfo> list = buildContactInfos(context, cursor, false);
+			if (cursor != null && !cursor.isClosed())
+			{
+				cursor.close();
+			}
+			return list;
+		}
 	}
 
 	/**
@@ -208,6 +223,10 @@ public class ContactsUtils8 extends ContactsFactory
 	@Override
 	public ContactInfo getContactInfoById(Context context, Long contactId, boolean showPhoto)
 	{
+		if (contactId == null)
+		{
+			return null;
+		}
 		String sortOrder = getSortKey() + " COLLATE LOCALIZED ASC";
 		Cursor cursor = context.getContentResolver().query(CONTENT_URI8, projection8, CONTACT_ID8 + " = ?", new String[]{contactId.toString()}, sortOrder);
 		ContactInfo contactInfo = buildContactInfo(context, cursor, showPhoto);

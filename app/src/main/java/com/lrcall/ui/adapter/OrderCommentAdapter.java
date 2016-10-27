@@ -59,17 +59,17 @@ public class OrderCommentAdapter extends BaseUserAdapter<OrderProductInfo>
 		PicService.ajaxGetPic(viewHolder.ivHead, ApiConfig.getServerPicUrl(orderProductInfo.getProductInfo().getPicId()), DisplayTools.getWindowWidth(context) / 6);
 		final RatingBar ratingBar = viewHolder.ratingBar;
 		final EditText etContent = viewHolder.etContent;
-		convertView.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener()
+		if (iOrderCommentAdapter != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener()
 			{
-				if (iOrderCommentAdapter != null)
+				@Override
+				public void onClick(View v)
 				{
 					iOrderCommentAdapter.onSubmit(orderProductInfo.getProductInfo().getProductId(), ratingBar.getNumStars(), etContent.getText().toString());
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 

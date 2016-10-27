@@ -60,13 +60,13 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 		if (contactInfo != null)
 		{
 			name = contactInfo.getName();
+			if (contactInfo.getContactPhoto() != null)
+			{
+				ivHead.setImageBitmap(contactInfo.getContactPhoto());
+			}
 		}
 		tvName.setText(name);
 		tvResult.setText("正在呼叫,请稍后...");
-		if (contactInfo.getContactPhoto() != null)
-		{
-			ivHead.setImageBitmap(contactInfo.getContactPhoto());
-		}
 		mCallbackService.makeCall(number, null, false);
 		IntentFilter filter = new IntentFilter("android.intent.action.PHONE_STATE");
 		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);

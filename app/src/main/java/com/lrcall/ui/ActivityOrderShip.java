@@ -67,7 +67,7 @@ public class ActivityOrderShip extends MyBaseActivity implements View.OnClickLis
 		mShopOrderService = new ShopOrderService(this);
 		mShopOrderService.addDataResponse(this);
 		viewInit();
-		refreshExpressList(Arrays.asList(new String[]{"顺丰", "EMS"}));
+		refreshExpressList(Arrays.asList("顺丰", "EMS"));
 		mShopOrderService.getOrderExpressInfo(mOrderSubId, "请稍后...", false);
 	}
 
@@ -186,7 +186,7 @@ public class ActivityOrderShip extends MyBaseActivity implements View.OnClickLis
 			{
 				tvName.setText(userAddressInfo.getName());
 				tvNumber.setText(userAddressInfo.getNumber());
-				tvAddress.setText(userAddressInfo.getAddress());
+				tvAddress.setText(userAddressInfo.getProvince() + " " + userAddressInfo.getCity() + " " + userAddressInfo.getDistrict() + " " + userAddressInfo.getAddress());
 			}
 			else
 			{

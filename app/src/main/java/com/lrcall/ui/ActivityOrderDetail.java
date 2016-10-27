@@ -184,7 +184,7 @@ public class ActivityOrderDetail extends MyBaseActivity implements View.OnClickL
 			{
 				tvName.setText(userAddressInfo.getName());
 				tvNumber.setText(userAddressInfo.getNumber());
-				tvAddress.setText(userAddressInfo.getAddress());
+				tvAddress.setText(userAddressInfo.getProvince() + " " + userAddressInfo.getCity() + " " + userAddressInfo.getDistrict() + " " + userAddressInfo.getAddress());
 			}
 			else
 			{

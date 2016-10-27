@@ -141,7 +141,7 @@ public class FragmentBackupContact extends MyBaseFragment implements IAjaxDataRe
 				final List<ContactInfo> contactInfoList = ContactsFactory.getInstance().getContactInfos(getContext());
 				if (contactInfoList == null || contactInfoList.size() < 1)
 				{
-					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail,"手机通讯录为空！");
+					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail, "手机通讯录为空！");
 					return;
 				}
 				final int total = contactInfoList.size();
@@ -166,7 +166,10 @@ public class FragmentBackupContact extends MyBaseFragment implements IAjaxDataRe
 							index++;
 							EventBus.getDefault().post(new ContactBackupEvent(index, total));
 							ContactInfo newContactInfo = ContactsFactory.getInstance().getContactInfoById(getContext(), contactInfo.getContactId(), false);
-							newContactInfoList.add(newContactInfo);
+							if (newContactInfo != null)
+							{
+								newContactInfoList.add(newContactInfo);
+							}
 						}
 						if (mDialogProgress != null)
 						{
@@ -228,7 +231,7 @@ public class FragmentBackupContact extends MyBaseFragment implements IAjaxDataRe
 				}.getType());
 				if (contactInfoList == null || contactInfoList.size() < 1)
 				{
-					ToastView.showCenterToast(getContext(),R.drawable.ic_do_fail, "服务器通讯录为空！");
+					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail, "服务器通讯录为空！");
 				}
 				else
 				{
@@ -276,11 +279,11 @@ public class FragmentBackupContact extends MyBaseFragment implements IAjaxDataRe
 			{
 				if (returnInfo != null)
 				{
-					ToastView.showCenterToast(getContext(),R.drawable.ic_do_fail, "下载通讯录失败：" + returnInfo.getErrmsg());
+					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail, "下载通讯录失败：" + returnInfo.getErrmsg());
 				}
 				else
 				{
-					ToastView.showCenterToast(getContext(),R.drawable.ic_do_fail, "下载通讯录失败：" + result);
+					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail, "下载通讯录失败：" + result);
 				}
 			}
 			return true;
