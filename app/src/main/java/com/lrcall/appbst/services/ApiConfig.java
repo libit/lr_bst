@@ -12,10 +12,10 @@ import com.lrcall.utils.AppConfig;
 public class ApiConfig
 {
 	public static final String API_VERSION = "1";
-	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
-	private static final String DEBUG_URL = "http://192.168.168.6:8080/lr_bst/user";
-	//		private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	//		private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	//	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
+	//	private static final String DEBUG_URL = "http://192.168.0.103:8080/lr_bst/user";
+	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
 	public static final String CHECK_UPDATE = RELEASE_URL + "/ajaxGetLastClientInfo";//检查更新
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
