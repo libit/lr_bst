@@ -85,6 +85,34 @@ public class PayService extends BaseService
 		ajaxStringCallback(ApiConfig.PAY_DATA_TRAFFIC_BY_BALANCE, params, tips, needServiceProcessData);
 	}
 
+	/**
+	 * 用户升级费用
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getUserUpgradePrice(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.USER_UPGRADE_PRICE, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 用户使用商城卡升级
+	 *
+	 * @param cardId                 商城卡卡号
+	 * @param cardPwd                商城卡密码
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void payUserUpgradeByShopCard(String cardId, String cardPwd, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("cardId", cardId);
+		params.put("cardPwd", cardPwd);
+		ajaxStringCallback(ApiConfig.USER_UPGRADE_BY_SHOP_CARD, params, tips, needServiceProcessData);
+	}
+
 	@Override
 	public void parseData(String url, String result, AjaxStatus status)
 	{

@@ -9,7 +9,9 @@
     <color name="colorAccent">#3f59f9</color>
     <color name="white_20">#33008866</color>
     <color name="transparent">#00000000</color>
-    <color name="icon_enabled">#e14d4d</color>
+    <color name="main_icon_enabled">#319C8B</color>
+    <color name="main_icon_disabled">#ffffff</color>
+    <color name="icon_enabled">#ff000001</color>
     <color name="icon_disabled">#ffffff</color>
     <color name="line">#aac4c4c4</color>
     <color name="line_height">#ffeeebeb</color>

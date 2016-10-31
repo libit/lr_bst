@@ -13,7 +13,7 @@ public class ApiConfig
 {
 	public static final String API_VERSION = "1";
 	//	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
-	//	private static final String DEBUG_URL = "http://192.168.0.103:8080/lr_bst/user";
+	//	private static final String DEBUG_URL = "http://192.168.168.6:8080/lr_bst/user";
 	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
@@ -33,6 +33,9 @@ public class ApiConfig
 	public static final String UPDATE_BACKUP_CONFIG = getServerUrl() + "/ajaxUserToUpdateBackupConfig";//用户配置备份
 	public static final String USER_SHARE = getServerUrl() + "/ajaxShareApp";//用户分享App
 	public static final String GET_CLIENT_CONFIG = getServerUrl() + "/ajaxGetClientConfig";//客户端公共配置信息
+	//用户升级
+	public static final String USER_UPGRADE_PRICE = getServerUrl() + "/ajaxGetUserUpgradePrice";//用户升级费用
+	public static final String USER_UPGRADE_BY_SHOP_CARD = getServerUrl() + "/ajaxUserUpgradeByShopCard";//用户商城卡升级
 	//号码相关
 	public static final String GET_NUMBER_LOCAL = getServerUrl() + "/ajaxGetNumberLocal";//获取电话号码归属地
 	public static final String GET_NUMBER_LABEL = getServerUrl() + "/ajaxGetNumberLabel";//获取电话号码标记

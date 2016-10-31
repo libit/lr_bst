@@ -49,4 +49,17 @@ public enum UserLevel
 		}
 		return "";
 	}
+
+	public static String getNextLevelDesc(byte level)
+	{
+		UserLevel[] list = UserLevel.values();
+		for (UserLevel userLevel : list)
+		{
+			if (userLevel.getLevel() == level + 10)
+			{
+				return userLevel.getDesc();
+			}
+		}
+		return "";
+	}
 }

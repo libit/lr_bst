@@ -44,7 +44,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityPayList extends MyBaseActivity implements PayAdapter.IPayAdapterItemClicked, IAjaxDataResponse
+public class ActivityPayList extends MyBaseActivity implements IAjaxDataResponse
 {
 	public static final int REQ_PAY = 1002;
 	private static final String TAG = ActivityPayList.class.getSimpleName();
@@ -156,31 +156,32 @@ public class ActivityPayList extends MyBaseActivity implements PayAdapter.IPayAd
 
 	private void initData()
 	{
-		PayAdapter payAdapter = new PayAdapter(this, mPayInfoList, this);
-		xListView.setAdapter(payAdapter);
-	}
-
-	@Override
-	public void onPayClicked(View v, final PayInfo payInfo)
-	{
-		if (payInfo != null)
+		PayAdapter payAdapter = new PayAdapter(this, mPayInfoList, new PayAdapter.IPayAdapterItemClicked()
 		{
-			if (payInfo.getName().indexOf("余额") > -1)
+			@Override
+			public void onPayClicked(View v, PayInfo payInfo)
 			{
-				Intent intent = new Intent(this, ActivityPayByBalance.class);
-				//				intent.putExtra(ConstValues.DATA_ORDER_ID, payTypeInfo.getComment());
-				intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, params);
-				startActivityForResult(intent, REQ_PAY);
+				if (payInfo != null)
+				{
+					if (payInfo.getName().indexOf("余额") > -1)
+					{
+						Intent intent = new Intent(ActivityPayList.this, ActivityPayByBalance.class);
+						//				intent.putExtra(ConstValues.DATA_ORDER_ID, payTypeInfo.getComment());
+						intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, params);
+						startActivityForResult(intent, REQ_PAY);
+					}
+					else if (payInfo.getName().indexOf("支付宝") > -1)
+					{
+						alipayService.getAlipayConfigInfo("正在调用支付宝，请稍后...", false);
+					}
+					else if (payInfo.getName().indexOf("微信") > -1)
+					{
+						wxPayService.getWxPayInfo("正在调用微信支付，请稍后...", true);
+					}
+				}
 			}
-			else if (payInfo.getName().indexOf("支付宝") > -1)
-			{
-				alipayService.getAlipayConfigInfo("正在调用支付宝，请稍后...", false);
-			}
-			else if (payInfo.getName().indexOf("微信") > -1)
-			{
-				wxPayService.getWxPayInfo("正在调用微信支付，请稍后...", true);
-			}
-		}
+		});
+		xListView.setAdapter(payAdapter);
 	}
 
 	@Override

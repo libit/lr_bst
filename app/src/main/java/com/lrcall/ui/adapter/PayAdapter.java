@@ -17,6 +17,7 @@ import com.lrcall.appbst.models.PayInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.PicService;
 import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.StringTools;
 
 import java.util.List;
 
@@ -55,7 +56,14 @@ public class PayAdapter extends BaseUserAdapter<PayInfo>
 		}
 		final PayInfo payInfo = list.get(position);
 		viewHolder.tvName.setText(payInfo.getName());
-		PicService.ajaxGetPic(viewHolder.ivLogo, ApiConfig.getServerPicUrl(payInfo.getPicUrl()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 5);
+		if (!StringTools.isNull(payInfo.getPicUrl()))
+		{
+			PicService.ajaxGetPic(viewHolder.ivLogo, ApiConfig.getServerPicUrl(payInfo.getPicUrl()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 5);
+		}
+		else
+		{
+			viewHolder.ivLogo.setImageBitmap(null);
+		}
 		if (iPayAdapterItemClicked != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()

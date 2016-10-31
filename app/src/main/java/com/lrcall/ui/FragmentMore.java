@@ -132,6 +132,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		rootView.findViewById(R.id.layout_settings).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_apply_shop).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_apply_agent).setOnClickListener(this);
+		rootView.findViewById(R.id.btn_upgrade).setOnClickListener(this);
 		ivPhoto.setOnClickListener(this);
 		super.viewInit(rootView);
 	}
@@ -189,6 +190,19 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 	{
 		switch (v.getId())
 		{
+			case R.id.btn_upgrade:
+			{
+				if (isbLogin())
+				{
+					Intent intent = new Intent(this.getContext(), ActivityUserUpgrade.class);
+					startActivity(intent);
+				}
+				else
+				{
+					startActivityForResult(new Intent(this.getContext(), ActivityLogin.class), ConstValues.REQUEST_LOGIN_USER);
+				}
+				break;
+			}
 			case R.id.btn_login:
 			{
 				startActivityForResult(new Intent(this.getContext(), ActivityLogin.class), ConstValues.REQUEST_LOGIN_USER);

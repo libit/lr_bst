@@ -134,15 +134,15 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		//加载tab布局
 		tab.addView(LayoutInflater.from(this).inflate(R.layout.layout_main_tab, tab, false));
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-		final LayoutInflater inflater = LayoutInflater.from(viewPagerTab.getContext());
+		final SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+		//		final LayoutInflater inflater = LayoutInflater.from(viewPagerTab.getContext());
 		viewPagerTab.setCustomTabView(new SmartTabLayout.TabProvider()
 		{
 			@Override
 			public View createTabView(ViewGroup container, int position, PagerAdapter adapter)
 			{
 				TabInfo tabInfo = tabInfos.get(position);
-				View view = inflater.inflate(R.layout.item_tab, container, false);
+				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_main_tab, container, false);
 				tabInfo.setImgIcon((ImageView) view.findViewById(R.id.tab_icon));
 				tabInfo.setTvLabel((TextView) view.findViewById(R.id.tab_label));
 				tabInfo.getImgIcon().setImageResource(tabInfo.getImgResId());
@@ -172,6 +172,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 					LogcatTools.debug("onPageSelected", "添加点击事件");
 					tabInfo.getImgIcon().setOnClickListener(listener);
 					tabInfo.getTvLabel().setOnClickListener(listener);
+					//					view.setOnClickListener(listener);
 				}
 				return view;
 			}
@@ -192,12 +193,12 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 					TabInfo tabInfo = tabInfos.get(i);
 					if (i == position)
 					{
-						tabInfo.getTvLabel().setTextColor(getResources().getColor(R.color.icon_enabled));
+						tabInfo.getTvLabel().setTextColor(getResources().getColor(R.color.main_icon_enabled));
 						mToolbar.setTitle(tabInfo.getLabel());
 					}
 					else
 					{
-						tabInfo.getTvLabel().setTextColor(getResources().getColor(R.color.icon_disabled));
+						tabInfo.getTvLabel().setTextColor(getResources().getColor(R.color.main_icon_disabled));
 					}
 				}
 				if (position == INDEX || position == CATEGORY || position == INTERACT)
@@ -227,7 +228,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getSupportFragmentManager(), pages);
 		viewPager.setAdapter(adapter);
 		viewPagerTab.setViewPager(viewPager);
-		tabInfos.get(0).getTvLabel().setTextColor(getResources().getColor(R.color.icon_enabled));
+		tabInfos.get(0).getTvLabel().setTextColor(getResources().getColor(R.color.main_icon_enabled));
 		//侧滑布局
 		xListView = (XListView) findViewById(R.id.xlist);
 		layoutSideMain = new LayoutSideMain(this);
@@ -328,8 +329,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		{
 			if (resultCode == Activity.RESULT_OK)
 			{
-				Bundle bundle = data.getExtras();
-				Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
+				Bitmap bitmap = (Bitmap) data.getExtras().get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
 				picSelected(bitmap);
 			}
 			else

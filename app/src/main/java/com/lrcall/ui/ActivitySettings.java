@@ -16,6 +16,8 @@ import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UpdateService;
+import com.lrcall.ui.dialog.DialogCommon;
+import com.lrcall.ui.dialog.DialogSettingAutoAnswer;
 import com.lrcall.ui.dialog.DialogSettingBugLevel;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
@@ -25,7 +27,7 @@ import com.lrcall.utils.apptools.AppFactory;
 public class ActivitySettings extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private ImageView ivIsDebug;
-	private TextView tvVersion;
+	private TextView tvVersion, tvAutoAnswerStatus;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -53,6 +55,7 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 		tvVersion.setText(AppFactory.getInstance().getVersionName());
 		findViewById(R.id.layout_debug).setOnClickListener(this);
 		findViewById(R.id.layout_about).setOnClickListener(this);
+		findViewById(R.id.layout_auto_answer).setOnClickListener(this);
 		findViewById(R.id.layout_advice).setOnClickListener(this);
 		findViewById(R.id.layout_bug_level).setOnClickListener(this);
 		findViewById(R.id.layout_update).setOnClickListener(this);
@@ -81,6 +84,22 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 			case R.id.layout_about:
 			{
 				ActivityWebView.startWebActivity(this, "关于我们", ApiConfig.getServerAboutUrl());
+				break;
+			}
+			case R.id.layout_auto_answer:
+			{
+				new DialogSettingAutoAnswer(this, new DialogCommon.LibitDialogListener()
+				{
+					@Override
+					public void onOkClick()
+					{
+					}
+
+					@Override
+					public void onCancelClick()
+					{
+					}
+				}).show();
 				break;
 			}
 			case R.id.layout_advice:

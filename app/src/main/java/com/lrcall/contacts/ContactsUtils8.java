@@ -137,41 +137,82 @@ public class ContactsUtils8 extends ContactsFactory
 	@Override
 	public List<ContactInfo> getContactInfos(Context context)
 	{
-		Uri uri = ContactsContract.Contacts.CONTENT_URI;
-		String[] projection = new String[]{CONTACT_ID, DISPLAY_NAME, PHOTO_ID, STARRED, getSortKey()};
-		String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " = '1'";
-		String[] selectionArgs = null;
-		String sortOrder = getSortKey() + " COLLATE LOCALIZED ASC";
-		Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, sortOrder);
-		List<ContactInfo> list = new ArrayList<>();
-		if (cursor != null)
+		try
 		{
-			while (cursor.moveToNext())
+			Uri uri = ContactsContract.Contacts.CONTENT_URI;
+			String[] projection = new String[]{CONTACT_ID, DISPLAY_NAME, PHOTO_ID, STARRED, getSortKey()};
+			String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " = '1'";
+			String[] selectionArgs = null;
+			String sortOrder = getSortKey() + " COLLATE LOCALIZED ASC";
+			Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, sortOrder);
+			List<ContactInfo> list = new ArrayList<>();
+			if (cursor != null)
 			{
-				ContactInfo contactInfo = new ContactInfo();
-				Long id = cursor.getLong(cursor.getColumnIndex(CONTACT_ID));
-				String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
-				String py = cursor.getString(cursor.getColumnIndex(getSortKey()));
-				Long photoId = cursor.getLong(cursor.getColumnIndex(PHOTO_ID));
-				boolean starred = cursor.getInt(cursor.getColumnIndex(STARRED)) == 1;
-				if (photoId == null)
+				while (cursor.moveToNext())
 				{
-					photoId = 0L;
+					ContactInfo contactInfo = new ContactInfo();
+					Long id = cursor.getLong(cursor.getColumnIndex(CONTACT_ID));
+					String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+					String py = cursor.getString(cursor.getColumnIndex(getSortKey()));
+					Long photoId = cursor.getLong(cursor.getColumnIndex(PHOTO_ID));
+					boolean starred = cursor.getInt(cursor.getColumnIndex(STARRED)) == 1;
+					if (photoId == null)
+					{
+						photoId = 0L;
+					}
+					contactInfo.setContactId(id);
+					contactInfo.setName(name);
+					contactInfo.setPy(py);
+					contactInfo.setPhotoId(photoId);
+					contactInfo.setStarred(starred);
+					//				LogcatTools.debug("getContactInfos", "name:" + name + ",py:" + py + ",sortOrder:" + sortOrder);
+					list.add(contactInfo);
 				}
-				contactInfo.setContactId(id);
-				contactInfo.setName(name);
-				contactInfo.setPy(py);
-				contactInfo.setPhotoId(photoId);
-				contactInfo.setStarred(starred);
-				//				LogcatTools.debug("getContactInfos", "name:" + name + ",py:" + py + ",sortOrder:" + sortOrder);
-				list.add(contactInfo);
+				if (!cursor.isClosed())
+				{
+					cursor.close();
+				}
 			}
-			if (!cursor.isClosed())
-			{
-				cursor.close();
-			}
+			return list;
 		}
-		return list;
+		catch (Exception e)
+		{
+			Uri uri = ContactsContract.Contacts.CONTENT_URI;
+			String[] projection = new String[]{CONTACT_ID, DISPLAY_NAME, PHOTO_ID, STARRED, ContactsContract.Contacts.SORT_KEY_PRIMARY};
+			String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " = '1'";
+			String[] selectionArgs = null;
+			String sortOrder = ContactsContract.Contacts.SORT_KEY_PRIMARY + " COLLATE LOCALIZED ASC";
+			Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, sortOrder);
+			List<ContactInfo> list = new ArrayList<>();
+			if (cursor != null)
+			{
+				while (cursor.moveToNext())
+				{
+					ContactInfo contactInfo = new ContactInfo();
+					Long id = cursor.getLong(cursor.getColumnIndex(CONTACT_ID));
+					String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+					String py = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.SORT_KEY_PRIMARY));
+					Long photoId = cursor.getLong(cursor.getColumnIndex(PHOTO_ID));
+					boolean starred = cursor.getInt(cursor.getColumnIndex(STARRED)) == 1;
+					if (photoId == null)
+					{
+						photoId = 0L;
+					}
+					contactInfo.setContactId(id);
+					contactInfo.setName(name);
+					contactInfo.setPy(py);
+					contactInfo.setPhotoId(photoId);
+					contactInfo.setStarred(starred);
+					//				LogcatTools.debug("getContactInfos", "name:" + name + ",py:" + py + ",sortOrder:" + sortOrder);
+					list.add(contactInfo);
+				}
+				if (!cursor.isClosed())
+				{
+					cursor.close();
+				}
+			}
+			return list;
+		}
 	}
 
 	/**
@@ -201,7 +242,7 @@ public class ContactsUtils8 extends ContactsFactory
 		catch (Exception e)
 		{
 			Uri uri = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI, condition);
-			String sortOrder = getSortKey() + " COLLATE LOCALIZED ASC";
+			String sortOrder = ContactsContract.Contacts.SORT_KEY_PRIMARY + " COLLATE LOCALIZED ASC";
 			Cursor cursor = context.getContentResolver().query(uri, new String[]{CONTACT_ID8, NAME8, NUMBER8, TYPE8, PHOTO_ID8, STARRED8, ContactsContract.Contacts.SORT_KEY_PRIMARY}, null, null, sortOrder);
 			List<ContactInfo> list = buildContactInfos(context, cursor, false);
 			if (cursor != null && !cursor.isClosed())

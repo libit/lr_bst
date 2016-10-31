@@ -248,6 +248,12 @@
         <activity
             android:name="com.lrcall.ui.ActivityResetPwd"
             android:label="@string/title_activity_reset_pwd"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityUserUpgrade"
+            android:label="@string/title_activity_user_upgrade"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityPayByShopCard"
+            android:label="@string/title_activity_pay_by_shop_card"/>
         <!-- 商家 -->
         <activity
             android:name="com.lrcall.ui.ActivityShopRegister"

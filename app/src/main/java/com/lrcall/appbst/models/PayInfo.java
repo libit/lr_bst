@@ -18,6 +18,17 @@ public class PayInfo
 	@SerializedName("picId")
 	private String picUrl;
 
+	public PayInfo()
+	{
+	}
+
+	public PayInfo(String payId, String name, String picUrl)
+	{
+		this.payId = payId;
+		this.name = name;
+		this.picUrl = picUrl;
+	}
+
 	public String getPayId()
 	{
 		return payId;

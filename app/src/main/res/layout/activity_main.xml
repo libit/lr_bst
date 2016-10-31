@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@drawable/menu_bg"
+            android:background="@color/white"
             android:divider="#00000000"
             android:fadingEdge="none"
             android:footerDividersEnabled="false"

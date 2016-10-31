@@ -49,7 +49,7 @@ public class PreferenceUtils
 			put(PIC_QUALITY, PicQuality.HIGH.getLevel() + "");
 			put(WX_APP_ID, "");
 			put(CLIENT_CONFIG, "");
-			put(PREF_CALLBACK_AUTO_ANSWER_KEY, AutoAnswerType.AUTO_ANSWER2.getType() + "");
+			put(PREF_CALLBACK_AUTO_ANSWER_KEY, AutoAnswerType.ANSWER_USER.getType() + "");
 		}
 	};
 	private final static HashMap<String, Boolean> BOOLEAN_PREFS = new HashMap<String, Boolean>()

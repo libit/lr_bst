@@ -101,6 +101,10 @@
     <string name="title_activity_callback_call_waiting">呼叫等待</string>
     <!-- 重置密码Activity -->
     <string name="title_activity_reset_pwd">重置密码</string>
+    <!-- 用户等级升级Activity -->
+    <string name="title_activity_user_upgrade">用户等级升级</string>
+    <!-- 商城卡支付Activity -->
+    <string name="title_activity_pay_by_shop_card">商城卡支付</string>
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="downloading">正在下载</string>
