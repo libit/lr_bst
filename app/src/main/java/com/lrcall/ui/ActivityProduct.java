@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.OrderProductInfo;
-import com.lrcall.appbst.models.ProductInfo;
 import com.lrcall.appbst.models.ProductStarInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
@@ -30,6 +29,7 @@ import com.lrcall.appbst.services.ProductStarService;
 import com.lrcall.appbst.services.ShopCartService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbProductStarInfoFactory;
+import com.lrcall.enums.ProductType;
 import com.lrcall.models.TabInfo;
 import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
@@ -104,9 +104,6 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		//设置滑动返回区域
 		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
-		//初始化Tab
-		Bundle bundle = new Bundle();
-		bundle.putString(ConstValues.DATA_PRODUCT_ID, productId);
 		tabInfos.clear();
 		tabInfos.add(new TabInfo(0, "商品", FragmentProduct.class));
 		tabInfos.add(new TabInfo(1, "详情", FragmentProductWeb.class));
@@ -132,6 +129,10 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		});
 		viewPager.setOffscreenPageLimit(PAGE_COUNT);
 		FragmentPagerItems pages = new FragmentPagerItems(this);
+		//初始化Tab
+		Bundle bundle = new Bundle();
+		bundle.putString(ConstValues.DATA_PRODUCT_ID, productId);
+		bundle.putString(ConstValues.DATA_PRODUCT_TYPE, ProductType.PRODUCT.getType() + "");
 		for (TabInfo tabInfo : tabInfos)
 		{
 			pages.add(FragmentPagerItem.of(tabInfo.getLabel(), tabInfo.getLoadClass(), bundle));
@@ -260,11 +261,12 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 					}
 					Intent intent = new Intent(this, ActivityOrderAdd.class);
 					ArrayList<OrderProductInfo> orderProductInfos = new ArrayList<>();
-					ProductInfo productInfo = new ProductInfo();
-					productInfo.setProductId(productId);
+					//					ProductInfo productInfo = new ProductInfo();
+					//					productInfo.setProductId(productId);
 					OrderProductInfo orderProductInfo = new OrderProductInfo();
 					orderProductInfo.setCount(amount);
-					orderProductInfo.setProductInfo(productInfo);
+					orderProductInfo.setProductId(productId);
+					//					orderProductInfo.setProductInfo(productInfo);
 					orderProductInfos.add(orderProductInfo);
 					intent.putExtra(ConstValues.DATA_ORDER_PRODUCT_LIST, GsonTools.toJson(orderProductInfos));
 					startActivity(intent);
@@ -332,19 +334,13 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		}
 		else if (url.endsWith(ApiConfig.ADD_SHOP_CART_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "已加入购物车！");
+				ToastView.showCenterToast(this, R.drawable.ic_done, "添加到购物车成功！");
 			}
 			else
 			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "添加购物车失败：" + msg);
+				showServerMsg(result);
 			}
 		}
 		return false;

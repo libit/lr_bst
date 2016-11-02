@@ -163,7 +163,7 @@ public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 						return false;
 					}
 				});
-				orderProductCommentService.getProductCommentInfoCount(orderInfo.getOrderId(), orderInfo.getOrderProductInfoList().get(0).getProductInfo().getProductId(), null, false);
+				orderProductCommentService.getProductCommentInfoCount(orderInfo.getOrderId(), orderInfo.getOrderProductInfoList().get(0).getProductId(), null, false);
 			}
 		}
 		convertView.setOnClickListener(new View.OnClickListener()

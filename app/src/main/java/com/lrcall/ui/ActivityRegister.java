@@ -241,25 +241,13 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 			else
 			{
 				setResult(ConstValues.RESULT_REGISTER_ERROR);
+				showServerMsg(result);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_SMS_CODE))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, returnInfo.getErrmsg());
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "获取验证码失败:" + msg);
-			}
+			showServerMsg(result);
 			return true;
 		}
 		return false;

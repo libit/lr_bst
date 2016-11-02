@@ -64,27 +64,27 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 	{
 		// Required empty public constructor
 	}
-	//	public static FragmentProduct newInstance(String productId)
-	//	{
-	//		FragmentProduct fragment = new FragmentProduct();
-	//		Bundle args = new Bundle();
-	//		args.putString(ARG_PRODUCT_ID, productId);
-	//		fragment.setArguments(args);
-	//		return fragment;
-	//	}
+	//		public static FragmentProduct newInstance(String productId)
+	//		{
+	//			FragmentProduct fragment = new FragmentProduct();
+	//			Bundle args = new Bundle();
+	//			args.putString(ARG_PRODUCT_ID, productId);
+	//			fragment.setArguments(args);
+	//			return fragment;
+	//		}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		//		if (getArguments() != null)
-		//		{
-		//			productId = getArguments().getString(ARG_PRODUCT_ID);
-		//		}
-		//		else
+		if (getArguments() != null)
 		{
-			productId = getActivity().getIntent().getExtras().getString(ConstValues.DATA_PRODUCT_ID);
+			productId = getArguments().getString(ConstValues.DATA_PRODUCT_ID);
 		}
+		//		else
+		//		{
+		//			productId = getActivity().getIntent().getExtras().getString(ConstValues.DATA_PRODUCT_ID);
+		//		}
 		mProductService = new ProductService(this.getContext());
 		mProductService.addDataResponse(this);
 	}

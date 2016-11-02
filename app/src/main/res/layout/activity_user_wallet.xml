@@ -142,4 +142,10 @@
         android:layout_width="match_parent"
         android:layout_height="0.7dp"
         android:background="@color/line"/>
+    <Button
+        android:id="@+id/btn_duihuan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="积分兑换"/>
 </LinearLayout>

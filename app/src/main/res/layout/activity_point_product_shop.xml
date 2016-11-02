@@ -1,0 +1,54 @@
+<!--
+  ~ Libit保留所有版权，如有疑问联系QQ：308062035
+  ~ Copyright (c) 2016.
+  -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/layout_title"/>
+    <LinearLayout
+        android:id="@+id/layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/bg_transparent_main_color"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/search_box"
+            android:drawableLeft="@drawable/search_icon"
+            android:drawablePadding="10dp"
+            android:hint="输入商品关键字"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="15dp"/>
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="6dp"
+            android:background="@color/bg_section_normal"
+            android:text="搜索"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <com.external.xlistview.XListView
+        android:id="@+id/xlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:divider="#00000000"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:scrollbars="none">
+    </com.external.xlistview.XListView>
+</LinearLayout>

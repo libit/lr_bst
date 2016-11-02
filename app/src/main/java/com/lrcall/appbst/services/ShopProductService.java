@@ -31,6 +31,30 @@ public class ShopProductService extends BaseService
 	}
 
 	/**
+	 * 获取平台商品列表
+	 *
+	 * @param condition
+	 * @param start
+	 * @param size
+	 * @param orderInfos
+	 * @param searchInfos
+	 * @param advancedSearch
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getAdminProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		if (!StringTools.isNull(condition))
+		{
+			params.put("search[value]", condition);
+		}
+		ajaxStringCallback(ApiConfig.GET_ADMIN_PRODUCT_LIST, params, tips, needServiceProcessData);
+	}
+
+	/**
 	 * 获取商品列表
 	 *
 	 * @param tips                   提示信息
@@ -46,6 +70,30 @@ public class ShopProductService extends BaseService
 			params.put("search[value]", condition);
 		}
 		ajaxStringCallback(ApiConfig.GET_SHOP_PRODUCT_LIST, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 获取代理商品列表
+	 *
+	 * @param condition
+	 * @param start
+	 * @param size
+	 * @param orderInfos
+	 * @param searchInfos
+	 * @param advancedSearch
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getAgentProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		if (!StringTools.isNull(condition))
+		{
+			params.put("search[value]", condition);
+		}
+		ajaxStringCallback(ApiConfig.GET_SHOP_AGENT_PRODUCT_LIST, params, tips, needServiceProcessData);
 	}
 
 	/**
@@ -172,6 +220,34 @@ public class ShopProductService extends BaseService
 		params.put("sortIndex", sortIndex);
 		params.put("pointAmount", pointAmount);
 		ajaxStringCallback(ApiConfig.SHOP_UPDATE_PRODUCT, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 添加代理商品
+	 *
+	 * @param productId              商品ID
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void chooseAgetnProduct(String productId, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("productId", productId);
+		ajaxStringCallback(ApiConfig.SHOP_ADD_PRODUCT_AGENT, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 取消代理商品
+	 *
+	 * @param productId              商品ID
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void deleteAgetnProduct(String productId, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("productId", productId);
+		ajaxStringCallback(ApiConfig.SHOP_DELETE_PRODUCT_AGENT, params, tips, needServiceProcessData);
 	}
 
 	@Override

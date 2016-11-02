@@ -17,17 +17,20 @@ import android.widget.ProgressBar;
 import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
 import com.lrcall.appbst.R;
+import com.lrcall.appbst.models.PointProductInfo;
 import com.lrcall.appbst.models.ProductInfo;
-import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
+import com.lrcall.appbst.services.PointProductService;
 import com.lrcall.appbst.services.ProductService;
 import com.lrcall.db.DbProductInfoFactory;
+import com.lrcall.enums.ProductType;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
+import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.apptools.AppFactory;
 
-public class FragmentProductWeb extends MyBaseFragment implements View.OnClickListener, IAjaxDataResponse
+public class FragmentProductWeb extends MyBaseFragment implements IAjaxDataResponse
 {
 	private static final String TAG = FragmentProductWeb.class.getSimpleName();
 	private XListView xListView;
@@ -35,16 +38,23 @@ public class FragmentProductWeb extends MyBaseFragment implements View.OnClickLi
 	private WebView webView;
 	private ProgressBar progressBar;
 	private String productId;
-	private ProductInfo mProductInfo;
+	private String productType = "";
 	private ProductService mProductService;
+	private PointProductService mPointProductService;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		productId = getActivity().getIntent().getExtras().getString(ConstValues.DATA_PRODUCT_ID);
+		if (getArguments() != null)
+		{
+			productId = getArguments().getString(ConstValues.DATA_PRODUCT_ID);
+			productType = getArguments().getString(ConstValues.DATA_PRODUCT_TYPE);
+		}
 		mProductService = new ProductService(this.getContext());
 		mProductService.addDataResponse(this);
+		mPointProductService = new PointProductService(this.getContext());
+		mPointProductService.addDataResponse(this);
 	}
 
 	@Override
@@ -52,7 +62,14 @@ public class FragmentProductWeb extends MyBaseFragment implements View.OnClickLi
 	{
 		View rootView = inflater.inflate(R.layout.fragment_web_view, container, false);
 		viewInit(rootView);
-		mProductInfo = DbProductInfoFactory.getInstance().getProductInfo(productId);
+		if (productType.equals(ProductType.PRODUCT.getType() + ""))
+		{
+			ProductInfo productInfo = DbProductInfoFactory.getInstance().getProductInfo(productId);
+			if (productInfo != null)
+			{
+				loadWebData(productInfo.getContent());
+			}
+		}
 		refreshData();
 		return rootView;
 	}
@@ -95,38 +112,22 @@ public class FragmentProductWeb extends MyBaseFragment implements View.OnClickLi
 		super.viewInit(rootView);
 	}
 
-	private void initData()
-	{
-		if (mProductInfo != null)
-		{
-			loadWebData(mProductInfo.getContent());
-		}
-	}
-
 	private void loadWebData(String data)
 	{
 		//		String html = String.format("<html><body style=\"width:100%;\">%s</body></html>", data);
+		LogcatTools.debug("loadWebData", "data:" + data);
 		webView.loadDataWithBaseURL(ApiConfig.getServerUrl(), data, "text/html", "utf-8", null);
 	}
 
 	private void refreshData()
 	{
-		mProductService.getProductInfo(productId, null, true);
-	}
-
-	@Override
-	public void onClick(View v)
-	{
-		switch (v.getId())
+		if (productType.equals(ProductType.PRODUCT.getType() + ""))
 		{
-			case R.id.btn_go_shopping:
-			{
-				if (ActivityMain.getInstance() != null)
-				{
-					ActivityMain.getInstance().setCurrentPage(ActivityMain.INDEX);
-				}
-				break;
-			}
+			mProductService.getProductInfo(productId, null, true);
+		}
+		else if (productType.equals(ProductType.POINT_PRODUCT.getType() + ""))
+		{
+			mPointProductService.getPointProduct(productId, null, true);
 		}
 	}
 
@@ -135,11 +136,19 @@ public class FragmentProductWeb extends MyBaseFragment implements View.OnClickLi
 	{
 		if (url.endsWith(ApiConfig.GET_PRODUCT_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			ProductInfo productInfo = GsonTools.getReturnObject(result, ProductInfo.class);
+			if (productInfo != null)
 			{
-				mProductInfo = GsonTools.getReturnObject(result, ProductInfo.class);
-				initData();
+				loadWebData(productInfo.getContent());
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.GET_POINT_PRODUCT))
+		{
+			PointProductInfo pointProductInfo = GsonTools.getReturnObject(result, PointProductInfo.class);
+			if (pointProductInfo != null)
+			{
+				loadWebData(pointProductInfo.getContent());
 			}
 			return true;
 		}

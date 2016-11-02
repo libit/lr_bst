@@ -14,6 +14,7 @@ import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.DataTrafficOrderInfo;
 import com.lrcall.appbst.models.OrderInfo;
 import com.lrcall.appbst.models.PayTypeInfo;
+import com.lrcall.appbst.models.PointOrderInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.UserBalanceInfo;
 import com.lrcall.appbst.services.ApiConfig;
@@ -21,6 +22,7 @@ import com.lrcall.appbst.services.DataTrafficOrderService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.OrderService;
 import com.lrcall.appbst.services.PayService;
+import com.lrcall.appbst.services.PointOrderService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.enums.PayType;
 import com.lrcall.ui.customer.ToastView;
@@ -37,6 +39,7 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 	private PayService mPayService;
 	private OrderService mOrderService;
 	private DataTrafficOrderService mDataTrafficOrderService;
+	private PointOrderService mPointOrderService;
 	private String orderId;
 	private PayTypeInfo payTypeInfo;
 
@@ -45,12 +48,6 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pay_by_balance);
-		//		orderId = getIntent().getStringExtra(ConstValues.DATA_ORDER_ID);
-		//		if (StringTools.isNull(orderId))
-		//		{
-		//			finish();
-		//			Toast.makeText(this, "订单号为空！", Toast.LENGTH_LONG).show();
-		//		}
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null)
 		{
@@ -62,9 +59,8 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "支付信息为空！");
 				return;
 			}
-			//			payTypeInfo.setPrice(1);
 			String type = payTypeInfo.getPayType().getType();
-			if (type.equals(PayType.PAY_ORDER.getType()) || type.equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()))
+			if (type.equals(PayType.PAY_ORDER.getType()) || type.equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()) || type.equals(PayType.PAY_POINT_ORDER.getType()))
 			{
 				orderId = payTypeInfo.getComment();
 				if (StringTools.isNull(orderId))
@@ -83,6 +79,8 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 		mOrderService.addDataResponse(this);
 		mDataTrafficOrderService = new DataTrafficOrderService(this);
 		mDataTrafficOrderService.addDataResponse(this);
+		mPointOrderService = new PointOrderService(this);
+		mPointOrderService.addDataResponse(this);
 		viewInit();
 		initData();
 		if (payTypeInfo.getPayType().getType().equals(PayType.PAY_ORDER.getType()))
@@ -92,6 +90,10 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 		else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()))
 		{
 			mDataTrafficOrderService.getOrderInfo(orderId, "请稍后...", false);
+		}
+		else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_POINT_ORDER.getType()))
+		{
+			mPointOrderService.getOrderInfo(orderId, "请稍后...", false);
 		}
 	}
 
@@ -133,6 +135,10 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 				{
 					mPayService.payDataTrafficOrderByBalance(orderId, password, "正在支付，请稍后...", true);
 				}
+				else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_POINT_ORDER.getType()))
+				{
+					mPointOrderService.payPointOrderByBalance(orderId, password, "正在支付，请稍后...", true);
+				}
 				break;
 			}
 		}
@@ -171,12 +177,7 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 			}
 			else
 			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "支付失败：" + msg);
+				showServerMsg(result);
 			}
 			return true;
 		}
@@ -200,12 +201,7 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 			}
 			else
 			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "支付失败：" + msg);
+				showServerMsg(result);
 			}
 			return true;
 		}
@@ -215,6 +211,34 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 			if (dataTrafficOrderInfo != null)
 			{
 				tvTotalPay.setText(StringTools.getPrice(dataTrafficOrderInfo.getTotalPrice()) + "元");
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.GET_POINT_ORDER))
+		{
+			PointOrderInfo pointOrderInfo = GsonTools.getReturnObject(result, PointOrderInfo.class);
+			if (pointOrderInfo != null)
+			{
+				tvTotalPay.setText(StringTools.getPrice(pointOrderInfo.getTotalPrice()) + "元");
+			}
+			else
+			{
+				showServerMsg(result);
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.PAY_POINT_ORDER_BY_BALANCE))
+		{
+			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			if (ReturnInfo.isSuccess(returnInfo))
+			{
+				ToastView.showCenterToast(this, R.drawable.ic_done, "支付成功！");
+				setResult(RESULT_OK);
+				finish();
+			}
+			else
+			{
+				showServerMsg(result);
 			}
 			return true;
 		}

@@ -141,7 +141,7 @@ public class ActivityLogin extends MyBaseActivity implements View.OnClickListene
 			}
 			else
 			{
-				setResult(ConstValues.RESULT_LOGIN_ERROR);
+				showServerMsg(result);
 			}
 		}
 		return true;

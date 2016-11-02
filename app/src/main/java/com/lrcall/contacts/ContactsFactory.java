@@ -31,9 +31,9 @@ public abstract class ContactsFactory
 	{
 		if (instance == null)
 		{
-			if (AppFactory.isCompatible(19))
+			if (AppFactory.isCompatible(21))
 			{
-				instance = new ContactsUtils19();
+				instance = new ContactsUtils21();
 			}
 			else if (AppFactory.isCompatible(14))
 			{

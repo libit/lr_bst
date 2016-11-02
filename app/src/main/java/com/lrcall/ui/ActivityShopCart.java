@@ -246,11 +246,12 @@ public class ActivityShopCart extends MyBasePageActivity implements View.OnClick
 					CheckBox checkBox = mProductCheckBoxMap.get(shopCartInfo);
 					if (checkBox.isChecked())
 					{
-						ProductInfo productInfo = new ProductInfo();
-						productInfo.setProductId(shopCartInfo.getProductId());
+						//						ProductInfo productInfo = new ProductInfo();
+						//						productInfo.setProductId(shopCartInfo.getProductId());
 						OrderProductInfo orderProductInfo = new OrderProductInfo();
 						orderProductInfo.setCount(shopCartInfo.getAmount());
-						orderProductInfo.setProductInfo(productInfo);
+						orderProductInfo.setProductId(shopCartInfo.getProductId());
+						//						orderProductInfo.setProductInfo(productInfo);
 						orderProductInfos.add(orderProductInfo);
 					}
 				}

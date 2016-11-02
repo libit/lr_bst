@@ -272,12 +272,6 @@ public class UserService extends BaseService
 			{
 				// 登录失败，清空SessionId
 				PreferenceUtils.getInstance().setSessionId("");
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(context, R.drawable.ic_do_fail, "登录失败：" + msg);
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGOUT));
 			}
 		}
@@ -293,6 +287,7 @@ public class UserService extends BaseService
 					PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
 					PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
 					EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
+					//注册回拨功能
 					registerCallback(null, true);
 				}
 			}
@@ -300,14 +295,6 @@ public class UserService extends BaseService
 			{
 				// 注册失败，清空SessionId
 				PreferenceUtils.getInstance().setSessionId("");
-				if (returnInfo != null)
-				{
-					ToastView.showCenterToast(context, R.drawable.ic_do_fail, "注册失败：" + returnInfo.getErrmsg());
-				}
-				else
-				{
-					ToastView.showCenterToast(context, R.drawable.ic_do_fail, "注册失败：" + result);
-				}
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGOUT));
 			}
 		}
@@ -348,18 +335,6 @@ public class UserService extends BaseService
 				UserInfo userInfo = GsonTools.getReturnObject(returnInfo, UserInfo.class);
 				PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
-				ToastView.showCenterToast(context, R.drawable.ic_done, "修改密码成功！");
-			}
-			else
-			{
-				if (returnInfo != null)
-				{
-					ToastView.showCenterToast(context, R.drawable.ic_do_fail, "修改密码失败：" + returnInfo.getErrmsg());
-				}
-				else
-				{
-					ToastView.showCenterToast(context, R.drawable.ic_do_fail, "修改密码失败：" + result);
-				}
 			}
 		}
 		else if (url.endsWith(ApiConfig.UPDATE_PIC))
@@ -375,24 +350,24 @@ public class UserService extends BaseService
 		}
 		else if (url.endsWith(ApiConfig.USER_UPDATE_PIC_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			//			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 		}
 		else if (url.endsWith(ApiConfig.USER_SIGN_TODAY))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getErrmsg());
-			}
-			else
-			{
-				String msg = "签到失败！";
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(context, R.drawable.ic_do_fail, msg);
-			}
+			//			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			//			if (ReturnInfo.isSuccess(returnInfo))
+			//			{
+			//				ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getErrmsg());
+			//			}
+			//			else
+			//			{
+			//				String msg = "签到失败！";
+			//				if (returnInfo != null)
+			//				{
+			//					msg = returnInfo.getErrmsg();
+			//				}
+			//				ToastView.showCenterToast(context, R.drawable.ic_do_fail, msg);
+			//			}
 		}
 	}
 

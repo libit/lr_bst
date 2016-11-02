@@ -7,6 +7,10 @@ package com.lrcall.ui;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.lrcall.appbst.R;
+import com.lrcall.appbst.models.ReturnInfo;
+import com.lrcall.ui.customer.ToastView;
+import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LogcatTools;
 
 /**
@@ -54,5 +58,28 @@ public abstract class MyBaseFragment extends Fragment
 	 */
 	public void fragmentShow()
 	{
+	}
+
+	/**
+	 * 显示服务器返回的消息--json格式
+	 *
+	 * @param jsonResult json数据
+	 */
+	public void showServerMsg(String jsonResult)
+	{
+		ReturnInfo returnInfo = GsonTools.getReturnInfo(jsonResult);
+		if (ReturnInfo.isSuccess(returnInfo))
+		{
+			ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, returnInfo.getErrmsg());
+		}
+		else
+		{
+			String msg = jsonResult;
+			if (returnInfo != null)
+			{
+				msg = returnInfo.getErrmsg();
+			}
+			ToastView.showCenterToast(this.getContext(), R.drawable.ic_do_fail, msg);
+		}
 	}
 }

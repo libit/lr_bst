@@ -8,12 +8,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.androidquery.callback.AjaxStatus;
-import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.ReturnInfo;
-import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BmpTools;
-import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -140,21 +136,21 @@ public class ShopService extends BaseService
 	{
 		if (url.endsWith(ApiConfig.SHOP_REGISTER))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				//注册成功
-			}
-			else
-			{
-				// 注册失败
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(context, R.drawable.ic_do_fail, "注册失败:" + msg);
-			}
+			//			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			//			if (ReturnInfo.isSuccess(returnInfo))
+			//			{
+			//				//注册成功
+			//			}
+			//			else
+			//			{
+			//				// 注册失败
+			//				String msg = result;
+			//				if (returnInfo != null)
+			//				{
+			//					msg = returnInfo.getErrmsg();
+			//				}
+			//				ToastView.showCenterToast(context, R.drawable.ic_do_fail, "注册失败:" + msg);
+			//			}
 		}
 	}
 

@@ -123,6 +123,14 @@
     <string name="title_activity_product_history_list">浏览记录</string>
     <!-- 流量充值记录Activity -->
     <string name="title_activity_recharge_data_traffic_list">流量充值记录</string>
+    <!-- 积分商城Activity -->
+    <string name="title_activity_point_product_shop">积分商城</string>
+    <!-- 积分商品信息Activity -->
+    <string name="title_activity_point_product">商品信息</string>
+    <!-- 增加积分商品订单Activity -->
+    <string name="title_activity_point_order_add">订单信息</string>
+    <!-- 积分商品订单列表Activity -->
+    <string name="title_activity_point_order_list">积分订单列表</string>
     <string name="dialog_title_bug_level">日志记录级别</string>
     <string name="auto_update_log">自动上报错误日志</string>
     <string name="log_tips">提示：日志级别越高记录的信息越详细，可以让开发者更全面的定位错误，但记录的越详细相应的日志文件则越大，建议选择级别3</string>
@@ -270,4 +278,8 @@
     <string name="title_activity_order_info">订单详情</string>
     <!-- 商家订单发货Activity -->
     <string name="title_activity_order_ship">订单发货</string>
+    <!-- 商家代理商品管理Activity -->
+    <string name="title_activity_shop_agent_products_manage">分销商品管理</string>
+    <!-- 商家选择代理商品Activity -->
+    <string name="title_activity_choose_agent_product">选择分销商品</string>
 </resources>

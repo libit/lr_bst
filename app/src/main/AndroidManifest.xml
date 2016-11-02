@@ -171,6 +171,18 @@
             android:name="com.lrcall.ui.ActivityRechargeDataTrafficList"
             android:label="@string/title_activity_recharge_data_traffic_list"/>
         <activity
+            android:name="com.lrcall.ui.ActivityPointProductShop"
+            android:label="@string/title_activity_point_product_shop"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityPointProduct"
+            android:label="@string/title_activity_point_product"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityPointOrderAdd"
+            android:label="@string/title_activity_point_order_add"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityPointOrderList"
+            android:label="@string/title_activity_point_order_list"/>
+        <activity
             android:name="com.lrcall.ui.ActivityWebView">
             <!-- 拦截打开网址请求 -->
             <!--<intent-filter>-->
@@ -282,6 +294,12 @@
         <activity
             android:name="com.lrcall.ui.ActivityOrderShip"
             android:label="@string/title_activity_order_ship"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityShopAgentProductsManage"
+            android:label="@string/title_activity_shop_agent_products_manage"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityChooseAgentProduct"
+            android:label="@string/title_activity_choose_agent_product"/>
 
         <service android:name="com.lrcall.services.AutoAnswerIntentService"/>
         <service android:name="com.lrcall.services.AutoAnswerIntentService2"/>

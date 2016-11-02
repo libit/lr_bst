@@ -12,11 +12,11 @@ import com.lrcall.utils.AppConfig;
 public class ApiConfig
 {
 	public static final String API_VERSION = "1";
-	//	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
-	//	private static final String DEBUG_URL = "http://192.168.168.6:8080/lr_bst/user";
-	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
+	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
+	private static final String DEBUG_URL = "http://192.168.168.6:8080/lr_bst/user";
+	//		private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	//		private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	public static final String SUBMIT_BUG = RELEASE_URL + "/lr_bst/user/ajaxAddClientBugInfo";//BUG日志提交
 	public static final String CHECK_UPDATE = RELEASE_URL + "/ajaxGetLastClientInfo";//检查更新
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
 	public static final String SUBMIT_ADVICE = getServerUrl() + "/ajaxAddAdviceInfo";//提交意见反馈
@@ -142,7 +142,9 @@ public class ApiConfig
 	public static final String SHOP_REGISTER = getServerUrl() + "/../shop/ajaxRegister";//商家注册
 	public static final String SHOP_AUTH = getServerUrl() + "/../shop/ajaxShopAuth";//商家认证
 	public static final String GET_SHOP_INFO = getServerUrl() + "/../shop/ajaxGetShopInfo";//获取商家信息
+	public static final String GET_ADMIN_PRODUCT_LIST = getServerUrl() + "/../shop/ajaxGetAdminProductList";//获取平台商品列表
 	public static final String GET_SHOP_PRODUCT_LIST = getServerUrl() + "/../shop/ajaxGetProductList";//获取商家商品列表
+	public static final String GET_SHOP_AGENT_PRODUCT_LIST = getServerUrl() + "/../shop/ajaxGetProductAgentList";//获取商家代理商品列表
 	public static final String SHOP_ADD_PRODUCT = getServerUrl() + "/../shop/ajaxAddProductInfo";//商家添加商品
 	public static final String GET_SHOP_PRODUCT_SORT_LIST = getServerUrl() + "/../shop/ajaxGetProductSortList";//获取商家商品类别列表
 	public static final String GET_BRAND_LIST = getServerUrl() + "/../shop/ajaxGetBrandList";//获取商家品牌列表
@@ -154,7 +156,19 @@ public class ApiConfig
 	public static final String GET_SHOP_ORDER_INFO = getServerUrl() + "/../shop/ajaxGetOrderSubInfo";//商家订单详情
 	public static final String GET_SHOP_ORDER_EXPRESS_INFO = getServerUrl() + "/../shop/ajaxGetOrderSubExpressInfo";//商家订单快递信息
 	public static final String GET_EXPRESS_LIST = getServerUrl() + "/ajaxGetExpressInfoList";//快递列表
+	public static final String SHOP_ADD_PRODUCT_AGENT = getServerUrl() + "/../shop/ajaxAddProductAgent";//添加代理商品
+	public static final String SHOP_DELETE_PRODUCT_AGENT = getServerUrl() + "/../shop/ajaxDeleteProductAgent";//取消代理商品
+	//积分商城
+	public static final String GET_POINT_PRODUCT_LIST = getServerUrl() + "/ajaxGetPointProductList";//获取所有积分商品列表
+	public static final String GET_POINT_PRODUCT = getServerUrl() + "/ajaxGetPointProduct";//获取积分商品信息
+	public static final String ADD_POINT_ORDER = getServerUrl() + "/ajaxAddPointOrder";//积分商品下单
+	public static final String DELETE_POINT_ORDER = getServerUrl() + "/ajaxDeletePointOrder";//删除积分商品订单
+	public static final String GET_POINT_ORDER_LIST = getServerUrl() + "/ajaxGetPointOrderList";//获取所有积分商品订单列表
+	public static final String GET_POINT_ORDER = getServerUrl() + "/ajaxGetPointOrder";//获取积分商品订单
+	public static final String GET_POINT_ORDER_EXPRESS_INFO = getServerUrl() + "/ajaxGetPointOrderExpressInfo";//获取积分商品订单快递信息
+	public static final String PAY_POINT_ORDER_BY_BALANCE = getServerUrl() + "/ajaxPointOrderPayByBalance";//余额方式支付积分订单
 
+	//获取服务器地址
 	public static String getServerUrl()
 	{
 		if (AppConfig.isDebug())

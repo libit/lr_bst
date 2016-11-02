@@ -115,7 +115,7 @@ public class ActivityPayList extends MyBaseActivity implements IAjaxDataResponse
 			}
 			//			payTypeInfo.setPrice(1);
 			String type = payTypeInfo.getPayType().getType();
-			if (type.equals(PayType.PAY_ORDER.getType()) || type.equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()))
+			if (type.equals(PayType.PAY_ORDER.getType()) || type.equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()) || type.equals(PayType.PAY_POINT_ORDER.getType()))
 			{
 				String orderId = payTypeInfo.getComment();
 				if (StringTools.isNull(orderId))

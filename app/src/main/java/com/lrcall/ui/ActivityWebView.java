@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.external.xlistview.XListView;
 import com.lrcall.appbst.R;
+import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogFileList;
 import com.lrcall.utils.ConstValues;
@@ -95,6 +96,8 @@ public class ActivityWebView extends MyBaseActivity implements XListView.IXListV
 	protected void viewInit()
 	{
 		super.viewInit();
+		//设置滑动返回区域
+		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 8);
 		setBackButton();
 		layoutWeb = (FrameLayout) findViewById(R.id.layout_web);
 		xListView = (XListView) findViewById(R.id.xlist);

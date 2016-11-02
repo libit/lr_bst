@@ -87,7 +87,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	private static final int FUNC_STAR = 1;
 	private static final int FUNC_ORDERS = 2;
 	private static final int FUNC_ADDRESSES = 3;
-	private static final int FUNC_FREE_DIAL = 4;
+	private static final int FUNC_POINT_SHOP = 4;
 	private static final int FUNC_HISTORY = 5;
 	private static final int FUNC_SHARE = 6;
 	private static final int FUNC_SHOP = 7;
@@ -371,7 +371,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		funcInfoList.add(new FuncInfo(FUNC_STAR, R.drawable.mine_icon_waitpay, "收藏"));
 		funcInfoList.add(new FuncInfo(FUNC_ORDERS, R.drawable.mine_icon_ordrers, "订单"));
 		funcInfoList.add(new FuncInfo(FUNC_ADDRESSES, R.drawable.mine_icon_address, "地址"));
-		funcInfoList.add(new FuncInfo(FUNC_FREE_DIAL, R.drawable.mine_icon_care, "免费电话"));
+		funcInfoList.add(new FuncInfo(FUNC_POINT_SHOP, R.drawable.mine_icon_care, "积分商城"));
 		funcInfoList.add(new FuncInfo(FUNC_HISTORY, R.drawable.mine_icon_website, "浏览记录"));
 		funcInfoList.add(new FuncInfo(FUNC_SHARE, R.drawable.mine_icon_shipped, "分享"));
 		funcInfoList.add(new FuncInfo(FUNC_SHOP, R.drawable.mine_icon_changps, "流量充值"));
@@ -419,9 +419,9 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 						}
 						break;
 					}
-					case FUNC_FREE_DIAL:
+					case FUNC_POINT_SHOP:
 					{
-						startActivity(new Intent(FragmentIndex.this.getContext(), ActivityDial.class));
+						startActivity(new Intent(FragmentIndex.this.getContext(), ActivityPointProductShop.class));
 						break;
 					}
 					case FUNC_HISTORY:

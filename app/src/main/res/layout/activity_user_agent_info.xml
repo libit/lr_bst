@@ -84,7 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/bg_corner_10"
+                        android:background="@drawable/bg_sharp_10"
                         android:text="升级"
                         android:textSize="18sp"/>
                 </LinearLayout>

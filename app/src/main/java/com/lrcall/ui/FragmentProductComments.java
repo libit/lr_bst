@@ -43,7 +43,10 @@ public class FragmentProductComments extends MyBasePageFragment implements View.
 	public void onCreate(@Nullable Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		productId = getActivity().getIntent().getExtras().getString(ConstValues.DATA_PRODUCT_ID);
+		if (getArguments() != null)
+		{
+			productId = getArguments().getString(ConstValues.DATA_PRODUCT_ID);
+		}
 		mProductCommentService = new OrderProductCommentService(this.getContext());
 		mProductCommentService.addDataResponse(this);
 	}

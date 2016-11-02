@@ -12,11 +12,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 
+import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.OrderProductInfo;
+import com.lrcall.appbst.models.ProductInfo;
 import com.lrcall.appbst.services.ApiConfig;
+import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.PicService;
+import com.lrcall.appbst.services.ProductService;
 import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.GsonTools;
 
 import java.util.List;
 
@@ -56,7 +61,25 @@ public class OrderCommentAdapter extends BaseUserAdapter<OrderProductInfo>
 		}
 		//设置控件的值
 		final OrderProductInfo orderProductInfo = list.get(position);
-		PicService.ajaxGetPic(viewHolder.ivHead, ApiConfig.getServerPicUrl(orderProductInfo.getProductInfo().getPicId()), DisplayTools.getWindowWidth(context) / 6);
+		ProductService productService = new ProductService(context);
+		final OrderCommentViewHolder holder = viewHolder;
+		productService.addDataResponse(new IAjaxDataResponse()
+		{
+			@Override
+			public boolean onAjaxDataResponse(String url, String result, AjaxStatus status)
+			{
+				if (url.endsWith(ApiConfig.GET_PRODUCT_INFO))
+				{
+					ProductInfo productInfo = GsonTools.getReturnObject(result, ProductInfo.class);
+					if (productInfo != null)
+					{
+						PicService.ajaxGetPic(holder.ivHead, ApiConfig.getServerPicUrl(productInfo.getPicId()), DisplayTools.getWindowWidth(context) / 6);
+					}
+				}
+				return false;
+			}
+		});
+		productService.getProductInfo(orderProductInfo.getProductId(), null, true);
 		final RatingBar ratingBar = viewHolder.ratingBar;
 		final EditText etContent = viewHolder.etContent;
 		if (iOrderCommentAdapter != null)
@@ -66,7 +89,7 @@ public class OrderCommentAdapter extends BaseUserAdapter<OrderProductInfo>
 				@Override
 				public void onClick(View v)
 				{
-					iOrderCommentAdapter.onSubmit(orderProductInfo.getProductInfo().getProductId(), ratingBar.getNumStars(), etContent.getText().toString());
+					iOrderCommentAdapter.onSubmit(orderProductInfo.getProductId(), ratingBar.getNumStars(), etContent.getText().toString());
 				}
 			});
 		}

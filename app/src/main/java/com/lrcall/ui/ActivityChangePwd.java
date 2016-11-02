@@ -11,13 +11,11 @@ import android.widget.EditText;
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ReturnInfo;
-import com.lrcall.appbst.models.UserInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 
 public class ActivityChangePwd extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
@@ -98,7 +96,7 @@ public class ActivityChangePwd extends MyBaseActivity implements View.OnClickLis
 					etNewPassword.requestFocus();
 					return;
 				}
-				userService.changePwd(password, newPassword, "正在修改密码...", false);
+				userService.changePwd(password, newPassword, "正在修改密码...", true);
 				break;
 			}
 		}
@@ -117,27 +115,12 @@ public class ActivityChangePwd extends MyBaseActivity implements View.OnClickLis
 	{
 		if (url.endsWith(ApiConfig.USER_CHANGE_PWD))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result);
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				//修改成功，保存SessionId
-				UserInfo userInfo = GsonTools.getReturnObject(returnInfo, UserInfo.class);
-				PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
-				ToastView.showCenterToast(this, R.drawable.ic_done, "修改密码成功！");
 				etPassword.setText("");
 				etNewPassword.setText("");
 				etReNewPassword.setText("");
-			}
-			else
-			{
-				if (returnInfo != null)
-				{
-					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "修改密码失败：" + returnInfo.getErrmsg());
-				}
-				else
-				{
-					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "修改密码失败：" + result);
-				}
 			}
 			return true;
 		}

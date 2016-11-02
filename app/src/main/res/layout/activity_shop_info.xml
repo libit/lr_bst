@@ -227,6 +227,27 @@
                             android:textSize="16sp"/>
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/layout_agent_products_manage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:src="@drawable/icon_find_suggest_white"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:gravity="center"
+                            android:text="分销商品管理"
+                            android:textSize="16sp"/>
+                    </LinearLayout>
+                    <LinearLayout
                         android:id="@+id/layout_orders_manage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

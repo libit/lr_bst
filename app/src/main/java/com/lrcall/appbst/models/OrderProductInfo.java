@@ -15,6 +15,8 @@ public class OrderProductInfo
 	private String orderProductId;//ID
 	@SerializedName("orderId")
 	private String orderId;//ID
+	@SerializedName("productId")
+	private String productId;
 	@SerializedName("count")
 	private int count;//总数
 	@SerializedName("price")
@@ -23,8 +25,10 @@ public class OrderProductInfo
 	private int totalPrice;//总价
 	@SerializedName("updateDateLong")
 	private long updateDateLong;//最后更新状态时间
-	@SerializedName("productInfo")
-	private ProductInfo productInfo;//商品信息
+	//	@SerializedName("productInfo")
+	//	private ProductInfo productInfo;//商品信息
+	//	@SerializedName("pointProductInfo")
+	//	private PointProductInfo pointProductInfo;//积分商品信息
 
 	public OrderProductInfo()
 	{
@@ -48,7 +52,7 @@ public class OrderProductInfo
 		this.price = price;
 		this.totalPrice = totalPrice;
 		this.updateDateLong = updateDateLong;
-		this.productInfo = productInfo;
+		//		this.productInfo = productInfo;
 	}
 
 	public String getOrderProductId()
@@ -110,14 +114,23 @@ public class OrderProductInfo
 	{
 		this.updateDateLong = updateDateLong;
 	}
+	//	public ProductInfo getProductInfo()
+	//	{
+	//		return productInfo;
+	//	}
+	//
+	//	public void setProductInfo(ProductInfo productInfo)
+	//	{
+	//		this.productInfo = productInfo;
+	//	}
 
-	public ProductInfo getProductInfo()
+	public String getProductId()
 	{
-		return productInfo;
+		return productId;
 	}
 
-	public void setProductInfo(ProductInfo productInfo)
+	public void setProductId(String productId)
 	{
-		this.productInfo = productInfo;
+		this.productId = productId;
 	}
 }

@@ -135,7 +135,7 @@ public class ActivityOrderDetail extends MyBaseActivity implements View.OnClickL
 				{
 					for (OrderProductInfo orderProductInfo : orderInfo.getOrderProductInfoList())
 					{
-						ProductInfo productInfo = DbProductInfoFactory.getInstance().getProductInfo(orderProductInfo.getProductInfo().getProductId());
+						ProductInfo productInfo = DbProductInfoFactory.getInstance().getProductInfo(orderProductInfo.getProductId());
 						productsPrice += productInfo.getPrice() * orderProductInfo.getCount();
 						expressPrice += productInfo.getExpressPrice() * orderProductInfo.getCount();
 						if (productInfo.getNeedExpress() == NeedExpress.NEED.getStatus())

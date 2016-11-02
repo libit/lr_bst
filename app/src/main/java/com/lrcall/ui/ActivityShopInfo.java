@@ -73,6 +73,7 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 		btnRegister.setOnClickListener(this);
 		btnAuth.setOnClickListener(this);
 		findViewById(R.id.layout_products_manage).setOnClickListener(this);
+		findViewById(R.id.layout_agent_products_manage).setOnClickListener(this);
 		findViewById(R.id.layout_orders_manage).setOnClickListener(this);
 		findViewById(R.id.layout_profits_list).setOnClickListener(this);
 		findViewById(R.id.layout_add_product).setOnClickListener(this);
@@ -96,6 +97,11 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 			case R.id.layout_add_product:
 			{
 				startActivity(new Intent(this, ActivityProductAdd.class));
+				break;
+			}
+			case R.id.layout_agent_products_manage:
+			{
+				startActivity(new Intent(this, ActivityShopAgentProductsManage.class));
 				break;
 			}
 			case R.id.layout_products_manage:

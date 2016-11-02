@@ -33,7 +33,7 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 		mUserService = new UserService(this);
 		mUserService.addDataResponse(this);
 		viewInit();
-		mUserService.getUserBalanceInfo(null, false);
+		mUserService.getUserBalanceInfo("请稍后...", false);
 	}
 
 	@Override
@@ -45,6 +45,7 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 		tvFreezeBalance = (TextView) findViewById(R.id.tv_freeze_balance);
 		tvPoint = (TextView) findViewById(R.id.tv_point);
 		findViewById(R.id.layout_add_balance).setOnClickListener(this);
+		findViewById(R.id.btn_duihuan).setOnClickListener(this);
 	}
 
 	@Override
@@ -97,6 +98,12 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 			case R.id.layout_add_balance:
 			{
 				Intent intent = new Intent(this, ActivityBalanceRecharge.class);
+				startActivity(intent);
+				break;
+			}
+			case R.id.btn_duihuan:
+			{
+				Intent intent = new Intent(this, ActivityPointProductShop.class);
 				startActivity(intent);
 				break;
 			}

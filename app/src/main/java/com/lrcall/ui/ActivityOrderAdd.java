@@ -56,9 +56,9 @@ import java.util.List;
 public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivityOrderAdd.class.getSimpleName();
-	private static final int PAY_ALIPAY = 1;
-	private static final int PAY_WX = 2;
-	private static final int PAY_BALANCE = 3;
+	//	private static final int PAY_ALIPAY = 1;
+	//	private static final int PAY_WX = 2;
+	//	private static final int PAY_BALANCE = 3;
 	private static final int EXPRESS_EMS = 1;
 	private static final int EXPRESS_SF = 2;
 	private static final int REQ_SELECT_ADDRESS = 100;
@@ -153,43 +153,43 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 		for (OrderProductInfo orderProductInfo : mOrderProductInfoArrayList)
 		{
 			LogcatTools.debug(TAG, "数量：" + orderProductInfo.getCount());
-			ProductInfo productInfo = DbProductInfoFactory.getInstance().getProductInfo(orderProductInfo.getProductInfo().getProductId());
+			ProductInfo productInfo = DbProductInfoFactory.getInstance().getProductInfo(orderProductInfo.getProductId());
+			productIds += "," + orderProductInfo.getProductId();
 			productsPrice += productInfo.getPrice() * orderProductInfo.getCount();
 			expressPrice += productInfo.getExpressPrice() * orderProductInfo.getCount();
 			if (productInfo.getNeedExpress() == NeedExpress.NEED.getStatus())
 			{
 				isNeedExpress = true;
 			}
-			productIds += "," + orderProductInfo.getProductInfo().getProductId();
-		}
-		if (!isNeedExpress)
-		{
-			expressPrice = 0;
-			findViewById(R.id.layout_address).setVisibility(View.GONE);
-			findViewById(R.id.layout_select_express).setVisibility(View.GONE);
-			findViewById(R.id.layout_select_express_line).setVisibility(View.GONE);
-			findViewById(R.id.layout_express_price).setVisibility(View.GONE);
-			findViewById(R.id.layout_express_price_line).setVisibility(View.GONE);
-		}
-		tvProductsPrice.setText("￥" + StringTools.getPrice(productsPrice));
-		tvExpressPrice.setText(String.format("￥%s", StringTools.getPrice(expressPrice)));
-		totalPrice = expressPrice + productsPrice;
-		tvTotalPrice.setText(String.format("￥%s", StringTools.getPrice(totalPrice)));
-		OrderProductsAdapter orderProductsAdapter = new OrderProductsAdapter(this, mOrderProductInfoArrayList, new OrderProductsAdapter.IOrderProductsAdapter()
-		{
-			@Override
-			public void onProductClicked(ProductInfo productInfo)
+			if (!isNeedExpress)
 			{
+				expressPrice = 0;
+				findViewById(R.id.layout_address).setVisibility(View.GONE);
+				findViewById(R.id.layout_select_express).setVisibility(View.GONE);
+				findViewById(R.id.layout_select_express_line).setVisibility(View.GONE);
+				findViewById(R.id.layout_express_price).setVisibility(View.GONE);
+				findViewById(R.id.layout_express_price_line).setVisibility(View.GONE);
 			}
-		});
-		lvProducts.setAdapter(orderProductsAdapter);
-		ViewHeightCalTools.setListViewHeight(lvProducts, true);
-		mUserService.getUserBalanceInfo("请稍后...", false);
-		if (productIds.length() > 0)
-		{
-			productIds = productIds.substring(1);
+			tvProductsPrice.setText("￥" + StringTools.getPrice(productsPrice));
+			tvExpressPrice.setText(String.format("￥%s", StringTools.getPrice(expressPrice)));
+			totalPrice = expressPrice + productsPrice;
+			tvTotalPrice.setText(String.format("￥%s", StringTools.getPrice(totalPrice)));
+			OrderProductsAdapter orderProductsAdapter = new OrderProductsAdapter(this, mOrderProductInfoArrayList, new OrderProductsAdapter.IOrderProductsAdapter()
+			{
+				@Override
+				public void onProductClicked(ProductInfo productInfo)
+				{
+				}
+			});
+			lvProducts.setAdapter(orderProductsAdapter);
+			ViewHeightCalTools.setListViewHeight(lvProducts, true);
+			mUserService.getUserBalanceInfo("请稍后...", false);
+			if (productIds.length() > 0)
+			{
+				productIds = productIds.substring(1);
+			}
+			mProductPricePointService.getProductPricePointInfoList(productIds, null, false);
 		}
-		mProductPricePointService.getProductPricePointInfoList(productIds, null, false);
 	}
 
 	@Override
@@ -435,12 +435,7 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 			}
 			else
 			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				Toast.makeText(this, "下单失败：" + msg, Toast.LENGTH_LONG).show();
+				showServerMsg(result);
 			}
 			return true;
 		}

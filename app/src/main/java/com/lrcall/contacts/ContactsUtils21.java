@@ -10,7 +10,7 @@ import android.provider.ContactsContract;
 
 import java.util.ArrayList;
 
-public class ContactsUtils19 extends ContactsUtils14
+public class ContactsUtils21 extends ContactsUtils14
 {
 	public static final String SORT_KEY = "phonebook_label";
 

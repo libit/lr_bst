@@ -15,12 +15,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.lrcall.appbst.R;
+import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.models.FuncInfo;
 import com.lrcall.ui.adapter.FuncsHorizontalAdapter;
 import com.lrcall.ui.adapter.FuncsVerticalAdapter;
 import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogList;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.GsonTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,5 +193,28 @@ public abstract class MyBaseActivity extends SwipeBackActivity
 		intent.putExtra("outputY", 300);
 		intent.putExtra("return-data", true);
 		startActivityForResult(intent, ConstValues.REQUEST_EDIT_PIC);
+	}
+
+	/**
+	 * 显示服务器返回的消息--json格式
+	 *
+	 * @param jsonResult json数据
+	 */
+	public void showServerMsg(String jsonResult)
+	{
+		ReturnInfo returnInfo = GsonTools.getReturnInfo(jsonResult);
+		if (ReturnInfo.isSuccess(returnInfo))
+		{
+			ToastView.showCenterToast(this, R.drawable.ic_done, returnInfo.getErrmsg());
+		}
+		else
+		{
+			String msg = jsonResult;
+			if (returnInfo != null)
+			{
+				msg = returnInfo.getErrmsg();
+			}
+			ToastView.showCenterToast(this, R.drawable.ic_do_fail, msg);
+		}
 	}
 }

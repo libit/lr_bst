@@ -23,7 +23,6 @@ import com.lrcall.appbst.services.ProductService;
 import com.lrcall.db.DbProductInfoFactory;
 import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.List;
@@ -65,7 +64,7 @@ public class OrderProductsAdapter extends BaseUserAdapter<OrderProductInfo>
 		}
 		//设置控件的值
 		final OrderProductInfo orderProductInfo = list.get(position);
-		final ProductInfo productInfo = DbProductInfoFactory.getInstance().getProductInfo(orderProductInfo.getProductInfo().getProductId());
+		final ProductInfo productInfo = DbProductInfoFactory.getInstance().getProductInfo(orderProductInfo.getProductId());
 		if (productInfo != null)
 		{
 			setProductInfo(viewHolder, orderProductInfo, productInfo, convertView);
@@ -91,7 +90,7 @@ public class OrderProductsAdapter extends BaseUserAdapter<OrderProductInfo>
 					return false;
 				}
 			});
-			productService.getProductInfo(orderProductInfo.getProductInfo().getProductId(), null, true);
+			productService.getProductInfo(orderProductInfo.getProductId(), null, true);
 		}
 		return convertView;
 	}
@@ -99,7 +98,6 @@ public class OrderProductsAdapter extends BaseUserAdapter<OrderProductInfo>
 	private void setProductInfo(final ProductViewHolder viewHolder, OrderProductInfo orderProductInfo, final ProductInfo productInfo, View convertView)
 	{
 		PicService.ajaxGetPic(viewHolder.ivHead, ApiConfig.getServerPicUrl(productInfo.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 4);
-		LogcatTools.debug("OrderProductsAdapter", "orderProductInfo信息:" + orderProductInfo.getOrderProductId());
 		viewHolder.tvName.setText(productInfo.getName());
 		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(productInfo.getPrice()));
 		viewHolder.tvAmount.setText("X " + orderProductInfo.getCount());
@@ -124,12 +122,6 @@ public class OrderProductsAdapter extends BaseUserAdapter<OrderProductInfo>
 		 * @param productInfo 商品信息
 		 */
 		void onProductClicked(ProductInfo productInfo);
-		/**
-		 * 从服务器获取商品信息并显示到控件上
-		 *
-		 * @param viewHolder 控件
-		 */
-		//		void onGetProductFromServer(ProductViewHolder viewHolder);
 	}
 
 	public static class ProductViewHolder

@@ -22,7 +22,6 @@ import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.BannerInfo;
-import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.BannerService;
@@ -31,7 +30,6 @@ import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbBannerInfoFactory;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.DisplayTools;
-import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.DateTimeTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LogcatTools;
@@ -265,7 +263,7 @@ public class FragmentInteract extends MyBaseFragment implements View.OnClickList
 		{
 			case R.id.layout_sign:
 			{
-				mUserService.userSignToday("正在签到，请稍后...", false);
+				mUserService.userSignToday("正在签到，请稍后...", true);
 				break;
 			}
 			case R.id.layout_share:
@@ -324,20 +322,7 @@ public class FragmentInteract extends MyBaseFragment implements View.OnClickList
 		}
 		else if (url.endsWith(ApiConfig.USER_SIGN_TODAY))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, returnInfo.getErrmsg());
-			}
-			else
-			{
-				String msg = "签到失败！";
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this.getContext(), R.drawable.ic_do_fail, msg);
-			}
+			showServerMsg(result);
 		}
 		return false;
 	}
