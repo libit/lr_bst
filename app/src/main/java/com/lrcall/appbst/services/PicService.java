@@ -38,12 +38,12 @@ public class PicService extends BaseService
 		Bitmap bitmap = aQuery.getCachedImage(url, width);
 		if (bitmap != null)
 		{
-			LogcatTools.debug("aQuery", "从缓存读取图片:" + url);
+			LogcatTools.debug("ajaxGetPic", "从缓存读取图片:" + url);
 			imageView.setImageBitmap(bitmap);
 		}
 		else
 		{
-			LogcatTools.debug("aQuery", "图片地址:" + url);
+			LogcatTools.debug("ajaxGetPic", "图片地址:" + url);
 			aQuery.image(url, false, true);
 		}
 	}
@@ -61,13 +61,13 @@ public class PicService extends BaseService
 		Bitmap bitmap = aQuery.getCachedImage(url, width);
 		if (bitmap != null)
 		{
-			LogcatTools.debug("aQuery", "从缓存读取图片:" + url);
+			LogcatTools.debug("ajaxGetRoundPic", "从缓存读取图片:" + url);
 			bitmap = BmpTools.createRoundConerImage(bitmap, width, width, 50 * width / DisplayTools.getWindowWidth(MyApplication.getContext()), 50 * width / DisplayTools.getWindowWidth(MyApplication.getContext()));
 			imageView.setImageBitmap(bitmap);
 		}
 		else
 		{
-			LogcatTools.debug("aQuery", "图片地址:" + url);
+			LogcatTools.debug("ajaxGetRoundPic", "图片地址:" + url);
 			aQuery.image(url, false, true);
 		}
 	}
@@ -85,13 +85,13 @@ public class PicService extends BaseService
 		Bitmap bitmap = aQuery.getCachedImage(url, width);
 		if (bitmap != null)
 		{
-			LogcatTools.debug("aQuery", "从缓存读取图片:" + url);
+			LogcatTools.debug("ajaxGetRoundPic", "从缓存读取图片:" + url);
 			bitmap = BmpTools.createRoundConerImage(bitmap, width, height, radiusX, radiusY);
 			imageView.setImageBitmap(bitmap);
 		}
 		else
 		{
-			LogcatTools.debug("aQuery", "图片地址:" + url);
+			LogcatTools.debug("ajaxGetRoundPic", "图片地址:" + url);
 			aQuery.image(url, false, true);
 		}
 	}
@@ -109,13 +109,13 @@ public class PicService extends BaseService
 		Bitmap bitmap = aQuery.getCachedImage(url, width);
 		if (bitmap != null)
 		{
-			LogcatTools.debug("aQuery", "从缓存读取图片:" + url);
+			LogcatTools.debug("ajaxGetRoundTopPic", "从缓存读取图片:" + url);
 			bitmap = BmpTools.fillet(BmpTools.TOP, bitmap, radius);
 			imageView.setImageBitmap(bitmap);
 		}
 		else
 		{
-			LogcatTools.debug("aQuery", "图片地址:" + url);
+			LogcatTools.debug("ajaxGetRoundTopPic", "图片地址:" + url);
 			aQuery.image(url, false, true);
 		}
 	}

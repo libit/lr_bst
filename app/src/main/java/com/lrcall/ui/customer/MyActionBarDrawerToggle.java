@@ -77,7 +77,7 @@ public class MyActionBarDrawerToggle extends ActionBarDrawerToggle
 	public void onDrawerOpened(View drawerView)
 	{
 		super.onDrawerOpened(drawerView);
-		LogcatTools.debug(TAG, "onDrawerOpened");
+		//		LogcatTools.debug(TAG, "onDrawerOpened");
 		if (statusChanged != null)
 		{
 			statusChanged.onDrawerOpened(drawerView);
@@ -88,7 +88,7 @@ public class MyActionBarDrawerToggle extends ActionBarDrawerToggle
 	public void onDrawerClosed(View drawerView)
 	{
 		super.onDrawerClosed(drawerView);
-		LogcatTools.debug(TAG, "onDrawerClosed");
+		//		LogcatTools.debug(TAG, "onDrawerClosed");
 		if (statusChanged != null)
 		{
 			statusChanged.onDrawerClosed(drawerView);

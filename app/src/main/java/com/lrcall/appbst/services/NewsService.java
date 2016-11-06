@@ -16,7 +16,6 @@ import com.lrcall.db.DbNewsInfoFactory;
 import com.lrcall.ui.ActivityWebView;
 import com.lrcall.ui.dialog.DialogCommon;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 
 import java.util.HashMap;
 import java.util.List;
@@ -81,10 +80,10 @@ public class NewsService extends BaseService
 					//					DbNewsInfoFactory.getInstance().clearNewsInfo();
 					for (NewsInfo newsInfo : newsInfoList)
 					{
-						LogcatTools.debug("newsInfo", "newsInfo:" + newsInfo.getNewsId());
+						//						LogcatTools.debug("newsInfo", "newsInfo:" + newsInfo.getNewsId());
 						if (DbNewsInfoFactory.getInstance().getNewsInfo(newsInfo.getNewsId()) == null)
 						{
-							LogcatTools.debug("newsInfo", "新消息->newsInfo:" + newsInfo.getNewsId());
+							//							LogcatTools.debug("newsInfo", "新消息->newsInfo:" + newsInfo.getNewsId());
 							final String newsId = newsInfo.getNewsId();
 							DialogCommon dialogCommon = new DialogCommon(context, new DialogCommon.LibitDialogListener()
 							{

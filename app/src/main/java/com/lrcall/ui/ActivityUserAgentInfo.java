@@ -160,7 +160,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 					@Override
 					public void onOkClick(byte agentType, String provinceId, String cityId, String countryId)
 					{
-						LogcatTools.debug("DialogSelectArea", "provinceId:" + provinceId + ",cityId:" + cityId + ",countryId:" + countryId);
+						//						LogcatTools.debug("DialogSelectArea", "provinceId:" + provinceId + ",cityId:" + cityId + ",countryId:" + countryId);
 						mUserAgentService.applyAgent(agentType, provinceId, cityId, countryId, "正在申请,请稍后...", true);
 					}
 

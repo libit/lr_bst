@@ -56,12 +56,12 @@ public class IndexNewProductsAdapter extends BaseUserAdapter<ProductInfo>
 			viewHolder.ivHead.setLayoutParams(layoutParams);
 			if (position % 2 == 0)
 			{
-				LogcatTools.debug("position", "position:在左边");
+				//				LogcatTools.debug("position", "position:在左边");
 				convertView.setPadding(DisplayTools.dip2px(context, 10), DisplayTools.dip2px(context, 5), DisplayTools.dip2px(context, 5), DisplayTools.dip2px(context, 5));
 			}
 			else
 			{
-				LogcatTools.debug("position", "position:在右边");
+				//				LogcatTools.debug("position", "position:在右边");
 				convertView.setPadding(DisplayTools.dip2px(context, 5), DisplayTools.dip2px(context, 5), DisplayTools.dip2px(context, 10), DisplayTools.dip2px(context, 5));
 			}
 		}

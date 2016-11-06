@@ -22,7 +22,6 @@ import com.lrcall.appbst.services.PicService;
 import com.lrcall.appbst.services.PointProductService;
 import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class PointOrderProductsAdapter extends BaseUserAdapter<OrderProductInfo>
 					if (url.endsWith(ApiConfig.GET_POINT_PRODUCT))
 					{
 						PointProductInfo pointProductInfo1 = GsonTools.getReturnObject(result, PointProductInfo.class);
-						LogcatTools.debug("onAjaxDataResponse", "pointProductInfo1:" + result);
+						//						LogcatTools.debug("onAjaxDataResponse", "pointProductInfo1:" + result);
 						if (pointProductInfo1 != null)
 						{
 							setPointProductInfo(vHolder, orderProductInfo, pointProductInfo1, v);

@@ -55,7 +55,6 @@ import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
-import com.lrcall.utils.DateTimeTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LocationTools;
 import com.lrcall.utils.LogcatTools;
@@ -211,7 +210,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 				public void run()
 				{
 					super.run();
-					LogcatTools.debug(TAG, "ScheduledFuture,时间:" + DateTimeTools.getCurrentTime());
+					//					LogcatTools.debug(TAG, "ScheduledFuture,时间:" + DateTimeTools.getCurrentTime());
 					mHandler.sendEmptyMessage(SCROLL_VIEW_PAGE);
 					mHandler.sendEmptyMessage(SCROLL_NEWS);
 				}
@@ -219,7 +218,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		}
 		catch (RejectedExecutionException e)
 		{
-			LogcatTools.debug(TAG, "ScheduledFuture,RejectedExecutionException:" + e.getMessage());
+			LogcatTools.debug(TAG, "ScheduledFuture->RejectedExecutionException:" + e.getMessage());
 		}
 	}
 

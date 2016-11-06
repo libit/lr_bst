@@ -47,7 +47,6 @@ import com.lrcall.ui.dialog.DialogInputPoint;
 import com.lrcall.ui.dialog.DialogList;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.ArrayList;
@@ -148,7 +147,7 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 		String productIds = "";
 		for (OrderProductInfo orderProductInfo : mOrderProductInfoArrayList)
 		{
-			LogcatTools.debug(TAG, "数量：" + orderProductInfo.getCount());
+			//			LogcatTools.debug(TAG, "数量：" + orderProductInfo.getCount());
 			ProductInfo productInfo = DbProductInfoFactory.getInstance().getProductInfo(orderProductInfo.getProductId());
 			productIds += "," + orderProductInfo.getProductId();
 			productsPrice += productInfo.getPrice() * orderProductInfo.getCount();

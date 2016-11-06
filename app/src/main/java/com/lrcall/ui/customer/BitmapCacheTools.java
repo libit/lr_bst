@@ -164,7 +164,7 @@ public class BitmapCacheTools
 	{
 		int width = getImageViewWidth(context, imageView);
 		final String imageKey = String.valueOf(resId) + "_" + width;
-		LogcatTools.debug("BitmapWorkerTask", "loadBitmap imageKey:" + imageKey);
+		//		LogcatTools.debug("BitmapWorkerTask", "loadBitmap imageKey:" + imageKey);
 		final Bitmap bitmap = getBitmapFromMemCache(imageKey);
 		if (bitmap != null)
 		{
@@ -208,7 +208,7 @@ public class BitmapCacheTools
 			ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
 			width = layoutParams.width;
 			height = layoutParams.height;
-			LogcatTools.debug("BitmapWorkerTask", "width:" + width + ",height:" + height);
+			//			LogcatTools.debug("BitmapWorkerTask", "width:" + width + ",height:" + height);
 		}
 
 		// Decode image in background.
@@ -237,8 +237,8 @@ public class BitmapCacheTools
 			final Bitmap bitmap = decodeSampledBitmapFromResource(context.getResources(), resId, width, height);
 			String imageKey = String.valueOf(resId) + "_" + width;
 			addBitmapToMemoryCache(imageKey, bitmap);
-			LogcatTools.debug("BitmapWorkerTask", "doInBackground imageKey:" + imageKey);
-			LogcatTools.debug("BitmapWorkerTask", "doInBackground memoryCache:" + memoryCache.toString());
+			//			LogcatTools.debug("BitmapWorkerTask", "doInBackground imageKey:" + imageKey);
+			//			LogcatTools.debug("BitmapWorkerTask", "doInBackground memoryCache:" + memoryCache.toString());
 			return bitmap;
 		}
 

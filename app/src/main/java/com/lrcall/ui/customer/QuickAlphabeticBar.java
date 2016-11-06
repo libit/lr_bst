@@ -103,7 +103,7 @@ public class QuickAlphabeticBar extends ImageButton
 		int action = event.getAction();
 		float y = event.getY();
 		mHeight = this.getHeight();
-		LogcatTools.debug("onTouch", "QuickAlphabeticBar->act:" + action + ",y:" + y);
+		//		LogcatTools.debug("onTouch", "QuickAlphabeticBar->act:" + action + ",y:" + y);
 		int selectIndex = (int) (y / (mHeight / count));
 		if (selectIndex < 0)
 		{
@@ -170,7 +170,7 @@ public class QuickAlphabeticBar extends ImageButton
 		}
 		else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)
 		{
-			LogcatTools.debug("onTouch", "ACTION_UP");
+			//			LogcatTools.debug("onTouch", "ACTION_UP");
 			mHandler.post(new Runnable()
 			{
 				@Override

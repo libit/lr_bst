@@ -10,8 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.lrcall.utils.LogcatTools;
-
 /**
  * Created by libit on 16/5/9.
  */
@@ -66,7 +64,7 @@ public class DraftImageView extends ImageView
 					{
 						bDraft = true;
 					}
-					LogcatTools.debug("DraftImageView", "lastX:" + lastX + ",lastY:" + lastY + ",left:" + left + ",right:" + right + ",top:" + top + ",bottom:" + bottom);
+					//					LogcatTools.debug("DraftImageView", "lastX:" + lastX + ",lastY:" + lastY + ",left:" + left + ",right:" + right + ",top:" + top + ",bottom:" + bottom);
 				}
 				else if (action == MotionEvent.ACTION_MOVE)
 				{
@@ -109,7 +107,7 @@ public class DraftImageView extends ImageView
 							//								}
 							//							}
 							layout(left, top, right, bottom);
-							LogcatTools.debug("DraftImageView", "lastX:" + lastX + ",lastY:" + lastY + ",left:" + left + ",right:" + right + ",top:" + top + ",bottom:" + bottom);
+							//							LogcatTools.debug("DraftImageView", "lastX:" + lastX + ",lastY:" + lastY + ",left:" + left + ",right:" + right + ",top:" + top + ",bottom:" + bottom);
 						}
 					}
 				}

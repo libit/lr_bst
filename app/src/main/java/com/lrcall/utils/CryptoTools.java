@@ -116,7 +116,7 @@ public class CryptoTools
 		{
 			builder.append(s);
 		}
-		LogcatTools.debug("客户端签名", "客户端签名数据：" + builder.toString() + ",签名结果：" + getMD5Str(builder.toString()));
+		//		LogcatTools.debug("客户端签名", "客户端签名数据：" + builder.toString() + ",签名结果：" + getMD5Str(builder.toString()));
 		return getMD5Str(builder.toString());
 	}
 
@@ -144,7 +144,7 @@ public class CryptoTools
 		{
 			builder.append(s);
 		}
-		LogcatTools.debug("客户端签名", "客户端签名数据：" + builder.toString() + ",签名结果：" + getMD5Str(builder.toString()));
+		//		LogcatTools.debug("客户端签名", "客户端签名数据：" + builder.toString() + ",签名结果：" + getMD5Str(builder.toString()));
 		return getMD5Str(builder.toString());
 	}
 }

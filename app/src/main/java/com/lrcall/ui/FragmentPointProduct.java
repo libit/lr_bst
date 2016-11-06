@@ -32,7 +32,6 @@ import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.FloatProductSelectCount;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
@@ -143,7 +142,7 @@ public class FragmentPointProduct extends MyBaseFragment implements View.OnClick
 				if (action == MotionEvent.ACTION_MOVE)
 				{
 					float dx = event.getRawX() - lastX;
-					LogcatTools.debug("onTouch", "dx:" + dx + ",b=" + b);
+					//					LogcatTools.debug("onTouch", "dx:" + dx + ",b=" + b);
 					if (Math.abs(dx) > 5)
 					{
 						b = false;
@@ -151,7 +150,7 @@ public class FragmentPointProduct extends MyBaseFragment implements View.OnClick
 				}
 				if (action == MotionEvent.ACTION_UP)
 				{
-					LogcatTools.debug("onTouch", "b=" + b);
+					//					LogcatTools.debug("onTouch", "b=" + b);
 					if (b && mPointProductInfo != null)
 					{
 						Intent intent = new Intent(FragmentPointProduct.this.getContext(), ActivityPicView.class);

@@ -11,7 +11,6 @@ import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 /**
@@ -31,7 +30,7 @@ public abstract class MyBaseFragment extends Fragment
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
 		super.setUserVisibleHint(isVisibleToUser);
-		LogcatTools.debug(TAG, "fragment setUserVisibleHint:" + isVisibleToUser);
+		//		LogcatTools.debug(TAG, "fragment setUserVisibleHint:" + isVisibleToUser);
 		if (isInit)
 		{
 			if (isVisibleToUser)

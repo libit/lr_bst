@@ -30,7 +30,6 @@ import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbBannerInfoFactory;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.DisplayTools;
-import com.lrcall.utils.DateTimeTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LogcatTools;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -103,14 +102,14 @@ public class FragmentInteract extends MyBaseFragment implements View.OnClickList
 				public void run()
 				{
 					super.run();
-					LogcatTools.debug(TAG, "ScheduledFuture,时间:" + DateTimeTools.getCurrentTime());
+
 					mHandler.sendEmptyMessage(SCROLL_VIEW_PAGE);
 				}
 			}, SCROLL_TIME, SCROLL_TIME, TimeUnit.SECONDS);
 		}
 		catch (RejectedExecutionException e)
 		{
-			LogcatTools.debug(TAG, "ScheduledFuture,RejectedExecutionException:" + e.getMessage());
+			LogcatTools.debug(TAG, "ScheduledFuture->RejectedExecutionException:" + e.getMessage());
 		}
 	}
 

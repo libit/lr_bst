@@ -18,7 +18,6 @@ import com.lrcall.appbst.services.NewsService;
 import com.lrcall.db.DbNewsInfoFactory;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 public class ActivityNews extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
@@ -73,7 +72,7 @@ public class ActivityNews extends MyBaseActivity implements View.OnClickListener
 		if (newsInfo != null)
 		{
 			String content = newsInfo.getDescripition();
-			LogcatTools.debug(TAG, "content:" + content);
+			//			LogcatTools.debug(TAG, "content:" + content);
 			content = content.replace("\\n", "\r\n");
 			tvContent.setText(content);
 		}

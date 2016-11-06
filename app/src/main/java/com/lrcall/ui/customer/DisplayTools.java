@@ -6,8 +6,6 @@ package com.lrcall.ui.customer;
 
 import android.content.Context;
 
-import com.lrcall.utils.LogcatTools;
-
 public class DisplayTools
 {
 	/**
@@ -19,7 +17,7 @@ public class DisplayTools
 	public static int getWindowWidth(Context context)
 	{
 		final float width = context.getResources().getDisplayMetrics().widthPixels;
-		LogcatTools.debug("getWindowWidth", "width:" + width);
+		//		LogcatTools.debug("getWindowWidth", "width:" + width);
 		return (int) (width);
 	}
 
@@ -32,7 +30,7 @@ public class DisplayTools
 	public static int getWindowHeight(Context context)
 	{
 		final float height = context.getResources().getDisplayMetrics().heightPixels;
-		LogcatTools.debug("getWindowHeight", "height:" + height);
+		//		LogcatTools.debug("getWindowHeight", "height:" + height);
 		return (int) (height);
 	}
 

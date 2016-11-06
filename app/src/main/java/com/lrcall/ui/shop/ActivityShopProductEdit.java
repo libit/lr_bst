@@ -35,7 +35,6 @@ import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.ArrayList;
@@ -117,7 +116,7 @@ public class ActivityShopProductEdit extends MyBaseActivity implements View.OnCl
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 			{
-				LogcatTools.debug("AdapterView", "spSorts:" + mSortsList.get(position).getName());
+				//				LogcatTools.debug("AdapterView", "spSorts:" + mSortsList.get(position).getName());
 			}
 
 			@Override
@@ -130,7 +129,7 @@ public class ActivityShopProductEdit extends MyBaseActivity implements View.OnCl
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 			{
-				LogcatTools.debug("AdapterView", "spBrands:" + mBrandsList.get(position).getName());
+				//				LogcatTools.debug("AdapterView", "spBrands:" + mBrandsList.get(position).getName());
 			}
 
 			@Override

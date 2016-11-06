@@ -40,7 +40,6 @@ import com.lrcall.ui.dialog.DialogInputComment;
 import com.lrcall.ui.dialog.DialogList;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.ArrayList;
@@ -136,7 +135,7 @@ public class ActivityPointOrderAdd extends MyBaseActivity implements View.OnClic
 		for (int i = 0; i < size; i++)
 		{
 			final OrderProductInfo orderProductInfo = mOrderProductInfoArrayList.get(i);
-			LogcatTools.debug(TAG, "数量：" + orderProductInfo.getCount());
+			//			LogcatTools.debug(TAG, "数量：" + orderProductInfo.getCount());
 			PointProductService pointProductService = new PointProductService(this);
 			pointProductService.addDataResponse(new IAjaxDataResponse()
 			{

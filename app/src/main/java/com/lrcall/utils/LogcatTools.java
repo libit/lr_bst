@@ -46,7 +46,7 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 
 	public static void debug(String tag, String msg)
 	{
-		if (AppConfig.isDebug())
+		//		if (AppConfig.isDebug())
 		{
 			Log.d(tag, msg);
 		}
@@ -172,12 +172,12 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 						}
 					}
 				}
-				LogcatTools.debug("saveFiles", "saveFiles:" + GsonTools.toJson(saveFiles));
+				//				LogcatTools.debug("saveFiles", "saveFiles:" + GsonTools.toJson(saveFiles));
 				for (int i = saveFiles.size() - 1; i >= MAX_SAVE; i--)
 				{
 					if (saveFiles.get(i).isFile())
 					{
-						LogcatTools.debug("saveFiles", "delete:" + GsonTools.toJson(saveFiles.get(i)));
+						//						LogcatTools.debug("saveFiles", "delete:" + GsonTools.toJson(saveFiles.get(i)));
 						saveFiles.get(i).delete();
 					}
 				}
@@ -196,7 +196,7 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 			mLogDumper.stopLogs();
 			mLogDumper = null;
 		}
-		LogcatTools.debug(TAG + "stop", "停止纪录日志！");
+		//		LogcatTools.debug(TAG + "stop", "停止纪录日志！");
 	}
 
 	/**

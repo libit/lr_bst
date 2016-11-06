@@ -38,7 +38,6 @@ import com.lrcall.ui.adapter.PayAdapter;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 import com.tencent.mm.sdk.modelpay.PayReq;
@@ -246,7 +245,7 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 			WxPayInfo wxPayInfo = GsonTools.getReturnObject(result, WxPayInfo.class);
 			if (wxPayInfo != null)
 			{
-				LogcatTools.debug("wxPayInfo", "wxPayInfo:" + GsonTools.toJson(wxPayInfo));
+				//				LogcatTools.debug("wxPayInfo", "wxPayInfo:" + GsonTools.toJson(wxPayInfo));
 				PayReq req = new PayReq();
 				req.appId = wxPayInfo.getAppId();
 				req.partnerId = wxPayInfo.getPartnerId();

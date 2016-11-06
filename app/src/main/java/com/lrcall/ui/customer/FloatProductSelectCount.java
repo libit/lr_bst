@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.lrcall.appbst.R;
-import com.lrcall.utils.LogcatTools;
 
 /**
  * Created by libit on 16/7/21.
@@ -85,11 +84,11 @@ public class FloatProductSelectCount implements View.OnClickListener
 			public boolean onTouch(View v, MotionEvent event)
 			{
 				int action = event.getAction();
-				LogcatTools.debug("DraftImageView", "action:" + action + ",lastY:" + lastY + ".");
+				//				LogcatTools.debug("DraftImageView", "action:" + action + ",lastY:" + lastY + ".");
 				if (action == MotionEvent.ACTION_DOWN)
 				{
 					lastY = event.getRawY();
-					LogcatTools.debug("DraftImageView", "ACTION_DOWN lastY:" + lastY + ".");
+					//					LogcatTools.debug("DraftImageView", "ACTION_DOWN lastY:" + lastY + ".");
 					//					showList();
 					//					return true;
 				}
@@ -97,7 +96,7 @@ public class FloatProductSelectCount implements View.OnClickListener
 				{
 					float dy = lastY - event.getRawY();
 					lastY = event.getRawY();
-					LogcatTools.debug("DraftImageView", "ACTION_UP lastY:" + lastY + ",dy:" + dy + ".");
+					//					LogcatTools.debug("DraftImageView", "ACTION_UP lastY:" + lastY + ",dy:" + dy + ".");
 					if (dy > windowHeight / 8)
 					{
 					}
@@ -112,7 +111,7 @@ public class FloatProductSelectCount implements View.OnClickListener
 				}
 				else if (action == MotionEvent.ACTION_OUTSIDE)
 				{
-					LogcatTools.debug("DraftImageView", "ACTION_OUTSIDE,lastY:" + lastY + ".");
+					//					LogcatTools.debug("DraftImageView", "ACTION_OUTSIDE,lastY:" + lastY + ".");
 					clearTopWindow();
 					return true;
 				}

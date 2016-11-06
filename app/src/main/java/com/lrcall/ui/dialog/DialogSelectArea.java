@@ -136,21 +136,21 @@ public class DialogSelectArea extends Dialog implements OnClickListener, IAjaxDa
 				if (listenser != null)
 				{
 					int position = spProvince.getSelectedItemPosition();
-					LogcatTools.debug("DialogSelectArea", "position:" + position);
+					//					LogcatTools.debug("DialogSelectArea", "position:" + position);
 					String provinceId = "";
 					if (position >= 0)
 					{
 						provinceId = mProvinceList.get(position).getProvinceId();
 					}
 					position = spCity.getSelectedItemPosition();
-					LogcatTools.debug("DialogSelectArea", "position:" + position);
+					//					LogcatTools.debug("DialogSelectArea", "position:" + position);
 					String cityId = "";
 					if (position >= 0)
 					{
 						cityId = mCityList.get(position).getCityId();
 					}
 					position = spCountry.getSelectedItemPosition();
-					LogcatTools.debug("DialogSelectArea", "position:" + position);
+					//					LogcatTools.debug("DialogSelectArea", "position:" + position);
 					String countryId = "";
 					if (position >= 0)
 					{

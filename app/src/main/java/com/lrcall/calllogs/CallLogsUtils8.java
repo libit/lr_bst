@@ -16,7 +16,6 @@ import com.lrcall.contacts.ContactsFactory;
 import com.lrcall.models.CallLogInfo;
 import com.lrcall.models.ContactInfo;
 import com.lrcall.utils.CallTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.ArrayList;
@@ -285,7 +284,7 @@ public class CallLogsUtils8 extends CallLogsFactory
 	@Override
 	public List<CallLogInfo> createListSort(Cursor cursor, int start, int callLogCount)
 	{
-		LogcatTools.debug("createListSort", "start:" + start + ",callLogCount:" + callLogCount);
+		//		LogcatTools.debug("createListSort", "start:" + start + ",callLogCount:" + callLogCount);
 		List<CallLogInfo> callLogInfoList = new ArrayList<>();
 		List<String> data = new ArrayList<>();
 		if (cursor != null)

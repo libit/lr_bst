@@ -215,7 +215,7 @@ public abstract class BaseService
 			}
 		};
 		params = buildParams(params);
-		LogcatTools.debug("ajaxStringCallback", "url:" + url + ",params:" + GsonTools.toJson(params));
+		LogcatTools.debug("ajaxFileCallback", "url:" + url + ",params:" + GsonTools.toJson(params));
 		cb.url(url).type(File.class).params(params);
 		if (!StringTools.isNull(tips))
 		{
@@ -247,7 +247,7 @@ public abstract class BaseService
 			@Override
 			public void callback(String url, File file, AjaxStatus status)
 			{
-				LogcatTools.debug("ajaxFileCallback", "url:" + url);
+				LogcatTools.debug("ajaxDownloadFileCallback", "url:" + url);
 				if (needServiceProcess)
 				{
 					parseData(url, file, status);
@@ -255,7 +255,7 @@ public abstract class BaseService
 			}
 		};
 		params = buildParams(params);
-		LogcatTools.debug("ajaxStringCallback", "url:" + url + ",params:" + GsonTools.toJson(params));
+		LogcatTools.debug("ajaxDownloadFileCallback", "url:" + url + ",params:" + GsonTools.toJson(params));
 		cb.url(url).type(File.class).params(params);
 		if (!StringTools.isNull(tips))
 		{

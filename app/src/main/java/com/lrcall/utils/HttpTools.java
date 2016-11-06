@@ -36,7 +36,7 @@ public class HttpTools
 	 */
 	public static String doGet(String url, String encode)
 	{
-		LogcatTools.debug(TAG + " doGet", "RELEASE_URL GET:" + url);
+		//		LogcatTools.debug(TAG + " doGet", "RELEASE_URL GET:" + url);
 		String strResult = null;
 		HttpClient client = null;
 		HttpGet request = null;
@@ -82,7 +82,7 @@ public class HttpTools
 			}
 			client.getConnectionManager().shutdown();
 		}
-		LogcatTools.debug(TAG + " doGet", "strResult:" + strResult);
+		//		LogcatTools.debug(TAG + " doGet", "strResult:" + strResult);
 		return strResult;
 	}
 
@@ -95,7 +95,7 @@ public class HttpTools
 	 */
 	public static String doPost(String url, HashMap<String, String> map)
 	{
-		LogcatTools.debug(TAG + " doPost", "POST RELEASE_URL:" + url);
+		//		LogcatTools.debug(TAG + " doPost", "POST RELEASE_URL:" + url);
 		String strResult = null;
 		HttpPost post = new HttpPost(url);
 		// post
@@ -103,7 +103,7 @@ public class HttpTools
 		for (String key : map.keySet())
 		{
 			params.add(new BasicNameValuePair(key, map.get(key)));
-			LogcatTools.debug(TAG + " doPost", "key:" + key + ",value:" + map.get(key) + ".");
+			//			LogcatTools.debug(TAG + " doPost", "key:" + key + ",value:" + map.get(key) + ".");
 		}
 		try
 		{
@@ -118,7 +118,7 @@ public class HttpTools
 		{
 			e.printStackTrace();
 		}
-		LogcatTools.debug(TAG + " doPost", "strResult:" + strResult);
+		//		LogcatTools.debug(TAG + " doPost", "strResult:" + strResult);
 		return strResult;
 	}
 

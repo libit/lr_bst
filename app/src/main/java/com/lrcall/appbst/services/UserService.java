@@ -16,7 +16,6 @@ import com.lrcall.events.UserEvent;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 
@@ -333,7 +332,7 @@ public class UserService extends BaseService
 			PicInfo picInfo = GsonTools.getReturnObject(result, PicInfo.class);
 			if (picInfo != null)
 			{
-				LogcatTools.debug("USER_UPDATE_PIC", "picInfo:" + picInfo.toString());
+				//				LogcatTools.debug("USER_UPDATE_PIC", "picInfo:" + picInfo.toString());
 				Map<String, Object> params = new HashMap<>();
 				params.put("picId", picInfo.getPicId());
 				ajaxStringCallback(ApiConfig.USER_UPDATE_PIC_INFO, params, null, true);

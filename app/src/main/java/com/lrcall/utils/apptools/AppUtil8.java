@@ -315,7 +315,7 @@ public class AppUtil8 extends AppFactory
 			AppInfo appInfo1 = getAppInfoByPackageName(packageName, false);
 			if (appInfo1 == null || !appInfo1.isEnabled())
 			{
-				LogcatTools.debug("enableApps", "disPackages:" + packageName);
+				//				LogcatTools.debug("enableApps", "disPackages:" + packageName);
 				disPackages.add(packageName);
 			}
 		}

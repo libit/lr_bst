@@ -172,7 +172,7 @@ public class ShellUtils
 				{
 					errorMsg.append(s);
 				}
-				LogcatTools.debug("ShellUtils execCommand", errorMsg.toString());
+				//				LogcatTools.debug("ShellUtils execCommand", errorMsg.toString());
 			}
 		}
 		catch (IOException e)

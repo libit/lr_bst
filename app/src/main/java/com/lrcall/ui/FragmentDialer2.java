@@ -32,7 +32,6 @@ import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.DraftImageView;
 import com.lrcall.ui.customer.EraseButton;
 import com.lrcall.utils.ConstValues;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import org.greenrobot.eventbus.EventBus;
@@ -73,7 +72,7 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		LogcatTools.debug(TAG, "fragment onCreateView");
+		//		LogcatTools.debug(TAG, "fragment onCreateView");
 		View rootView = inflater.inflate(R.layout.fragment_dialer2, container, false);
 		viewInit(rootView);
 		setPadVisible(true);
@@ -125,7 +124,7 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
 	{
 		super.onViewCreated(view, savedInstanceState);
-		LogcatTools.debug(TAG, "fragment onViewCreated,start=" + start);
+		//		LogcatTools.debug(TAG, "fragment onViewCreated,start=" + start);
 		onRefresh();
 	}
 
