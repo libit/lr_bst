@@ -28,12 +28,12 @@ import java.util.List;
  */
 public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 {
-	protected final IOrderAdapter iOrderAdapter;
+	protected final IItemClick iItemClick;
 
-	public OrderAdapter(Context context, List<OrderInfo> list, IOrderAdapter iOrderAdapter)
+	public OrderAdapter(Context context, List<OrderInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iOrderAdapter = iOrderAdapter;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -46,13 +46,9 @@ public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new OrderViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_order, null);
-			viewHolder.tvOrderId = (TextView) convertView.findViewById(R.id.tv_order_id);
-			viewHolder.tvOrderStatus = (TextView) convertView.findViewById(R.id.tv_order_status);
-			viewHolder.tvOrderProductCount = (TextView) convertView.findViewById(R.id.tv_products_count);
-			viewHolder.tvPrice = (TextView) convertView.findViewById(R.id.tv_total_price);
-			viewHolder.lvProducts = (ListView) convertView.findViewById(R.id.list_products);
+			viewHolder = new OrderViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -77,57 +73,48 @@ public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 		viewHolder.tvOrderProductCount.setText(String.format("共%d件商品", count));
 		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(orderInfo.getTotalPrice()));
 		viewHolder.lvProducts.setAdapter(new OrderProductsAdapter(context, orderInfo.getOrderProductInfoList(), null));
+		viewHolder.tvOrderStatus.setText(OrderStatus.getStatusDesc(orderInfo.getStatus()));
 		if (orderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
 		{
-			viewHolder.tvOrderStatus.setText(OrderStatus.WAIT_PAY.getDesc());
 			convertView.findViewById(R.id.btn_order_pay).setVisibility(View.VISIBLE);
-			convertView.findViewById(R.id.btn_order_pay).setOnClickListener(new View.OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					if (iOrderAdapter != null)
-					{
-						iOrderAdapter.onOrderPayClicked(orderInfo);
-					}
-				}
-			});
 			convertView.findViewById(R.id.btn_cancel_order).setVisibility(View.VISIBLE);
-			convertView.findViewById(R.id.btn_cancel_order).setOnClickListener(new View.OnClickListener()
+			if (iItemClick != null)
 			{
-				@Override
-				public void onClick(View v)
+				convertView.findViewById(R.id.btn_order_pay).setOnClickListener(new View.OnClickListener()
 				{
-					if (iOrderAdapter != null)
+					@Override
+					public void onClick(View v)
 					{
-						iOrderAdapter.onOrderCancelClicked(orderInfo);
+						iItemClick.onOrderPayClicked(orderInfo);
 					}
-				}
-			});
-		}
-		else if (orderInfo.getStatus() == OrderStatus.PAYED.getStatus())
-		{
-			viewHolder.tvOrderStatus.setText(OrderStatus.PAYED.getDesc());
+				});
+				convertView.findViewById(R.id.btn_cancel_order).setOnClickListener(new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						iItemClick.onOrderCancelClicked(orderInfo);
+					}
+				});
+			}
 		}
 		else if (orderInfo.getStatus() == OrderStatus.EXPRESS.getStatus())
 		{
-			viewHolder.tvOrderStatus.setText(OrderStatus.EXPRESS.getDesc());
 			convertView.findViewById(R.id.btn_confirm_receive).setVisibility(View.VISIBLE);
-			convertView.findViewById(R.id.btn_confirm_receive).setOnClickListener(new View.OnClickListener()
+			if (iItemClick != null)
 			{
-				@Override
-				public void onClick(View v)
+				convertView.findViewById(R.id.btn_confirm_receive).setOnClickListener(new View.OnClickListener()
 				{
-					if (iOrderAdapter != null)
+					@Override
+					public void onClick(View v)
 					{
-						iOrderAdapter.onOrderConfirmClicked(orderInfo);
+						iItemClick.onOrderConfirmClicked(orderInfo);
 					}
-				}
-			});
+				});
+			}
 		}
 		else if (orderInfo.getStatus() == OrderStatus.FINISH.getStatus())
 		{
-			viewHolder.tvOrderStatus.setText(OrderStatus.FINISH.getDesc());
 			if (orderInfo.getOrderProductInfoList() != null && orderInfo.getOrderProductInfoList().size() > 0)
 			{
 				final Button btnComment = (Button) convertView.findViewById(R.id.btn_order_comment);
@@ -148,17 +135,17 @@ public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 						{
 							btnComment.setText("我要评价");
 							btnComment.setEnabled(true);
-							btnComment.setOnClickListener(new View.OnClickListener()
+							if (iItemClick != null)
 							{
-								@Override
-								public void onClick(View v)
+								btnComment.setOnClickListener(new View.OnClickListener()
 								{
-									if (iOrderAdapter != null)
+									@Override
+									public void onClick(View v)
 									{
-										iOrderAdapter.onOrderCommentClicked(orderInfo);
+										iItemClick.onOrderCommentClicked(orderInfo);
 									}
-								}
-							});
+								});
+							}
 						}
 						return false;
 					}
@@ -166,21 +153,21 @@ public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 				orderProductCommentService.getProductCommentInfoCount(orderInfo.getOrderId(), orderInfo.getOrderProductInfoList().get(0).getProductId(), null, false);
 			}
 		}
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (iOrderAdapter != null)
+				@Override
+				public void onClick(View v)
 				{
-					iOrderAdapter.onOrderClicked(orderInfo);
+					iItemClick.onOrderClicked(orderInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
-	public interface IOrderAdapter
+	public interface IItemClick
 	{
 		void onOrderClicked(OrderInfo orderInfo);
 
@@ -200,6 +187,15 @@ public class OrderAdapter extends BaseUserAdapter<OrderInfo>
 		public TextView tvOrderProductCount;
 		public TextView tvPrice;
 		public ListView lvProducts;
+
+		public void viewInit(View convertView)
+		{
+			tvOrderId = (TextView) convertView.findViewById(R.id.tv_order_id);
+			tvOrderStatus = (TextView) convertView.findViewById(R.id.tv_order_status);
+			tvOrderProductCount = (TextView) convertView.findViewById(R.id.tv_products_count);
+			tvPrice = (TextView) convertView.findViewById(R.id.tv_total_price);
+			lvProducts = (ListView) convertView.findViewById(R.id.list_products);
+		}
 
 		public void clear()
 		{

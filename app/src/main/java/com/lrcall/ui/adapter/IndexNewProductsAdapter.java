@@ -27,12 +27,12 @@ import java.util.List;
  */
 public class IndexNewProductsAdapter extends BaseUserAdapter<ProductInfo>
 {
-	protected final INewProductsAdapter iNewProductsAdapter;
+	protected final IItemClick iItemClick;
 
-	public IndexNewProductsAdapter(Context context, List<ProductInfo> list, INewProductsAdapter iNewProductsAdapter)
+	public IndexNewProductsAdapter(Context context, List<ProductInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iNewProductsAdapter = iNewProductsAdapter;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -45,11 +45,9 @@ public class IndexNewProductsAdapter extends BaseUserAdapter<ProductInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new ProductViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_new_product, null);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_label);
-			viewHolder.tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+			viewHolder = new ProductViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 			//重设图片宽高
 			ViewGroup.LayoutParams layoutParams = viewHolder.ivHead.getLayoutParams();
@@ -76,21 +74,21 @@ public class IndexNewProductsAdapter extends BaseUserAdapter<ProductInfo>
 		PicService.ajaxGetRoundTopPic(viewHolder.ivHead, ApiConfig.getServerPicUrl(productInfo.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 4, 15);
 		viewHolder.tvName.setText(productInfo.getName());
 		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(productInfo.getPrice()));
-		if (iNewProductsAdapter != null)
+		if (iItemClick != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					iNewProductsAdapter.onProductClicked(productInfo);
+					iItemClick.onProductClicked(productInfo);
 				}
 			});
 		}
 		return convertView;
 	}
 
-	public interface INewProductsAdapter
+	public interface IItemClick
 	{
 		void onProductClicked(ProductInfo productInfo);
 	}
@@ -100,6 +98,13 @@ public class IndexNewProductsAdapter extends BaseUserAdapter<ProductInfo>
 		public ImageView ivHead;
 		public TextView tvName;
 		public TextView tvPrice;
+
+		public void viewInit(View convertView)
+		{
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			tvName = (TextView) convertView.findViewById(R.id.tv_label);
+			tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+		}
 
 		public void clear()
 		{

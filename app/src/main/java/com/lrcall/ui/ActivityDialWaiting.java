@@ -28,7 +28,6 @@ import com.lrcall.services.AutoAnswerIntentService;
 import com.lrcall.services.AutoAnswerIntentService2;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 
@@ -67,7 +66,7 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 		}
 		tvName.setText(name);
 		tvResult.setText("正在呼叫,请稍后...");
-		mCallbackService.makeCall(number, null, false);
+		mCallbackService.makeCall(number, null, true);
 		IntentFilter filter = new IntentFilter("android.intent.action.PHONE_STATE");
 		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 		registerReceiver(receiver, filter);
@@ -131,7 +130,6 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 			if (state.equalsIgnoreCase(TelephonyManager.EXTRA_STATE_RINGING)) // 来电
 			{
 				int answerType = PreferenceUtils.getInstance().getIntegerValue(PreferenceUtils.PREF_CALLBACK_AUTO_ANSWER_KEY);
-				LogcatTools.debug(TAG, "answerType:" + answerType);
 				if (answerType == AutoAnswerType.AUTO_ANSWER1.getType())
 				{
 					context.startService(new Intent(context, AutoAnswerIntentService.class));

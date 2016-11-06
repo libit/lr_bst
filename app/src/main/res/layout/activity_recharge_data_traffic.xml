@@ -50,7 +50,7 @@
         <Button
             android:id="@+id/btn_get"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="20dp"
@@ -128,12 +128,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:gravity="center_vertical|right"
-            android:minWidth="100dp"
+            android:minWidth="120dp"
             android:text="手机号码："
-            android:textColor="@android:color/widget_edittext_dark"
+            android:textColor="@color/black"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/et_number"

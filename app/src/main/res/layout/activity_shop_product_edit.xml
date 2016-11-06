@@ -23,11 +23,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="名称："
+                    android:minWidth="120dp"
+                    android:text="商品名称："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
@@ -51,11 +50,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="类别："
+                    android:minWidth="120dp"
+                    android:text="商品类别："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <Spinner
@@ -77,11 +75,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="品牌："
+                    android:minWidth="120dp"
+                    android:text="商品品牌："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <Spinner
@@ -103,11 +100,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="价格(分)："
+                    android:minWidth="120dp"
+                    android:text="商品价格(分)："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
@@ -132,10 +128,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="积分抵扣："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -159,10 +154,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="市场价(分)："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -186,10 +180,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="快递费(分)："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -220,10 +213,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="代理商利润(分)："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -247,10 +239,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="无限级返利(分)："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -274,11 +265,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="库存："
+                    android:minWidth="120dp"
+                    android:text="商品库存："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
@@ -301,10 +291,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="排序(越大越靠前)："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -330,8 +319,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:gravity="left"
-                    android:minWidth="100dp"
-                    android:text="描述："
+                    android:minWidth="120dp"
+                    android:text="商品描述："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
@@ -341,7 +330,7 @@
                     android:layout_margin="10dp"
                     android:background="@null"
                     android:gravity="top|left"
-                    android:hint="请输入描述"
+                    android:hint="请输入商品描述"
                     android:minLines="2"
                     android:padding="5dp"/>
             </LinearLayout>
@@ -358,8 +347,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:gravity="left"
-                    android:minWidth="100dp"
-                    android:text="参数："
+                    android:minWidth="120dp"
+                    android:text="商品参数："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
@@ -369,7 +358,7 @@
                     android:layout_margin="10dp"
                     android:background="@null"
                     android:gravity="top|left"
-                    android:hint="请输入参数"
+                    android:hint="请输入商品参数"
                     android:minLines="2"
                     android:padding="5dp"/>
             </LinearLayout>
@@ -387,7 +376,7 @@
                     android:layout_marginLeft="10dp"
                     android:gravity="left"
                     android:minWidth="100dp"
-                    android:text="内容："
+                    android:text="内容介绍："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
@@ -397,7 +386,7 @@
                     android:layout_margin="10dp"
                     android:background="@null"
                     android:gravity="top|left"
-                    android:hint="请输入内容"
+                    android:hint="请输入商品内容介绍"
                     android:minLines="2"
                     android:padding="5dp"/>
             </LinearLayout>
@@ -414,7 +403,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:gravity="left"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="图片："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -429,19 +418,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:layout_marginTop="30dp"
                 android:paddingBottom="0dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingTop="0dp">
                 <Button
-                    android:id="@+id/btn_add"
+                    android:id="@+id/btn_submit"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_primary"
-                    android:text="添加商品"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_btn_common"
+                    android:text="提交修改"
+                    android:textColor="@color/white"
                     android:textSize="18sp"/>
             </LinearLayout>
         </LinearLayout>

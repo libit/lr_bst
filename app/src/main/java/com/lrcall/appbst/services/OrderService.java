@@ -7,6 +7,9 @@ package com.lrcall.appbst.services;
 import android.content.Context;
 
 import com.androidquery.callback.AjaxStatus;
+import com.lrcall.events.OrderEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -122,22 +125,18 @@ public class OrderService extends BaseService
 	{
 		if (url.endsWith(ApiConfig.GET_ORDER_LIST))
 		{
-			//			TableData tableData = GsonTools.getObject(result, TableData.class);
-			//			if (tableData != null)
-			//			{
-			//				List<OrderInfo> orderInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<OrderInfo>>()
-			//				{
-			//				}.getType());
-			//				if (orderInfoList != null)
-			//				{
-			//					for (OrderInfo orderInfo : orderInfoList)
-			//					{
-			//					}
-			//				}
-			//			}
 		}
 		else if (url.endsWith(ApiConfig.ADD_ORDER))
 		{
+			EventBus.getDefault().post(new OrderEvent(OrderEvent.EVENT_ORDER_ADD));
+		}
+		else if (url.endsWith(ApiConfig.DELETE_ORDER))
+		{
+			EventBus.getDefault().post(new OrderEvent(OrderEvent.EVENT_ORDER_STATUS_CHANGED));
+		}
+		else if (url.endsWith(ApiConfig.ORDER_FINISH))
+		{
+			EventBus.getDefault().post(new OrderEvent(OrderEvent.EVENT_ORDER_STATUS_CHANGED));
 		}
 	}
 }

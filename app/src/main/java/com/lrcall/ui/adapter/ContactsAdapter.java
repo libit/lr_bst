@@ -71,32 +71,29 @@ public class ContactsAdapter extends BaseContactsAdapter<ContactInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new ContactViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_phonebook_with_head, null);
-			viewHolder.ivHeader = (ImageView) convertView.findViewById(R.id.contact_picture);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.contact_name);
-			viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.contact_number);
+			viewHolder = new ContactViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
 		{
 			viewHolder.clear();
 		}
-		TextView alpha = ((TextView) convertView.findViewById(R.id.alpha));
 		if (previewStr.equals(currentStr))
 		{
-			alpha.setVisibility(View.GONE);
+			viewHolder.tvAlpha.setVisibility(View.GONE);
 		}
 		else
 		{
-			alpha.setVisibility(View.VISIBLE);
-			alpha.setText(currentStr);
+			viewHolder.tvAlpha.setVisibility(View.VISIBLE);
+			viewHolder.tvAlpha.setText(currentStr);
 		}
 		ContactInfo contactInfo = list.get(position);
 		Long id = contactInfo.getContactId();
 		String name = contactInfo.getName();
 		String number = "";
-		if (contactInfo.getPhoneInfoList() != null)
+		if (contactInfo.getPhoneInfoList() != null && contactInfo.getPhoneInfoList().size() > 0)
 		{
 			number = contactInfo.getPhoneInfoList().get(0).getNumber();
 		}
@@ -145,6 +142,15 @@ public class ContactsAdapter extends BaseContactsAdapter<ContactInfo>
 		public ImageView ivHeader;
 		public TextView tvName;
 		public TextView tvNumber;
+		public TextView tvAlpha;
+
+		public void viewInit(View convertView)
+		{
+			ivHeader = (ImageView) convertView.findViewById(R.id.contact_picture);
+			tvName = (TextView) convertView.findViewById(R.id.contact_name);
+			tvNumber = (TextView) convertView.findViewById(R.id.contact_number);
+			tvAlpha = ((TextView) convertView.findViewById(R.id.alpha));
+		}
 
 		public void clear()
 		{
@@ -152,6 +158,7 @@ public class ContactsAdapter extends BaseContactsAdapter<ContactInfo>
 			ivHeader.setImageBitmap(null);
 			tvName.setText("");
 			tvNumber.setText("");
+			tvAlpha.setText("");
 		}
 	}
 }

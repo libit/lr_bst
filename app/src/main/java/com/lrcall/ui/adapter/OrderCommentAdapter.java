@@ -30,12 +30,12 @@ import java.util.List;
  */
 public class OrderCommentAdapter extends BaseUserAdapter<OrderProductInfo>
 {
-	protected final IOrderCommentAdapter iOrderCommentAdapter;
+	protected final IItemClick iItemClick;
 
-	public OrderCommentAdapter(Context context, List<OrderProductInfo> list, IOrderCommentAdapter iOrderCommentAdapter)
+	public OrderCommentAdapter(Context context, List<OrderProductInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iOrderCommentAdapter = iOrderCommentAdapter;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -48,11 +48,9 @@ public class OrderCommentAdapter extends BaseUserAdapter<OrderProductInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new OrderCommentViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_order_product_comment, null);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
-			viewHolder.etContent = (EditText) convertView.findViewById(R.id.et_content);
+			viewHolder = new OrderCommentViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -61,8 +59,8 @@ public class OrderCommentAdapter extends BaseUserAdapter<OrderProductInfo>
 		}
 		//设置控件的值
 		final OrderProductInfo orderProductInfo = list.get(position);
-		ProductService productService = new ProductService(context);
 		final OrderCommentViewHolder holder = viewHolder;
+		ProductService productService = new ProductService(context);
 		productService.addDataResponse(new IAjaxDataResponse()
 		{
 			@Override
@@ -82,21 +80,21 @@ public class OrderCommentAdapter extends BaseUserAdapter<OrderProductInfo>
 		productService.getProductInfo(orderProductInfo.getProductId(), null, true);
 		final RatingBar ratingBar = viewHolder.ratingBar;
 		final EditText etContent = viewHolder.etContent;
-		if (iOrderCommentAdapter != null)
+		if (iItemClick != null)
 		{
 			convertView.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					iOrderCommentAdapter.onSubmit(orderProductInfo.getProductId(), ratingBar.getNumStars(), etContent.getText().toString());
+					iItemClick.onSubmit(orderProductInfo.getProductId(), ratingBar.getNumStars(), etContent.getText().toString());
 				}
 			});
 		}
 		return convertView;
 	}
 
-	public interface IOrderCommentAdapter
+	public interface IItemClick
 	{
 		void onSubmit(String productId, int rate, String content);
 	}
@@ -106,6 +104,13 @@ public class OrderCommentAdapter extends BaseUserAdapter<OrderProductInfo>
 		public ImageView ivHead;
 		public RatingBar ratingBar;
 		public EditText etContent;
+
+		public void viewInit(View convertView)
+		{
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
+			etContent = (EditText) convertView.findViewById(R.id.et_content);
+		}
 
 		public void clear()
 		{

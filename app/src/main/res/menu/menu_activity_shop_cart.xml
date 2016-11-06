@@ -8,7 +8,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_shop_cart_edit"
+        android:icon="@drawable/ic_edit_address"
         android:orderInCategory="100"
         android:title="编辑"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 </menu>

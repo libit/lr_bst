@@ -56,9 +56,6 @@ import java.util.List;
 public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivityOrderAdd.class.getSimpleName();
-	//	private static final int PAY_ALIPAY = 1;
-	//	private static final int PAY_WX = 2;
-	//	private static final int PAY_BALANCE = 3;
 	private static final int EXPRESS_EMS = 1;
 	private static final int EXPRESS_SF = 2;
 	private static final int REQ_SELECT_ADDRESS = 100;
@@ -68,7 +65,6 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 	private int expressPrice = 0, productsPrice = 0, totalPrice = 0;
 	private String addressId = "";
 	private String comment = "";
-	//	private int payType = 0;
 	private int expressType = 0;
 	private ArrayList<OrderProductInfo> mOrderProductInfoArrayList = new ArrayList<>();
 	private final List<FuncInfo> funcExpressInfoList = new ArrayList<>();
@@ -174,7 +170,7 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 			tvExpressPrice.setText(String.format("￥%s", StringTools.getPrice(expressPrice)));
 			totalPrice = expressPrice + productsPrice;
 			tvTotalPrice.setText(String.format("￥%s", StringTools.getPrice(totalPrice)));
-			OrderProductsAdapter orderProductsAdapter = new OrderProductsAdapter(this, mOrderProductInfoArrayList, new OrderProductsAdapter.IOrderProductsAdapter()
+			OrderProductsAdapter orderProductsAdapter = new OrderProductsAdapter(this, mOrderProductInfoArrayList, new OrderProductsAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(ProductInfo productInfo)
@@ -391,7 +387,7 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 					expressJson = GsonTools.toJson(new ExpressInfo("", "", addressId, expressName, "", expressPrice, (byte) 0, 0l, 0l));
 				}
 				String productsJson = GsonTools.toJson(mOrderProductInfoArrayList);
-				mOrderService.addOrder(comment, "测试", productsJson, expressJson, pointAmount, null, false);
+				mOrderService.addOrder(comment, "普通订单", productsJson, expressJson, pointAmount, null, true);
 				break;
 			}
 		}
@@ -402,10 +398,10 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 	{
 		if (url.endsWith(ApiConfig.ADD_ORDER))
 		{
+			showServerMsg(result, "下单成功！");
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				Toast.makeText(this, "下单成功！", Toast.LENGTH_LONG).show();
 				finish();
 				//这里转到支付界面
 				//				if (payType == PAY_ALIPAY)
@@ -429,13 +425,10 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 				//				else
 				{
 					Intent intent = new Intent(this, ActivityPayList.class);
-					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_ORDER, totalPrice, "订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg())));
+					PayTypeInfo payTypeInfo = new PayTypeInfo(PayType.PAY_ORDER, totalPrice, "订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg());
+					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(payTypeInfo));
 					startActivity(intent);
 				}
-			}
-			else
-			{
-				showServerMsg(result);
 			}
 			return true;
 		}

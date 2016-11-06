@@ -67,4 +67,5 @@ public class ConstValues
 	public static final String DATA_PAY_TYPE_INFO = "pay_type_info";//支付信息
 	public static final String DATA_SHOW_PAD = "show_pad";
 	public static final String DATA_PRODUCT_TYPE = "product_type";//商品类型
+	public static final String DATA_SHOP_ID = "shop_id";
 }

@@ -15,12 +15,6 @@ import com.lrcall.appbst.R;
 import com.lrcall.ui.customer.BitmapCacheTools;
 import com.lrcall.utils.StringTools;
 
-/**
- * A simple {@link Fragment} subclass.
- * to handle interaction events.
- * Use the {@link FragmentImage#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentImage extends Fragment
 {
 	private static final String ARG_IMAGE_RES = "ARG_IMAGE_RES";
@@ -68,7 +62,6 @@ public class FragmentImage extends Fragment
 	{
 		super.onActivityCreated(savedInstanceState);
 		initView();
-		//		imageView.setImageResource(mImageRes);
 		BitmapCacheTools.loadBitmap(this.getContext(), imageView, mImageRes);
 		if (!StringTools.isNull(mUrl))
 		{

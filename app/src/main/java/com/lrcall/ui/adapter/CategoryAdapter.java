@@ -20,12 +20,12 @@ import java.util.List;
  */
 public class CategoryAdapter extends BaseUserAdapter<ProductSortInfo>
 {
-	private final ICategoryProductSortAdapterItemClicked categoryProductSortAdapterItemClicked;
+	private final IItemClick iItemClick;
 
-	public CategoryAdapter(Context context, List<ProductSortInfo> list, ICategoryProductSortAdapterItemClicked categoryProductSortAdapterItemClicked)
+	public CategoryAdapter(Context context, List<ProductSortInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.categoryProductSortAdapterItemClicked = categoryProductSortAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -38,9 +38,9 @@ public class CategoryAdapter extends BaseUserAdapter<ProductSortInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new CategoryViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_category, null);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_label);
+			viewHolder = new CategoryViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -49,25 +49,21 @@ public class CategoryAdapter extends BaseUserAdapter<ProductSortInfo>
 		}
 		final ProductSortInfo productSortInfo = list.get(position);
 		viewHolder.tvName.setText(productSortInfo.getName());
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (categoryProductSortAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					categoryProductSortAdapterItemClicked.onProductSortClicked(v, productSortInfo);
+					iItemClick.onProductSortClicked(v, productSortInfo);
 				}
-			}
-		});
-		//		if (position == 0)
-		//		{
-		//			LogcatTools.debug("getView", "convertView:" + convertView);
-		//		}
+			});
+		}
 		return convertView;
 	}
 
-	public interface ICategoryProductSortAdapterItemClicked
+	public interface IItemClick
 	{
 		void onProductSortClicked(View view, ProductSortInfo productSortInfo);
 	}
@@ -75,6 +71,11 @@ public class CategoryAdapter extends BaseUserAdapter<ProductSortInfo>
 	public class CategoryViewHolder
 	{
 		public TextView tvName;
+
+		public void viewInit(View convertView)
+		{
+			tvName = (TextView) convertView.findViewById(R.id.tv_label);
+		}
 
 		public void clear()
 		{

@@ -19,7 +19,7 @@
     <string name="time_error">时间有问题</string>
     <string name="drawer_open">打开</string>
     <string name="drawer_close">关闭</string>
-    <string name="contacts_num">共<xliff:g id="num">%s</xliff:g>位联系人</string>
+    <string name="contacts_num">共<xliff:g id="num">%d</xliff:g>位联系人</string>
     <string name="text_incoming_call">来电</string>
     <string name="text_outgoing_call">去电</string>
     <string name="text_missed_call">未接</string>
@@ -131,6 +131,10 @@
     <string name="title_activity_point_order_add">订单信息</string>
     <!-- 积分商品订单列表Activity -->
     <string name="title_activity_point_order_list">积分订单列表</string>
+    <!-- 微店商品列表Activity -->
+    <string name="title_activity_shop_products">微店商品</string>
+    <!-- 微店列表Activity -->
+    <string name="title_activity_shop_list">微店列表</string>
     <string name="dialog_title_bug_level">日志记录级别</string>
     <string name="auto_update_log">自动上报错误日志</string>
     <string name="log_tips">提示：日志级别越高记录的信息越详细，可以让开发者更全面的定位错误，但记录的越详细相应的日志文件则越大，建议选择级别3</string>

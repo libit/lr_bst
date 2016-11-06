@@ -39,8 +39,9 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_primary"
+            android:background="@drawable/bg_btn_common"
             android:text="立即购买"
+            android:textColor="@color/white"
             android:textSize="16sp"/>
         <Button
             android:id="@+id/btn_add_cart"
@@ -51,8 +52,9 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:background="@drawable/btn_primary"
+            android:background="@drawable/bg_btn_common"
             android:text="加入购物车"
+            android:textColor="@color/white"
             android:textSize="16sp"/>
         <ImageView
             android:id="@+id/btn_go_cart"

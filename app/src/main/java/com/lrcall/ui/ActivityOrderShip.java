@@ -129,34 +129,25 @@ public class ActivityOrderShip extends MyBaseActivity implements View.OnClickLis
 	{
 		if (url.endsWith(ApiConfig.SHOP_ORDER_SHIP))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "发货成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
 				setResult(RESULT_OK);
 				finish();
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "发货成功！");
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "发货失败：" + msg);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_EXPRESS_LIST))
 		{
+			List<String> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<String> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<String>>()
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<String>>()
 				{
 				}.getType());
-				refreshExpressList(list);
 			}
+			refreshExpressList(list);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_SHOP_ORDER_EXPRESS_INFO))

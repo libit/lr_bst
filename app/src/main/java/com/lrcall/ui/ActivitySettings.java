@@ -10,21 +10,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
-import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UpdateService;
+import com.lrcall.enums.AutoAnswerType;
 import com.lrcall.ui.dialog.DialogCommon;
 import com.lrcall.ui.dialog.DialogSettingAutoAnswer;
 import com.lrcall.ui.dialog.DialogSettingBugLevel;
-import com.lrcall.utils.ConstValues;
-import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.apptools.AppFactory;
 
-public class ActivitySettings extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
+public class ActivitySettings extends MyBaseActivity implements View.OnClickListener
 {
 	private ImageView ivIsDebug;
 	private TextView tvVersion, tvAutoAnswerStatus;
@@ -35,6 +31,7 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		viewInit();
+		initData();
 	}
 
 	@Override
@@ -44,6 +41,19 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 		setBackButton();
 		ivIsDebug = (ImageView) findViewById(R.id.app_setting_debug_value);
 		tvVersion = (TextView) findViewById(R.id.app_setting_current_version);
+		tvVersion.setText(AppFactory.getInstance().getVersionName());
+		tvAutoAnswerStatus = (TextView) findViewById(R.id.tv_auto_answer_status);
+		findViewById(R.id.layout_debug).setOnClickListener(this);
+		findViewById(R.id.layout_about).setOnClickListener(this);
+		findViewById(R.id.layout_auto_answer).setOnClickListener(this);
+		findViewById(R.id.layout_advice).setOnClickListener(this);
+		findViewById(R.id.layout_bug_level).setOnClickListener(this);
+		findViewById(R.id.layout_update).setOnClickListener(this);
+		findViewById(R.id.layout_more_app).setOnClickListener(this);
+	}
+
+	private void initData()
+	{
 		if (PreferenceUtils.getInstance().getBooleanValue(PreferenceUtils.IS_DEBUG))
 		{
 			ivIsDebug.setImageResource(R.drawable.btn_checked);
@@ -52,14 +62,8 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 		{
 			ivIsDebug.setImageResource(R.drawable.btn_nocheck);
 		}
-		tvVersion.setText(AppFactory.getInstance().getVersionName());
-		findViewById(R.id.layout_debug).setOnClickListener(this);
-		findViewById(R.id.layout_about).setOnClickListener(this);
-		findViewById(R.id.layout_auto_answer).setOnClickListener(this);
-		findViewById(R.id.layout_advice).setOnClickListener(this);
-		findViewById(R.id.layout_bug_level).setOnClickListener(this);
-		findViewById(R.id.layout_update).setOnClickListener(this);
-		findViewById(R.id.layout_more_app).setOnClickListener(this);
+		int answerType = PreferenceUtils.getInstance().getIntegerValue(PreferenceUtils.PREF_CALLBACK_AUTO_ANSWER_KEY);
+		tvAutoAnswerStatus.setText(AutoAnswerType.getTypeDesc(answerType));
 	}
 
 	@Override
@@ -93,6 +97,7 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 					@Override
 					public void onOkClick()
 					{
+						initData();
 					}
 
 					@Override
@@ -123,42 +128,5 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 				break;
 			}
 		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == ConstValues.REQUEST_REGISTER)
-		{
-			if (resultCode == ConstValues.RESULT_REGISTER_SUCCESS)
-			{
-				setResult(ConstValues.RESULT_LOGIN_SUCCESS);
-				finish();
-			}
-			else
-			{
-				setResult(ConstValues.RESULT_LOGIN_ERROR);
-				finish();
-			}
-		}
-	}
-
-	@Override
-	public boolean onAjaxDataResponse(String url, String result, AjaxStatus status)
-	{
-		if (url.endsWith(ApiConfig.USER_LOGIN))
-		{
-			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
-			{
-				setResult(ConstValues.RESULT_LOGIN_SUCCESS);
-				finish();
-			}
-			else
-			{
-				setResult(ConstValues.RESULT_LOGIN_ERROR);
-			}
-		}
-		return true;
 	}
 }

@@ -26,23 +26,14 @@
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:minWidth="100dp"
-                    android:text="充值金额："
+                    android:text="充值金额(单位：元)："
                     android:textColor="@color/black"
-                    android:textSize="24sp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:minWidth="100dp"
-                    android:text="(单位：元)"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"/>
+                    android:textSize="20sp"/>
                 <EditText
                     android:id="@+id/et_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:background="@null"
                     android:gravity="center"
                     android:hint="请输入充值金额"
@@ -64,11 +55,10 @@
                 <Button
                     android:id="@+id/btn_recharge"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_primary"
-                    android:text="充值"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_btn_common"
+                    android:text="去充值"
+                    android:textColor="@color/white"
                     android:textSize="18sp"/>
             </LinearLayout>
         </LinearLayout>

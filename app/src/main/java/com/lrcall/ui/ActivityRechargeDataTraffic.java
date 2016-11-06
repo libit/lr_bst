@@ -45,9 +45,10 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 	private View layoutRechargeOnline, layoutRechargeCard, layoutBtnOnline, layoutBtnCard, ivOnline, ivCard;
 	private TextView tvOnline, tvCard, tvValidate;
 	private EditText etNumber, etCardId, etCardPwd;
-	private DataTrafficAdapter dataTrafficAdapter;
+	private DataTrafficAdapter mDataTrafficAdapter;
 	private DataTrafficService mDataTrafficService;
 	private DataTrafficOrderService mDataTrafficOrderService;
+	private UserService mUserService;
 	private final List<DataTrafficInfo> mDataTrafficInfoList = new ArrayList<>();
 
 	@Override
@@ -55,16 +56,15 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recharge_data_traffic);
-		viewInit();
 		mDataTrafficService = new DataTrafficService(this);
 		mDataTrafficService.addDataResponse(this);
 		mDataTrafficOrderService = new DataTrafficOrderService(this);
 		mDataTrafficOrderService.addDataResponse(this);
-		refreshData();
-		UserService userService = new UserService(this);
-		userService.addDataResponse(this);
-		userService.getUserInfo("请稍后...", false);
-		userService.getUserBalanceInfo(null, false);
+		mUserService = new UserService(this);
+		mUserService.addDataResponse(this);
+		viewInit();
+		onRefresh();
+		mUserService.getUserInfo("请稍后...", false);
 	}
 
 	@Override
@@ -177,7 +177,7 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 	public void refreshData()
 	{
 		mDataTrafficInfoList.clear();
-		dataTrafficAdapter = null;
+		mDataTrafficAdapter = null;
 		loadMoreData();
 	}
 
@@ -203,9 +203,9 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 		{
 			mDataTrafficInfoList.add(dataTrafficInfo);
 		}
-		if (dataTrafficAdapter == null)
+		if (mDataTrafficAdapter == null)
 		{
-			dataTrafficAdapter = new DataTrafficAdapter(this, mDataTrafficInfoList, new DataTrafficAdapter.IDataTrafficAdapterItemClicked()
+			mDataTrafficAdapter = new DataTrafficAdapter(this, mDataTrafficInfoList, new DataTrafficAdapter.IItemClick()
 			{
 				@Override
 				public void onDataTrafficClicked(final DataTrafficInfo dataTrafficInfo)
@@ -238,19 +238,14 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 										}
 										else
 										{
-											String msg = result;
-											if (returnInfo != null)
-											{
-												msg = returnInfo.getErrmsg();
-											}
-											ToastView.showCenterToast(ActivityRechargeDataTraffic.this, R.drawable.ic_do_fail, "下单失败，错误信息：" + msg);
+											showServerMsg(result, null);
 										}
 										return true;
 									}
 									return false;
 								}
 							});
-							dataTrafficOrderService.addOrder(dataTrafficInfo.getProductId(), 1, number, null, null, "正在下单，请稍后...", false);
+							dataTrafficOrderService.addOrder(dataTrafficInfo.getProductId(), 1, number, null, null, "正在下单，请稍后...", true);
 							finish();
 						}
 
@@ -262,11 +257,11 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 					}, "提示", "确定要为" + number + "充值吗？", true, false, true).show();
 				}
 			});
-			xListView.setAdapter(dataTrafficAdapter);
+			xListView.setAdapter(mDataTrafficAdapter);
 		}
 		else
 		{
-			dataTrafficAdapter.notifyDataSetChanged();
+			mDataTrafficAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -285,14 +280,15 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_DATA_TRAFFIC_LIST))
 		{
+			List<DataTrafficInfo> dataTrafficInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<DataTrafficInfo> dataTrafficInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<DataTrafficInfo>>()
+				dataTrafficInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<DataTrafficInfo>>()
 				{
 				}.getType());
-				refreshDataTraffics(dataTrafficInfoList);
 			}
+			refreshDataTraffics(dataTrafficInfoList);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_USER_INFO))
@@ -303,6 +299,7 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 				etNumber.setText(userInfo.getNumber());
 				etNumber.setEnabled(false);
 			}
+			mUserService.getUserBalanceInfo(null, false);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_USER_BALANCE_INFO))
@@ -322,41 +319,12 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 		}
 		else if (url.endsWith(ApiConfig.DATA_TRAFFIC_RECHARGE_BY_CARD))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				//"充值成功，请等待管理员处理！"
-				ToastView.showCenterToast(this, R.drawable.ic_done, returnInfo.getErrmsg());
-				etCardId.setText("");
-				etCardPwd.setText("");
-			}
-			else
-			{
-				String msg = "充值失败！";
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, msg);
-			}
+			showServerMsg(result, "充值成功，请等待管理员处理！");
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_PACKAGE_DATA_TRAFFIC))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, returnInfo.getErrmsg());
-			}
-			else
-			{
-				String msg = "申领失败！";
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, msg);
-			}
+			showServerMsg(result, "申领成功！");
 			return true;
 		}
 		return false;

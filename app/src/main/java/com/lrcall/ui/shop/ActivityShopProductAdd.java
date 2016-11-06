@@ -2,7 +2,7 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui;
+package com.lrcall.ui.shop;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -28,6 +28,7 @@ import com.lrcall.appbst.services.PicService;
 import com.lrcall.appbst.services.ShopProductService;
 import com.lrcall.appbst.services.ShopService;
 import com.lrcall.enums.NeedExpress;
+import com.lrcall.ui.MyBaseActivity;
 import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.GsonTools;
@@ -37,9 +38,9 @@ import com.lrcall.utils.StringTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityProductAdd extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
+public class ActivityShopProductAdd extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
-	private static final String TAG = ActivityProductAdd.class.getSimpleName();
+	private static final String TAG = ActivityShopProductAdd.class.getSimpleName();
 	private EditText etName, etPrice, etPoint, etMarketPrice, etExpressPrice, etAgentShare, etAddShare, etCount, etSortIndex, etDesc, etConfig, etContent;
 	private CheckBox cbNeedExpress;
 	private ImageView ivProduct;
@@ -54,12 +55,12 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_product_add);
+		setContentView(R.layout.activity_shop_product_add);
 		mShopProductService = new ShopProductService(this);
 		mShopProductService.addDataResponse(this);
 		viewInit();
-		mShopProductService.getProductSortList(null, 0, -1, null, null, false, null, false);
-		mShopProductService.getBrandList(null, 0, -1, null, null, false, null, false);
+		mShopProductService.getProductSortList(null, 0, -1, null, null, null, false);
+		mShopProductService.getBrandList(null, 0, -1, null, null, null, false);
 	}
 
 	@Override
@@ -209,21 +210,11 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 	{
 		if (url.endsWith(ApiConfig.SHOP_ADD_PRODUCT))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "添加商品成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
 				setResult(RESULT_OK);
 				finish();
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "添加商品成功！");
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "添加商品失败：" + msg);
 			}
 			return true;
 		}
@@ -287,13 +278,7 @@ public class ActivityProductAdd extends MyBaseActivity implements View.OnClickLi
 			}
 			else
 			{
-				String msg = result;
-				ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "上传图片失败:" + msg);
+				showServerMsg(result, null);
 			}
 			return true;
 		}

@@ -27,19 +27,6 @@ import java.util.Map;
 public class BugService extends BaseService
 {
 	private static final String TAG = BugService.class.getSimpleName();
-	//	private static BugService instance = null;
-	//	public static BugService getInstance(Context context)
-	//	{
-	//		if (instance == null)
-	//		{
-	//			instance = new BugService(context);
-	//		}
-	//		else
-	//		{
-	//			instance.context = context;
-	//		}
-	//		return instance;
-	//	}
 
 	public BugService(Context context)
 	{
@@ -49,28 +36,19 @@ public class BugService extends BaseService
 	/**
 	 * 提交BUG信息
 	 */
-	public void submitBug(String tips, final boolean needServiceProcessData)
+	public void uploadLogFile(String tips, final boolean needServiceProcessData)
 	{
-		LogcatTools.debug(TAG, "提交BUG信息");
 		String path = PreferenceUtils.getInstance().getStringValue(PreferenceUtils.PREF_CRASH_FILE);
 		if (StringTools.isNull(path))
 		{
 			return;
 		}
-		String ext = "";
-		if (path.lastIndexOf(".") > -1)
-		{
-			ext = path.substring(path.lastIndexOf(".") + 1);
-		}
-		LogcatTools.debug(TAG, "日志ext:" + ext);
 		File file = new File(FileTools.getDir(AppConfig.getLogcatFolder()) + "/" + path);
 		if (file.exists())
 		{
 			Map<String, Object> params = new HashMap<>();
 			params.put("upload", file);
-			//			params.put("uploadFileFileName", Build.MODEL + "_" + new Random().nextInt() % 10 + "_" + file.getName());//+ Build.DISPLAY + "_"
 			ajaxStringCallback(ApiConfig.UPLOAD_DEBUG_FILE, params, tips, needServiceProcessData);
-			LogcatTools.debug(TAG, "正在上传日志");
 		}
 		else
 		{
@@ -79,11 +57,11 @@ public class BugService extends BaseService
 	}
 
 	/**
-	 * 提交BUG信息
+	 * 提交日志
 	 */
-	public void submitBug2(File file, String url, String tips, final boolean needServiceProcessData)
+	public void uploadLog(File file, String url, String tips, final boolean needServiceProcessData)
 	{
-		final String bug = new FileTools().readFile(file);
+		final String bug = FileTools.readFile(file);
 		String content = bug;
 		if (StringTools.isNull(bug))
 		{
@@ -112,7 +90,6 @@ public class BugService extends BaseService
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				//				ToastView.showCenterToast(context, "日志已提交！");
 				LogcatTools.debug(TAG, "日志已提交！");
 			}
 			else
@@ -132,7 +109,7 @@ public class BugService extends BaseService
 					return;
 				}
 				File file = new File(FileTools.getDir(AppConfig.getLogcatFolder()) + "/" + path);
-				submitBug2(file, returnInfo.getErrmsg(), null, true);
+				uploadLog(file, returnInfo.getErrmsg(), null, true);
 			}
 		}
 	}

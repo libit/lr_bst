@@ -90,7 +90,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_weight="1"
             android:gravity="left"
             android:text="选择支付方式："
             android:textColor="@color/black"
@@ -112,13 +111,14 @@
     <Button
         android:id="@+id/btn_upgrade"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/btn_primary"
+        android:background="@drawable/bg_btn_common"
         android:text="确定升级"
+        android:textColor="@color/white"
         android:textSize="18sp"
         android:visibility="gone"/>
 </LinearLayout>

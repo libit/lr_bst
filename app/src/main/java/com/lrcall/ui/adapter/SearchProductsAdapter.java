@@ -27,12 +27,12 @@ import java.util.List;
  */
 public class SearchProductsAdapter extends BaseUserAdapter<ProductInfo>
 {
-	protected final IProductsAdapterItemClicked iProductsAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public SearchProductsAdapter(Context context, List<ProductInfo> list, IProductsAdapterItemClicked iProductsAdapterItemClicked)
+	public SearchProductsAdapter(Context context, List<ProductInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iProductsAdapterItemClicked = iProductsAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -45,13 +45,9 @@ public class SearchProductsAdapter extends BaseUserAdapter<ProductInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new SearchProductViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_search_product, null);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_label);
-			viewHolder.tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
-			viewHolder.tvMarketPrice = (TextView) convertView.findViewById(R.id.tv_market_price);
-			viewHolder.tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+			viewHolder = new SearchProductViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -66,21 +62,21 @@ public class SearchProductsAdapter extends BaseUserAdapter<ProductInfo>
 		viewHolder.tvName.setText(productInfo.getName());
 		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(productInfo.getPrice()));
 		viewHolder.tvMarketPrice.setText("￥" + StringTools.getPrice(productInfo.getMarketPrice()));
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (iProductsAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					iProductsAdapterItemClicked.onProductClicked(productInfo);
+					iItemClick.onProductClicked(productInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
-	public interface IProductsAdapterItemClicked
+	public interface IItemClick
 	{
 		void onProductClicked(ProductInfo productInfo);
 	}
@@ -91,6 +87,15 @@ public class SearchProductsAdapter extends BaseUserAdapter<ProductInfo>
 		public TextView tvName;
 		public TextView tvPrice;
 		public TextView tvMarketPrice;
+
+		public void viewInit(View convertView)
+		{
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			tvName = (TextView) convertView.findViewById(R.id.tv_label);
+			tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+			tvMarketPrice = (TextView) convertView.findViewById(R.id.tv_market_price);
+			tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+		}
 
 		public void clear()
 		{

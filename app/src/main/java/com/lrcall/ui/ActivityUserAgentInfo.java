@@ -11,12 +11,12 @@ import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.UserAgentInfo;
 import com.lrcall.appbst.models.UserApplyAgentInfo;
 import com.lrcall.appbst.models.UserInfo;
@@ -45,6 +45,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 	private static final String TAG = ActivityUserAgentInfo.class.getSimpleName();
 	private TextView tvType, tvApplyStatus;
 	private ImageView ivHead;
+	private Button btnUpgrade;
 	private ViewPager viewPager;
 	private SmartTabLayout viewPagerTab;
 	private SectionsPagerAdapter sectionsPagerAdapter;
@@ -53,6 +54,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 	private UserAgentService mUserAgentService;
 	private byte userType = -1;
 	private UserAgentInfo mUserAgentInfo;
+	private boolean bFirst = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -81,8 +83,13 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 	protected void onResume()
 	{
 		super.onResume();
-		mUserService.getUserInfo("请稍后...", false);
-		mUserAgentService.getUserLastApplyAgentInfo(null, false);
+		String tips = null;
+		if (bFirst)
+		{
+			tips = "请稍后...";
+		}
+		bFirst = false;
+		mUserService.getUserInfo(tips, false);
 	}
 
 	@Override
@@ -115,7 +122,8 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 				return false;
 			}
 		});
-		findViewById(R.id.btn_upgrade).setOnClickListener(this);
+		btnUpgrade = (Button) findViewById(R.id.btn_upgrade);
+		btnUpgrade.setOnClickListener(this);
 	}
 
 	//设置图片适配器
@@ -153,7 +161,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 					public void onOkClick(byte agentType, String provinceId, String cityId, String countryId)
 					{
 						LogcatTools.debug("DialogSelectArea", "provinceId:" + provinceId + ",cityId:" + cityId + ",countryId:" + countryId);
-						mUserAgentService.applyAgent(agentType, provinceId, cityId, countryId, "正在申请,请稍后...", false);
+						mUserAgentService.applyAgent(agentType, provinceId, cityId, countryId, "正在申请,请稍后...", true);
 					}
 
 					@Override
@@ -180,25 +188,13 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 				{
 					mUserAgentService.getUserAgentInfo(null, false);
 				}
+				mUserAgentService.getUserLastApplyAgentInfo(null, false);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.USER_APPLY_AGENT))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, returnInfo.getErrmsg());
-			}
-			else
-			{
-				String msg = "申请失败：" + result;
-				if (returnInfo != null)
-				{
-					msg = "申请失败：" + returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, msg);
-			}
+			showServerMsg(result, null);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_USER_AGENT_INFO))
@@ -235,12 +231,14 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 				if (userApplyAgentInfo.getStatus() == UserApplyStatus.VERIFY_FAIL.getStatus())
 				{
 					tvApplyStatus.setVisibility(View.VISIBLE);
+					btnUpgrade.setVisibility(View.VISIBLE);
 					tvApplyStatus.setText(String.format("申请 %s %s %s代理未通过!", userApplyAgentInfo.getProvinceId(), userApplyAgentInfo.getCityId(), userApplyAgentInfo.getCountryId()));
 					return true;
 				}
 				else if (userApplyAgentInfo.getStatus() == UserApplyStatus.APPLY.getStatus())
 				{
 					tvApplyStatus.setVisibility(View.VISIBLE);
+					btnUpgrade.setVisibility(View.GONE);
 					tvApplyStatus.setText(String.format("正在申请 %s %s %s代理!", userApplyAgentInfo.getProvinceId(), userApplyAgentInfo.getCityId(), userApplyAgentInfo.getCountryId()));
 					return true;
 				}

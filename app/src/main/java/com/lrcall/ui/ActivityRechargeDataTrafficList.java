@@ -6,6 +6,9 @@ package com.lrcall.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
@@ -32,9 +35,10 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 {
 	public static final int REQ_PAY = 1005;
 	private static final String TAG = ActivityRechargeDataTrafficList.class.getSimpleName();
+	private View layoutRechargeDataTrafficList, layoutNoRechargeDataTraffic;
 	private DataTrafficOrderService mDataTrafficOrderService;
 	private List<DataTrafficOrderInfo> mDataTrafficOrderInfoList = new ArrayList<>();
-	private DataTrafficOrderAdapter dataTrafficOrderAdapter;
+	private DataTrafficOrderAdapter mDataTrafficOrderAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -44,7 +48,26 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 		mDataTrafficOrderService = new DataTrafficOrderService(this);
 		mDataTrafficOrderService.addDataResponse(this);
 		viewInit();
-		refreshData();
+		onRefresh();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.menu_activity_recharge_data_traffic_list, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		int id = item.getItemId();
+		if (id == R.id.action_refresh)
+		{
+			onRefresh();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -52,6 +75,8 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 	{
 		super.viewInit();
 		setBackButton();
+		layoutRechargeDataTrafficList = findViewById(R.id.layout_log_list);
+		layoutNoRechargeDataTraffic = findViewById(R.id.layout_no_log);
 		xListView = (XListView) findViewById(R.id.xlist);
 		xListView.setPullRefreshEnable(true);
 		xListView.setPullLoadEnable(true);
@@ -62,14 +87,15 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 	public void refreshData()
 	{
 		mDataTrafficOrderInfoList.clear();
-		dataTrafficOrderAdapter = null;
+		mDataTrafficOrderAdapter = null;
 		loadMoreData();
 	}
 
 	@Override
 	public void loadMoreData()
 	{
-		mDataTrafficOrderService.getOrderInfoList(mDataStart, getPageSize(), "正在加载，请稍后...", false);
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
+		mDataTrafficOrderService.getOrderInfoList(mDataStart, getPageSize(), tips, false);
 	}
 
 	//刷新数据
@@ -78,8 +104,15 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 		if (dataTrafficInfoList == null || dataTrafficInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
+			if (mDataTrafficOrderInfoList.size() < 1)
+			{
+				layoutRechargeDataTrafficList.setVisibility(View.GONE);
+				layoutNoRechargeDataTraffic.setVisibility(View.VISIBLE);
+			}
 			return;
 		}
+		layoutRechargeDataTrafficList.setVisibility(View.VISIBLE);
+		layoutNoRechargeDataTraffic.setVisibility(View.GONE);
 		if (dataTrafficInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
@@ -88,9 +121,9 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 		{
 			mDataTrafficOrderInfoList.add(dataTrafficInfo);
 		}
-		if (dataTrafficOrderAdapter == null)
+		if (mDataTrafficOrderAdapter == null)
 		{
-			dataTrafficOrderAdapter = new DataTrafficOrderAdapter(this, mDataTrafficOrderInfoList, new DataTrafficOrderAdapter.IDataTrafficOrderAdapter()
+			mDataTrafficOrderAdapter = new DataTrafficOrderAdapter(this, mDataTrafficOrderInfoList, new DataTrafficOrderAdapter.IItemClick()
 			{
 				@Override
 				public void onOrderClicked(DataTrafficOrderInfo dataTrafficOrderInfo)
@@ -100,41 +133,47 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 				@Override
 				public void onOrderPayClicked(DataTrafficOrderInfo dataTrafficOrderInfo)
 				{
-					Intent intent = new Intent(ActivityRechargeDataTrafficList.this, ActivityPayList.class);
-					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_DATA_TRAFFIC_ORDER, dataTrafficOrderInfo.getTotalPrice(), "流量订单" + dataTrafficOrderInfo.getOrderId() + "支付", dataTrafficOrderInfo.getOrderId())));
-					startActivityForResult(intent, REQ_PAY);
+					if (dataTrafficOrderInfo != null)
+					{
+						Intent intent = new Intent(ActivityRechargeDataTrafficList.this, ActivityPayList.class);
+						intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_DATA_TRAFFIC_ORDER, dataTrafficOrderInfo.getTotalPrice(), "流量订单" + dataTrafficOrderInfo.getOrderId() + "支付", dataTrafficOrderInfo.getOrderId())));
+						startActivityForResult(intent, REQ_PAY);
+					}
 				}
 
 				@Override
 				public void onOrderCancelClicked(final DataTrafficOrderInfo dataTrafficOrderInfo)
 				{
-					new DialogCommon(ActivityRechargeDataTrafficList.this, new DialogCommon.LibitDialogListener()
+					if (dataTrafficOrderInfo != null)
 					{
-						@Override
-						public void onOkClick()
+						new DialogCommon(ActivityRechargeDataTrafficList.this, new DialogCommon.LibitDialogListener()
 						{
-							if (dataTrafficOrderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
+							@Override
+							public void onOkClick()
 							{
-								mDataTrafficOrderService.deleteOrder(dataTrafficOrderInfo.getOrderId(), "正在取消订单，请稍后...", false);
+								if (dataTrafficOrderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
+								{
+									mDataTrafficOrderService.deleteOrder(dataTrafficOrderInfo.getOrderId(), "正在取消订单，请稍后...", false);
+								}
+								else
+								{
+									ToastView.showCenterToast(ActivityRechargeDataTrafficList.this, R.drawable.ic_do_fail, "订单已生效，不能取消！");
+								}
 							}
-							else
-							{
-								ToastView.showCenterToast(ActivityRechargeDataTrafficList.this, R.drawable.ic_do_fail, "订单已生效，不能取消！");
-							}
-						}
 
-						@Override
-						public void onCancelClick()
-						{
-						}
-					}, getString(R.string.title_warning), "确定要取消订单吗？", true, false, true).show();
+							@Override
+							public void onCancelClick()
+							{
+							}
+						}, getString(R.string.title_warning), "确定要取消订单吗？", true, false, true).show();
+					}
 				}
 			});
-			xListView.setAdapter(dataTrafficOrderAdapter);
+			xListView.setAdapter(mDataTrafficOrderAdapter);
 		}
 		else
 		{
-			dataTrafficOrderAdapter.notifyDataSetChanged();
+			mDataTrafficOrderAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -145,14 +184,15 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_DATA_TRAFFIC_ORDER_LIST))
 		{
+			List<DataTrafficOrderInfo> dataTrafficOrderInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<DataTrafficOrderInfo> dataTrafficOrderInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<DataTrafficOrderInfo>>()
+				dataTrafficOrderInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<DataTrafficOrderInfo>>()
 				{
 				}.getType());
-				refreshDataTraffics(dataTrafficOrderInfoList);
 			}
+			refreshDataTraffics(dataTrafficOrderInfoList);
 			return true;
 		}
 		return false;

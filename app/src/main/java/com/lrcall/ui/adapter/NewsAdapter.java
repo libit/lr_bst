@@ -22,12 +22,12 @@ import java.util.List;
  */
 public class NewsAdapter extends BaseUserAdapter<NewsInfo>
 {
-	protected final INewsAdapterItemClicked newsAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public NewsAdapter(Context context, List<NewsInfo> list, INewsAdapterItemClicked newsAdapterItemClicked)
+	public NewsAdapter(Context context, List<NewsInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.newsAdapterItemClicked = newsAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -40,11 +40,9 @@ public class NewsAdapter extends BaseUserAdapter<NewsInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new NewsViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_news, null);
-			viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-			viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_date);
-			viewHolder.tvDesc = (TextView) convertView.findViewById(R.id.tv_desc);
+			viewHolder = new NewsViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -63,21 +61,21 @@ public class NewsAdapter extends BaseUserAdapter<NewsInfo>
 		{
 			convertView.setBackgroundColor(context.getResources().getColor(R.color.read_news_bg));
 		}
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (newsAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					newsAdapterItemClicked.onNewsClicked(v, newsInfo);
+					iItemClick.onNewsClicked(v, newsInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
-	public interface INewsAdapterItemClicked
+	public interface IItemClick
 	{
 		void onNewsClicked(View v, NewsInfo newsInfo);
 	}
@@ -87,6 +85,13 @@ public class NewsAdapter extends BaseUserAdapter<NewsInfo>
 		public TextView tvTitle;
 		public TextView tvDate;
 		public TextView tvDesc;
+
+		public void viewInit(View convertView)
+		{
+			tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+			tvDate = (TextView) convertView.findViewById(R.id.tv_date);
+			tvDesc = (TextView) convertView.findViewById(R.id.tv_desc);
+		}
 
 		public void clear()
 		{

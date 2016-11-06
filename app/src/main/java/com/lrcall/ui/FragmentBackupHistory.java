@@ -53,7 +53,7 @@ public class FragmentBackupHistory extends MyBaseFragment implements IAjaxDataRe
 			{
 				case RESTORE_FINISH:
 				{
-					ToastView.showCenterToast(getContext(), R.drawable.ic_done,"恢复通话记录完成！");
+					ToastView.showCenterToast(getContext(), R.drawable.ic_done, "恢复通话记录完成！");
 					break;
 				}
 			}
@@ -133,7 +133,7 @@ public class FragmentBackupHistory extends MyBaseFragment implements IAjaxDataRe
 				final List<CallLogInfo> callLogInfoList = CallLogsFactory.getInstance().createListSort(CallLogsFactory.getInstance().getCallLogs(getContext()));
 				if (callLogInfoList == null || callLogInfoList.size() < 1)
 				{
-					ToastView.showCenterToast(getContext(),R.drawable.ic_do_fail, "手机通话记录为空！");
+					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail, "手机通话记录为空！");
 					return;
 				}
 				mBackupService.updateHistoryBackupInfos(GsonTools.toJson(callLogInfoList), "正在备份通话记录...", true);
@@ -176,7 +176,7 @@ public class FragmentBackupHistory extends MyBaseFragment implements IAjaxDataRe
 				}.getType());
 				if (callLogInfoList == null || callLogInfoList.size() < 1)
 				{
-					ToastView.showCenterToast(getContext(),R.drawable.ic_do_fail, "服务器通话记录为空！");
+					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail, "服务器通话记录为空！");
 				}
 				else
 				{
@@ -222,14 +222,7 @@ public class FragmentBackupHistory extends MyBaseFragment implements IAjaxDataRe
 			}
 			else
 			{
-				if (returnInfo != null)
-				{
-					ToastView.showCenterToast(getContext(),R.drawable.ic_do_fail, "下载通话记录失败：" + returnInfo.getErrmsg());
-				}
-				else
-				{
-					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail,"下载通话记录失败：" + result);
-				}
+				showServerMsg(result, null);
 			}
 			return true;
 		}

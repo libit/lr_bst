@@ -23,14 +23,13 @@ import com.lrcall.contacts.ContactsFactory;
 import com.lrcall.models.CallLogInfo;
 import com.lrcall.models.ContactInfo;
 import com.lrcall.ui.adapter.ContactsAndCallLogsAdapter;
-import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.utils.CallTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.StringTools;
 
 import java.util.List;
 
-public class ActivitySearchContacts extends MyBaseActivity implements View.OnClickListener, ContactsAndCallLogsAdapter.IContactsAdapterItemClick, ContactsAndCallLogsAdapter.ICallLogsAdapterItemClicked
+public class ActivitySearchContacts extends MyBaseActivity implements View.OnClickListener
 {
 	private static final String TAG = ActivitySearchContacts.class.getSimpleName();
 	private EditText etSearch;
@@ -43,8 +42,6 @@ public class ActivitySearchContacts extends MyBaseActivity implements View.OnCli
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_contacts);
 		viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 	}
 
 	@Override
@@ -109,39 +106,6 @@ public class ActivitySearchContacts extends MyBaseActivity implements View.OnCli
 		}
 	}
 
-	@Override
-	public void onItemClicked(CallLogInfo callLogInfo)
-	{
-		if (callLogInfo != null)
-		{
-			Toast.makeText(this, "点击通话记录" + callLogInfo.getName(), Toast.LENGTH_LONG).show();
-		}
-	}
-
-	@Override
-	public void onCallClicked(CallLogInfo callLogInfo)
-	{
-		if (callLogInfo != null)
-		{
-			ReturnInfo returnInfo = CallTools.makeCall(this, callLogInfo.getNumber());
-			if (!ReturnInfo.isSuccess(returnInfo))
-			{
-				Toast.makeText(this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
-			}
-		}
-	}
-
-	@Override
-	public void onItemClicked(ContactInfo contactInfo)
-	{
-		if (contactInfo != null)
-		{
-			Intent intent = new Intent(this, ActivityContactDetail.class);
-			intent.putExtra(ConstValues.DATA_CONTACT_ID, contactInfo.getContactId());
-			startActivity(intent);
-		}
-	}
-
 	// 隐藏软键盘
 	private void hideSoftPad()
 	{
@@ -172,7 +136,42 @@ public class ActivitySearchContacts extends MyBaseActivity implements View.OnCli
 			{
 				cursor.close();
 			}
-			contactsAndCallLogsAdapter = new ContactsAndCallLogsAdapter(ActivitySearchContacts.this, contactInfoList, callLogInfoList, ActivitySearchContacts.this, ActivitySearchContacts.this);
+			contactsAndCallLogsAdapter = new ContactsAndCallLogsAdapter(ActivitySearchContacts.this, contactInfoList, callLogInfoList, new ContactsAndCallLogsAdapter.IContactsAdapterItemClick()
+			{
+				@Override
+				public void onItemClicked(ContactInfo contactInfo)
+				{
+					if (contactInfo != null)
+					{
+						Intent intent = new Intent(ActivitySearchContacts.this, ActivityContactDetail.class);
+						intent.putExtra(ConstValues.DATA_CONTACT_ID, contactInfo.getContactId());
+						startActivity(intent);
+					}
+				}
+			}, new ContactsAndCallLogsAdapter.ICallLogsAdapterItemClick()
+			{
+				@Override
+				public void onItemClicked(CallLogInfo callLogInfo)
+				{
+					if (callLogInfo != null)
+					{
+						Toast.makeText(ActivitySearchContacts.this, "点击通话记录" + callLogInfo.getName(), Toast.LENGTH_LONG).show();
+					}
+				}
+
+				@Override
+				public void onCallClicked(CallLogInfo callLogInfo)
+				{
+					if (callLogInfo != null)
+					{
+						ReturnInfo returnInfo = CallTools.makeCall(ActivitySearchContacts.this, callLogInfo.getNumber());
+						if (!ReturnInfo.isSuccess(returnInfo))
+						{
+							Toast.makeText(ActivitySearchContacts.this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+						}
+					}
+				}
+			});
 			return contactInfoList;
 		}
 

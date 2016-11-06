@@ -2,7 +2,7 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui;
+package com.lrcall.ui.shop;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +19,7 @@ import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ShopService;
 import com.lrcall.enums.ShopAuthStatus;
 import com.lrcall.enums.ShopLevel;
+import com.lrcall.ui.MyBaseActivity;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.GsonTools;
@@ -96,22 +97,22 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 			}
 			case R.id.layout_add_product:
 			{
-				startActivity(new Intent(this, ActivityProductAdd.class));
+				startActivity(new Intent(this, ActivityShopProductAdd.class));
 				break;
 			}
 			case R.id.layout_agent_products_manage:
 			{
-				startActivity(new Intent(this, ActivityShopAgentProductsManage.class));
+				startActivity(new Intent(this, ActivityShopAgentProductManage.class));
 				break;
 			}
 			case R.id.layout_products_manage:
 			{
-				startActivity(new Intent(this, ActivityShopProductsManage.class));
+				startActivity(new Intent(this, ActivityShopProductManage.class));
 				break;
 			}
 			case R.id.layout_orders_manage:
 			{
-				startActivity(new Intent(this, ActivityShopOrdersManage.class));
+				startActivity(new Intent(this, ActivityShopOrderManage.class));
 				break;
 			}
 			case R.id.layout_profits_list:

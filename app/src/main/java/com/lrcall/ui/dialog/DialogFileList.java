@@ -18,7 +18,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DialogFileList extends Dialog implements FileListAdapter.IFileListAdapter
+public class DialogFileList extends Dialog implements FileListAdapter.IItemClick
 {
 	private ListView listView;
 	private FileListAdapter adapter;

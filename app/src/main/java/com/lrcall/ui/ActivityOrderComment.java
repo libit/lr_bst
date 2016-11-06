@@ -72,54 +72,35 @@ public class ActivityOrderComment extends MyBaseActivity implements IAjaxDataRes
 	{
 		if (url.endsWith(ApiConfig.GET_ORDER_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			final OrderInfo orderInfo = GsonTools.getReturnObject(result, OrderInfo.class);
+			if (orderInfo != null)
 			{
-				final OrderInfo orderInfo = GsonTools.getReturnObject(result, OrderInfo.class);
-				if (orderInfo != null)
+				mOrderCommentAdapter = new OrderCommentAdapter(this, orderInfo.getOrderProductInfoList(), new OrderCommentAdapter.IItemClick()
 				{
-					mOrderCommentAdapter = new OrderCommentAdapter(this, orderInfo.getOrderProductInfoList(), new OrderCommentAdapter.IOrderCommentAdapter()
+					@Override
+					public void onSubmit(String productId, int rate, String content)
 					{
-						@Override
-						public void onSubmit(String productId, int rate, String content)
+						if (StringTools.isNull(content))
 						{
-							if (StringTools.isNull(content))
-							{
-								content = "用户未发言，系统默认好评！";
-							}
-							mOrderProductCommentService.addProductCommentInfo(orderInfo.getOrderId(), productId, content, (byte) rate, rate, "请稍后...", true);
+							content = "用户未发言，系统默认好评！";
 						}
-					});
-					lvProductComment.setAdapter(mOrderCommentAdapter);
-				}
+						mOrderProductCommentService.addProductCommentInfo(orderInfo.getOrderId(), productId, content, (byte) rate, rate, "请稍后...", true);
+					}
+				});
+				lvProductComment.setAdapter(mOrderCommentAdapter);
 			}
 			else
 			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				Toast.makeText(this, "查询订单失败：" + msg, Toast.LENGTH_LONG).show();
+				showServerMsg(result, null);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.ADD_PRODUCT_COMMENT))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "评价成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				Toast.makeText(this, "评价成功！", Toast.LENGTH_LONG).show();
 				finish();
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				Toast.makeText(this, "评价失败：" + msg, Toast.LENGTH_LONG).show();
 			}
 			return true;
 		}

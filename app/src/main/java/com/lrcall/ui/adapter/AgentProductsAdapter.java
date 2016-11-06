@@ -27,12 +27,12 @@ import java.util.List;
  */
 public class AgentProductsAdapter extends BaseUserAdapter<ShopProductAgentInfo>
 {
-	protected final IAgentProductsAdapterItemClicked iAgentProductsAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public AgentProductsAdapter(Context context, List<ShopProductAgentInfo> list, IAgentProductsAdapterItemClicked iAgentProductsAdapterItemClicked)
+	public AgentProductsAdapter(Context context, List<ShopProductAgentInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iAgentProductsAdapterItemClicked = iAgentProductsAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -45,13 +45,9 @@ public class AgentProductsAdapter extends BaseUserAdapter<ShopProductAgentInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new SearchProductViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_agent_product, null);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_label);
-			viewHolder.tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
-			viewHolder.tvMarketPrice = (TextView) convertView.findViewById(R.id.tv_market_price);
-			viewHolder.tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+			viewHolder = new SearchProductViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -64,21 +60,21 @@ public class AgentProductsAdapter extends BaseUserAdapter<ShopProductAgentInfo>
 		viewHolder.tvName.setText(shopProductAgentInfo.getProductInfo().getName());
 		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(shopProductAgentInfo.getProductInfo().getPrice()));
 		viewHolder.tvMarketPrice.setText("￥" + StringTools.getPrice(shopProductAgentInfo.getProductInfo().getMarketPrice()));
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (iAgentProductsAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					iAgentProductsAdapterItemClicked.onProductClicked(shopProductAgentInfo);
+					iItemClick.onProductClicked(shopProductAgentInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
-	public interface IAgentProductsAdapterItemClicked
+	public interface IItemClick
 	{
 		void onProductClicked(ShopProductAgentInfo shopProductAgentInfo);
 	}
@@ -89,6 +85,15 @@ public class AgentProductsAdapter extends BaseUserAdapter<ShopProductAgentInfo>
 		public TextView tvName;
 		public TextView tvPrice;
 		public TextView tvMarketPrice;
+
+		public void viewInit(View convertView)
+		{
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			tvName = (TextView) convertView.findViewById(R.id.tv_label);
+			tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+			tvMarketPrice = (TextView) convertView.findViewById(R.id.tv_market_price);
+			tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+		}
 
 		public void clear()
 		{

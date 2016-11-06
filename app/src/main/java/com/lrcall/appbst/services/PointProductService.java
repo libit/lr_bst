@@ -31,7 +31,7 @@ public class PointProductService extends BaseService
 	 * @param tips
 	 * @param needServiceProcessData
 	 */
-	public void getPointProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
+	public void getPointProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);

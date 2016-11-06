@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -87,6 +86,7 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 	private final List<ProductInfo> mRecommendProductInfoList = new ArrayList<>();
 	private SmartTabLayout viewPagerTab;
 	private SectionsPagerAdapter sectionsPagerAdapter;
+	private View layoutNoProduct;
 	private final Handler mHandler = new Handler()
 	{
 		@Override
@@ -206,7 +206,7 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 		viewInit();
 		updateView();
 		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList());
-		refreshData();
+		onRefresh();
 	}
 
 	@Override
@@ -235,24 +235,12 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 		setBackButton();
 		layoutSearch = findViewById(R.id.layout_search);
 		etSearch = (EditText) findViewById(R.id.et_search);
-		//		etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener()
-		//		{
-		//			@Override
-		//			public void onFocusChange(View v, boolean hasFocus)
-		//			{
-		//				if (v.getId() == etSearch.getId() && hasFocus)
-		//				{
-		//					startActivity(new Intent(ActivityPointProductShop.this, ActivitySearchProducts.class));
-		//					v.clearFocus();
-		//				}
-		//			}
-		//		});
 		etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener()
 		{
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
 			{
-				if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND || event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+				if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)//actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
 				{
 					onRefresh();
 					return true;
@@ -300,6 +288,7 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 		gvNewProducts.setNumColumns(NEW_PRODUCT_COLUMNS_NUM);
 		findViewById(R.id.tv_new_product_more).setOnClickListener(this);
 		findViewById(R.id.btn_search).setOnClickListener(this);
+		layoutNoProduct = findViewById(R.id.layout_no_product);
 	}
 
 	//设置图片适配器
@@ -322,6 +311,8 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 	@Override
 	synchronized public void refreshData()
 	{
+		mNewProductInfoList.clear();
+		mPointProductsAdapter = null;
 		mBannerService.getBannerInfoList(0, RECOMMEND_COUNT, null, true);
 		//获取新闻
 		//		mNewsService.getNewsInfoList(null, true);
@@ -335,15 +326,7 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 	synchronized public void loadMoreData()
 	{
 		String condition = etSearch.getText().toString();
-		mPointProductService.getPointProductList(condition, mDataStart, getPageSize(), null, null, false, null, true);
-	}
-
-	@Override
-	synchronized public void onRefresh()
-	{
-		mNewProductInfoList.clear();
-		mPointProductsAdapter = null;
-		super.onRefresh();
+		mPointProductService.getPointProductList(condition, mDataStart, getPageSize(), null, null, null, true);
 	}
 
 	synchronized private void refreshNewProducts(List<PointProductInfo> pointProductInfoList)
@@ -351,28 +334,36 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 		if (pointProductInfoList == null || pointProductInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
+			if (mNewProductInfoList.size() < 1)
+			{
+				gvNewProducts.setVisibility(View.GONE);
+				layoutNoProduct.setVisibility(View.VISIBLE);
+			}
+			return;
 		}
-		else
+		gvNewProducts.setVisibility(View.VISIBLE);
+		layoutNoProduct.setVisibility(View.GONE);
+		if (pointProductInfoList.size() < getPageSize())
 		{
-			if (pointProductInfoList.size() < getPageSize())
-			{
-				xListView.setPullLoadEnable(false);
-			}
-			for (PointProductInfo pointProductInfo : pointProductInfoList)
-			{
-				mNewProductInfoList.add(pointProductInfo);
-			}
+			xListView.setPullLoadEnable(false);
+		}
+		for (PointProductInfo pointProductInfo : pointProductInfoList)
+		{
+			mNewProductInfoList.add(pointProductInfo);
 		}
 		if (mPointProductsAdapter == null)
 		{
-			mPointProductsAdapter = new PointProductsAdapter(this, mNewProductInfoList, new PointProductsAdapter.IPointProductsAdapter()
+			mPointProductsAdapter = new PointProductsAdapter(this, mNewProductInfoList, new PointProductsAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(PointProductInfo pointProductInfo)
 				{
-					Intent intent = new Intent(ActivityPointProductShop.this, ActivityPointProduct.class);
-					intent.putExtra(ConstValues.DATA_PRODUCT_ID, pointProductInfo.getProductId());
-					startActivity(intent);
+					if (pointProductInfo != null)
+					{
+						Intent intent = new Intent(ActivityPointProductShop.this, ActivityPointProduct.class);
+						intent.putExtra(ConstValues.DATA_PRODUCT_ID, pointProductInfo.getProductId());
+						startActivity(intent);
+					}
 				}
 			});
 			gvNewProducts.setAdapter(mPointProductsAdapter);
@@ -398,38 +389,50 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 		}
 		if (indexRecommendProductsAdapter == null)
 		{
-			indexRecommendProductsAdapter = new IndexRecommendProducts4Adapter(this, mRecommendProductInfoList, new IndexRecommendProducts4Adapter.IRecommendProductsAdapter()
+			indexRecommendProductsAdapter = new IndexRecommendProducts4Adapter(this, mRecommendProductInfoList, new IndexRecommendProducts4Adapter.IItemClick()
 			{
 				@Override
 				public void onProduct1Clicked(ProductInfo productInfo)
 				{
-					Intent intent = new Intent(ActivityPointProductShop.this, ActivityProduct.class);
-					intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
-					startActivity(intent);
+					if (productInfo != null)
+					{
+						Intent intent = new Intent(ActivityPointProductShop.this, ActivityProduct.class);
+						intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
+						startActivity(intent);
+					}
 				}
 
 				@Override
 				public void onProduct2Clicked(ProductInfo productInfo)
 				{
-					Intent intent = new Intent(ActivityPointProductShop.this, ActivityProduct.class);
-					intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
-					startActivity(intent);
+					if (productInfo != null)
+					{
+						Intent intent = new Intent(ActivityPointProductShop.this, ActivityProduct.class);
+						intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
+						startActivity(intent);
+					}
 				}
 
 				@Override
 				public void onProduct3Clicked(ProductInfo productInfo)
 				{
-					Intent intent = new Intent(ActivityPointProductShop.this, ActivityProduct.class);
-					intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
-					startActivity(intent);
+					if (productInfo != null)
+					{
+						Intent intent = new Intent(ActivityPointProductShop.this, ActivityProduct.class);
+						intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
+						startActivity(intent);
+					}
 				}
 
 				@Override
 				public void onProduct4Clicked(ProductInfo productInfo)
 				{
-					Intent intent = new Intent(ActivityPointProductShop.this, ActivityProduct.class);
-					intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
-					startActivity(intent);
+					if (productInfo != null)
+					{
+						Intent intent = new Intent(ActivityPointProductShop.this, ActivityProduct.class);
+						intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
+						startActivity(intent);
+					}
 				}
 			});
 			lvRecommendProducts.setAdapter(indexRecommendProductsAdapter);
@@ -546,18 +549,15 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 		}
 		else if (url.endsWith(ApiConfig.GET_POINT_PRODUCT_LIST))
 		{
+			List<PointProductInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<PointProductInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<PointProductInfo>>()
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<PointProductInfo>>()
 				{
 				}.getType());
-				refreshNewProducts(list);
 			}
-			else
-			{
-				refreshNewProducts(null);
-			}
+			refreshNewProducts(list);
 		}
 		else if (url.endsWith(ApiConfig.GET_BANNER_LIST))
 		{

@@ -10,12 +10,10 @@ import android.widget.EditText;
 
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.CallbackService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.ui.customer.ToastView;
-import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
 
 public class ActivityCallbackRecharge extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
@@ -76,20 +74,7 @@ public class ActivityCallbackRecharge extends MyBaseActivity implements View.OnC
 	{
 		if (url.endsWith(ApiConfig.CALLBACK_RECHARGE))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "充值成功!");
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "充值失败:" + msg);
-			}
+			showServerMsg(result, "充值成功!");
 			return true;
 		}
 		return false;

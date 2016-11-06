@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.androidquery.callback.AjaxStatus;
@@ -24,7 +23,6 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ProductService;
 import com.lrcall.ui.adapter.SearchProductsAdapter;
-import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
@@ -35,8 +33,8 @@ import java.util.List;
 public class ActivitySearchProducts extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivitySearchProducts.class.getSimpleName();
+	private View layoutProductList, layoutNoProduct;
 	private EditText etSearch;
-	private ListView lvSearchHistory;
 	private SearchProductsAdapter searchProductsAdapter;
 	private String mSortId;
 	private ProductService mProductService;
@@ -51,37 +49,29 @@ public class ActivitySearchProducts extends MyBasePageActivity implements View.O
 		viewInit();
 		mProductService = new ProductService(this);
 		mProductService.addDataResponse(this);
-		if (!StringTools.isNull(mSortId))
-		{
-			mProductService.getProductList(mSortId, mDataStart, getPageSize(), null, null, false, null, true);
-		}
-		else
-		{
-			refreshData();
-		}
+		onRefresh();
 	}
 
 	@Override
 	protected void viewInit()
 	{
 		super.viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
+		layoutProductList = findViewById(R.id.layout_search_result);
+		layoutNoProduct = findViewById(R.id.layout_no_product);
 		xListView = (XListView) findViewById(R.id.xlist);
 		xListView.setPullRefreshEnable(true);
 		xListView.setPullLoadEnable(true);
 		xListView.setXListViewListener(this);
-		lvSearchHistory = (ListView) findViewById(R.id.list_search_history);
 		etSearch = (EditText) findViewById(R.id.et_search);
 		etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener()
 		{
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
 			{
-				if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND || event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+				if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND || (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
 				{
-					search();
+					onRefresh();
 					return true;
 				}
 				return false;
@@ -107,11 +97,11 @@ public class ActivitySearchProducts extends MyBasePageActivity implements View.O
 		String condition = etSearch.getText().toString();
 		if (!StringTools.isNull(mSortId))
 		{
-			mProductService.getProductList(mSortId, mDataStart, getPageSize(), null, null, false, null, true);
+			mProductService.getProductList(mSortId, mDataStart, getPageSize(), null, null, null, true);
 		}
 		else
 		{
-			mProductService.getProductList(condition, mDataStart, getPageSize(), null, null, false, null, true);
+			mProductService.getProductList(condition, mDataStart, getPageSize(), null, null, null, true);
 		}
 	}
 
@@ -122,7 +112,7 @@ public class ActivitySearchProducts extends MyBasePageActivity implements View.O
 		{
 			case R.id.search_icon:
 			{
-				search();
+				onRefresh();
 				break;
 			}
 			case R.id.search_del:
@@ -138,20 +128,6 @@ public class ActivitySearchProducts extends MyBasePageActivity implements View.O
 		}
 	}
 
-	//开始搜索
-	private void search()
-	{
-		String condition = etSearch.getText().toString();
-		if (!StringTools.isNull(condition))
-		{
-			onRefresh();
-		}
-		else
-		{
-			xListView.setAdapter(null);
-		}
-	}
-
 	// 隐藏软键盘
 	private void hideSoftPad()
 	{
@@ -164,8 +140,15 @@ public class ActivitySearchProducts extends MyBasePageActivity implements View.O
 		if (productInfoList == null || productInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
+			if (mProductInfoList.size() < 1)
+			{
+				layoutProductList.setVisibility(View.GONE);
+				layoutNoProduct.setVisibility(View.VISIBLE);
+			}
 			return;
 		}
+		layoutProductList.setVisibility(View.VISIBLE);
+		layoutNoProduct.setVisibility(View.GONE);
 		if (productInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
@@ -176,14 +159,17 @@ public class ActivitySearchProducts extends MyBasePageActivity implements View.O
 		}
 		if (searchProductsAdapter == null)
 		{
-			searchProductsAdapter = new SearchProductsAdapter(this, mProductInfoList, new SearchProductsAdapter.IProductsAdapterItemClicked()
+			searchProductsAdapter = new SearchProductsAdapter(this, mProductInfoList, new SearchProductsAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(ProductInfo productInfo)
 				{
-					Intent intent = new Intent(ActivitySearchProducts.this, ActivityProduct.class);
-					intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
-					startActivity(intent);
+					if (productInfo != null)
+					{
+						Intent intent = new Intent(ActivitySearchProducts.this, ActivityProduct.class);
+						intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
+						startActivity(intent);
+					}
 				}
 			});
 			xListView.setAdapter(searchProductsAdapter);
@@ -201,14 +187,15 @@ public class ActivitySearchProducts extends MyBasePageActivity implements View.O
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_PRODUCT_LIST))
 		{
+			List<ProductInfo> productInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<ProductInfo> productInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductInfo>>()
+				productInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductInfo>>()
 				{
 				}.getType());
-				refreshProducts(productInfoList);
 			}
+			refreshProducts(productInfoList);
 		}
 		return false;
 	}

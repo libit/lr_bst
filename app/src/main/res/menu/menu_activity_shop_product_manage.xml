@@ -7,8 +7,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_refresh"
+        android:orderInCategory="100"
+        android:title="刷新"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/action_add_product"
-        android:icon="@drawable/bg_btn_add"
+        android:icon="@drawable/ic_add_white_normal"
         android:orderInCategory="100"
         android:title="添加"
         app:showAsAction="always"/>

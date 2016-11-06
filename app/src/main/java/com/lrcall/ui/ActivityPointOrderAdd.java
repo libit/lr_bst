@@ -169,7 +169,7 @@ public class ActivityPointOrderAdd extends MyBaseActivity implements View.OnClic
 						tvExpressPrice.setText(String.format("￥%s", StringTools.getPrice(expressPrice)));
 						totalPrice = expressPrice;
 						tvTotalPrice.setText(String.format("￥%s", StringTools.getPrice(totalPrice)));
-						PointOrderProductsAdapter orderProductsAdapter = new PointOrderProductsAdapter(ActivityPointOrderAdd.this, mOrderProductInfoArrayList, new PointOrderProductsAdapter.IOrderProductsAdapter()
+						PointOrderProductsAdapter orderProductsAdapter = new PointOrderProductsAdapter(ActivityPointOrderAdd.this, mOrderProductInfoArrayList, new PointOrderProductsAdapter.IItemClick()
 						{
 							@Override
 							public void onProductClicked(PointProductInfo pointProductInfo)
@@ -293,10 +293,10 @@ public class ActivityPointOrderAdd extends MyBaseActivity implements View.OnClic
 	{
 		if (url.endsWith(ApiConfig.ADD_POINT_ORDER))
 		{
+			showServerMsg(result, "下单成功！");
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				Toast.makeText(this, "下单成功！", Toast.LENGTH_LONG).show();
 				finish();
 				if (isNeedExpress && expressPrice > 0)
 				{
@@ -305,10 +305,6 @@ public class ActivityPointOrderAdd extends MyBaseActivity implements View.OnClic
 					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_POINT_ORDER, totalPrice, "订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg())));
 					startActivity(intent);
 				}
-			}
-			else
-			{
-				showServerMsg(result);
 			}
 			return true;
 		}

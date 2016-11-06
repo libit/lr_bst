@@ -5,6 +5,8 @@
 package com.lrcall.ui;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.androidquery.callback.AjaxStatus;
@@ -17,15 +19,15 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.CallbackService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.ui.adapter.CallbackRechargeLogsAdapter;
-import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.utils.GsonTools;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityCallbackRechargeLogList extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
+public class ActivityCallbackRechargeLogList extends MyBasePageActivity implements IAjaxDataResponse
 {
 	private static final String TAG = ActivityCallbackRechargeLogList.class.getSimpleName();
+	private View layoutRechargeLogList, layoutNoRechargeLog;
 	private CallbackRechargeLogsAdapter mCallbackRechargeLogsAdapter;
 	private CallbackService mCallbackService;
 	private final List<CallbackRechargeLogInfo> mCallbackRechargeLogInfoList = new ArrayList<>();
@@ -38,16 +40,35 @@ public class ActivityCallbackRechargeLogList extends MyBasePageActivity implemen
 		mCallbackService = new CallbackService(this);
 		mCallbackService.addDataResponse(this);
 		viewInit();
-		refreshData();
+		onRefresh();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.menu_activity_recharge_log_list, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		int id = item.getItemId();
+		if (id == R.id.action_refresh)
+		{
+			onRefresh();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	protected void viewInit()
 	{
 		super.viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
+		layoutRechargeLogList = findViewById(R.id.layout_recharge_log_list);
+		layoutNoRechargeLog = findViewById(R.id.layout_no_recharge_log);
 		xListView = (XListView) findViewById(R.id.xlist);
 		xListView.setPullRefreshEnable(true);
 		xListView.setPullLoadEnable(true);
@@ -67,19 +88,8 @@ public class ActivityCallbackRechargeLogList extends MyBasePageActivity implemen
 	@Override
 	public void loadMoreData()
 	{
-		mCallbackService.getRechargeLogList(mDataStart, getPageSize(), null, true);
-	}
-
-	@Override
-	public void onClick(View v)
-	{
-		switch (v.getId())
-		{
-			case R.id.search_icon:
-			{
-				break;
-			}
-		}
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
+		mCallbackService.getRechargeLogList(mDataStart, getPageSize(), null, null, tips, true);
 	}
 
 	synchronized private void refreshRechargeLogs(List<CallbackRechargeLogInfo> callbackRechargeLogInfoList)
@@ -87,8 +97,15 @@ public class ActivityCallbackRechargeLogList extends MyBasePageActivity implemen
 		if (callbackRechargeLogInfoList == null || callbackRechargeLogInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
+			if (mCallbackRechargeLogInfoList.size() < 1)
+			{
+				layoutRechargeLogList.setVisibility(View.GONE);
+				layoutNoRechargeLog.setVisibility(View.VISIBLE);
+			}
 			return;
 		}
+		layoutRechargeLogList.setVisibility(View.VISIBLE);
+		layoutNoRechargeLog.setVisibility(View.GONE);
 		if (callbackRechargeLogInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
@@ -99,7 +116,7 @@ public class ActivityCallbackRechargeLogList extends MyBasePageActivity implemen
 		}
 		if (mCallbackRechargeLogsAdapter == null)
 		{
-			mCallbackRechargeLogsAdapter = new CallbackRechargeLogsAdapter(this, mCallbackRechargeLogInfoList, new CallbackRechargeLogsAdapter.ICallbackRechargeLogsAdapterItemClicked()
+			mCallbackRechargeLogsAdapter = new CallbackRechargeLogsAdapter(this, mCallbackRechargeLogInfoList, new CallbackRechargeLogsAdapter.IItemClick()
 			{
 				@Override
 				public void onItemClicked(CallbackRechargeLogInfo callbackRechargeLogInfo)
@@ -121,14 +138,15 @@ public class ActivityCallbackRechargeLogList extends MyBasePageActivity implemen
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.CALLBACK_GET_RECHARGE_LOG_LIST))
 		{
+			List<CallbackRechargeLogInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<CallbackRechargeLogInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<CallbackRechargeLogInfo>>()
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<CallbackRechargeLogInfo>>()
 				{
 				}.getType());
-				refreshRechargeLogs(list);
 			}
+			refreshRechargeLogs(list);
 		}
 		return false;
 	}

@@ -252,21 +252,17 @@ public class UserService extends BaseService
 	{
 		if (url.endsWith(ApiConfig.USER_LOGIN))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			//登录成功，保存账号和SessionId
+			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
+			if (userInfo != null)
 			{
-				//登录成功，保存账号和SessionId
-				UserInfo userInfo = GsonTools.getReturnObject(returnInfo, UserInfo.class);
-				if (userInfo != null)
+				PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
+				PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
+				if (userInfo.getPicInfo() != null)
 				{
-					PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
-					PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
-					if (userInfo.getPicInfo() != null)
-					{
-						getUserHead(userInfo.getPicInfo().getPicUrl(), null, true);
-					}
-					EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
+					getUserHead(userInfo.getPicInfo().getPicUrl(), null, true);
 				}
+				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
 			}
 			else
 			{
@@ -277,19 +273,15 @@ public class UserService extends BaseService
 		}
 		else if (url.endsWith(ApiConfig.USER_REGISTER))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			//注册成功，保存账号和SessionId
+			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
+			if (userInfo != null)
 			{
-				//注册成功，保存账号和SessionId
-				UserInfo userInfo = GsonTools.getReturnObject(returnInfo, UserInfo.class);
-				if (userInfo != null)
-				{
-					PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
-					PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
-					EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
-					//注册回拨功能
-					registerCallback(null, true);
-				}
+				PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
+				PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
+				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
+				//注册回拨功能
+				registerCallback(null, true);
 			}
 			else
 			{
@@ -328,11 +320,10 @@ public class UserService extends BaseService
 		}
 		else if (url.endsWith(ApiConfig.USER_CHANGE_PWD))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			//修改成功，保存SessionId
+			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
+			if (userInfo != null)
 			{
-				//修改成功，保存SessionId
-				UserInfo userInfo = GsonTools.getReturnObject(returnInfo, UserInfo.class);
 				PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
 			}
@@ -368,6 +359,23 @@ public class UserService extends BaseService
 			//				}
 			//				ToastView.showCenterToast(context, R.drawable.ic_do_fail, msg);
 			//			}
+		}
+		else if (url.endsWith(ApiConfig.USER_RESET_PWD))
+		{
+			//重置成功，保存SessionId
+			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
+			if (userInfo != null)
+			{
+				PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
+				PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
+				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
+			}
+			else
+			{
+				PreferenceUtils.getInstance().setUsername("");
+				PreferenceUtils.getInstance().setSessionId("");
+				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGOUT));
+			}
 		}
 	}
 

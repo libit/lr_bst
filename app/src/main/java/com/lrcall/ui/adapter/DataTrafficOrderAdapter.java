@@ -23,12 +23,12 @@ import java.util.List;
  */
 public class DataTrafficOrderAdapter extends BaseUserAdapter<DataTrafficOrderInfo>
 {
-	protected final IDataTrafficOrderAdapter iDataTrafficOrderAdapter;
+	protected final IItemClick iItemClick;
 
-	public DataTrafficOrderAdapter(Context context, List<DataTrafficOrderInfo> list, IDataTrafficOrderAdapter iDataTrafficOrderAdapter)
+	public DataTrafficOrderAdapter(Context context, List<DataTrafficOrderInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iDataTrafficOrderAdapter = iDataTrafficOrderAdapter;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -41,16 +41,9 @@ public class DataTrafficOrderAdapter extends BaseUserAdapter<DataTrafficOrderInf
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new DataTrafficOrderViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_data_traffic_order, null);
-			viewHolder.tvOrderId = (TextView) convertView.findViewById(R.id.tv_order_id);
-			viewHolder.tvOrderStatus = (TextView) convertView.findViewById(R.id.tv_order_status);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-			viewHolder.tvMoney = (TextView) convertView.findViewById(R.id.tv_money);
-			viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.tv_number);
-			viewHolder.tvComment = (TextView) convertView.findViewById(R.id.tv_comment);
-			viewHolder.tvPayDate = (TextView) convertView.findViewById(R.id.tv_pay_date);
-			viewHolder.tvRechargeDate = (TextView) convertView.findViewById(R.id.tv_recharge_date);
+			viewHolder = new DataTrafficOrderViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -85,29 +78,26 @@ public class DataTrafficOrderAdapter extends BaseUserAdapter<DataTrafficOrderInf
 		{
 			viewHolder.tvOrderStatus.setText(DataTrafficOrderType.WAIT_PAY.getDesc());
 			convertView.findViewById(R.id.btn_order_pay).setVisibility(View.VISIBLE);
-			convertView.findViewById(R.id.btn_order_pay).setOnClickListener(new View.OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					if (iDataTrafficOrderAdapter != null)
-					{
-						iDataTrafficOrderAdapter.onOrderPayClicked(dataTrafficOrderInfo);
-					}
-				}
-			});
 			convertView.findViewById(R.id.btn_cancel_order).setVisibility(View.VISIBLE);
-			convertView.findViewById(R.id.btn_cancel_order).setOnClickListener(new View.OnClickListener()
+			if (iItemClick != null)
 			{
-				@Override
-				public void onClick(View v)
+				convertView.findViewById(R.id.btn_order_pay).setOnClickListener(new View.OnClickListener()
 				{
-					if (iDataTrafficOrderAdapter != null)
+					@Override
+					public void onClick(View v)
 					{
-						iDataTrafficOrderAdapter.onOrderCancelClicked(dataTrafficOrderInfo);
+						iItemClick.onOrderPayClicked(dataTrafficOrderInfo);
 					}
-				}
-			});
+				});
+				convertView.findViewById(R.id.btn_cancel_order).setOnClickListener(new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						iItemClick.onOrderCancelClicked(dataTrafficOrderInfo);
+					}
+				});
+			}
 		}
 		else if (dataTrafficOrderInfo.getStatus() == DataTrafficOrderType.PAYED.getStatus())
 		{
@@ -125,21 +115,21 @@ public class DataTrafficOrderAdapter extends BaseUserAdapter<DataTrafficOrderInf
 		{
 			viewHolder.tvOrderStatus.setText(DataTrafficOrderType.DELETED.getDesc());
 		}
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (iDataTrafficOrderAdapter != null)
+				@Override
+				public void onClick(View v)
 				{
-					iDataTrafficOrderAdapter.onOrderClicked(dataTrafficOrderInfo);
+					iItemClick.onOrderClicked(dataTrafficOrderInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
-	public interface IDataTrafficOrderAdapter
+	public interface IItemClick
 	{
 		void onOrderClicked(DataTrafficOrderInfo dataTrafficOrderInfo);
 
@@ -158,6 +148,18 @@ public class DataTrafficOrderAdapter extends BaseUserAdapter<DataTrafficOrderInf
 		public TextView tvPayDate;
 		public TextView tvRechargeDate;
 		public TextView tvOrderStatus;
+
+		public void viewInit(View convertView)
+		{
+			tvOrderId = (TextView) convertView.findViewById(R.id.tv_order_id);
+			tvOrderStatus = (TextView) convertView.findViewById(R.id.tv_order_status);
+			tvName = (TextView) convertView.findViewById(R.id.tv_name);
+			tvMoney = (TextView) convertView.findViewById(R.id.tv_money);
+			tvNumber = (TextView) convertView.findViewById(R.id.tv_number);
+			tvComment = (TextView) convertView.findViewById(R.id.tv_comment);
+			tvPayDate = (TextView) convertView.findViewById(R.id.tv_pay_date);
+			tvRechargeDate = (TextView) convertView.findViewById(R.id.tv_recharge_date);
+		}
 
 		public void clear()
 		{

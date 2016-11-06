@@ -15,12 +15,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:gravity="center_vertical|right"
-            android:minWidth="100dp"
+            android:minWidth="120dp"
             android:text="卡号："
-            android:textColor="@android:color/widget_edittext_dark"
+            android:textColor="@color/black"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/et_card_id"
@@ -44,12 +43,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:gravity="center_vertical|right"
-            android:minWidth="100dp"
+            android:minWidth="120dp"
             android:text="卡密："
-            android:textColor="@android:color/widget_edittext_dark"
+            android:textColor="@color/black"
             android:textSize="18sp"/>
         <EditText
             android:id="@+id/et_card_pwd"
@@ -69,12 +67,13 @@
     <Button
         android:id="@+id/btn_pay"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/btn_primary"
+        android:background="@drawable/bg_btn_common"
         android:text="确定"
+        android:textColor="@color/white"
         android:textSize="18sp"/>
 </LinearLayout>

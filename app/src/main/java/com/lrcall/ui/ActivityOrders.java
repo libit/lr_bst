@@ -17,7 +17,6 @@ import com.lrcall.appbst.R;
 import com.lrcall.enums.OrderStatus;
 import com.lrcall.models.TabInfo;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.utils.ConstValues;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
@@ -26,17 +25,17 @@ import java.util.List;
 
 public class ActivityOrders extends MyBaseActivity
 {
-	private byte orderType;
 	private ViewPager viewPager;
-	private final List<Fragment> fragmentList = new ArrayList<>();
-	private final List<TabInfo> tabInfos = new ArrayList<>();
+	private final List<Fragment> mFragmentList = new ArrayList<>();
+	private final List<TabInfo> mTabInfoList = new ArrayList<>();
+	private byte mOrderType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_orders);
-		orderType = getIntent().getByteExtra(ConstValues.DATA_ORDER_TYPE, OrderStatus.WAIT_PAY.getStatus());
+		mOrderType = getIntent().getByteExtra(ConstValues.DATA_ORDER_TYPE, OrderStatus.WAIT_PAY.getStatus());
 		viewInit();
 	}
 
@@ -44,49 +43,47 @@ public class ActivityOrders extends MyBaseActivity
 	protected void viewInit()
 	{
 		super.viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
-		tabInfos.add(new TabInfo(0, OrderStatus.WAIT_PAY.getDesc(), null));
-		tabInfos.add(new TabInfo(1, OrderStatus.PAYED.getDesc(), null));
-		tabInfos.add(new TabInfo(2, OrderStatus.EXPRESS.getDesc(), null));
-		tabInfos.add(new TabInfo(3, OrderStatus.FINISH.getDesc(), null));
-		fragmentList.add(FragmentOrderList.newInstance(OrderStatus.WAIT_PAY.getStatus()));
-		fragmentList.add(FragmentOrderList.newInstance(OrderStatus.PAYED.getStatus()));
-		fragmentList.add(FragmentOrderList.newInstance(OrderStatus.EXPRESS.getStatus()));
-		fragmentList.add(FragmentOrderList.newInstance(OrderStatus.FINISH.getStatus()));
+		mTabInfoList.add(new TabInfo(0, OrderStatus.WAIT_PAY.getDesc(), null));
+		mTabInfoList.add(new TabInfo(1, OrderStatus.PAYED.getDesc(), null));
+		mTabInfoList.add(new TabInfo(2, OrderStatus.EXPRESS.getDesc(), null));
+		mTabInfoList.add(new TabInfo(3, OrderStatus.FINISH.getDesc(), null));
+		mFragmentList.add(FragmentOrderList.newInstance(OrderStatus.WAIT_PAY.getStatus()));
+		mFragmentList.add(FragmentOrderList.newInstance(OrderStatus.PAYED.getStatus()));
+		mFragmentList.add(FragmentOrderList.newInstance(OrderStatus.EXPRESS.getStatus()));
+		mFragmentList.add(FragmentOrderList.newInstance(OrderStatus.FINISH.getStatus()));
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		final SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-		final LayoutInflater inflater = LayoutInflater.from(viewPagerTab.getContext());
 		viewPagerTab.setCustomTabView(new SmartTabLayout.TabProvider()
 		{
 			@Override
 			public View createTabView(ViewGroup container, int position, PagerAdapter adapter)
 			{
-				TabInfo tabInfo = tabInfos.get(position);
-				View view = inflater.inflate(R.layout.item_product_tab, container, false);
+				TabInfo tabInfo = mTabInfoList.get(position);
+				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_text_tab, container, false);
 				TextView textView = (TextView) view.findViewById(R.id.tab_label);
 				textView.setText(tabInfo.getLabel());
 				tabInfo.setTvLabel(textView);
 				return view;
 			}
 		});
-		SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager(), fragmentList);
+		SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager(), mFragmentList);
 		viewPager.setAdapter(adapter);
 		viewPagerTab.setViewPager(viewPager);
-		if (orderType == OrderStatus.WAIT_PAY.getStatus())
+		viewPager.setOffscreenPageLimit(4);
+		if (mOrderType == OrderStatus.WAIT_PAY.getStatus())
 		{
 			viewPager.setCurrentItem(0);
 		}
-		else if (orderType == OrderStatus.PAYED.getStatus())
+		else if (mOrderType == OrderStatus.PAYED.getStatus())
 		{
 			viewPager.setCurrentItem(1);
 		}
-		else if (orderType == OrderStatus.EXPRESS.getStatus())
+		else if (mOrderType == OrderStatus.EXPRESS.getStatus())
 		{
 			viewPager.setCurrentItem(2);
 		}
-		else if (orderType == OrderStatus.FINISH.getStatus())
+		else if (mOrderType == OrderStatus.FINISH.getStatus())
 		{
 			viewPager.setCurrentItem(3);
 		}

@@ -288,7 +288,7 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 	@Subscribe
 	public void onEventMainThread(CallLogEvent callLogEvent)
 	{
-		if (callLogEvent.getEventType().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_ADD) || callLogEvent.getEventType().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_UPDATE) || callLogEvent.getEventType().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_DELETE))
+		if (callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_ADD) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_UPDATE) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_DELETE))
 		{
 			onRefresh();
 		}
@@ -330,7 +330,7 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 			super.onPostExecute(bAdd);
 			if (mCallLogsAdapter == null || start == 0)
 			{
-				mCallLogsAdapter = new CallLogsAdapter(FragmentDialer2.this.getContext(), mCallLogInfoList, new CallLogsAdapter.ICallLogsAdapterItemClicked()
+				mCallLogsAdapter = new CallLogsAdapter(FragmentDialer2.this.getContext(), mCallLogInfoList, new CallLogsAdapter.IItemClick()
 				{
 					@Override
 					public void onItemClicked(CallLogInfo callLogInfo)
@@ -396,7 +396,7 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 			super.onPostExecute(contactInfoList);
 			//			if (contactInfoList.size() > 0)
 			{
-				mContactsSearchAdapter = new ContactsSearchAdapter(FragmentDialer2.this.getContext(), contactInfoList, new ContactsSearchAdapter.IContactsSearchAdapterItemClick()
+				mContactsSearchAdapter = new ContactsSearchAdapter(FragmentDialer2.this.getContext(), contactInfoList, new ContactsSearchAdapter.IItemClick()
 				{
 					@Override
 					public void onItemClicked(ContactInfo contactInfo)

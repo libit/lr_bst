@@ -26,12 +26,12 @@ import java.util.List;
  */
 public class IndexConcessionProductsAdapter extends BaseUserAdapter<ProductInfo>
 {
-	protected final IConcessionProductsAdapter iConcessionProductsAdapter;
+	protected final IItemClick iItemClick;
 
-	public IndexConcessionProductsAdapter(Context context, List<ProductInfo> list, IConcessionProductsAdapter iConcessionProductsAdapter)
+	public IndexConcessionProductsAdapter(Context context, List<ProductInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iConcessionProductsAdapter = iConcessionProductsAdapter;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -44,11 +44,9 @@ public class IndexConcessionProductsAdapter extends BaseUserAdapter<ProductInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new ProductViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_concession_product, null);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_label);
-			viewHolder.tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+			viewHolder = new ProductViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 			//重设图片宽高
 			ViewGroup.LayoutParams layoutParams = viewHolder.ivHead.getLayoutParams();
@@ -65,21 +63,21 @@ public class IndexConcessionProductsAdapter extends BaseUserAdapter<ProductInfo>
 		PicService.ajaxGetPic(viewHolder.ivHead, ApiConfig.getServerPicUrl(productInfo.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()));
 		viewHolder.tvName.setText(productInfo.getName());
 		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(productInfo.getPrice()));
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (iConcessionProductsAdapter != null)
+				@Override
+				public void onClick(View v)
 				{
-					iConcessionProductsAdapter.onProductClicked(productInfo);
+					iItemClick.onProductClicked(productInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
-	public interface IConcessionProductsAdapter
+	public interface IItemClick
 	{
 		void onProductClicked(ProductInfo productInfo);
 	}
@@ -89,6 +87,13 @@ public class IndexConcessionProductsAdapter extends BaseUserAdapter<ProductInfo>
 		public ImageView ivHead;
 		public TextView tvName;
 		public TextView tvPrice;
+
+		public void viewInit(View convertView)
+		{
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			tvName = (TextView) convertView.findViewById(R.id.tv_label);
+			tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+		}
 
 		public void clear()
 		{

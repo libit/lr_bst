@@ -21,12 +21,12 @@ import java.util.List;
  */
 public class ContactNumbersAdapter extends BaseUserAdapter<ContactInfo.PhoneInfo>
 {
-	private final IContactNumberAdapterItemClicked contactNumberAdapterItemClicked;
+	private final IItemClick iItemClick;
 
-	public ContactNumbersAdapter(Context context, List<ContactInfo.PhoneInfo> list, IContactNumberAdapterItemClicked contactNumberAdapterItemClicked)
+	public ContactNumbersAdapter(Context context, List<ContactInfo.PhoneInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.contactNumberAdapterItemClicked = contactNumberAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -39,11 +39,9 @@ public class ContactNumbersAdapter extends BaseUserAdapter<ContactInfo.PhoneInfo
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new ContactNumberViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_contact_number, null);
-			viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.tv_number);
-			viewHolder.tvType = (TextView) convertView.findViewById(R.id.tv_type);
-			viewHolder.tvLocal = (TextView) convertView.findViewById(R.id.tv_local);
+			viewHolder = new ContactNumberViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -55,33 +53,30 @@ public class ContactNumbersAdapter extends BaseUserAdapter<ContactInfo.PhoneInfo
 		String type = phoneInfo.getType();
 		viewHolder.tvNumber.setText(number);
 		viewHolder.tvType.setText(type);
-		convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
 			{
-				if (contactNumberAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					contactNumberAdapterItemClicked.onCallClicked(phoneInfo);
+					iItemClick.onCallClicked(phoneInfo);
 				}
-			}
-		});
-		convertView.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
+			});
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (contactNumberAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					contactNumberAdapterItemClicked.onItemClicked(phoneInfo);
+					iItemClick.onItemClicked(phoneInfo);
 				}
-			}
-		});
+			});
+		}
 		LocalTools.setLocal(context, viewHolder.tvLocal, number, true);
 		return convertView;
 	}
 
-	public interface IContactNumberAdapterItemClicked
+	public interface IItemClick
 	{
 		void onItemClicked(ContactInfo.PhoneInfo phoneInfo);
 
@@ -93,6 +88,13 @@ public class ContactNumbersAdapter extends BaseUserAdapter<ContactInfo.PhoneInfo
 		public TextView tvNumber;
 		public TextView tvType;
 		public TextView tvLocal;
+
+		public void viewInit(View convertView)
+		{
+			tvNumber = (TextView) convertView.findViewById(R.id.tv_number);
+			tvType = (TextView) convertView.findViewById(R.id.tv_type);
+			tvLocal = (TextView) convertView.findViewById(R.id.tv_local);
+		}
 
 		public void clear()
 		{

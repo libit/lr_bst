@@ -15,7 +15,6 @@ import com.lrcall.appbst.R;
 import com.lrcall.models.CallLogInfo;
 import com.lrcall.ui.customer.LocalTools;
 import com.lrcall.utils.DateTimeTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.List;
@@ -25,12 +24,12 @@ import java.util.List;
  */
 public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 {
-	protected final ICallLogsAdapterItemClicked callLogsAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public CallLogsAdapter(Context context, List<CallLogInfo> list, ICallLogsAdapterItemClicked callLogsAdapterItemClicked)
+	public CallLogsAdapter(Context context, List<CallLogInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.callLogsAdapterItemClicked = callLogsAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -52,9 +51,7 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 		{
 			viewHolder.clear();
 		}
-		LogcatTools.debug("CallLogsAdapter", "数组长度:" + list.size() + ",position1:" + position);
 		final CallLogInfo callLogInfo = list.get(position);
-		LogcatTools.debug("CallLogsAdapter", "position2:" + position);
 		String name = callLogInfo.getName();
 		if (StringTools.isNull(name))
 		{
@@ -65,19 +62,19 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 			name = "未知号码" + name;
 		}
 		String number = callLogInfo.getNumber();
-		viewHolder.ivCallLogType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
+		viewHolder.ivType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
 		viewHolder.tvName.setText(name);
 		viewHolder.tvNumber.setText(number);
 		viewHolder.tvDuration.setText(CallLogInfo.getDurationString(callLogInfo.getDuration()));
 		viewHolder.tvTime.setText(DateTimeTools.getRelativeTimeSpanString(callLogInfo.getDate()));
-		if (callLogsAdapterItemClicked != null)
+		if (iItemClick != null)
 		{
 			convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					callLogsAdapterItemClicked.onCallClicked(callLogInfo);
+					iItemClick.onCallClicked(callLogInfo);
 				}
 			});
 			convertView.setOnClickListener(new View.OnClickListener()
@@ -85,7 +82,7 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 				@Override
 				public void onClick(View v)
 				{
-					callLogsAdapterItemClicked.onItemClicked(callLogInfo);
+					iItemClick.onItemClicked(callLogInfo);
 				}
 			});
 		}
@@ -93,7 +90,7 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 		return convertView;
 	}
 
-	public interface ICallLogsAdapterItemClicked
+	public interface IItemClick
 	{
 		void onItemClicked(CallLogInfo callLogInfo);
 
@@ -102,7 +99,7 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 
 	public static class CallLogViewHolder
 	{
-		public ImageView ivCallLogType;
+		public ImageView ivType;
 		public TextView tvName;
 		public TextView tvNumber;
 		public TextView tvLocal;
@@ -111,7 +108,7 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 
 		public void viewInit(View convertView)
 		{
-			ivCallLogType = (ImageView) convertView.findViewById(R.id.call_log_type_icon);
+			ivType = (ImageView) convertView.findViewById(R.id.call_log_type_icon);
 			tvName = (TextView) convertView.findViewById(R.id.call_log_name);
 			tvNumber = (TextView) convertView.findViewById(R.id.call_log_number);
 			tvLocal = (TextView) convertView.findViewById(R.id.tv_local);
@@ -121,7 +118,7 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 
 		public void clear()
 		{
-			ivCallLogType.setImageBitmap(null);
+			ivType.setImageBitmap(null);
 			tvName.setText("");
 			tvNumber.setText("");
 			tvLocal.setText("");

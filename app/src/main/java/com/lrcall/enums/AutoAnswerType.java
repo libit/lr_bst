@@ -38,4 +38,17 @@ public enum AutoAnswerType
 	{
 		this.desc = desc;
 	}
+
+	public static String getTypeDesc(int type)
+	{
+		AutoAnswerType[] list = AutoAnswerType.values();
+		for (AutoAnswerType autoAnswerType : list)
+		{
+			if (autoAnswerType.getType() == type)
+			{
+				return autoAnswerType.getDesc();
+			}
+		}
+		return "";
+	}
 }

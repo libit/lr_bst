@@ -38,9 +38,8 @@
                 android:id="@+id/iv_menu"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
-                android:padding="10dp"
-                android:src="@drawable/menu"
-                android:visibility="gone"/>
+                android:padding="6dp"
+                android:src="@drawable/menu"/>
             <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="48dp"
@@ -50,7 +49,8 @@
                 android:paddingRight="5dp"
                 android:text="定位中"
                 android:textColor="@color/white"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:visibility="gone"/>
             <EditText
                 android:id="@+id/et_search"
                 android:layout_width="match_parent"

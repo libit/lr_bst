@@ -27,13 +27,13 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 {
 	protected final Context context;
 	protected final List<ProductInfo> list;
-	protected final IRecommendProductsAdapter iRecommendProductsAdapter;
+	protected final IItemClick iItemClick;
 
-	public IndexRecommendProducts4Adapter(Context context, List<ProductInfo> list, IRecommendProductsAdapter iRecommendProductsAdapter)
+	public IndexRecommendProducts4Adapter(Context context, List<ProductInfo> list, IItemClick iItemClick)
 	{
 		this.context = context;
 		this.list = list;
-		this.iRecommendProductsAdapter = iRecommendProductsAdapter;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -65,12 +65,9 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new ProductViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_recommend_product_4, null);
-			viewHolder.ivProduct1 = (ImageView) convertView.findViewById(R.id.iv_product1);
-			viewHolder.ivProduct2 = (ImageView) convertView.findViewById(R.id.iv_product2);
-			viewHolder.ivProduct3 = (ImageView) convertView.findViewById(R.id.iv_product3);
-			viewHolder.ivProduct4 = (ImageView) convertView.findViewById(R.id.iv_product4);
+			viewHolder = new ProductViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 			//重设图片宽高
 			ViewGroup.LayoutParams layoutParams = viewHolder.ivProduct1.getLayoutParams();
@@ -99,14 +96,14 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 			if (productInfo1 != null)
 			{
 				PicService.ajaxGetRoundPic(viewHolder.ivProduct1, ApiConfig.getServerPicUrl(productInfo1.getPicId()), DisplayTools.getWindowWidth(context) - DisplayTools.dip2px(context, 20), DisplayTools.getWindowWidth(context) - DisplayTools.dip2px(context, 20) * 2 / 5, 20, 50);
-				if (iRecommendProductsAdapter != null)
+				if (iItemClick != null)
 				{
 					viewHolder.ivProduct1.setOnClickListener(new View.OnClickListener()
 					{
 						@Override
 						public void onClick(View v)
 						{
-							iRecommendProductsAdapter.onProduct1Clicked(productInfo1);
+							iItemClick.onProduct1Clicked(productInfo1);
 						}
 					});
 				}
@@ -115,14 +112,14 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 			if (productInfo2 != null)
 			{
 				PicService.ajaxGetRoundPic(viewHolder.ivProduct2, ApiConfig.getServerPicUrl(productInfo2.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
-				if (iRecommendProductsAdapter != null)
+				if (iItemClick != null)
 				{
 					viewHolder.ivProduct2.setOnClickListener(new View.OnClickListener()
 					{
 						@Override
 						public void onClick(View v)
 						{
-							iRecommendProductsAdapter.onProduct2Clicked(productInfo2);
+							iItemClick.onProduct2Clicked(productInfo2);
 						}
 					});
 				}
@@ -131,14 +128,14 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 			if (productInfo3 != null)
 			{
 				PicService.ajaxGetRoundPic(viewHolder.ivProduct3, ApiConfig.getServerPicUrl(productInfo3.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
-				if (iRecommendProductsAdapter != null)
+				if (iItemClick != null)
 				{
 					viewHolder.ivProduct3.setOnClickListener(new View.OnClickListener()
 					{
 						@Override
 						public void onClick(View v)
 						{
-							iRecommendProductsAdapter.onProduct3Clicked(productInfo3);
+							iItemClick.onProduct3Clicked(productInfo3);
 						}
 					});
 				}
@@ -147,14 +144,14 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 			if (productInfo4 != null)
 			{
 				PicService.ajaxGetRoundPic(viewHolder.ivProduct4, ApiConfig.getServerPicUrl(productInfo4.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 3);
-				if (iRecommendProductsAdapter != null)
+				if (iItemClick != null)
 				{
 					viewHolder.ivProduct4.setOnClickListener(new View.OnClickListener()
 					{
 						@Override
 						public void onClick(View v)
 						{
-							iRecommendProductsAdapter.onProduct4Clicked(productInfo4);
+							iItemClick.onProduct4Clicked(productInfo4);
 						}
 					});
 				}
@@ -166,7 +163,7 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 		return convertView;
 	}
 
-	public interface IRecommendProductsAdapter
+	public interface IItemClick
 	{
 		void onProduct1Clicked(ProductInfo productInfo);
 
@@ -180,6 +177,14 @@ public class IndexRecommendProducts4Adapter extends BaseAdapter
 	public static class ProductViewHolder
 	{
 		public ImageView ivProduct1, ivProduct2, ivProduct3, ivProduct4;
+
+		public void viewInit(View convertView)
+		{
+			ivProduct1 = (ImageView) convertView.findViewById(R.id.iv_product1);
+			ivProduct2 = (ImageView) convertView.findViewById(R.id.iv_product2);
+			ivProduct3 = (ImageView) convertView.findViewById(R.id.iv_product3);
+			ivProduct4 = (ImageView) convertView.findViewById(R.id.iv_product4);
+		}
 
 		public void clear()
 		{

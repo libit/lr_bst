@@ -49,69 +49,17 @@
                 android:layout_toRightOf="@id/search_icon"
                 android:background="@null"
                 android:gravity="center_vertical|left"
-                android:hint="点击此处搜索产品"
+                android:hint="点击此处搜索订单"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:textSize="16sp"/>
         </RelativeLayout>
     </RelativeLayout>
     <LinearLayout
-        android:id="@+id/layout_search_history"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="搜索历史"/>
-        <ListView
-            android:id="@+id/list_search_history"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/line"
-            android:dividerHeight="0.5dp"/>
-    </LinearLayout>
-    <LinearLayout
         android:id="@+id/layout_search_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="新品上架"
-                android:textSize="14sp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="人气排行"
-                android:textSize="14sp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="价格"
-                android:textSize="14sp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="筛选"
-                android:textSize="14sp"/>
-        </LinearLayout>
         <com.external.xlistview.XListView
             android:id="@+id/xlist"
             android:layout_width="match_parent"
@@ -122,7 +70,21 @@
             android:fastScrollEnabled="false"
             android:footerDividersEnabled="false"
             android:headerDividersEnabled="false"
-            android:scrollbars="none">
-        </com.external.xlistview.XListView>
+            android:scrollbars="none"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_no_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="您还没有订单"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
     </LinearLayout>
 </LinearLayout>

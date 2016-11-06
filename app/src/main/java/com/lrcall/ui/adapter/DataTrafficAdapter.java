@@ -29,12 +29,12 @@ import java.util.List;
  */
 public class DataTrafficAdapter extends BaseUserAdapter<DataTrafficInfo>
 {
-	private final IDataTrafficAdapterItemClicked iDataTrafficAdapterItemClicked;
+	private final IItemClick iItemClick;
 
-	public DataTrafficAdapter(Context context, List<DataTrafficInfo> list, IDataTrafficAdapterItemClicked iDataTrafficAdapterItemClicked)
+	public DataTrafficAdapter(Context context, List<DataTrafficInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iDataTrafficAdapterItemClicked = iDataTrafficAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -47,13 +47,9 @@ public class DataTrafficAdapter extends BaseUserAdapter<DataTrafficInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new DataTrafficViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_data_traffic, null);
-			viewHolder.ivPic = (ImageView) convertView.findViewById(R.id.iv_pic);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-			viewHolder.tvRemark = (TextView) convertView.findViewById(R.id.tv_remark);
-			viewHolder.ivDefault = (ImageView) convertView.findViewById(R.id.iv_default);
-			viewHolder.btnRecharge = (Button) convertView.findViewById(R.id.btn_recharge);
+			viewHolder = new DataTrafficViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -76,7 +72,7 @@ public class DataTrafficAdapter extends BaseUserAdapter<DataTrafficInfo>
 		}
 		else if (dataTrafficInfo.getStatus() == DataTrafficStatus.ENABLED.getStatus())
 		{
-			if (iDataTrafficAdapterItemClicked != null)
+			if (iItemClick != null)
 			{
 				viewHolder.btnRecharge.setOnClickListener(new View.OnClickListener()
 				{
@@ -86,7 +82,7 @@ public class DataTrafficAdapter extends BaseUserAdapter<DataTrafficInfo>
 						//				Intent intent = new Intent(context, ActivityAddressEdit.class);
 						//				intent.putExtra(ConstValues.DATA_ADDRESS_ID, dataTrafficInfo.getAddressId());
 						//				context.startActivity(intent);
-						iDataTrafficAdapterItemClicked.onDataTrafficClicked(dataTrafficInfo);
+						iItemClick.onDataTrafficClicked(dataTrafficInfo);
 					}
 				});
 			}
@@ -102,7 +98,7 @@ public class DataTrafficAdapter extends BaseUserAdapter<DataTrafficInfo>
 		return convertView;
 	}
 
-	public interface IDataTrafficAdapterItemClicked
+	public interface IItemClick
 	{
 		void onDataTrafficClicked(DataTrafficInfo dataTrafficInfo);
 	}
@@ -114,6 +110,15 @@ public class DataTrafficAdapter extends BaseUserAdapter<DataTrafficInfo>
 		public TextView tvName;
 		public TextView tvRemark;
 		public Button btnRecharge;
+
+		public void viewInit(View convertView)
+		{
+			ivPic = (ImageView) convertView.findViewById(R.id.iv_pic);
+			tvName = (TextView) convertView.findViewById(R.id.tv_name);
+			tvRemark = (TextView) convertView.findViewById(R.id.tv_remark);
+			ivDefault = (ImageView) convertView.findViewById(R.id.iv_default);
+			btnRecharge = (Button) convertView.findViewById(R.id.btn_recharge);
+		}
 
 		public void clear()
 		{

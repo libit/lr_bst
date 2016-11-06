@@ -49,8 +49,6 @@ public class ActivityPicView extends MyBaseActivity
 	protected void viewInit()
 	{
 		super.viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		for (String url : mPicUrlList)
 		{
 			fragmentPicList.add(FragmentServerImage.newInstance(url, DisplayTools.getWindowWidth(this), ""));

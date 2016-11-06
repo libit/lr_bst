@@ -36,10 +36,9 @@ public class FuncsVerticalAdapter extends BaseFuncsAdapter
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new FuncViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_func_vertical, null);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_label);
+			viewHolder = new FuncViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -49,17 +48,17 @@ public class FuncsVerticalAdapter extends BaseFuncsAdapter
 		final FuncInfo funcInfo = list.get(position);
 		viewHolder.ivHead.setImageResource(funcInfo.getImgRes());
 		viewHolder.tvName.setText(funcInfo.getLabel());
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (funcsAdapterItemClicked != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (funcsAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
 					funcsAdapterItemClicked.onFuncClicked(funcInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
@@ -67,6 +66,12 @@ public class FuncsVerticalAdapter extends BaseFuncsAdapter
 	{
 		public ImageView ivHead;
 		public TextView tvName;
+
+		public void viewInit(View convertView)
+		{
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			tvName = (TextView) convertView.findViewById(R.id.tv_label);
+		}
 
 		public void clear()
 		{

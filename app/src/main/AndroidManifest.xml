@@ -150,7 +150,7 @@
             android:name="com.lrcall.ui.ActivityProduct"
             android:label="@string/title_activity_product"/>
         <activity
-            android:name="com.lrcall.ui.ActivityStarList"
+            android:name="com.lrcall.ui.ActivityProductStarList"
             android:label="@string/title_activity_star_list"/>
         <activity
             android:name="com.lrcall.ui.ActivityBalanceLog"
@@ -182,6 +182,12 @@
         <activity
             android:name="com.lrcall.ui.ActivityPointOrderList"
             android:label="@string/title_activity_point_order_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityShopProducts"
+            android:label="@string/title_activity_shop_products"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityShopList"
+            android:label="@string/title_activity_shop_list"/>
         <activity
             android:name="com.lrcall.ui.ActivityWebView">
             <!-- 拦截打开网址请求 -->
@@ -268,37 +274,37 @@
             android:label="@string/title_activity_pay_by_shop_card"/>
         <!-- 商家 -->
         <activity
-            android:name="com.lrcall.ui.ActivityShopRegister"
+            android:name="com.lrcall.ui.shop.ActivityShopRegister"
             android:label="@string/title_activity_shop_register"/>
         <activity
-            android:name="com.lrcall.ui.ActivityShopAuth"
+            android:name="com.lrcall.ui.shop.ActivityShopAuth"
             android:label="@string/title_activity_shop_auth"/>
         <activity
-            android:name="com.lrcall.ui.ActivityShopInfo"
+            android:name="com.lrcall.ui.shop.ActivityShopInfo"
             android:label="@string/title_activity_shop_info"/>
         <activity
-            android:name="com.lrcall.ui.ActivityShopProductsManage"
+            android:name="com.lrcall.ui.shop.ActivityShopProductManage"
             android:label="@string/title_activity_shop_products_manage"/>
         <activity
-            android:name="com.lrcall.ui.ActivityProductAdd"
+            android:name="com.lrcall.ui.shop.ActivityShopProductAdd"
             android:label="@string/title_activity_product_add"/>
         <activity
-            android:name="com.lrcall.ui.ActivityProductEdit"
+            android:name="com.lrcall.ui.shop.ActivityShopProductEdit"
             android:label="@string/title_activity_product_edit"/>
         <activity
-            android:name="com.lrcall.ui.ActivityShopOrdersManage"
+            android:name="com.lrcall.ui.shop.ActivityShopOrderManage"
             android:label="@string/title_activity_orders_manage"/>
         <activity
-            android:name="com.lrcall.ui.ActivityShopOrderInfo"
+            android:name="com.lrcall.ui.shop.ActivityShopOrderInfo"
             android:label="@string/title_activity_order_info"/>
         <activity
             android:name="com.lrcall.ui.ActivityOrderShip"
             android:label="@string/title_activity_order_ship"/>
         <activity
-            android:name="com.lrcall.ui.ActivityShopAgentProductsManage"
+            android:name="com.lrcall.ui.shop.ActivityShopAgentProductManage"
             android:label="@string/title_activity_shop_agent_products_manage"/>
         <activity
-            android:name="com.lrcall.ui.ActivityChooseAgentProduct"
+            android:name="com.lrcall.ui.shop.ActivityShopChooseAgentProduct"
             android:label="@string/title_activity_choose_agent_product"/>
 
         <service android:name="com.lrcall.services.AutoAnswerIntentService"/>

@@ -10,7 +10,12 @@ import com.androidquery.callback.AjaxStatus;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.models.ProductHistoryInfo;
 import com.lrcall.appbst.models.TableData;
+import com.lrcall.appbst.models.TableOrderInfo;
+import com.lrcall.appbst.models.TableSearchInfo;
+import com.lrcall.events.ProductEvent;
 import com.lrcall.utils.GsonTools;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,9 +38,12 @@ public class ProductHistoryService extends BaseService
 	 * @param tips                   提示信息
 	 * @param needServiceProcessData
 	 */
-	public void getProductHistoryInfoList(String tips, final boolean needServiceProcessData)
+	public void getProductHistoryInfoList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		params.put("search[value]", condition);
 		params.put("order[0][column]", "4");
 		params.put("columns[4][data]", "update_date_long");
 		params.put("order[0][dir]", "desc");
@@ -110,6 +118,7 @@ public class ProductHistoryService extends BaseService
 			if (productHistoryInfo != null)
 			{
 				//				DbProductStarInfoFactory.getInstance().addOrUpdateProductStarInfo(productStarInfo);
+				EventBus.getDefault().post(new ProductEvent(ProductEvent.EVENT_HISTORY_ADD));
 			}
 		}
 	}

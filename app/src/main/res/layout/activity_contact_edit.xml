@@ -87,8 +87,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
+                android:background="@drawable/bg_btn_common"
                 android:minWidth="160dp"
-                android:text="添加字段"/>
+                android:text="添加字段"
+                android:textColor="@color/white"
+                android:textSize="18sp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

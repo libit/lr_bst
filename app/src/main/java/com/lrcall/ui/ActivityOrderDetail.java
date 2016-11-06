@@ -155,7 +155,7 @@ public class ActivityOrderDetail extends MyBaseActivity implements View.OnClickL
 				totalPrice = expressPrice + productsPrice;
 				tvTotalPrice.setText(String.format("￥%s", StringTools.getPrice(totalPrice)));
 				tvRemark.setText(orderInfo.getComment());
-				OrderProductsAdapter orderProductsAdapter = new OrderProductsAdapter(this, orderInfo.getOrderProductInfoList(), new OrderProductsAdapter.IOrderProductsAdapter()
+				OrderProductsAdapter orderProductsAdapter = new OrderProductsAdapter(this, orderInfo.getOrderProductInfoList(), new OrderProductsAdapter.IItemClick()
 				{
 					@Override
 					public void onProductClicked(ProductInfo productInfo)

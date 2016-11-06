@@ -214,8 +214,7 @@ public class FragmentBackupContact extends MyBaseFragment implements IAjaxDataRe
 		}
 		else if (url.endsWith(ApiConfig.USER_BACKUP_CONTACTS))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
 				mBackupService.getContactBackupInfoCount(null, false);
 			}
@@ -277,14 +276,7 @@ public class FragmentBackupContact extends MyBaseFragment implements IAjaxDataRe
 			}
 			else
 			{
-				if (returnInfo != null)
-				{
-					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail, "下载通讯录失败：" + returnInfo.getErrmsg());
-				}
-				else
-				{
-					ToastView.showCenterToast(getContext(), R.drawable.ic_do_fail, "下载通讯录失败：" + result);
-				}
+				showServerMsg(result, null);
 			}
 			return true;
 		}

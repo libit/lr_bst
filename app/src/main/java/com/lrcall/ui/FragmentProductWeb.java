@@ -115,7 +115,6 @@ public class FragmentProductWeb extends MyBaseFragment implements IAjaxDataRespo
 	private void loadWebData(String data)
 	{
 		//		String html = String.format("<html><body style=\"width:100%;\">%s</body></html>", data);
-		LogcatTools.debug("loadWebData", "data:" + data);
 		webView.loadDataWithBaseURL(ApiConfig.getServerUrl(), data, "text/html", "utf-8", null);
 	}
 

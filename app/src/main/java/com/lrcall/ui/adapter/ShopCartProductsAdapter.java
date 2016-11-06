@@ -35,14 +35,14 @@ import java.util.Map;
  */
 public class ShopCartProductsAdapter extends BaseUserAdapter<ShopCartInfo>
 {
-	protected final IShopCartProductsAdapter iShopCartProductsAdapter;
+	protected final IItemClicked iItemClicked;
 	private Map<ShopCartInfo, CheckBox> checkBoxMap;
 
-	public ShopCartProductsAdapter(Context context, List<ShopCartInfo> list, Map<ShopCartInfo, CheckBox> checkBoxMap, IShopCartProductsAdapter iShopCartProductsAdapter)
+	public ShopCartProductsAdapter(Context context, List<ShopCartInfo> list, Map<ShopCartInfo, CheckBox> checkBoxMap, IItemClicked iItemClicked)
 	{
 		super(context, list);
 		this.checkBoxMap = checkBoxMap;
-		this.iShopCartProductsAdapter = iShopCartProductsAdapter;
+		this.iItemClicked = iItemClicked;
 	}
 
 	@Override
@@ -55,13 +55,9 @@ public class ShopCartProductsAdapter extends BaseUserAdapter<ShopCartInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new ProductViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_shop_cart_product, null);
-			viewHolder.cbSelect = (CheckBox) convertView.findViewById(R.id.cb_select);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_label);
-			viewHolder.tvCount = (TextView) convertView.findViewById(R.id.tv_total);
-			viewHolder.tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+			viewHolder = new ProductViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -114,37 +110,34 @@ public class ShopCartProductsAdapter extends BaseUserAdapter<ShopCartInfo>
 			@Override
 			public void onClick(View v)
 			{
-				//				if (iShopCartProductsAdapter != null)
+				//				if (iItemClicked != null)
 				//				{
-				//					iShopCartProductsAdapter.onProductClicked(productInfo);
+				//					iItemClicked.onProductClicked(productInfo);
 				//				}
 			}
 		});
-		convertView.findViewById(R.id.btn_delete).setOnClickListener(new View.OnClickListener()
+		if (iItemClicked != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.findViewById(R.id.btn_delete).setOnClickListener(new View.OnClickListener()
 			{
-				if (iShopCartProductsAdapter != null)
+				@Override
+				public void onClick(View v)
 				{
-					iShopCartProductsAdapter.onDeleteClicked(shopCartInfo);
+					iItemClicked.onDeleteClicked(shopCartInfo);
 				}
-			}
-		});
-		viewHolder.cbSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-		{
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			});
+			viewHolder.cbSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
 			{
-				if (iShopCartProductsAdapter != null)
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 				{
-					iShopCartProductsAdapter.onCheckClicked(shopCartInfo, productInfo, isChecked);
+					iItemClicked.onCheckClicked(shopCartInfo, productInfo, isChecked);
 				}
-			}
-		});
+			});
+		}
 	}
 
-	public interface IShopCartProductsAdapter
+	public interface IItemClicked
 	{
 		void onProductClicked(ProductInfo productInfo);
 
@@ -160,6 +153,15 @@ public class ShopCartProductsAdapter extends BaseUserAdapter<ShopCartInfo>
 		public TextView tvName;
 		public TextView tvCount;
 		public TextView tvPrice;
+
+		public void viewInit(View convertView)
+		{
+			cbSelect = (CheckBox) convertView.findViewById(R.id.cb_select);
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			tvName = (TextView) convertView.findViewById(R.id.tv_label);
+			tvCount = (TextView) convertView.findViewById(R.id.tv_total);
+			tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+		}
 
 		public void clear()
 		{

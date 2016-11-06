@@ -11,6 +11,7 @@ public class UserEvent
 {
 	public static final String EVENT_LOGINED = "event_logined";
 	public static final String EVENT_LOGOUT = "event_logout";
+	public static final String EVENT_UPGRADE = "event_upgrade";
 	private String event;
 
 	public UserEvent(String event)

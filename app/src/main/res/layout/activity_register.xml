@@ -23,12 +23,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="手机号码："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_username"
@@ -51,12 +50,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="登录密码："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_password"
@@ -82,12 +80,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="确认密码："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_repassword"
@@ -113,12 +110,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="支付密码："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_pay_password"
@@ -144,12 +140,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="确认密码："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_pay_repassword"
@@ -175,12 +170,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="姓名："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_name"
@@ -205,12 +199,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="昵称："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_nickname"
@@ -235,12 +228,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="手机号码："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_number"
@@ -266,12 +258,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="邮箱："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_email"
@@ -293,12 +284,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="推荐人手机号码："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:minWidth="120dp"
+                    android:text="推荐人："
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_referrer"
@@ -320,12 +310,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="验证码："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_code"
@@ -357,11 +346,10 @@
                 <Button
                     android:id="@+id/btn_register"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_primary"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_btn_common"
                     android:text="注册"
+                    android:textColor="@color/white"
                     android:textSize="18sp"/>
             </LinearLayout>
         </LinearLayout>

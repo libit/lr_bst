@@ -21,7 +21,7 @@
         android:background="@color/transparent"
         android:gravity="center_vertical"
         android:padding="8dp"
-        android:src="@drawable/orderdetail_comment_create"/>
+        android:src="@null"/>
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"

@@ -22,8 +22,8 @@ import com.lrcall.utils.StringTools;
 
 public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataResponse, View.OnClickListener
 {
-	private UserService mUserService;
 	private TextView tvBalance, tvFreezeBalance, tvPoint;
+	private UserService mUserService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)

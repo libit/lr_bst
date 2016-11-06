@@ -24,6 +24,7 @@ import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogList;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
+import com.lrcall.utils.StringTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,7 @@ public abstract class MyBaseActivity extends SwipeBackActivity
 		}
 		//		setBackButton();
 		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 2);
+		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 	}
 
 	//后退按钮
@@ -200,12 +201,16 @@ public abstract class MyBaseActivity extends SwipeBackActivity
 	 *
 	 * @param jsonResult json数据
 	 */
-	public void showServerMsg(String jsonResult)
+	public void showServerMsg(String jsonResult, String successMsg)
 	{
 		ReturnInfo returnInfo = GsonTools.getReturnInfo(jsonResult);
 		if (ReturnInfo.isSuccess(returnInfo))
 		{
-			ToastView.showCenterToast(this, R.drawable.ic_done, returnInfo.getErrmsg());
+			if (StringTools.isNull(successMsg))
+			{
+				successMsg = returnInfo.getErrmsg();
+			}
+			ToastView.showCenterToast(this, R.drawable.ic_done, successMsg);
 		}
 		else
 		{

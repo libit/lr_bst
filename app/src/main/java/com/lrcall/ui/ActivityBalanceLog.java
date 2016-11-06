@@ -5,6 +5,9 @@
 package com.lrcall.ui;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
@@ -24,7 +27,8 @@ import java.util.List;
 public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataResponse
 {
 	private static final String TAG = ActivityBalanceLog.class.getSimpleName();
-	private UserBalanceLogAdapter userBalanceLogAdapter;
+	private View layoutLogList, layoutNoLog;
+	private UserBalanceLogAdapter mUserBalanceLogAdapter;
 	private UserBalanceLogService mUserBalanceLogService;
 	private final List<UserBalanceLogInfo> mUserBalanceLogInfoList = new ArrayList<>();
 
@@ -33,10 +37,29 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_balance_log);
-		viewInit();
 		mUserBalanceLogService = new UserBalanceLogService(this);
 		mUserBalanceLogService.addDataResponse(this);
-		refreshData();
+		viewInit();
+		onRefresh();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.menu_activity_balance_log, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		int id = item.getItemId();
+		if (id == R.id.action_refresh)
+		{
+			onRefresh();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -44,6 +67,8 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 	{
 		super.viewInit();
 		setBackButton();
+		layoutLogList = findViewById(R.id.layout_log_list);
+		layoutNoLog = findViewById(R.id.layout_no_log);
 		xListView = (XListView) findViewById(R.id.xlist);
 		xListView.setPullRefreshEnable(true);
 		xListView.setPullLoadEnable(true);
@@ -55,7 +80,7 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 	public void refreshData()
 	{
 		mUserBalanceLogInfoList.clear();
-		userBalanceLogAdapter = null;
+		mUserBalanceLogAdapter = null;
 		loadMoreData();
 	}
 
@@ -63,7 +88,8 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 	@Override
 	public void loadMoreData()
 	{
-		mUserBalanceLogService.getUserBalanceLogList(mDataStart, getPageSize(), null, true);
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
+		mUserBalanceLogService.getUserBalanceLogList(mDataStart, getPageSize(), tips, true);
 	}
 
 	synchronized private void refreshUserBalanceLogs(List<UserBalanceLogInfo> userBalanceLogInfoList)
@@ -71,8 +97,15 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 		if (userBalanceLogInfoList == null || userBalanceLogInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
+			if (mUserBalanceLogInfoList.size() < 1)
+			{
+				layoutLogList.setVisibility(View.GONE);
+				layoutNoLog.setVisibility(View.VISIBLE);
+			}
 			return;
 		}
+		layoutLogList.setVisibility(View.VISIBLE);
+		layoutNoLog.setVisibility(View.GONE);
 		if (userBalanceLogInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
@@ -81,23 +114,23 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 		{
 			mUserBalanceLogInfoList.add(userBalanceLogInfo);
 		}
-		if (userBalanceLogAdapter == null)
+		if (mUserBalanceLogAdapter == null)
 		{
-			userBalanceLogAdapter = new UserBalanceLogAdapter(this, mUserBalanceLogInfoList, new UserBalanceLogAdapter.IUserBalanceLogAdapterItemClicked()
+			mUserBalanceLogAdapter = new UserBalanceLogAdapter(this, mUserBalanceLogInfoList, new UserBalanceLogAdapter.IItemClicked()
 			{
 				@Override
 				public void onUserBalanceLogClicked(UserBalanceLogInfo userBalanceLogInfo)
 				{
-					//					Intent intent = new Intent(ActivityBalanceLog.this, ActivityProduct.class);
-					//					intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
-					//					startActivity(intent);
+					if (userBalanceLogInfo != null)
+					{
+					}
 				}
 			});
-			xListView.setAdapter(userBalanceLogAdapter);
+			xListView.setAdapter(mUserBalanceLogAdapter);
 		}
 		else
 		{
-			userBalanceLogAdapter.notifyDataSetChanged();
+			mUserBalanceLogAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -108,14 +141,15 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_USER_BALANCE_LOG_LIST))
 		{
+			List<UserBalanceLogInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<UserBalanceLogInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<UserBalanceLogInfo>>()
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<UserBalanceLogInfo>>()
 				{
 				}.getType());
-				refreshUserBalanceLogs(list);
 			}
+			refreshUserBalanceLogs(list);
 		}
 		return false;
 	}

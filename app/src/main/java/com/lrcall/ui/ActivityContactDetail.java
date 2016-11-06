@@ -36,7 +36,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public class ActivityContactDetail extends MyBaseActivity implements ContactNumbersAdapter.IContactNumberAdapterItemClicked, CallLogsAdapter.ICallLogsAdapterItemClicked
+public class ActivityContactDetail extends MyBaseActivity
 {
 	private static final String TAG = FragmentDialer.class.getSimpleName();
 	private static final int REQ_EDIT = 11;
@@ -44,9 +44,9 @@ public class ActivityContactDetail extends MyBaseActivity implements ContactNumb
 	private ImageView ivHead;
 	private ListView lvContactNumbers, lvContactCalllogs;
 	private Long contactId;
-	private ContactNumbersAdapter contactNumbersAdapter;
-	private ContactCallLogsAdapter contactCallLogsAdapter;
-	private List<CallLogInfo> callLogInfoList;
+	private ContactNumbersAdapter mContactNumbersAdapter;
+	private ContactCallLogsAdapter mContactCallLogsAdapter;
+	private List<CallLogInfo> mCallLogInfoList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -76,20 +76,39 @@ public class ActivityContactDetail extends MyBaseActivity implements ContactNumb
 		{
 			tvName.setText(contactInfo.getName());
 			ivHead.setImageBitmap(contactInfo.getContactPhoto());
-			if (contactNumbersAdapter == null)
+			if (mContactNumbersAdapter == null)
 			{
-				contactNumbersAdapter = new ContactNumbersAdapter(ActivityContactDetail.this, contactInfo.getPhoneInfoList(), this);
-				lvContactNumbers.setAdapter(contactNumbersAdapter);
+				mContactNumbersAdapter = new ContactNumbersAdapter(ActivityContactDetail.this, contactInfo.getPhoneInfoList(), new ContactNumbersAdapter.IItemClick()
+				{
+					@Override
+					public void onItemClicked(ContactInfo.PhoneInfo phoneInfo)
+					{
+					}
+
+					@Override
+					public void onCallClicked(ContactInfo.PhoneInfo phoneInfo)
+					{
+						if (phoneInfo != null)
+						{
+							ReturnInfo returnInfo = CallTools.makeCall(ActivityContactDetail.this, phoneInfo.getNumber());
+							if (!ReturnInfo.isSuccess(returnInfo))
+							{
+								Toast.makeText(ActivityContactDetail.this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+							}
+						}
+					}
+				});
+				lvContactNumbers.setAdapter(mContactNumbersAdapter);
 			}
 			else
 			{
-				contactNumbersAdapter.notifyDataSetChanged();
+				mContactNumbersAdapter.notifyDataSetChanged();
 			}
 			ViewHeightCalTools.setListViewHeight(lvContactNumbers, true);
-			//			if (contactCallLogsAdapter == null)
+			//			if (mContactCallLogsAdapter == null)
 			{
-				callLogInfoList = CallLogsFactory.getInstance().getCallLogsByContactId(ActivityContactDetail.this, contactInfo.getContactId());
-				if (callLogInfoList == null || callLogInfoList.size() < 1)
+				mCallLogInfoList = CallLogsFactory.getInstance().getCallLogsByContactId(ActivityContactDetail.this, contactInfo.getContactId());
+				if (mCallLogInfoList == null || mCallLogInfoList.size() < 1)
 				{
 					findViewById(R.id.tv_no_contact_calllogs).setVisibility(View.VISIBLE);
 					lvContactCalllogs.setVisibility(View.GONE);
@@ -98,14 +117,33 @@ public class ActivityContactDetail extends MyBaseActivity implements ContactNumb
 				{
 					findViewById(R.id.tv_no_contact_calllogs).setVisibility(View.GONE);
 					lvContactCalllogs.setVisibility(View.VISIBLE);
-					contactCallLogsAdapter = new ContactCallLogsAdapter(ActivityContactDetail.this, callLogInfoList, this);
-					lvContactCalllogs.setAdapter(contactCallLogsAdapter);
+					mContactCallLogsAdapter = new ContactCallLogsAdapter(ActivityContactDetail.this, mCallLogInfoList, new CallLogsAdapter.IItemClick()
+					{
+						@Override
+						public void onItemClicked(CallLogInfo callLogInfo)
+						{
+						}
+
+						@Override
+						public void onCallClicked(CallLogInfo callLogInfo)
+						{
+							if (callLogInfo != null)
+							{
+								ReturnInfo returnInfo = CallTools.makeCall(ActivityContactDetail.this, callLogInfo.getNumber());
+								if (!ReturnInfo.isSuccess(returnInfo))
+								{
+									Toast.makeText(ActivityContactDetail.this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+								}
+							}
+						}
+					});
+					lvContactCalllogs.setAdapter(mContactCallLogsAdapter);
 					ViewHeightCalTools.setListViewHeight(lvContactCalllogs, true);
 				}
 			}
 			//			else
 			//			{
-			//				contactCallLogsAdapter.notifyDataSetChanged();
+			//				mContactCallLogsAdapter.notifyDataSetChanged();
 			//			}
 		}
 		else
@@ -119,58 +157,6 @@ public class ActivityContactDetail extends MyBaseActivity implements ContactNumb
 	}
 
 	@Override
-	public void onItemClicked(CallLogInfo callLogInfo)
-	{
-		//		if (callLogInfo != null)
-		//		{
-		//			ReturnInfo returnInfo = CallTools.makeCall(this, callLogInfo.getNumber());
-		//			if (!ReturnInfo.isSuccess(returnInfo))
-		//			{
-		//				Toast.makeText(this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
-		//			}
-		//		}
-	}
-
-	@Override
-	public void onCallClicked(CallLogInfo callLogInfo)
-	{
-		if (callLogInfo != null)
-		{
-			ReturnInfo returnInfo = CallTools.makeCall(this, callLogInfo.getNumber());
-			if (!ReturnInfo.isSuccess(returnInfo))
-			{
-				Toast.makeText(this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
-			}
-		}
-	}
-
-	@Override
-	public void onCallClicked(ContactInfo.PhoneInfo phoneInfo)
-	{
-		if (phoneInfo != null)
-		{
-			ReturnInfo returnInfo = CallTools.makeCall(this, phoneInfo.getNumber());
-			if (!ReturnInfo.isSuccess(returnInfo))
-			{
-				Toast.makeText(this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
-			}
-		}
-	}
-
-	@Override
-	public void onItemClicked(ContactInfo.PhoneInfo phoneInfo)
-	{
-		//		if (phoneInfo != null)
-		//		{
-		//			ReturnInfo returnInfo = CallTools.makeCall(this, phoneInfo.getNumber());
-		//			if (!ReturnInfo.isSuccess(returnInfo))
-		//			{
-		//				Toast.makeText(this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
-		//			}
-		//		}
-	}
-
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.menu_activity_contact_detail, menu);
@@ -180,11 +166,7 @@ public class ActivityContactDetail extends MyBaseActivity implements ContactNumb
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent context in AndroidManifest.xml.
 		int id = item.getItemId();
-		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_contact_edit)
 		{
 			//			Intent intent = new Intent(this, ActivityContactEdit.class);

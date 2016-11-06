@@ -5,9 +5,11 @@
 package com.lrcall.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
@@ -21,13 +23,106 @@ import com.lrcall.utils.CallTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
+import com.lrcall.utils.apptools.AppFactory;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class ActivityRegister extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
+	private static final int GET_CODE_LEFT_TIME = 111;
+	private static final int GET_CODE_RESET = 112;
+	private static final long SCROLL_TIME = 1;
 	private EditText etUsername, etPassword, etRePassword, etPayPassword, etPayRePassword, etName, etNickname, etNumber, etEmail, etReferrerId, etCode;
+	private Button btnGetCode;
 	private UserService mUserService;
 	private Byte sex = 1;
 	private String picId = null;
+	private ScheduledExecutorService scheduledExecutorService = null;
+	private ScheduledFuture scheduledFuture = null;
+	private int tm = 60;
+	private final Handler mHandler = new Handler()
+	{
+		@Override
+		public void handleMessage(Message msg)
+		{
+			super.handleMessage(msg);
+			switch (msg.what)
+			{
+				case GET_CODE_LEFT_TIME:
+				{
+					btnGetCode.setEnabled(false);
+					btnGetCode.setText("剩余" + tm + "秒");
+					break;
+				}
+				case GET_CODE_RESET:
+				{
+					btnGetCode.setEnabled(true);
+					btnGetCode.setText("获取注册码");
+					cancelScheduledFuture();
+					break;
+				}
+			}
+		}
+	};
+
+	synchronized private void updateView()
+	{
+		if (scheduledExecutorService == null)
+		{
+			scheduledExecutorService = Executors.newScheduledThreadPool(1);
+		}
+		else
+		{
+			cancelScheduledFuture();
+		}
+		tm = 60;
+		try
+		{
+			scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(new Thread("updateView")
+			{
+				@Override
+				public void run()
+				{
+					super.run();
+					if (tm > 0)
+					{
+						mHandler.sendEmptyMessage(GET_CODE_LEFT_TIME);
+						tm--;
+					}
+					else
+					{
+						mHandler.sendEmptyMessage(GET_CODE_RESET);
+					}
+				}
+			}, SCROLL_TIME, SCROLL_TIME, TimeUnit.SECONDS);
+		}
+		catch (RejectedExecutionException e)
+		{
+		}
+	}
+
+	synchronized private void cancelScheduledFuture()
+	{
+		if (scheduledFuture != null)
+		{
+			scheduledFuture.cancel(true);
+			scheduledFuture = null;
+		}
+	}
+
+	synchronized private void stopScheduledFuture()
+	{
+		cancelScheduledFuture();
+		if (scheduledExecutorService != null)
+		{
+			scheduledExecutorService.shutdown();
+			scheduledExecutorService = null;
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -37,6 +132,15 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 		viewInit();
 		mUserService = new UserService(this);
 		mUserService.addDataResponse(this);
+		String number = AppFactory.getInstance().getPhoneNumber();
+		etUsername.setText(number);
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		stopScheduledFuture();
+		super.onDestroy();
 	}
 
 	@Override
@@ -55,7 +159,8 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 		etEmail = (EditText) findViewById(R.id.et_email);
 		etReferrerId = (EditText) findViewById(R.id.et_referrer);
 		etCode = (EditText) findViewById(R.id.et_code);
-		findViewById(R.id.btn_get_code).setOnClickListener(this);
+		btnGetCode = (Button) findViewById(R.id.btn_get_code);
+		btnGetCode.setOnClickListener(this);
 		findViewById(R.id.btn_register).setOnClickListener(this);
 		//		etUsername.addTextChangedListener(new TextWatcher()
 		//		{
@@ -103,6 +208,7 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 					return;
 				}
 				mUserService.getSmsCode(username, SmsCodeType.REGISTER.getType(), "正在请求短信验证码,请稍后...", false);
+				updateView();
 				break;
 			}
 			case R.id.btn_register:
@@ -232,22 +338,21 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 	{
 		if (url.endsWith(ApiConfig.USER_REGISTER))
 		{
+			showServerMsg(result, "恭喜，注册成功！");
 			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				Toast.makeText(this, "恭喜，注册成功！", Toast.LENGTH_SHORT).show();
 				setResult(ConstValues.RESULT_REGISTER_SUCCESS);
 				finish();
 			}
 			else
 			{
 				setResult(ConstValues.RESULT_REGISTER_ERROR);
-				showServerMsg(result);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_SMS_CODE))
 		{
-			showServerMsg(result);
+			showServerMsg(result, null);
 			return true;
 		}
 		return false;

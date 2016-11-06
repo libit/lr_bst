@@ -20,18 +20,8 @@
             android:id="@+id/contact_picture"
             android:layout_width="50.0dp"
             android:layout_height="50.0dp"
-            android:layout_gravity="top|left|center"
-            android:layout_marginLeft="1.0px"
+            android:layout_gravity="center"
             android:src="@drawable/default_header"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|left|center"
-            android:src="@drawable/avatar_frame"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right|center"/>
     </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"

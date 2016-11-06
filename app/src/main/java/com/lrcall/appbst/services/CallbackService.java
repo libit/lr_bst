@@ -10,6 +10,8 @@ import android.provider.CallLog;
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ReturnInfo;
+import com.lrcall.appbst.models.TableOrderInfo;
+import com.lrcall.appbst.models.TableSearchInfo;
 import com.lrcall.calllogs.CallLogsFactory;
 import com.lrcall.contacts.ContactsFactory;
 import com.lrcall.events.CallLogEvent;
@@ -23,6 +25,7 @@ import com.lrcall.utils.StringTools;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -113,7 +116,7 @@ public class CallbackService extends BaseService
 	 * @param tips
 	 * @param needServiceProcessData
 	 */
-	public void getCallLogList(int start, int size, String tips, final boolean needServiceProcessData)
+	public void getCallLogList(int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
@@ -129,7 +132,7 @@ public class CallbackService extends BaseService
 	 * @param tips
 	 * @param needServiceProcessData
 	 */
-	public void getRechargeLogList(int start, int size, String tips, final boolean needServiceProcessData)
+	public void getRechargeLogList(int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
@@ -145,16 +148,7 @@ public class CallbackService extends BaseService
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getErrmsg());
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(context, R.drawable.ic_do_fail, "呼叫失败:" + msg);
+				EventBus.getDefault().post(new CallLogEvent(CallLogEvent.EVENT_CALLLOG_ADD));
 			}
 		}
 		else if (url.endsWith(ApiConfig.CALLBACK_REGISTER))

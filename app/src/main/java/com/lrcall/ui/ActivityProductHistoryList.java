@@ -6,6 +6,9 @@ package com.lrcall.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
@@ -17,21 +20,43 @@ import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ProductHistoryService;
-import com.lrcall.appbst.services.ProductService;
-import com.lrcall.ui.adapter.SearchProductsAdapter;
+import com.lrcall.events.ProductEvent;
+import com.lrcall.ui.adapter.ProductHistoryAdapter;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityProductHistoryList extends MyBaseActivity implements IAjaxDataResponse, XListView.IXListViewListener
+public class ActivityProductHistoryList extends MyBasePageActivity implements IAjaxDataResponse
 {
 	private static final String TAG = ActivityProductHistoryList.class.getSimpleName();
-	private XListView xListView;
+	private View layoutHistoryList, layoutNoHistory;
 	private ProductHistoryService mProductHistoryService;
-	private ProductService mProductService;
-	private final List<ProductInfo> mProductInfoList = new ArrayList<>();
+	private final List<ProductHistoryInfo> mProductHistoryInfoList = new ArrayList<>();
+	private ProductHistoryAdapter mProductHistoryAdapter;
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.menu_activity_product_history_list, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		int id = item.getItemId();
+		if (id == R.id.action_refresh)
+		{
+			onRefresh();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -40,11 +65,28 @@ public class ActivityProductHistoryList extends MyBaseActivity implements IAjaxD
 		setContentView(R.layout.activity_product_history_list);
 		mProductHistoryService = new ProductHistoryService(this);
 		mProductHistoryService.addDataResponse(this);
-		mProductService = new ProductService(this);
-		mProductService.addDataResponse(this);
 		viewInit();
-		initData();
-		mProductHistoryService.getProductHistoryInfoList(null, true);
+		EventBus.getDefault().register(this);
+		onRefresh();
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		EventBus.getDefault().unregister(this);
+		super.onDestroy();
+	}
+
+	@Subscribe
+	public void onEventMainThread(ProductEvent productEvent)
+	{
+		if (productEvent != null)
+		{
+			if (productEvent.getEvent().equals(ProductEvent.EVENT_HISTORY_ADD))
+			{
+				onRefresh();
+			}
+		}
 	}
 
 	@Override
@@ -52,35 +94,72 @@ public class ActivityProductHistoryList extends MyBaseActivity implements IAjaxD
 	{
 		super.viewInit();
 		setBackButton();
+		layoutHistoryList = findViewById(R.id.layout_history_list);
+		layoutNoHistory = findViewById(R.id.layout_no_history);
 		xListView = (XListView) findViewById(R.id.xlist);
-	}
-
-	private void initData()
-	{
-		SearchProductsAdapter searchProductsAdapter = new SearchProductsAdapter(this, mProductInfoList, new SearchProductsAdapter.IProductsAdapterItemClicked()
-		{
-			@Override
-			public void onProductClicked(ProductInfo productInfo)
-			{
-				Intent intent = new Intent(ActivityProductHistoryList.this, ActivityProduct.class);
-				intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
-				startActivity(intent);
-			}
-		});
-		xListView.setAdapter(searchProductsAdapter);
 		xListView.setPullRefreshEnable(true);
+		xListView.setPullLoadEnable(true);
 		xListView.setXListViewListener(this);
 	}
 
-	@Override
-	public void onRefresh()
+	synchronized private void refreshProductHistoryList(List<ProductHistoryInfo> productHistoryInfoList)
 	{
-		mProductHistoryService.getProductHistoryInfoList(null, true);
+		if (productHistoryInfoList == null || productHistoryInfoList.size() < 1)
+		{
+			xListView.setPullLoadEnable(false);
+			if (mProductHistoryInfoList.size() < 1)
+			{
+				layoutHistoryList.setVisibility(View.GONE);
+				layoutNoHistory.setVisibility(View.VISIBLE);
+			}
+			return;
+		}
+		layoutHistoryList.setVisibility(View.VISIBLE);
+		layoutNoHistory.setVisibility(View.GONE);
+		if (productHistoryInfoList.size() < getPageSize())
+		{
+			xListView.setPullLoadEnable(false);
+		}
+		for (ProductHistoryInfo productHistoryInfo : productHistoryInfoList)
+		{
+			mProductHistoryInfoList.add(productHistoryInfo);
+		}
+		if (mProductHistoryAdapter == null)
+		{
+			mProductHistoryAdapter = new ProductHistoryAdapter(this, mProductHistoryInfoList, new ProductHistoryAdapter.IItemClicked()
+			{
+				@Override
+				public void onProductClicked(ProductInfo productInfo)
+				{
+					if (productInfo != null)
+					{
+						Intent intent = new Intent(ActivityProductHistoryList.this, ActivityProduct.class);
+						intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
+						startActivity(intent);
+					}
+				}
+			});
+			xListView.setAdapter(mProductHistoryAdapter);
+		}
+		else
+		{
+			mProductHistoryAdapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
-	public void onLoadMore()
+	public void refreshData()
 	{
+		mProductHistoryInfoList.clear();
+		mProductHistoryAdapter = null;
+		loadMoreData();
+	}
+
+	@Override
+	public void loadMoreData()
+	{
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
+		mProductHistoryService.getProductHistoryInfoList(null, mDataStart, getPageSize(), null, null, tips, true);
 	}
 
 	@Override
@@ -90,39 +169,15 @@ public class ActivityProductHistoryList extends MyBaseActivity implements IAjaxD
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_PRODUCT_HISTORY_LIST))
 		{
+			List<ProductHistoryInfo> productHistoryInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<ProductHistoryInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductHistoryInfo>>()
+				productHistoryInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductHistoryInfo>>()
 				{
 				}.getType());
-				if (list != null && list.size() > 0)
-				{
-					mProductInfoList.clear();
-					for (ProductHistoryInfo productHistoryInfo : list)
-					{
-						ProductInfo productInfo = productHistoryInfo.getProductInfo();
-						if (productInfo != null)
-						{
-							mProductInfoList.add(productInfo);
-						}
-						else
-						{
-							mProductService.getProductInfo(productHistoryInfo.getProductId(), null, true);
-						}
-					}
-					initData();
-				}
 			}
-			return true;
-		}
-		else if (url.endsWith(ApiConfig.GET_PRODUCT_INFO))
-		{
-			ProductInfo productInfo = GsonTools.getReturnObject(result, ProductInfo.class);
-			if (productInfo != null)
-			{
-				mProductInfoList.add(productInfo);
-			}
+			refreshProductHistoryList(productHistoryInfoList);
 			return true;
 		}
 		return false;

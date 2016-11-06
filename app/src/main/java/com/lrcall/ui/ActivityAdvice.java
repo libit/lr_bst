@@ -22,19 +22,19 @@ import com.lrcall.utils.StringTools;
 public class ActivityAdvice extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private EditText etNumber, etContent;
-	private UserService userService;
+	private UserService mUserService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_advice);
+		mUserService = new UserService(this);
+		mUserService.addDataResponse(this);
 		viewInit();
-		userService = new UserService(this);
-		userService.addDataResponse(this);
 		if (UserService.isLogin())
 		{
-			userService.getUserInfo("请稍后...", false);
+			mUserService.getUserInfo("请稍后...", false);
 		}
 	}
 
@@ -60,7 +60,7 @@ public class ActivityAdvice extends MyBaseActivity implements View.OnClickListen
 				if (StringTools.isNull(content))
 				{
 					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "反馈内容不能为空！");
-					etNumber.requestFocus();
+					etContent.requestFocus();
 					return;
 				}
 				if (content.length() < 10)
@@ -69,7 +69,7 @@ public class ActivityAdvice extends MyBaseActivity implements View.OnClickListen
 					etContent.requestFocus();
 					return;
 				}
-				userService.submitAdvice(number, content, "请稍后...", false);
+				mUserService.submitAdvice(number, content, "请稍后...", false);
 				break;
 			}
 		}
@@ -103,21 +103,12 @@ public class ActivityAdvice extends MyBaseActivity implements View.OnClickListen
 		}
 		else if (url.endsWith(ApiConfig.SUBMIT_ADVICE))
 		{
+			showServerMsg(result, "提交反馈成功！");
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "提交反馈成功！");
 				etNumber.setText("");
 				etContent.setText("");
-			}
-			else
-			{
-				String msg = "提交反馈失败：" + result;
-				if (returnInfo != null)
-				{
-					msg = "提交反馈失败：" + returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, msg);
 			}
 			return true;
 		}

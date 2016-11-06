@@ -25,12 +25,12 @@ import java.util.List;
  */
 public class CategorySortAdapter extends BaseUserAdapter<ProductSortInfo>
 {
-	protected final IProductSortAdapterItemClicked productSortAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public CategorySortAdapter(Context context, List<ProductSortInfo> list, IProductSortAdapterItemClicked productSortAdapterItemClicked)
+	public CategorySortAdapter(Context context, List<ProductSortInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.productSortAdapterItemClicked = productSortAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -43,10 +43,9 @@ public class CategorySortAdapter extends BaseUserAdapter<ProductSortInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new SortViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_category_sort, null);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_label);
+			viewHolder = new SortViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 			ViewGroup.LayoutParams layoutParams = viewHolder.ivHead.getLayoutParams();
 			layoutParams.width = DisplayTools.getWindowWidth(context) / 3;
@@ -60,21 +59,21 @@ public class CategorySortAdapter extends BaseUserAdapter<ProductSortInfo>
 		String url = ApiConfig.getServerPicUrl(productSortInfo.getPicId());
 		PicService.ajaxGetPic(viewHolder.ivHead, url, DisplayTools.getWindowWidth(MyApplication.getContext()) / 4);
 		viewHolder.tvName.setText(productSortInfo.getName());
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (productSortAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					productSortAdapterItemClicked.onProductSortClicked(productSortInfo);
+					iItemClick.onProductSortClicked(productSortInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
-	public interface IProductSortAdapterItemClicked
+	public interface IItemClick
 	{
 		void onProductSortClicked(ProductSortInfo productSortInfo);
 	}
@@ -83,6 +82,12 @@ public class CategorySortAdapter extends BaseUserAdapter<ProductSortInfo>
 	{
 		public ImageView ivHead;
 		public TextView tvName;
+
+		public void viewInit(View convertView)
+		{
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			tvName = (TextView) convertView.findViewById(R.id.tv_label);
+		}
 
 		public void clear()
 		{

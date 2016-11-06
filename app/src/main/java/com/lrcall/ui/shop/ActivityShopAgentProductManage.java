@@ -2,7 +2,7 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui;
+package com.lrcall.ui.shop;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,10 +25,11 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ShopProductService;
 import com.lrcall.models.FuncInfo;
+import com.lrcall.ui.ActivityProduct;
+import com.lrcall.ui.MyBasePageActivity;
 import com.lrcall.ui.adapter.AgentProductsAdapter;
 import com.lrcall.ui.adapter.FuncsHorizontalAdapter;
 import com.lrcall.ui.adapter.FuncsVerticalAdapter;
-import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.dialog.DialogList;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
@@ -37,11 +38,11 @@ import com.lrcall.utils.StringTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityShopAgentProductsManage extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
+public class ActivityShopAgentProductManage extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
 {
-	private static final String TAG = ActivityShopAgentProductsManage.class.getSimpleName();
-	public static final int REQ_EDIT = 300;
+	private static final String TAG = ActivityShopAgentProductManage.class.getSimpleName();
 	public static final int REQ_ADD = 301;
+	private View layoutProductList, layoutNoProduct;
 	private EditText etSearch;
 	private AgentProductsAdapter mAgentProductsAdapter;
 	private ShopProductService mProductService;
@@ -51,11 +52,11 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_shop_agent_products_manage);
-		viewInit();
+		setContentView(R.layout.activity_shop_agent_product_manage);
 		mProductService = new ShopProductService(this);
 		mProductService.addDataResponse(this);
-		mProductService.getAgentProductList(null, mDataStart, getPageSize(), null, null, false, null, true);
+		viewInit();
+		onRefresh();
 	}
 
 	@Override
@@ -69,9 +70,14 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
-		if (id == R.id.action_add_agent_product)
+		if (id == R.id.action_refresh)
 		{
-			startActivityForResult(new Intent(this, ActivityChooseAgentProduct.class), REQ_ADD);
+			onRefresh();
+			return true;
+		}
+		else if (id == R.id.action_add_agent_product)
+		{
+			startActivityForResult(new Intent(this, ActivityShopChooseAgentProduct.class), REQ_ADD);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -81,9 +87,9 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 	protected void viewInit()
 	{
 		super.viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
+		layoutProductList = findViewById(R.id.layout_search_result);
+		layoutNoProduct = findViewById(R.id.layout_no_product);
 		xListView = (XListView) findViewById(R.id.xlist);
 		xListView.setPullRefreshEnable(true);
 		xListView.setPullLoadEnable(true);
@@ -94,9 +100,9 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
 			{
-				if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND || event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+				if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND || (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
 				{
-					search();
+					onRefresh();
 					return true;
 				}
 				return false;
@@ -104,6 +110,7 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 		});
 		findViewById(R.id.search_icon).setOnClickListener(this);
 		findViewById(R.id.search_del).setOnClickListener(this);
+		findViewById(R.id.btn_agent).setOnClickListener(this);
 	}
 
 	//刷新数据
@@ -119,8 +126,9 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 	@Override
 	public void loadMoreData()
 	{
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
 		String condition = etSearch.getText().toString();
-		mProductService.getAgentProductList(condition, mDataStart, getPageSize(), null, null, false, null, true);
+		mProductService.getAgentProductList(condition, mDataStart, getPageSize(), null, null, tips, true);
 	}
 
 	@Override
@@ -130,7 +138,7 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 		{
 			case R.id.search_icon:
 			{
-				search();
+				onRefresh();
 				break;
 			}
 			case R.id.search_del:
@@ -143,20 +151,11 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 				//				search();
 				break;
 			}
-		}
-	}
-
-	//开始搜索
-	private void search()
-	{
-		String condition = etSearch.getText().toString();
-		if (!StringTools.isNull(condition))
-		{
-			onRefresh();
-		}
-		else
-		{
-			xListView.setAdapter(null);
+			case R.id.btn_agent:
+			{
+				startActivityForResult(new Intent(this, ActivityShopChooseAgentProduct.class), REQ_ADD);
+				break;
+			}
 		}
 	}
 
@@ -165,8 +164,15 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 		if (shopProductAgentInfoList == null || shopProductAgentInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
+			if (mShopProductAgentInfoList.size() < 1)
+			{
+				layoutProductList.setVisibility(View.GONE);
+				layoutNoProduct.setVisibility(View.VISIBLE);
+			}
 			return;
 		}
+		layoutProductList.setVisibility(View.VISIBLE);
+		layoutNoProduct.setVisibility(View.GONE);
 		if (shopProductAgentInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
@@ -177,35 +183,38 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 		}
 		if (mAgentProductsAdapter == null)
 		{
-			mAgentProductsAdapter = new AgentProductsAdapter(this, mShopProductAgentInfoList, new AgentProductsAdapter.IAgentProductsAdapterItemClicked()
+			mAgentProductsAdapter = new AgentProductsAdapter(this, mShopProductAgentInfoList, new AgentProductsAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(final ShopProductAgentInfo shopProductAgentInfo)
 				{
-					final List<FuncInfo> list = new ArrayList<>();
-					list.add(new FuncInfo(R.drawable.ic_done_grey600_18dp, "查看商品"));
-					list.add(new FuncInfo(R.drawable.ic_done_grey600_18dp, "取消代理"));
-					final DialogList dialogList = new DialogList(ActivityShopAgentProductsManage.this);
-					FuncsHorizontalAdapter adapter = new FuncsHorizontalAdapter(ActivityShopAgentProductsManage.this, list, new FuncsVerticalAdapter.IFuncsAdapterItemClicked()
+					if (shopProductAgentInfo != null)
 					{
-						@Override
-						public void onFuncClicked(FuncInfo funcInfo)
+						final List<FuncInfo> list = new ArrayList<>();
+						list.add(new FuncInfo(R.drawable.ic_done_grey600_18dp, "查看商品"));
+						list.add(new FuncInfo(R.drawable.ic_done_grey600_18dp, "取消代理"));
+						final DialogList dialogList = new DialogList(ActivityShopAgentProductManage.this);
+						FuncsHorizontalAdapter adapter = new FuncsHorizontalAdapter(ActivityShopAgentProductManage.this, list, new FuncsVerticalAdapter.IFuncsAdapterItemClicked()
 						{
-							dialogList.dismiss();
-							if (funcInfo.getLabel().equalsIgnoreCase(list.get(0).getLabel()))
+							@Override
+							public void onFuncClicked(FuncInfo funcInfo)
 							{
-								Intent intent = new Intent(ActivityShopAgentProductsManage.this, ActivityProduct.class);
-								intent.putExtra(ConstValues.DATA_PRODUCT_ID, shopProductAgentInfo.getProductInfo().getProductId());
-								startActivity(intent);
+								dialogList.dismiss();
+								if (funcInfo.getLabel().equalsIgnoreCase(list.get(0).getLabel()))
+								{
+									Intent intent = new Intent(ActivityShopAgentProductManage.this, ActivityProduct.class);
+									intent.putExtra(ConstValues.DATA_PRODUCT_ID, shopProductAgentInfo.getProductInfo().getProductId());
+									startActivity(intent);
+								}
+								else if (funcInfo.getLabel().equalsIgnoreCase(list.get(1).getLabel()))
+								{
+									mProductService.deleteAgetnProduct(shopProductAgentInfo.getProductId(), "请稍后...", true);
+								}
 							}
-							else if (funcInfo.getLabel().equalsIgnoreCase(list.get(1).getLabel()))
-							{
-								mProductService.deleteAgetnProduct(shopProductAgentInfo.getProductId(), "请稍后...", true);
-							}
-						}
-					});
-					dialogList.setAdapter(adapter);
-					dialogList.show();
+						});
+						dialogList.setAdapter(adapter);
+						dialogList.show();
+					}
 				}
 			});
 			xListView.setAdapter(mAgentProductsAdapter);
@@ -223,21 +232,22 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_SHOP_AGENT_PRODUCT_LIST))
 		{
+			List<ShopProductAgentInfo> shopProductAgentInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<ShopProductAgentInfo> shopProductAgentInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ShopProductAgentInfo>>()
+				shopProductAgentInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ShopProductAgentInfo>>()
 				{
 				}.getType());
-				refreshAgentProducts(shopProductAgentInfoList);
 			}
+			refreshAgentProducts(shopProductAgentInfoList);
 		}
 		else if (url.endsWith(ApiConfig.SHOP_DELETE_PRODUCT_AGENT))
 		{
-			showServerMsg(result);
+			showServerMsg(result, null);
 			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				refreshData();
+				onRefresh();
 			}
 		}
 		return false;
@@ -249,7 +259,7 @@ public class ActivityShopAgentProductsManage extends MyBasePageActivity implemen
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK)
 		{
-			refreshData();
+			onRefresh();
 		}
 	}
 }

@@ -25,12 +25,12 @@ import java.util.List;
  */
 public class ProductCommentAdapter extends BaseUserAdapter<ProductCommentInfo>
 {
-	protected final IProductCommentAdapter iProductCommentAdapter;
+	protected final IItemClick iItemClick;
 
-	public ProductCommentAdapter(Context context, List<ProductCommentInfo> list, IProductCommentAdapter iProductCommentAdapter)
+	public ProductCommentAdapter(Context context, List<ProductCommentInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iProductCommentAdapter = iProductCommentAdapter;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -43,12 +43,9 @@ public class ProductCommentAdapter extends BaseUserAdapter<ProductCommentInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new ProductCommentViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_product_comment, null);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-			viewHolder.tvContent = (TextView) convertView.findViewById(R.id.tv_content);
+			viewHolder = new ProductCommentViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -67,7 +64,7 @@ public class ProductCommentAdapter extends BaseUserAdapter<ProductCommentInfo>
 		return convertView;
 	}
 
-	public interface IProductCommentAdapter
+	public interface IItemClick
 	{
 	}
 
@@ -77,6 +74,14 @@ public class ProductCommentAdapter extends BaseUserAdapter<ProductCommentInfo>
 		public RatingBar ratingBar;
 		public TextView tvName;
 		public TextView tvContent;
+
+		public void viewInit(View convertView)
+		{
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
+			tvName = (TextView) convertView.findViewById(R.id.tv_name);
+			tvContent = (TextView) convertView.findViewById(R.id.tv_content);
+		}
 
 		public void clear()
 		{

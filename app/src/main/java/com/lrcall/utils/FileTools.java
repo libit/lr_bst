@@ -161,7 +161,7 @@ public class FileTools
 	 * @param fileName 文件名
 	 * @return 文件内容
 	 */
-	public String readFile(String dir, String fileName)
+	public static String readFile(String dir, String fileName)
 	{
 		if (StringTools.isNull(fileName))
 		{
@@ -177,7 +177,7 @@ public class FileTools
 	 * @param file
 	 * @return
 	 */
-	public String readFile(File file)
+	public static String readFile(File file)
 	{
 		if (file != null && file.canRead())
 		{
@@ -185,7 +185,7 @@ public class FileTools
 			try
 			{
 				input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-				String line = "";
+				String line = null;
 				StringBuilder strBuffer = new StringBuilder("");
 				while ((line = input.readLine()) != null)
 				{
@@ -220,7 +220,7 @@ public class FileTools
 	 * @param content  文件内容
 	 * @return 写入成功true，失败false
 	 */
-	public boolean writeFile(String dir, String fileName, String content)
+	public static boolean writeFile(String dir, String fileName, String content)
 	{
 		try
 		{

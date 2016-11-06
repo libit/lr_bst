@@ -2,13 +2,12 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui;
+package com.lrcall.ui.shop;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
@@ -18,6 +17,7 @@ import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ShopService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.enums.SmsCodeType;
+import com.lrcall.ui.MyBaseActivity;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
@@ -168,22 +168,17 @@ public class ActivityShopRegister extends MyBaseActivity implements View.OnClick
 	{
 		if (url.endsWith(ApiConfig.SHOP_REGISTER))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "恭喜，申请成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				Toast.makeText(this, "恭喜，申请成功！", Toast.LENGTH_SHORT).show();
 				finish();
 				startActivity(new Intent(this, ActivityShopAuth.class));
-			}
-			else
-			{
-				showServerMsg(result);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_SMS_CODE))
 		{
-			showServerMsg(result);
+			showServerMsg(result, null);
 			return true;
 		}
 		return false;

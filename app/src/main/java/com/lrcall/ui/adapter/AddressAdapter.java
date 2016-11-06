@@ -25,12 +25,12 @@ import java.util.List;
  */
 public class AddressAdapter extends BaseUserAdapter<UserAddressInfo>
 {
-	private final IAddressAdapterItemClicked iAddressAdapterItemClicked;
+	private final IItemClick iItemClick;
 
-	public AddressAdapter(Context context, List<UserAddressInfo> list, IAddressAdapterItemClicked iAddressAdapterItemClicked)
+	public AddressAdapter(Context context, List<UserAddressInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iAddressAdapterItemClicked = iAddressAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -43,12 +43,9 @@ public class AddressAdapter extends BaseUserAdapter<UserAddressInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new AddressViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_address, null);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-			viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.tv_number);
-			viewHolder.tvAddress = (TextView) convertView.findViewById(R.id.tv_address);
-			viewHolder.ivDefault = (ImageView) convertView.findViewById(R.id.iv_default);
+			viewHolder = new AddressViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -73,33 +70,23 @@ public class AddressAdapter extends BaseUserAdapter<UserAddressInfo>
 				context.startActivity(intent);
 			}
 		});
-		if (iAddressAdapterItemClicked != null)
+		if (iItemClick != null)
 		{
-			//			convertView.findViewById(R.id.btn_edit).setOnClickListener(new View.OnClickListener()
-			//			{
-			//				@Override
-			//				public void onClick(View v)
-			//				{
-			//					iAddressAdapterItemClicked.onAddressEditClicked(v, userAddressInfo);
-			//				}
-			//			});
 			convertView.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					iAddressAdapterItemClicked.onAddressClicked(v, userAddressInfo);
+					iItemClick.onAddressClicked(v, userAddressInfo);
 				}
 			});
 		}
 		return convertView;
 	}
 
-	public interface IAddressAdapterItemClicked
+	public interface IItemClick
 	{
 		void onAddressClicked(View v, UserAddressInfo userAddressInfo);
-
-//		void onAddressEditClicked(View v, UserAddressInfo userAddressInfo);
 	}
 
 	public static class AddressViewHolder
@@ -108,6 +95,14 @@ public class AddressAdapter extends BaseUserAdapter<UserAddressInfo>
 		public TextView tvName;
 		public TextView tvNumber;
 		public TextView tvAddress;
+
+		public void viewInit(View convertView)
+		{
+			tvName = (TextView) convertView.findViewById(R.id.tv_name);
+			tvNumber = (TextView) convertView.findViewById(R.id.tv_number);
+			tvAddress = (TextView) convertView.findViewById(R.id.tv_address);
+			ivDefault = (ImageView) convertView.findViewById(R.id.iv_default);
+		}
 
 		public void clear()
 		{

@@ -2,7 +2,7 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui;
+package com.lrcall.ui.shop;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,13 +18,13 @@ import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.ProductInfo;
+import com.lrcall.appbst.models.OrderSubInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
-import com.lrcall.appbst.services.ShopProductService;
-import com.lrcall.ui.adapter.SearchProductsAdapter;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.appbst.services.ShopOrderService;
+import com.lrcall.ui.MyBasePageActivity;
+import com.lrcall.ui.adapter.ShopOrdersAdapter;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
@@ -32,31 +32,30 @@ import com.lrcall.utils.StringTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityShopProductsManage extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
+public class ActivityShopOrderManage extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
 {
-	private static final String TAG = ActivityShopProductsManage.class.getSimpleName();
-	public static final int REQ_EDIT = 300;
-	public static final int REQ_ADD = 301;
+	private static final String TAG = ActivityShopOrderManage.class.getSimpleName();
+	private View layoutOrderList, layoutNoOrder;
 	private EditText etSearch;
-	private SearchProductsAdapter searchProductsAdapter;
-	private ShopProductService mProductService;
-	private final List<ProductInfo> mProductInfoList = new ArrayList<>();
+	private ShopOrdersAdapter mShopOrdersAdapter;
+	private ShopOrderService mShopOrderService;
+	private final List<OrderSubInfo> mOrderInfoList = new ArrayList<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_shop_products_manage);
+		setContentView(R.layout.activity_shop_order_manage);
+		mShopOrderService = new ShopOrderService(this);
+		mShopOrderService.addDataResponse(this);
 		viewInit();
-		mProductService = new ShopProductService(this);
-		mProductService.addDataResponse(this);
-		mProductService.getProductList(null, mDataStart, getPageSize(), null, null, false, null, true);
+		onRefresh();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.menu_activity_shop_product_manage, menu);
+		getMenuInflater().inflate(R.menu.menu_activity_shop_order_manage, menu);
 		return true;
 	}
 
@@ -64,9 +63,9 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
-		if (id == R.id.action_add_product)
+		if (id == R.id.action_refresh)
 		{
-			startActivityForResult(new Intent(this, ActivityProductAdd.class), REQ_ADD);
+			onRefresh();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -76,9 +75,9 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 	protected void viewInit()
 	{
 		super.viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
+		layoutOrderList = findViewById(R.id.layout_search_result);
+		layoutNoOrder = findViewById(R.id.layout_no_order);
 		xListView = (XListView) findViewById(R.id.xlist);
 		xListView.setPullRefreshEnable(true);
 		xListView.setPullLoadEnable(true);
@@ -89,9 +88,9 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
 			{
-				if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND || event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+				if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND || (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
 				{
-					search();
+					onRefresh();
 					return true;
 				}
 				return false;
@@ -105,8 +104,8 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 	@Override
 	public void refreshData()
 	{
-		mProductInfoList.clear();
-		searchProductsAdapter = null;
+		mOrderInfoList.clear();
+		mShopOrdersAdapter = null;
 		loadMoreData();
 	}
 
@@ -114,8 +113,9 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 	@Override
 	public void loadMoreData()
 	{
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
 		String condition = etSearch.getText().toString();
-		mProductService.getProductList(condition, mDataStart, getPageSize(), null, null, false, null, true);
+		mShopOrderService.getOrderList(condition, mDataStart, getPageSize(), null, null, tips, true);
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 		{
 			case R.id.search_icon:
 			{
-				search();
+				onRefresh();
 				break;
 			}
 			case R.id.search_del:
@@ -141,52 +141,53 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 		}
 	}
 
-	//开始搜索
-	private void search()
+	synchronized private void refreshOrders(List<OrderSubInfo> orderInfoList)
 	{
-		String condition = etSearch.getText().toString();
-		if (!StringTools.isNull(condition))
-		{
-			onRefresh();
-		}
-		else
-		{
-			xListView.setAdapter(null);
-		}
-	}
-
-	synchronized private void refreshProducts(List<ProductInfo> productInfoList)
-	{
-		if (productInfoList == null || productInfoList.size() < 1)
+		if (orderInfoList == null || orderInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
+			if (mOrderInfoList.size() < 1)
+			{
+				layoutOrderList.setVisibility(View.GONE);
+				layoutNoOrder.setVisibility(View.VISIBLE);
+			}
 			return;
 		}
-		if (productInfoList.size() < getPageSize())
+		layoutOrderList.setVisibility(View.VISIBLE);
+		layoutNoOrder.setVisibility(View.GONE);
+		if (orderInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
 		}
-		for (ProductInfo productInfo : productInfoList)
+		for (OrderSubInfo orderInfo : orderInfoList)
 		{
-			mProductInfoList.add(productInfo);
+			mOrderInfoList.add(orderInfo);
 		}
-		if (searchProductsAdapter == null)
+		if (mShopOrdersAdapter == null)
 		{
-			searchProductsAdapter = new SearchProductsAdapter(this, mProductInfoList, new SearchProductsAdapter.IProductsAdapterItemClicked()
+			mShopOrdersAdapter = new ShopOrdersAdapter(this, mOrderInfoList, new ShopOrdersAdapter.IItemClick()
 			{
 				@Override
-				public void onProductClicked(ProductInfo productInfo)
+				public void onOrderClicked(OrderSubInfo orderInfo)
 				{
-					Intent intent = new Intent(ActivityShopProductsManage.this, ActivityProductEdit.class);
-					intent.putExtra(ConstValues.DATA_PRODUCT, GsonTools.toJson(productInfo));
-					startActivity(intent);
+					if (orderInfo != null)
+					{
+						Intent intent = new Intent(ActivityShopOrderManage.this, ActivityShopOrderInfo.class);
+						intent.putExtra(ConstValues.DATA_ORDER_ID, orderInfo.getOrderSubId());
+						startActivity(intent);
+					}
+				}
+
+				@Override
+				public void onOrderSendExpressClicked(OrderSubInfo orderInfo)
+				{
 				}
 			});
-			xListView.setAdapter(searchProductsAdapter);
+			xListView.setAdapter(mShopOrdersAdapter);
 		}
 		else
 		{
-			searchProductsAdapter.notifyDataSetChanged();
+			mShopOrdersAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -195,16 +196,17 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 	{
 		xListView.stopRefresh();
 		xListView.stopLoadMore();
-		if (url.endsWith(ApiConfig.GET_SHOP_PRODUCT_LIST))
+		if (url.endsWith(ApiConfig.GET_SHOP_ORDER_LIST))
 		{
+			List<OrderSubInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<ProductInfo> productInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductInfo>>()
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<OrderSubInfo>>()
 				{
 				}.getType());
-				refreshProducts(productInfoList);
 			}
+			refreshOrders(list);
 		}
 		return false;
 	}
@@ -215,7 +217,7 @@ public class ActivityShopProductsManage extends MyBasePageActivity implements Vi
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK)
 		{
-			refreshData();
+			onRefresh();
 		}
 	}
 }

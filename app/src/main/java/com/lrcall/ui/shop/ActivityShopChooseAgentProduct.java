@@ -2,10 +2,12 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui;
+package com.lrcall.ui.shop;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -23,18 +25,18 @@ import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ShopProductService;
+import com.lrcall.ui.MyBasePageActivity;
 import com.lrcall.ui.adapter.SearchProductsAdapter;
-import com.lrcall.ui.customer.DisplayTools;
-import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityChooseAgentProduct extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
+public class ActivityShopChooseAgentProduct extends MyBasePageActivity implements View.OnClickListener, IAjaxDataResponse
 {
-	private static final String TAG = ActivityChooseAgentProduct.class.getSimpleName();
+	private static final String TAG = ActivityShopChooseAgentProduct.class.getSimpleName();
+	private View layoutProductList, layoutNoProduct;
 	private EditText etSearch;
 	private ListView lvSearchHistory;
 	private SearchProductsAdapter searchProductsAdapter;
@@ -45,20 +47,39 @@ public class ActivityChooseAgentProduct extends MyBasePageActivity implements Vi
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_choose_agent_product);
+		setContentView(R.layout.activity_shop_choose_agent_product);
 		mProductService = new ShopProductService(this);
 		mProductService.addDataResponse(this);
 		viewInit();
-		refreshData();
+		onRefresh();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.menu_activity_shop_choose_agent_product, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		int id = item.getItemId();
+		if (id == R.id.action_refresh)
+		{
+			onRefresh();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	protected void viewInit()
 	{
 		super.viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
+		layoutProductList = findViewById(R.id.layout_search_result);
+		layoutNoProduct = findViewById(R.id.layout_no_product);
 		xListView = (XListView) findViewById(R.id.xlist);
 		xListView.setPullRefreshEnable(true);
 		xListView.setPullLoadEnable(true);
@@ -70,9 +91,9 @@ public class ActivityChooseAgentProduct extends MyBasePageActivity implements Vi
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
 			{
-				if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND || event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+				if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND || (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
 				{
-					search();
+					onRefresh();
 					return true;
 				}
 				return false;
@@ -95,8 +116,9 @@ public class ActivityChooseAgentProduct extends MyBasePageActivity implements Vi
 	@Override
 	public void loadMoreData()
 	{
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
 		String condition = etSearch.getText().toString();
-		mProductService.getAdminProductList(condition, mDataStart, getPageSize(), null, null, false, null, true);
+		mProductService.getAdminProductList(condition, mDataStart, getPageSize(), null, null, tips, true);
 	}
 
 	@Override
@@ -106,7 +128,7 @@ public class ActivityChooseAgentProduct extends MyBasePageActivity implements Vi
 		{
 			case R.id.search_icon:
 			{
-				search();
+				onRefresh();
 				break;
 			}
 			case R.id.search_del:
@@ -116,31 +138,9 @@ public class ActivityChooseAgentProduct extends MyBasePageActivity implements Vi
 				{
 					etSearch.setTextKeepState(number.substring(0, number.length() - 1));
 				}
-				//				search();
 				break;
 			}
 		}
-	}
-
-	//开始搜索
-	private void search()
-	{
-		String condition = etSearch.getText().toString();
-		if (!StringTools.isNull(condition))
-		{
-			onRefresh();
-		}
-		else
-		{
-			xListView.setAdapter(null);
-		}
-	}
-
-	// 隐藏软键盘
-	private void hideSoftPad()
-	{
-		etSearch.clearFocus();
-		((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
 	}
 
 	synchronized private void refreshProducts(List<ProductInfo> productInfoList)
@@ -148,8 +148,15 @@ public class ActivityChooseAgentProduct extends MyBasePageActivity implements Vi
 		if (productInfoList == null || productInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
+			if (mProductInfoList.size() < 1)
+			{
+				layoutProductList.setVisibility(View.GONE);
+				layoutNoProduct.setVisibility(View.VISIBLE);
+			}
 			return;
 		}
+		layoutProductList.setVisibility(View.VISIBLE);
+		layoutNoProduct.setVisibility(View.GONE);
 		if (productInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
@@ -160,12 +167,15 @@ public class ActivityChooseAgentProduct extends MyBasePageActivity implements Vi
 		}
 		if (searchProductsAdapter == null)
 		{
-			searchProductsAdapter = new SearchProductsAdapter(this, mProductInfoList, new SearchProductsAdapter.IProductsAdapterItemClicked()
+			searchProductsAdapter = new SearchProductsAdapter(this, mProductInfoList, new SearchProductsAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(ProductInfo productInfo)
 				{
-					mProductService.chooseAgetnProduct(productInfo.getProductId(), "请稍后...", true);
+					if (productInfo != null)
+					{
+						mProductService.chooseAgetnProduct(productInfo.getProductId(), "请稍后...", true);
+					}
 				}
 			});
 			xListView.setAdapter(searchProductsAdapter);
@@ -183,34 +193,32 @@ public class ActivityChooseAgentProduct extends MyBasePageActivity implements Vi
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_ADMIN_PRODUCT_LIST))
 		{
+			List<ProductInfo> productInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<ProductInfo> productInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductInfo>>()
+				productInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductInfo>>()
 				{
 				}.getType());
-				refreshProducts(productInfoList);
 			}
+			refreshProducts(productInfoList);
 		}
 		else if (url.endsWith(ApiConfig.SHOP_ADD_PRODUCT_AGENT))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "代理商品成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "代理商品成功！");
 				setResult(RESULT_OK);
 				finish();
 			}
-			else
-			{
-				String msg = "";
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "代理失败：" + msg);
-			}
 		}
 		return false;
+	}
+
+	// 隐藏软键盘
+	private void hideSoftPad()
+	{
+		etSearch.clearFocus();
+		((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
 	}
 }

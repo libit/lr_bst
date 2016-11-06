@@ -2,7 +2,7 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui;
+package com.lrcall.ui.shop;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.PicService;
 import com.lrcall.appbst.services.ShopService;
+import com.lrcall.ui.MyBaseActivity;
 import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.CallTools;

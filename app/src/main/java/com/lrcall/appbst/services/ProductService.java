@@ -9,7 +9,6 @@ import android.content.Context;
 import com.androidquery.callback.AjaxStatus;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.models.ProductInfo;
-import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.models.TableOrderInfo;
 import com.lrcall.appbst.models.TableSearchInfo;
@@ -79,7 +78,7 @@ public class ProductService extends BaseService
 	 * @param tips                   提示信息
 	 * @param needServiceProcessData
 	 */
-	public void getProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
+	public void getProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
@@ -144,10 +143,9 @@ public class ProductService extends BaseService
 		}
 		else if (url.endsWith(ApiConfig.GET_PRODUCT_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			ProductInfo productInfo = GsonTools.getReturnObject(result, ProductInfo.class);
+			if (productInfo != null)
 			{
-				ProductInfo productInfo = GsonTools.getReturnObject(result, ProductInfo.class);
 				DbProductInfoFactory.getInstance().addOrUpdateProductInfo(productInfo);
 			}
 		}

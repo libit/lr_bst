@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class ContactCallLogsAdapter extends CallLogsAdapter
 {
-	public ContactCallLogsAdapter(Context context, List<CallLogInfo> list, ICallLogsAdapterItemClicked callLogsAdapterItemClicked)
+	public ContactCallLogsAdapter(Context context, List<CallLogInfo> list, IItemClick callLogsAdapterItemClicked)
 	{
 		super(context, list, callLogsAdapterItemClicked);
 	}
@@ -40,7 +40,7 @@ public class ContactCallLogsAdapter extends CallLogsAdapter
 		{
 			viewHolder = new CallLogViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_contact_calllog, null);
-			viewHolder.ivCallLogType = (ImageView) convertView.findViewById(R.id.call_log_type_icon);
+			viewHolder.ivType = (ImageView) convertView.findViewById(R.id.call_log_type_icon);
 			viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.call_log_number);
 			viewHolder.tvDuration = (TextView) convertView.findViewById(R.id.call_log_duration);
 			viewHolder.tvTime = (TextView) convertView.findViewById(R.id.call_log_date);
@@ -51,32 +51,29 @@ public class ContactCallLogsAdapter extends CallLogsAdapter
 			viewHolder.clear();
 		}
 		final CallLogInfo callLogInfo = list.get(position);
-		viewHolder.ivCallLogType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
+		viewHolder.ivType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
 		viewHolder.tvNumber.setText(callLogInfo.getNumber());
 		viewHolder.tvDuration.setText(CallLogInfo.getDurationString(callLogInfo.getDuration()));
 		viewHolder.tvTime.setText(DateTimeTools.getRelativeTimeSpanString(callLogInfo.getDate()));
-		convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
 			{
-				if (callLogsAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					callLogsAdapterItemClicked.onCallClicked(callLogInfo);
+					iItemClick.onCallClicked(callLogInfo);
 				}
-			}
-		});
-		convertView.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
+			});
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (callLogsAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					callLogsAdapterItemClicked.onItemClicked(callLogInfo);
+					iItemClick.onItemClicked(callLogInfo);
 				}
-			}
-		});
+			});
+		}
 		LocalTools.setLocal(context, viewHolder.tvDuration, callLogInfo.getNumber(), true);
 		return convertView;
 	}

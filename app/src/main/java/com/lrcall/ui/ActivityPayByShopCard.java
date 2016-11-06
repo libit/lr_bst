@@ -100,21 +100,11 @@ public class ActivityPayByShopCard extends MyBaseActivity implements View.OnClic
 	{
 		if (url.endsWith(ApiConfig.USER_UPGRADE_BY_SHOP_CARD))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "支付成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "支付成功！");
 				setResult(RESULT_OK);
 				finish();
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "支付失败：" + msg);
 			}
 			return true;
 		}

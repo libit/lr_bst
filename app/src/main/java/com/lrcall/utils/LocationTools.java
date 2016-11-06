@@ -65,6 +65,39 @@ public class LocationTools
 		return sb.toString();
 	}
 
+	/**
+	 * 获取所在省
+	 *
+	 * @param location
+	 * @return
+	 */
+	public synchronized static String getLocationProvinceStr(AMapLocation location)
+	{
+		if (null == location)
+		{
+			return null;
+		}
+		StringBuilder sb = new StringBuilder();
+		//errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+		if (location.getErrorCode() == 0)
+		{
+			// 提供者是GPS时是没有以下信息的
+			sb.append(location.getCity());
+		}
+		else
+		{
+			//定位失败
+			sb.append("定位失败");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 获取所在市
+	 *
+	 * @param location
+	 * @return
+	 */
 	public synchronized static String getLocationCityStr(AMapLocation location)
 	{
 		if (null == location)
@@ -86,6 +119,39 @@ public class LocationTools
 		return sb.toString();
 	}
 
+	/**
+	 * 获取所在区
+	 *
+	 * @param location
+	 * @return
+	 */
+	public synchronized static String getLocationDistrictStr(AMapLocation location)
+	{
+		if (null == location)
+		{
+			return null;
+		}
+		StringBuilder sb = new StringBuilder();
+		//errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+		if (location.getErrorCode() == 0)
+		{
+			// 提供者是GPS时是没有以下信息的
+			sb.append(location.getDistrict());
+		}
+		else
+		{
+			//定位失败
+			sb.append("定位失败");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 获取所在地址详细信息
+	 *
+	 * @param location
+	 * @return
+	 */
 	public synchronized static String getLocationAddressStr(AMapLocation location)
 	{
 		if (null == location)

@@ -34,9 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="6dp"
-            android:background="@color/bg_section_normal"
+            android:background="@drawable/bg_btn_common"
             android:text="搜索"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"/>
     </LinearLayout>
     <com.external.xlistview.XListView

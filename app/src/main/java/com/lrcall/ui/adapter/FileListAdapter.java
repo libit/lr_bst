@@ -24,44 +24,42 @@ import java.util.List;
 public class FileListAdapter extends BaseUserAdapter<File>
 {
 	private final File rootFile;
-	private final IFileListAdapter fileListAdapter;
+	private final IItemClick iItemClick;
 
-	public FileListAdapter(Context context, File rootFile, List<File> fileList, IFileListAdapter fileListAdapter)
+	public FileListAdapter(Context context, File rootFile, List<File> fileList, IItemClick iItemClick)
 	{
 		super(context, fileList);
 		this.rootFile = rootFile;
-		this.fileListAdapter = fileListAdapter;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		FileViewHolder contactViewHolder = null;
+		FileViewHolder viewHolder = null;
 		if (convertView != null)
 		{
-			contactViewHolder = (FileViewHolder) convertView.getTag();
+			viewHolder = (FileViewHolder) convertView.getTag();
 		}
-		if (contactViewHolder == null)
+		if (viewHolder == null)
 		{
-			contactViewHolder = new FileViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_file, null);
-			contactViewHolder.ivHeader = (ImageView) convertView.findViewById(R.id.iv_icon);
-			contactViewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_file_name);
-			contactViewHolder.tvTime = (TextView) convertView.findViewById(R.id.tv_file_time);
-			convertView.setTag(contactViewHolder);
+			viewHolder = new FileViewHolder();
+			viewHolder.viewInit(convertView);
+			convertView.setTag(viewHolder);
 		}
 		else
 		{
-			contactViewHolder.clear();
+			viewHolder.clear();
 		}
 		final File file = list.get(position);
 		if (file.isDirectory())
 		{
-			contactViewHolder.ivHeader.setImageResource(R.drawable.ic_folder);
+			viewHolder.ivHeader.setImageResource(R.drawable.ic_folder);
 		}
 		else
 		{
-			contactViewHolder.ivHeader.setImageResource(R.drawable.ic_file);
+			viewHolder.ivHeader.setImageResource(R.drawable.ic_file);
 		}
 		//第一个应该是返回上一层
 		if (position == 0)
@@ -72,48 +70,48 @@ public class FileListAdapter extends BaseUserAdapter<File>
 			}
 			else
 			{
-				contactViewHolder.tvName.setText("...");
-				contactViewHolder.tvTime.setText("上层文件夹");
+				viewHolder.tvName.setText("...");
+				viewHolder.tvTime.setText("上层文件夹");
+				if (iItemClick != null)
+				{
+					convertView.setOnClickListener(new View.OnClickListener()
+					{
+						@Override
+						public void onClick(View v)
+						{
+							iItemClick.onParentSelected(file);
+						}
+					});
+				}
+			}
+		}
+		else
+		{
+			viewHolder.tvName.setText(file.getName());
+			if (file.isDirectory())
+			{
+				viewHolder.tvTime.setText(DateTimeTools.getTime(file.lastModified()));
+			}
+			else
+			{
+				viewHolder.tvTime.setText(String.format("%s %.2fK", DateTimeTools.getTime(file.lastModified()), (double) file.length() / (double) 1024));
+			}
+			if (iItemClick != null)
+			{
 				convertView.setOnClickListener(new View.OnClickListener()
 				{
 					@Override
 					public void onClick(View v)
 					{
-						if (fileListAdapter != null)
-						{
-							fileListAdapter.onParentSelected(file);
-						}
+						iItemClick.onFileSelected(file);
 					}
 				});
 			}
 		}
-		else
-		{
-			contactViewHolder.tvName.setText(file.getName());
-			if (file.isDirectory())
-			{
-				contactViewHolder.tvTime.setText(DateTimeTools.getTime(file.lastModified()));
-			}
-			else
-			{
-				contactViewHolder.tvTime.setText(String.format("%s %.2fK", DateTimeTools.getTime(file.lastModified()), (double) file.length() / (double) 1024));
-			}
-			convertView.setOnClickListener(new View.OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					if (fileListAdapter != null)
-					{
-						fileListAdapter.onFileSelected(file);
-					}
-				}
-			});
-		}
 		return convertView;
 	}
 
-	public interface IFileListAdapter
+	public interface IItemClick
 	{
 		//选择上一层
 		void onParentSelected(File file);
@@ -127,6 +125,13 @@ public class FileListAdapter extends BaseUserAdapter<File>
 		public ImageView ivHeader;
 		public TextView tvName;
 		public TextView tvTime;
+
+		public void viewInit(View convertView)
+		{
+			ivHeader = (ImageView) convertView.findViewById(R.id.iv_icon);
+			tvName = (TextView) convertView.findViewById(R.id.tv_file_name);
+			tvTime = (TextView) convertView.findViewById(R.id.tv_file_time);
+		}
 
 		public void clear()
 		{

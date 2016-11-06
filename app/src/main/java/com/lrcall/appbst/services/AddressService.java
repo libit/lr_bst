@@ -10,10 +10,14 @@ import com.androidquery.callback.AjaxStatus;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
+import com.lrcall.appbst.models.TableOrderInfo;
+import com.lrcall.appbst.models.TableSearchInfo;
 import com.lrcall.appbst.models.UserAddressInfo;
 import com.lrcall.db.DbUserAddressInfoFactory;
+import com.lrcall.events.AddressEvent;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.StringTools;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,9 +40,11 @@ public class AddressService extends BaseService
 	 * @param tips                   提示信息
 	 * @param needServiceProcessData
 	 */
-	public void getUserAddressInfoList(String tips, final boolean needServiceProcessData)
+	public void getUserAddressInfoList(int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
 		ajaxStringCallback(ApiConfig.GET_ADDRESS_LIST, params, tips, needServiceProcessData);
 	}
 
@@ -151,6 +157,7 @@ public class AddressService extends BaseService
 			if (userAddressInfo != null)
 			{
 				DbUserAddressInfoFactory.getInstance().addOrUpdateUserAddressInfo(userAddressInfo);
+				EventBus.getDefault().post(new AddressEvent(AddressEvent.EVENT_ADD));
 			}
 		}
 		else if (url.endsWith(ApiConfig.UPDATE_ADDRESS_INFO))
@@ -159,6 +166,7 @@ public class AddressService extends BaseService
 			if (userAddressInfo != null)
 			{
 				DbUserAddressInfoFactory.getInstance().addOrUpdateUserAddressInfo(userAddressInfo);
+				EventBus.getDefault().post(new AddressEvent(AddressEvent.EVENT_UPDATE));
 			}
 		}
 		else if (url.endsWith(ApiConfig.UPDATE_ADDRESS_STATUS))
@@ -167,6 +175,7 @@ public class AddressService extends BaseService
 			if (userAddressInfo != null)
 			{
 				DbUserAddressInfoFactory.getInstance().addOrUpdateUserAddressInfo(userAddressInfo);
+				EventBus.getDefault().post(new AddressEvent(AddressEvent.EVENT_UPDATE));
 			}
 		}
 		else if (url.endsWith(ApiConfig.DELETE_ADDRESS_INFO))
@@ -175,6 +184,7 @@ public class AddressService extends BaseService
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
 				DbUserAddressInfoFactory.getInstance().deleteUserAddressInfo(returnInfo.getErrmsg());
+				EventBus.getDefault().post(new AddressEvent(AddressEvent.EVENT_DELETED));
 			}
 		}
 		else if (url.endsWith(ApiConfig.GET_ADDRESS_INFO))
@@ -183,14 +193,6 @@ public class AddressService extends BaseService
 			if (userAddressInfo != null)
 			{
 				DbUserAddressInfoFactory.getInstance().addOrUpdateUserAddressInfo(userAddressInfo);
-			}
-		}
-		else if (url.endsWith(ApiConfig.DELETE_ADDRESS_INFO))
-		{
-			String addressId = GsonTools.getReturnObject(result, String.class);
-			if (!StringTools.isNull(addressId))
-			{
-				DbUserAddressInfoFactory.getInstance().deleteUserAddressInfo(addressId);
 			}
 		}
 	}

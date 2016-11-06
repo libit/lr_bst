@@ -24,11 +24,15 @@ import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.OrderService;
 import com.lrcall.enums.OrderStatus;
 import com.lrcall.enums.PayType;
+import com.lrcall.events.OrderEvent;
 import com.lrcall.ui.adapter.OrderAdapter;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogCommon;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +77,28 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 	{
 		View rootView = inflater.inflate(R.layout.fragment_order_list, container, false);
 		viewInit(rootView);
-		refreshData();
+		EventBus.getDefault().register(this);
+		onRefresh();
 		return rootView;
+	}
+
+	@Override
+	public void onDestroyView()
+	{
+		EventBus.getDefault().unregister(this);
+		super.onDestroyView();
+	}
+
+	@Subscribe
+	public void onEventMainThread(OrderEvent orderEvent)
+	{
+		if (orderEvent != null)
+		{
+			if (orderEvent.getEvent().equals(OrderEvent.EVENT_ORDER_ADD) || orderEvent.getEvent().equals(OrderEvent.EVENT_ORDER_STATUS_CHANGED))
+			{
+				onRefresh();
+			}
+		}
 	}
 
 	@Override
@@ -90,22 +114,14 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 		super.viewInit(rootView);
 	}
 
-	@Override
-	public void fragmentShow()
-	{
-		super.fragmentShow();
-		refreshData();
-	}
-
 	/**
 	 * 刷新数据
 	 */
 	@Override
 	public void refreshData()
 	{
-		mOrderAdapter = null;
 		mOrderInfoList.clear();
-		xListView.setPullLoadEnable(true);
+		mOrderAdapter = null;
 		loadMoreData();
 	}
 
@@ -115,7 +131,8 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 	@Override
 	public void loadMoreData()
 	{
-		mOrderService.getOrderInfoList(orderType, mDataStart, getPageSize(), null, false);
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
+		mOrderService.getOrderInfoList(orderType, mDataStart, getPageSize(), tips, false);
 	}
 
 	//设置List
@@ -130,35 +147,40 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 			}
 			return;
 		}
+		layoutNoOrder.setVisibility(View.GONE);
+		xListView.setVisibility(View.VISIBLE);
 		if (orderInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
 		}
-		layoutNoOrder.setVisibility(View.GONE);
-		xListView.setVisibility(View.VISIBLE);
-		//		mOrderInfoList.clear();
 		for (OrderInfo orderInfo : orderInfoList)
 		{
 			mOrderInfoList.add(orderInfo);
 		}
 		if (mOrderAdapter == null)
 		{
-			mOrderAdapter = new OrderAdapter(getContext(), mOrderInfoList, new OrderAdapter.IOrderAdapter()
+			mOrderAdapter = new OrderAdapter(getContext(), mOrderInfoList, new OrderAdapter.IItemClick()
 			{
 				@Override
 				public void onOrderClicked(OrderInfo orderInfo)
 				{
-					Intent intent = new Intent(FragmentOrderList.this.getContext(), ActivityOrderDetail.class);
-					intent.putExtra(ConstValues.DATA_ORDER_ID, orderInfo.getOrderId());
-					startActivity(intent);
+					if (orderInfo != null)
+					{
+						Intent intent = new Intent(FragmentOrderList.this.getContext(), ActivityOrderDetail.class);
+						intent.putExtra(ConstValues.DATA_ORDER_ID, orderInfo.getOrderId());
+						startActivity(intent);
+					}
 				}
 
 				@Override
 				public void onOrderPayClicked(OrderInfo orderInfo)
 				{
-					Intent intent = new Intent(FragmentOrderList.this.getContext(), ActivityPayList.class);
-					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_ORDER, orderInfo.getTotalPrice(), "订单" + orderInfo.getOrderId() + "支付", orderInfo.getOrderId())));
-					startActivity(intent);
+					if (orderInfo != null)
+					{
+						Intent intent = new Intent(FragmentOrderList.this.getContext(), ActivityPayList.class);
+						intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_ORDER, orderInfo.getTotalPrice(), "订单" + orderInfo.getOrderId() + "支付", orderInfo.getOrderId())));
+						startActivity(intent);
+					}
 				}
 
 				@Override
@@ -171,7 +193,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 						{
 							if (orderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
 							{
-								mOrderService.deleteOrder(orderInfo.getOrderId(), "正在取消订单，请稍后...", false);
+								mOrderService.deleteOrder(orderInfo.getOrderId(), "正在取消订单，请稍后...", true);
 							}
 							else
 							{
@@ -194,7 +216,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 						@Override
 						public void onOkClick()
 						{
-							mOrderService.orderFinish(orderInfo.getOrderId(), "请稍后...", false);
+							mOrderService.orderFinish(orderInfo.getOrderId(), "请稍后...", true);
 						}
 
 						@Override
@@ -227,25 +249,22 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_ORDER_LIST))
 		{
+			List<OrderInfo> orderInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<OrderInfo> orderInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<OrderInfo>>()
+				orderInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<OrderInfo>>()
 				{
 				}.getType());
-				setOrderInfoList(orderInfoList);
 			}
-			else
-			{
-				setOrderInfoList(null);
-			}
+			setOrderInfoList(orderInfoList);
 		}
 		else if (url.endsWith(ApiConfig.DELETE_ORDER))
 		{
+			showServerMsg(result, "取消订单成功！");
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, "取消订单成功！");
 				for (OrderInfo orderInfo : mOrderInfoList)
 				{
 					if (orderInfo.getOrderId().equals(returnInfo.getErrmsg()))
@@ -255,23 +274,14 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 						break;
 					}
 				}
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this.getContext(), R.drawable.ic_do_fail, "取消订单失败：" + msg);
 			}
 		}
 		else if (url.endsWith(ApiConfig.ORDER_FINISH))
 		{
+			showServerMsg(result, "确认收货成功！");
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, "确认收货成功！");
 				for (OrderInfo orderInfo : mOrderInfoList)
 				{
 					if (orderInfo.getOrderId().equals(returnInfo.getErrmsg()))
@@ -281,15 +291,6 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 						break;
 					}
 				}
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this.getContext(), R.drawable.ic_do_fail, "确认收货失败：" + msg);
 			}
 		}
 		return false;
@@ -302,7 +303,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 		{
 			case R.id.btn_refresh:
 			{
-				refreshData();
+				onRefresh();
 				break;
 			}
 		}

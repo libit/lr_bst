@@ -25,12 +25,12 @@ import java.util.List;
  */
 public class CallbackCallLogsAdapter extends BaseUserAdapter<CallbackCallLogInfo>
 {
-	protected final ICallbackCallLogsAdapterItemClicked callLogsAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public CallbackCallLogsAdapter(Context context, List<CallbackCallLogInfo> list, ICallbackCallLogsAdapterItemClicked callLogsAdapterItemClicked)
+	public CallbackCallLogsAdapter(Context context, List<CallbackCallLogInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.callLogsAdapterItemClicked = callLogsAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -61,17 +61,17 @@ public class CallbackCallLogsAdapter extends BaseUserAdapter<CallbackCallLogInfo
 		}
 		String number = callLogInfo.getNumber();
 		viewHolder.tvName.setText(name);
-		//		viewHolder.tvNumber.setText(number);
+		viewHolder.tvNumber.setText(number);
 		viewHolder.tvDuration.setText(CallLogInfo.getDurationString(callLogInfo.getDuration()));
 		viewHolder.tvTime.setText(DateTimeTools.getRelativeTimeSpanString(callLogInfo.getCallDateLong()));
-		if (callLogsAdapterItemClicked != null)
+		if (iItemClick != null)
 		{
 			convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					callLogsAdapterItemClicked.onCallClicked(callLogInfo);
+					iItemClick.onCallClicked(callLogInfo);
 				}
 			});
 			convertView.setOnClickListener(new View.OnClickListener()
@@ -79,7 +79,7 @@ public class CallbackCallLogsAdapter extends BaseUserAdapter<CallbackCallLogInfo
 				@Override
 				public void onClick(View v)
 				{
-					callLogsAdapterItemClicked.onItemClicked(callLogInfo);
+					iItemClick.onItemClicked(callLogInfo);
 				}
 			});
 		}
@@ -87,7 +87,7 @@ public class CallbackCallLogsAdapter extends BaseUserAdapter<CallbackCallLogInfo
 		return convertView;
 	}
 
-	public interface ICallbackCallLogsAdapterItemClicked
+	public interface IItemClick
 	{
 		void onItemClicked(CallbackCallLogInfo callLogInfo);
 

@@ -21,16 +21,16 @@ import com.lrcall.utils.StringTools;
 public class ActivityChangePwd extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private EditText etPassword, etNewPassword, etReNewPassword;
-	private UserService userService;
+	private UserService mUserService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_change_pwd);
+		mUserService = new UserService(this);
+		mUserService.addDataResponse(this);
 		viewInit();
-		userService = new UserService(this);
-		userService.addDataResponse(this);
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class ActivityChangePwd extends MyBaseActivity implements View.OnClickLis
 					etNewPassword.requestFocus();
 					return;
 				}
-				userService.changePwd(password, newPassword, "正在修改密码...", true);
+				mUserService.changePwd(password, newPassword, "正在修改密码...", true);
 				break;
 			}
 		}
@@ -115,7 +115,7 @@ public class ActivityChangePwd extends MyBaseActivity implements View.OnClickLis
 	{
 		if (url.endsWith(ApiConfig.USER_CHANGE_PWD))
 		{
-			showServerMsg(result);
+			showServerMsg(result, "修改密码成功！");
 			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
 				etPassword.setText("");

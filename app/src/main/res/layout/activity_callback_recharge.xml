@@ -24,7 +24,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="充值卡号："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="充值密码："
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
@@ -79,11 +79,10 @@
                 <Button
                     android:id="@+id/btn_recharge"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_primary"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_btn_common"
                     android:text="充值"
+                    android:textColor="@color/white"
                     android:textSize="18sp"/>
             </LinearLayout>
         </LinearLayout>

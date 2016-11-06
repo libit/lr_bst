@@ -3,110 +3,118 @@
   ~ Libit保留所有版权，如有疑问联系QQ：308062035
   ~ Copyright (c) 2016.
   -->
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-        <com.lrcall.ui.customer.MarqueeTextView
-            android:id="@+id/tv_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="10"
-            android:ellipsize="marquee"
-            android:gravity="center_vertical"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:maxLines="1"
-            android:textColor="#ff485266"
-            android:textSize="18sp"/>
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="2dp"
-            android:layout_weight="12"
-            android:orientation="horizontal">
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
             <com.lrcall.ui.customer.MarqueeTextView
-                android:id="@+id/tv_number"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_name"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="0"
+                android:layout_weight="10"
                 android:ellipsize="marquee"
                 android:gravity="center_vertical"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:maxLines="1"
-                android:textColor="#ff999999"
-                android:textSize="16.0sp"
-                android:visibility="gone"/>
-            <com.lrcall.ui.customer.MarqueeTextView
-                android:id="@+id/tv_local"
+                android:textColor="#ff485266"
+                android:textSize="18sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="12"
+                android:orientation="horizontal">
+                <com.lrcall.ui.customer.MarqueeTextView
+                    android:id="@+id/tv_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:ellipsize="marquee"
+                    android:gravity="center_vertical"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1"
+                    android:textColor="#ff999999"
+                    android:textSize="16.0sp"/>
+                <com.lrcall.ui.customer.MarqueeTextView
+                    android:id="@+id/tv_local"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:ellipsize="marquee"
+                    android:gravity="center_vertical"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1"
+                    android:textColor="#ff999999"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5.0dp"
+            android:layout_weight="0"
+            android:measureWithLargestChild="true"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_call_duration"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:ellipsize="marquee"
-                android:gravity="center_vertical"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:maxLines="1"
+                android:gravity="center_vertical|right"
+                android:shadowColor="#99ffffff"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
                 android:textColor="#ff999999"
-                android:textSize="16sp"/>
+                android:textSize="12.0sp"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/tv_call_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:shadowColor="#99ffffff"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:textColor="#ff999999"
+                android:textSize="12sp"/>
         </LinearLayout>
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/line_height"/>
+        <ImageView
+            android:id="@+id/v_call"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:padding="18dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/dial_callicon_press"/>
     </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="5.0dp"
-        android:layout_weight="0"
-        android:measureWithLargestChild="true"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tv_call_duration"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:shadowColor="#99ffffff"
-            android:shadowDy="1.0"
-            android:shadowRadius="1.0"
-            android:textColor="#ff999999"
-            android:textSize="12.0sp"
-            android:visibility="gone"/>
-        <TextView
-            android:id="@+id/tv_call_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:shadowColor="#99ffffff"
-            android:shadowDy="1.0"
-            android:shadowRadius="1.0"
-            android:textColor="#ff999999"
-            android:textSize="12sp"/>
-    </LinearLayout>
-    <ImageView
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/line_height"/>
-    <ImageView
-        android:id="@+id/v_call"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center_vertical"
-        android:padding="18dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/dial_callicon_press"/>
-</LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:layout_gravity="bottom"
+        android:background="@color/line"/>
+</FrameLayout>

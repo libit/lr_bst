@@ -38,4 +38,17 @@ public enum OrderStatus
 	{
 		this.desc = desc;
 	}
+
+	public static String getStatusDesc(byte status)
+	{
+		OrderStatus[] orderStatuses = OrderStatus.values();
+		for (OrderStatus orderStatus : orderStatuses)
+		{
+			if (orderStatus.getStatus() == status)
+			{
+				return orderStatus.getDesc();
+			}
+		}
+		return "";
+	}
 }

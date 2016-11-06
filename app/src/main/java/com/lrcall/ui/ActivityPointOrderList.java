@@ -6,6 +6,9 @@ package com.lrcall.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
@@ -13,7 +16,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.PayTypeInfo;
 import com.lrcall.appbst.models.PointOrderInfo;
-import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
@@ -33,6 +35,7 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 {
 	private static final String TAG = ActivityPointOrderList.class.getSimpleName();
 	public static final int REQ_PAY = 1005;
+	private View layoutOrderList, layoutNoOrder;
 	private PointOrderService mPointOrderService;
 	private List<PointOrderInfo> mPointOrderInfoList = new ArrayList<>();
 	private PointOrderAdapter mPointOrderAdapter;
@@ -45,7 +48,26 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 		mPointOrderService = new PointOrderService(this);
 		mPointOrderService.addDataResponse(this);
 		viewInit();
-		refreshData();
+		onRefresh();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.menu_activity_point_order_list, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		int id = item.getItemId();
+		if (id == R.id.action_refresh)
+		{
+			onRefresh();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -53,6 +75,8 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 	{
 		super.viewInit();
 		setBackButton();
+		layoutOrderList = findViewById(R.id.layout_order_list);
+		layoutNoOrder = findViewById(R.id.layout_no_order);
 		xListView = (XListView) findViewById(R.id.xlist);
 		xListView.setPullRefreshEnable(true);
 		xListView.setPullLoadEnable(true);
@@ -70,7 +94,8 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 	@Override
 	public void loadMoreData()
 	{
-		mPointOrderService.getOrderInfoList(null, mDataStart, getPageSize(), "正在加载，请稍后...", false);
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
+		mPointOrderService.getOrderInfoList(null, mDataStart, getPageSize(), tips, false);
 	}
 
 	//刷新数据
@@ -79,8 +104,15 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 		if (pointOrderInfoList == null || pointOrderInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
+			if (mPointOrderInfoList.size() < 1)
+			{
+				layoutOrderList.setVisibility(View.GONE);
+				layoutNoOrder.setVisibility(View.VISIBLE);
+			}
 			return;
 		}
+		layoutOrderList.setVisibility(View.VISIBLE);
+		layoutNoOrder.setVisibility(View.GONE);
 		if (pointOrderInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
@@ -91,7 +123,7 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 		}
 		if (mPointOrderAdapter == null)
 		{
-			mPointOrderAdapter = new PointOrderAdapter(this, mPointOrderInfoList, new PointOrderAdapter.IPointOrderAdapter()
+			mPointOrderAdapter = new PointOrderAdapter(this, mPointOrderInfoList, new PointOrderAdapter.IItemClick()
 			{
 				@Override
 				public void onOrderClicked(PointOrderInfo pointOrderInfo)
@@ -101,34 +133,41 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 				@Override
 				public void onOrderPayClicked(PointOrderInfo pointOrderInfo)
 				{
-					Intent intent = new Intent(ActivityPointOrderList.this, ActivityPayList.class);
-					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_POINT_ORDER, pointOrderInfo.getTotalPrice(), "积分订单" + pointOrderInfo.getOrderId() + "支付", pointOrderInfo.getOrderId())));
-					startActivityForResult(intent, REQ_PAY);
+					if (pointOrderInfo != null)
+					{
+						Intent intent = new Intent(ActivityPointOrderList.this, ActivityPayList.class);
+						PayTypeInfo payTypeInfo = new PayTypeInfo(PayType.PAY_POINT_ORDER, pointOrderInfo.getTotalPrice(), "积分订单" + pointOrderInfo.getOrderId() + "支付", pointOrderInfo.getOrderId());
+						intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(payTypeInfo));
+						startActivityForResult(intent, REQ_PAY);
+					}
 				}
 
 				@Override
 				public void onOrderCancelClicked(final PointOrderInfo pointOrderInfo)
 				{
-					new DialogCommon(ActivityPointOrderList.this, new DialogCommon.LibitDialogListener()
+					if (pointOrderInfo != null)
 					{
-						@Override
-						public void onOkClick()
+						new DialogCommon(ActivityPointOrderList.this, new DialogCommon.LibitDialogListener()
 						{
-							if (pointOrderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
+							@Override
+							public void onOkClick()
 							{
-								mPointOrderService.deleteOrder(pointOrderInfo.getOrderId(), "正在取消订单，请稍后...", false);
+								if (pointOrderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
+								{
+									mPointOrderService.deleteOrder(pointOrderInfo.getOrderId(), "正在取消订单，请稍后...", true);
+								}
+								else
+								{
+									ToastView.showCenterToast(ActivityPointOrderList.this, R.drawable.ic_do_fail, "订单已生效，不能取消！");
+								}
 							}
-							else
-							{
-								ToastView.showCenterToast(ActivityPointOrderList.this, R.drawable.ic_do_fail, "订单已生效，不能取消！");
-							}
-						}
 
-						@Override
-						public void onCancelClick()
-						{
-						}
-					}, getString(R.string.title_warning), "确定要取消订单吗？", true, false, true).show();
+							@Override
+							public void onCancelClick()
+							{
+							}
+						}, getString(R.string.title_warning), "确定要取消订单吗？", true, false, true).show();
+					}
 				}
 			});
 			xListView.setAdapter(mPointOrderAdapter);
@@ -146,30 +185,20 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_POINT_ORDER_LIST))
 		{
+			List<PointOrderInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<PointOrderInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<PointOrderInfo>>()
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<PointOrderInfo>>()
 				{
 				}.getType());
-				refreshPointOrders(list);
 			}
-			else
-			{
-				refreshPointOrders(null);
-			}
+			refreshPointOrders(list);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.DELETE_POINT_ORDER))
 		{
-			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
-			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "删除订单成功！");
-			}
-			else
-			{
-				showServerMsg(result);
-			}
+			showServerMsg(result, "删除订单成功！");
 			return true;
 		}
 		return false;
@@ -179,7 +208,7 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-		//		refreshData();
+		//		onRefresh();
 		finish();
 	}
 }

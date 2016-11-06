@@ -192,16 +192,23 @@ public class FragmentPointProduct extends MyBaseFragment implements View.OnClick
 			{
 				mFragmentPicList.add(FragmentServerImage.newInstance(ApiConfig.getServerPicUrl(productPicInfo.getPicUrl()), DisplayTools.getWindowWidth(this.getContext()), ""));
 			}
-			if (sectionsPagerAdapter == null)
+		}
+		else
+		{
+			if (mPointProductInfo != null)
 			{
-				sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), mFragmentPicList);
-				viewPager.setAdapter(sectionsPagerAdapter);
-				viewPagerTab.setViewPager(viewPager);
+				mFragmentPicList.add(FragmentServerImage.newInstance(ApiConfig.getServerPicUrl(mPointProductInfo.getPicUrl()), DisplayTools.getWindowWidth(this.getContext()), ""));
 			}
-			else
-			{
-				sectionsPagerAdapter.notifyDataSetChanged();
-			}
+		}
+		if (sectionsPagerAdapter == null)
+		{
+			sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), mFragmentPicList);
+			viewPager.setAdapter(sectionsPagerAdapter);
+			viewPagerTab.setViewPager(viewPager);
+		}
+		else
+		{
+			sectionsPagerAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -266,9 +273,9 @@ public class FragmentPointProduct extends MyBaseFragment implements View.OnClick
 				{
 					mProductPicInfoList.clear();
 					mProductPicInfoList.addAll(productPicInfoList);
-					initPicData();
 				}
 			}
+			initPicData();
 			return true;
 		}
 		return false;

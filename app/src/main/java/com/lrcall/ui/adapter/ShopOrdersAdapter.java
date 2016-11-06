@@ -24,12 +24,12 @@ import java.util.List;
  */
 public class ShopOrdersAdapter extends BaseUserAdapter<OrderSubInfo>
 {
-	protected final IOrdersAdapterItemClicked iOrdersAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public ShopOrdersAdapter(Context context, List<OrderSubInfo> list, IOrdersAdapterItemClicked iOrdersAdapterItemClicked)
+	public ShopOrdersAdapter(Context context, List<OrderSubInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iOrdersAdapterItemClicked = iOrdersAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -74,14 +74,14 @@ public class ShopOrdersAdapter extends BaseUserAdapter<OrderSubInfo>
 		{
 			viewHolder.tvOrderStatus.setText(OrderStatus.PAYED.getDesc());
 			convertView.findViewById(R.id.btn_send_express).setVisibility(View.VISIBLE);
-			if (iOrdersAdapterItemClicked != null)
+			if (iItemClick != null)
 			{
 				convertView.findViewById(R.id.btn_send_express).setOnClickListener(new View.OnClickListener()
 				{
 					@Override
 					public void onClick(View v)
 					{
-						iOrdersAdapterItemClicked.onOrderSendExpressClicked(orderInfo);
+						iItemClick.onOrderSendExpressClicked(orderInfo);
 					}
 				});
 			}
@@ -94,21 +94,21 @@ public class ShopOrdersAdapter extends BaseUserAdapter<OrderSubInfo>
 		{
 			viewHolder.tvOrderStatus.setText(OrderStatus.FINISH.getDesc());
 		}
-		if (iOrdersAdapterItemClicked != null)
+		if (iItemClick != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					iOrdersAdapterItemClicked.onOrderClicked(orderInfo);
+					iItemClick.onOrderClicked(orderInfo);
 				}
 			});
 		}
 		return convertView;
 	}
 
-	public interface IOrdersAdapterItemClicked
+	public interface IItemClick
 	{
 		void onOrderClicked(OrderSubInfo orderInfo);
 

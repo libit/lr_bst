@@ -25,10 +25,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:minWidth="100dp"
+                    android:gravity="center_vertical|right"
+                    android:minWidth="120dp"
                     android:text="应付总额："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <TextView
                     android:id="@+id/tv_pay_total"
@@ -51,11 +51,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:minWidth="100dp"
+                    android:gravity="center_vertical|right"
+                    android:minWidth="120dp"
                     android:text="账户余额："
-                    android:textColor="@android:color/widget_edittext_dark"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
                 <TextView
                     android:id="@+id/tv_balance"
                     android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                     android:layout_weight="1"
                     android:text="0.00元"
                     android:textColor="#ff0000"
-                    android:textSize="14sp"/>
+                    android:textSize="24sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,12 +80,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="支付密码："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_pay_password"
@@ -113,11 +112,10 @@
                 <Button
                     android:id="@+id/btn_pay"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_primary"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_btn_common"
                     android:text="付款"
+                    android:textColor="@color/white"
                     android:textSize="18sp"/>
             </LinearLayout>
         </LinearLayout>

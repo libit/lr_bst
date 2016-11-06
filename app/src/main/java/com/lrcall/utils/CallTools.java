@@ -4,16 +4,17 @@
  */
 package com.lrcall.utils;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ErrorInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.ui.ActivityDialWaiting;
 import com.lrcall.ui.ActivityLogin;
+import com.lrcall.ui.customer.ToastView;
 
 import java.util.ArrayList;
 
@@ -262,25 +263,6 @@ public class CallTools
 		Intent intent = new Intent(context, ActivityDialWaiting.class);
 		intent.putExtra(ConstValues.DATA_NUMBER, number);
 		context.startActivity(intent);
-		//		CallbackService callbackService = new CallbackService(context);
-		//		callbackService.addDataResponse(new IAjaxDataResponse()
-		//		{
-		//			@Override
-		//			public boolean onAjaxDataResponse(String url, String result, AjaxStatus status)
-		//			{
-		//				if (url.endsWith(ApiConfig.CALLBACK_MAKE_CALL))
-		//				{
-		//					ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-		//					if (!ReturnInfo.isSuccess(returnInfo))
-		//					{
-		//						//						makeLocalCall(context, number);
-		//					}
-		//					return true;
-		//				}
-		//				return false;
-		//			}
-		//		});
-		//		callbackService.makeCall(number, "正在回拨，请稍后...", true);
 		return new ReturnInfo(ErrorInfo.getSuccessId(), "呼叫号码成功！");
 	}
 
@@ -295,9 +277,20 @@ public class CallTools
 		{
 			Intent i = new Intent(Intent.ACTION_CALL);
 			i.setData(Uri.fromParts("tel", number, null));
-			PendingIntent.getActivity(context, 0, i, 0).send();
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.startActivity(i);
+			//			PendingIntent.getActivity(context, 0, i, 0).send();
 		}
-		catch (PendingIntent.CanceledException e)
+		//		catch (PendingIntent.CanceledException e)
+		//		{
+		//			e.printStackTrace();
+		//		}
+		catch (SecurityException e)
+		{
+			e.printStackTrace();
+			ToastView.showCenterToast(context, R.drawable.ic_do_fail, "您拒绝了软件拨打电话的权限！");
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}

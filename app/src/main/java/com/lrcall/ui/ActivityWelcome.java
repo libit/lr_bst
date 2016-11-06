@@ -83,8 +83,8 @@ public class ActivityWelcome extends MyBaseActivity implements View.OnClickListe
 		{
 			case R.id.btn_start:
 			{
-				finish();
 				startActivity(new Intent(this, ActivityMain.class));
+				finish();
 				break;
 			}
 		}

@@ -30,9 +30,9 @@ public class ContactsAndCallLogsAdapter extends BaseAdapter
 	protected final List<ContactInfo> contactInfoList;
 	protected final List<CallLogInfo> callLogInfoList;
 	protected final IContactsAdapterItemClick contactsAdapterItemClicked;
-	protected final ICallLogsAdapterItemClicked callLogsAdapterItemClicked;
+	protected final ICallLogsAdapterItemClick callLogsAdapterItemClicked;
 
-	public ContactsAndCallLogsAdapter(Context context, List<ContactInfo> contactInfoList, List<CallLogInfo> callLogInfoList, IContactsAdapterItemClick contactsAdapterItemClicked, ICallLogsAdapterItemClicked callLogsAdapterItemClicked)
+	public ContactsAndCallLogsAdapter(Context context, List<ContactInfo> contactInfoList, List<CallLogInfo> callLogInfoList, IContactsAdapterItemClick contactsAdapterItemClicked, ICallLogsAdapterItemClick callLogsAdapterItemClicked)
 	{
 		this.context = context;
 		this.contactInfoList = contactInfoList;
@@ -83,30 +83,28 @@ public class ContactsAndCallLogsAdapter extends BaseAdapter
 		{
 			final ContactViewHolder holder = new ContactViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_contact, null);
-			holder.ivHeader = (ImageView) convertView.findViewById(R.id.contact_picture);
-			holder.tvName = (TextView) convertView.findViewById(R.id.contact_name);
-			holder.tvNumber = (TextView) convertView.findViewById(R.id.contact_number);
+			holder.viewInit(convertView);
 			convertView.setTag(holder);
 			final ContactInfo contactInfo = contactInfoList.get(position);
-			holder.tvName.setText(contactInfo.getName());
 			if (contactInfo != null && contactInfo.getPhoneInfoList() != null && contactInfo.getPhoneInfoList().size() > 0)
 			{
+				holder.tvName.setText(contactInfo.getName());
 				String number = contactInfo.getPhoneInfoList().get(0).getNumber();
 				holder.tvNumber.setText(number);
 				LocalTools.setLocal(context, holder.tvNumber, number, true);
 			}
 			LoadImageTask.loadBitmap(contactInfo.getContactId(), holder.ivHeader);
-			convertView.setOnClickListener(new View.OnClickListener()
+			if (contactsAdapterItemClicked != null)
 			{
-				@Override
-				public void onClick(View v)
+				convertView.setOnClickListener(new View.OnClickListener()
 				{
-					if (contactsAdapterItemClicked != null)
+					@Override
+					public void onClick(View v)
 					{
 						contactsAdapterItemClicked.onItemClicked(contactInfo);
 					}
-				}
-			});
+				});
+			}
 		}
 		else if (position < count1 + count2)
 		{
@@ -119,41 +117,33 @@ public class ContactsAndCallLogsAdapter extends BaseAdapter
 			{
 				callLogHolder = new CallLogsAdapter.CallLogViewHolder();
 				convertView = LayoutInflater.from(context).inflate(R.layout.item_calllog, null);
-				callLogHolder.ivCallLogType = (ImageView) convertView.findViewById(R.id.call_log_type_icon);
-				callLogHolder.tvName = (TextView) convertView.findViewById(R.id.call_log_name);
-				callLogHolder.tvNumber = (TextView) convertView.findViewById(R.id.call_log_number);
-				callLogHolder.tvLocal = (TextView) convertView.findViewById(R.id.tv_local);
-				callLogHolder.tvDuration = (TextView) convertView.findViewById(R.id.call_log_duration);
-				callLogHolder.tvTime = (TextView) convertView.findViewById(R.id.call_log_date);
+				callLogHolder.viewInit(convertView);
 				convertView.setTag(callLogHolder);
 				final CallLogInfo callLogInfo = callLogInfoList.get(position - count1);
-				callLogHolder.ivCallLogType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
+				callLogHolder.ivType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
 				callLogHolder.tvName.setText(callLogInfo.getName());
 				callLogHolder.tvNumber.setText(callLogInfo.getNumber());
 				callLogHolder.tvDuration.setText(CallLogInfo.getDurationString(callLogInfo.getDuration()));
 				callLogHolder.tvTime.setText(DateTimeTools.getRelativeTimeSpanString(callLogInfo.getDate()));
-				convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
+				if (callLogsAdapterItemClicked != null)
 				{
-					@Override
-					public void onClick(View v)
+					convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
 					{
-						if (callLogsAdapterItemClicked != null)
+						@Override
+						public void onClick(View v)
 						{
 							callLogsAdapterItemClicked.onCallClicked(callLogInfo);
 						}
-					}
-				});
-				convertView.setOnClickListener(new View.OnClickListener()
-				{
-					@Override
-					public void onClick(View v)
+					});
+					convertView.setOnClickListener(new View.OnClickListener()
 					{
-						if (callLogsAdapterItemClicked != null)
+						@Override
+						public void onClick(View v)
 						{
 							callLogsAdapterItemClicked.onItemClicked(callLogInfo);
 						}
-					}
-				});
+					});
+				}
 				LocalTools.setLocal(context, callLogHolder.tvLocal, callLogInfo.getNumber(), true);
 			}
 		}
@@ -165,7 +155,7 @@ public class ContactsAndCallLogsAdapter extends BaseAdapter
 		void onItemClicked(ContactInfo contactInfo);
 	}
 
-	public interface ICallLogsAdapterItemClicked
+	public interface ICallLogsAdapterItemClick
 	{
 		void onItemClicked(CallLogInfo callLogInfo);
 
@@ -178,5 +168,12 @@ public class ContactsAndCallLogsAdapter extends BaseAdapter
 		public ImageView ivHeader;
 		public TextView tvName;
 		public TextView tvNumber;
+
+		public void viewInit(View convertView)
+		{
+			ivHeader = (ImageView) convertView.findViewById(R.id.contact_picture);
+			tvName = (TextView) convertView.findViewById(R.id.contact_name);
+			tvNumber = (TextView) convertView.findViewById(R.id.contact_number);
+		}
 	}
 }

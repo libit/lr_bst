@@ -33,7 +33,6 @@ import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
-import com.lrcall.utils.StringTools;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -94,12 +93,11 @@ public class LayoutSideMain extends LinearLayout implements View.OnClickListener
 
 	public void refresh()
 	{
-		String userId = PreferenceUtils.getInstance().getUsername();
-		String sessionId = PreferenceUtils.getInstance().getSessionId();
-		if (!StringTools.isNull(userId) && !StringTools.isNull(sessionId))
+		if (UserService.isLogin())
 		{
+			String userId = PreferenceUtils.getInstance().getUsername();
 			tvName.setText(userId);
-			mUserService.getUserInfo(null, false);
+			mUserService.getUserInfo(null, true);
 		}
 		else
 		{
@@ -234,16 +232,14 @@ public class LayoutSideMain extends LinearLayout implements View.OnClickListener
 		if (url.endsWith(ApiConfig.GET_USER_INFO))
 		{
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (!ReturnInfo.isSuccess(returnInfo))
+			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				// 获取失败，清空SessionId
-				PreferenceUtils.getInstance().setSessionId("");
-				ToastView.showCenterToast(mContext, R.drawable.ic_do_fail, "登录信息已过期，请重新登录！");
-				setbLogin(false);
+				setbLogin(true);
 			}
 			else
 			{
-				setbLogin(true);
+				setbLogin(false);
+				ToastView.showCenterToast(mContext, R.drawable.ic_do_fail, "登录信息已过期，请重新登录！");
 			}
 		}
 		else if (url.endsWith(ApiConfig.USER_UPDATE_PIC_INFO))

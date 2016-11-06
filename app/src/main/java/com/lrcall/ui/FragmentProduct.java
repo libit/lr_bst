@@ -64,14 +64,6 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 	{
 		// Required empty public constructor
 	}
-	//		public static FragmentProduct newInstance(String productId)
-	//		{
-	//			FragmentProduct fragment = new FragmentProduct();
-	//			Bundle args = new Bundle();
-	//			args.putString(ARG_PRODUCT_ID, productId);
-	//			fragment.setArguments(args);
-	//			return fragment;
-	//		}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState)
@@ -81,10 +73,6 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 		{
 			productId = getArguments().getString(ConstValues.DATA_PRODUCT_ID);
 		}
-		//		else
-		//		{
-		//			productId = getActivity().getIntent().getExtras().getString(ConstValues.DATA_PRODUCT_ID);
-		//		}
 		mProductService = new ProductService(this.getContext());
 		mProductService.addDataResponse(this);
 	}
@@ -197,22 +185,29 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 
 	synchronized private void initPicData()
 	{
-		if (mProductPicInfoList != null)
+		if (mProductPicInfoList != null && mProductPicInfoList.size() > 0)
 		{
 			for (ProductPicInfo productPicInfo : mProductPicInfoList)
 			{
 				mFragmentPicList.add(FragmentServerImage.newInstance(ApiConfig.getServerPicUrl(productPicInfo.getPicUrl()), DisplayTools.getWindowWidth(this.getContext()), ""));
 			}
-			if (sectionsPagerAdapter == null)
+		}
+		else
+		{
+			if (mProductInfo != null)
 			{
-				sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), mFragmentPicList);
-				viewPager.setAdapter(sectionsPagerAdapter);
-				viewPagerTab.setViewPager(viewPager);
+				mFragmentPicList.add(FragmentServerImage.newInstance(ApiConfig.getServerPicUrl(mProductInfo.getPicId()), DisplayTools.getWindowWidth(this.getContext()), ""));
 			}
-			else
-			{
-				sectionsPagerAdapter.notifyDataSetChanged();
-			}
+		}
+		if (sectionsPagerAdapter == null)
+		{
+			sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), mFragmentPicList);
+			viewPager.setAdapter(sectionsPagerAdapter);
+			viewPagerTab.setViewPager(viewPager);
+		}
+		else
+		{
+			sectionsPagerAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -244,6 +239,11 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 			}
 			case R.id.layout_comment:
 			{
+				ActivityProduct activityProduct = (ActivityProduct) getActivity();
+				if (activityProduct != null)
+				{
+					activityProduct.setPage(2);
+				}
 				break;
 			}
 			case R.id.btn_kefu:
@@ -278,9 +278,9 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 				{
 					mProductPicInfoList.clear();
 					mProductPicInfoList.addAll(productPicInfoList);
-					initPicData();
 				}
 			}
+			initPicData();
 			return true;
 		}
 		return false;

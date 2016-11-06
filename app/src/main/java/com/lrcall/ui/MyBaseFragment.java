@@ -12,6 +12,7 @@ import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LogcatTools;
+import com.lrcall.utils.StringTools;
 
 /**
  * Created by libit on 16/4/27.
@@ -65,12 +66,16 @@ public abstract class MyBaseFragment extends Fragment
 	 *
 	 * @param jsonResult json数据
 	 */
-	public void showServerMsg(String jsonResult)
+	public void showServerMsg(String jsonResult, String successMsg)
 	{
 		ReturnInfo returnInfo = GsonTools.getReturnInfo(jsonResult);
 		if (ReturnInfo.isSuccess(returnInfo))
 		{
-			ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, returnInfo.getErrmsg());
+			if (StringTools.isNull(successMsg))
+			{
+				successMsg = returnInfo.getErrmsg();
+			}
+			ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, successMsg);
 		}
 		else
 		{

@@ -18,7 +18,6 @@ import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.CallbackService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
-import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.GsonTools;
@@ -31,6 +30,7 @@ public class ActivityCallbackInfo extends MyBaseActivity implements View.OnClick
 	private ImageView ivHead;
 	private View btnRegister, btnRecharge, layoutFuncs;
 	private CallbackService mCallbackService;
+	private boolean bFirst = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -56,7 +56,13 @@ public class ActivityCallbackInfo extends MyBaseActivity implements View.OnClick
 
 	private void refreshData()
 	{
-		mCallbackService.getBalanceInfo(true, "请稍后...", false);
+		String tips = null;
+		if (bFirst)
+		{
+			tips = "请稍后...";
+		}
+		mCallbackService.getBalanceInfo(true, tips, false);
+		bFirst = false;
 	}
 
 	@Override
@@ -127,20 +133,10 @@ public class ActivityCallbackInfo extends MyBaseActivity implements View.OnClick
 		}
 		else if (url.endsWith(ApiConfig.CALLBACK_REGISTER))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "开通回拨服务成功!");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "开通回拨服务成功!");
 				refreshData();
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "开通回拨服务失败:" + msg);
 			}
 			return true;
 		}

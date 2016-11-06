@@ -146,6 +146,21 @@
                 android:gravity="center"
                 android:numColumns="2"
                 android:padding="0dp"/>
+            <LinearLayout
+                android:id="@+id/layout_no_product"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="没有符合条件的商品"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

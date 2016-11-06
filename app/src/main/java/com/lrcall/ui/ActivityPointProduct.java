@@ -24,14 +24,12 @@ import com.lrcall.appbst.models.ProductStarInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
-import com.lrcall.appbst.services.ProductHistoryService;
 import com.lrcall.appbst.services.ProductStarService;
 import com.lrcall.appbst.services.ShopCartService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbProductStarInfoFactory;
 import com.lrcall.enums.ProductType;
 import com.lrcall.models.TabInfo;
-import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
@@ -58,10 +56,9 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 	private ViewPager viewPager;
 	private ImageView ivAddStar;
 	private String productId;
-	private final List<TabInfo> tabInfos = new ArrayList<>();
+	private final List<TabInfo> mTabInfoList = new ArrayList<>();
 	private ProductStarService mProductStarService;
 	private ShopCartService mShopCartService;
-	private ProductHistoryService mProductHistoryService;
 	private boolean isStared = false;
 
 	@Override
@@ -83,8 +80,6 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 		mProductStarService.addDataResponse(this);
 		mShopCartService = new ShopCartService(this);
 		mShopCartService.addDataResponse(this);
-		mProductHistoryService = new ProductHistoryService(this);
-		mProductHistoryService.addDataResponse(this);
 		viewInit();
 		if (AppFactory.isCompatible(23))
 		{
@@ -94,33 +89,29 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 		{
 			initData();
 		}
-		mProductHistoryService.addProductHistoryInfo(productId, null, false);
 	}
 
 	@Override
 	protected void viewInit()
 	{
 		super.viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
-		tabInfos.clear();
-		tabInfos.add(new TabInfo(0, "商品", FragmentPointProduct.class));
-		tabInfos.add(new TabInfo(1, "详情", FragmentProductWeb.class));
-		tabInfos.add(new TabInfo(2, "评价", FragmentProductComments.class));
+		mTabInfoList.clear();
+		mTabInfoList.add(new TabInfo(0, "商品", FragmentPointProduct.class));
+		mTabInfoList.add(new TabInfo(1, "详情", FragmentProductWeb.class));
+		mTabInfoList.add(new TabInfo(2, "评价", FragmentProductComments.class));
 		ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
 		//加载tab布局
 		tab.addView(LayoutInflater.from(this).inflate(R.layout.demo_distribute_evenly, tab, false));
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-		final LayoutInflater inflater = LayoutInflater.from(viewPagerTab.getContext());
+		final SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 		viewPagerTab.setCustomTabView(new SmartTabLayout.TabProvider()
 		{
 			@Override
 			public View createTabView(ViewGroup container, int position, PagerAdapter adapter)
 			{
-				TabInfo tabInfo = tabInfos.get(position);
-				View view = inflater.inflate(R.layout.item_product_tab, container, false);
+				TabInfo tabInfo = mTabInfoList.get(position);
+				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_text_tab, container, false);
 				TextView textView = (TextView) view.findViewById(R.id.tab_label);
 				textView.setText(tabInfo.getLabel());
 				tabInfo.setTvLabel(textView);
@@ -133,7 +124,7 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 		Bundle bundle = new Bundle();
 		bundle.putString(ConstValues.DATA_PRODUCT_ID, productId);
 		bundle.putString(ConstValues.DATA_PRODUCT_TYPE, ProductType.POINT_PRODUCT.getType() + "");
-		for (TabInfo tabInfo : tabInfos)
+		for (TabInfo tabInfo : mTabInfoList)
 		{
 			pages.add(FragmentPagerItem.of(tabInfo.getLabel(), tabInfo.getLoadClass(), bundle));
 		}
@@ -298,15 +289,14 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 	{
 		if (url.endsWith(ApiConfig.ADD_STAR_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (!ReturnInfo.isSuccess(returnInfo))
-			{
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "收藏失败，请重试！");
-			}
-			else
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
 				isStared = true;
 				ivAddStar.setImageResource(R.drawable.item_info_collection_btn);
+			}
+			else
+			{
+				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "收藏失败，请重试！");
 			}
 		}
 		else if (url.endsWith(ApiConfig.GET_STAR_INFO))
@@ -325,8 +315,7 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 		}
 		else if (url.endsWith(ApiConfig.DELETE_STAR_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
 				isStared = false;
 				ivAddStar.setImageResource(R.drawable.item_info_collection_disabled_btn);
@@ -334,14 +323,7 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 		}
 		else if (url.endsWith(ApiConfig.ADD_SHOP_CART_INFO))
 		{
-			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
-			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "添加到购物车成功！");
-			}
-			else
-			{
-				showServerMsg(result);
-			}
+			showServerMsg(result, "添加到购物车成功！");
 		}
 		return false;
 	}

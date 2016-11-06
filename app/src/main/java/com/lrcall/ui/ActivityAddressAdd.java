@@ -35,11 +35,11 @@ public class ActivityAddressAdd extends MyBaseActivity implements View.OnClickLi
 {
 	private static final String TAG = ActivityAddressAdd.class.getSimpleName();
 	private EditText etName, etNumber, etCountry, etProvince, etCity, etDistrict, etAddress;
-	private ArrayAdapter spProvinceAdapter, spCityAdapter, spCountryAdapter;
-	private Spinner spProvince, spCity, spCountry;
+	private ArrayAdapter spProvinceAdapter, spCityAdapter, spDistrictAdapter;
+	private Spinner spProvince, spCity, spDistrict;
 	private List<ProvinceInfo> mProvinceList = new ArrayList<>();
 	private List<CityInfo> mCityList = new ArrayList<>();
-	private List<CountryInfo> mCountryList = new ArrayList<>();
+	private List<CountryInfo> mDistrictList = new ArrayList<>();
 	private AreaService mAreaService;
 	private AddressService mAddressService;
 
@@ -70,7 +70,7 @@ public class ActivityAddressAdd extends MyBaseActivity implements View.OnClickLi
 		etAddress = (EditText) findViewById(R.id.et_address);
 		spProvince = (Spinner) findViewById(R.id.sp_province);
 		spCity = (Spinner) findViewById(R.id.sp_city);
-		spCountry = (Spinner) findViewById(R.id.sp_country);
+		spDistrict = (Spinner) findViewById(R.id.sp_district);
 		findViewById(R.id.btn_add).setOnClickListener(this);
 		spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
 		{
@@ -128,11 +128,11 @@ public class ActivityAddressAdd extends MyBaseActivity implements View.OnClickLi
 				{
 					cityId = mCityList.get(position).getCityId();
 				}
-				position = spCountry.getSelectedItemPosition();
+				position = spDistrict.getSelectedItemPosition();
 				String countryId = "";
 				if (position >= 0)
 				{
-					countryId = mCountryList.get(position).getCountryId();
+					countryId = mDistrictList.get(position).getCountryId();
 				}
 				if (StringTools.isNull(name))
 				{
@@ -178,102 +178,92 @@ public class ActivityAddressAdd extends MyBaseActivity implements View.OnClickLi
 	{
 		if (url.endsWith(ApiConfig.ADD_ADDRESS_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "添加地址成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
 				finish();
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "添加地址成功！");
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "添加地址失败：" + msg);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_PROVINCE_LIST))
 		{
+			//先清空
+			mProvinceList.clear();
+			mCityList.clear();
+			mDistrictList.clear();
+			spCity.setAdapter(null);
+			spDistrict.setAdapter(null);
+			List<String> stringList = new ArrayList<>();
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				//先清空分类
-				mProvinceList.clear();
-				mCityList.clear();
-				mCountryList.clear();
 				List<ProvinceInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProvinceInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
 					for (ProvinceInfo provinceInfo : list)
 					{
 						mProvinceList.add(provinceInfo);
 						stringList.add(provinceInfo.getName());
 					}
-					spProvinceAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spProvinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spProvince.setAdapter(spProvinceAdapter);
-					spCity.setAdapter(null);
-					spCountry.setAdapter(null);
 				}
 			}
+			spProvinceAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spProvinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spProvince.setAdapter(spProvinceAdapter);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_CITY_LIST))
 		{
+			//先清空
+			mCityList.clear();
+			mDistrictList.clear();
+			spDistrict.setAdapter(null);
+			List<String> stringList = new ArrayList<>();
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				//先清空分类
-				mCityList.clear();
-				mCountryList.clear();
 				List<CityInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<CityInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
 					for (CityInfo cityInfo : list)
 					{
 						mCityList.add(cityInfo);
 						stringList.add(cityInfo.getName());
 					}
-					spCityAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spCityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spCity.setAdapter(spCityAdapter);
-					spCountry.setAdapter(null);
 				}
 			}
+			spCityAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spCityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spCity.setAdapter(spCityAdapter);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_COUNTRY_LIST))
 		{
+			//先清空
+			mDistrictList.clear();
+			List<String> stringList = new ArrayList<>();
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				//先清空分类
-				mCountryList.clear();
 				List<CountryInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<CountryInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
 					for (CountryInfo countryInfo : list)
 					{
-						mCountryList.add(countryInfo);
+						mDistrictList.add(countryInfo);
 						stringList.add(countryInfo.getName());
 					}
-					spCountryAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spCountryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spCountry.setAdapter(spCountryAdapter);
 				}
 			}
+			spDistrictAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spDistrictAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spDistrict.setAdapter(spDistrictAdapter);
 			return true;
 		}
 		return false;

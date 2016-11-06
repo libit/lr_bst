@@ -29,7 +29,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:background="@drawable/bg_btn_common"
             android:text="去逛逛"
+            android:textColor="@color/white"
+            android:textSize="16sp"
             android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

@@ -39,22 +39,22 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 {
 	private static final String TAG = ActivityAddressEdit.class.getSimpleName();
 	private EditText etName, etNumber, etCountry, etProvince, etCity, etDistrict, etAddress;
-	private ArrayAdapter spProvinceAdapter, spCityAdapter, spCountryAdapter;
-	private Spinner spProvince, spCity, spCountry;
+	private ArrayAdapter spProvinceAdapter, spCityAdapter, spDistrictAdapter;
+	private Spinner spProvince, spCity, spDistrict;
 	private List<ProvinceInfo> mProvinceList = new ArrayList<>();
 	private List<CityInfo> mCityList = new ArrayList<>();
-	private List<CountryInfo> mCountryList = new ArrayList<>();
+	private List<CountryInfo> mDistrictList = new ArrayList<>();
 	private AreaService mAreaService;
 	private AddressService mAddressService;
-	private String addressId;
+	private String mAddressId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_address_edit);
-		addressId = getIntent().getStringExtra(ConstValues.DATA_ADDRESS_ID);
-		if (StringTools.isNull(addressId))
+		mAddressId = getIntent().getStringExtra(ConstValues.DATA_ADDRESS_ID);
+		if (StringTools.isNull(mAddressId))
 		{
 			finish();
 			Toast.makeText(this, "地址为空！", Toast.LENGTH_LONG).show();
@@ -82,7 +82,7 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 		etAddress = (EditText) findViewById(R.id.et_address);
 		spProvince = (Spinner) findViewById(R.id.sp_province);
 		spCity = (Spinner) findViewById(R.id.sp_city);
-		spCountry = (Spinner) findViewById(R.id.sp_country);
+		spDistrict = (Spinner) findViewById(R.id.sp_district);
 		findViewById(R.id.btn_update).setOnClickListener(this);
 		spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
 		{
@@ -116,7 +116,7 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 
 	private void initData()
 	{
-		UserAddressInfo userAddressInfo = DbUserAddressInfoFactory.getInstance().getUserAddressInfo(addressId);
+		UserAddressInfo userAddressInfo = DbUserAddressInfoFactory.getInstance().getUserAddressInfo(mAddressId);
 		if (userAddressInfo != null)
 		{
 			etName.setText(userAddressInfo.getName());
@@ -129,7 +129,7 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 		}
 		else
 		{
-			mAddressService.getUserAddressInfo(addressId, null, true);
+			mAddressService.getUserAddressInfo(mAddressId, null, true);
 		}
 	}
 
@@ -159,11 +159,11 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 				{
 					cityId = mCityList.get(position).getCityId();
 				}
-				position = spCountry.getSelectedItemPosition();
+				position = spDistrict.getSelectedItemPosition();
 				String countryId = "";
 				if (position >= 0)
 				{
-					countryId = mCountryList.get(position).getCountryId();
+					countryId = mDistrictList.get(position).getCountryId();
 				}
 				if (StringTools.isNull(name))
 				{
@@ -198,7 +198,7 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 					etAddress.requestFocus();
 					return;
 				}
-				mAddressService.updateUserAddressInfo(addressId, name, number, country, provinceId, cityId, countryId, address, "正在处理，请稍后...", true);
+				mAddressService.updateUserAddressInfo(mAddressId, name, number, country, provinceId, cityId, countryId, address, "正在处理，请稍后...", true);
 				break;
 			}
 		}
@@ -209,22 +209,12 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 	{
 		if (url.endsWith(ApiConfig.UPDATE_ADDRESS_INFO))
 		{
+			showServerMsg(result, "更新地址成功！");
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "更新地址成功！");
-				//				initData();
 				setResult(RESULT_OK);
 				finish();
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "更新地址失败：" + msg);
 			}
 			return true;
 		}
@@ -238,20 +228,22 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 		}
 		else if (url.endsWith(ApiConfig.GET_PROVINCE_LIST))
 		{
+			//先清空
+			mProvinceList.clear();
+			mCityList.clear();
+			mDistrictList.clear();
+			spCity.setAdapter(null);
+			spDistrict.setAdapter(null);
+			List<String> stringList = new ArrayList<>();
+			int selected = -1;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				//先清空分类
-				mProvinceList.clear();
-				mCityList.clear();
-				mCountryList.clear();
 				List<ProvinceInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProvinceInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
-					int selected = -1;
 					String province = etProvince.getText().toString();
 					int index = 0;
 					for (ProvinceInfo provinceInfo : list)
@@ -264,77 +256,75 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 						}
 						index++;
 					}
-					spProvinceAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spProvinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spProvince.setAdapter(spProvinceAdapter);
-					if (selected >= 0)
-					{
-						spProvince.setSelection(selected);
-					}
-					spCity.setAdapter(null);
-					spCountry.setAdapter(null);
 				}
+			}
+			spProvinceAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spProvinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spProvince.setAdapter(spProvinceAdapter);
+			if (selected >= 0)
+			{
+				spProvince.setSelection(selected);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_CITY_LIST))
 		{
+			//先清空
+			mCityList.clear();
+			mDistrictList.clear();
+			spDistrict.setAdapter(null);
+			List<String> stringList = new ArrayList<>();
+			int selected = -1;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				//先清空分类
-				mCityList.clear();
-				mCountryList.clear();
 				List<CityInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<CityInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
-					int selected = -1;
-					String ctiy = etCity.getText().toString();
+					String city = etCity.getText().toString();
 					int index = 0;
 					for (CityInfo cityInfo : list)
 					{
 						mCityList.add(cityInfo);
 						stringList.add(cityInfo.getName());
-						if (cityInfo.getName().equals(ctiy))
+						if (cityInfo.getName().equals(city))
 						{
 							selected = index;
 						}
 						index++;
 					}
-					spCityAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spCityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spCity.setAdapter(spCityAdapter);
-					if (selected >= 0)
-					{
-						spCity.setSelection(selected);
-					}
-					spCountry.setAdapter(null);
 				}
+			}
+			spCityAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spCityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spCity.setAdapter(spCityAdapter);
+			if (selected >= 0)
+			{
+				spCity.setSelection(selected);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_COUNTRY_LIST))
 		{
+			//先清空
+			mDistrictList.clear();
+			List<String> stringList = new ArrayList<>();
+			int selected = -1;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				//先清空分类
-				mCountryList.clear();
 				List<CountryInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<CountryInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
-					int selected = -1;
 					String country = etDistrict.getText().toString();
 					int index = 0;
 					for (CountryInfo countryInfo : list)
 					{
-						mCountryList.add(countryInfo);
+						mDistrictList.add(countryInfo);
 						stringList.add(countryInfo.getName());
 						if (countryInfo.getName().equals(country))
 						{
@@ -342,14 +332,14 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 						}
 						index++;
 					}
-					spCountryAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spCountryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spCountry.setAdapter(spCountryAdapter);
-					if (selected >= 0)
-					{
-						spCountry.setSelection(selected);
-					}
 				}
+			}
+			spDistrictAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spDistrictAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spDistrict.setAdapter(spDistrictAdapter);
+			if (selected >= 0)
+			{
+				spDistrict.setSelection(selected);
 			}
 			return true;
 		}

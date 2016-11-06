@@ -12,12 +12,10 @@ import android.widget.Toast;
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.NewsInfo;
-import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.NewsService;
 import com.lrcall.db.DbNewsInfoFactory;
-import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LogcatTools;
@@ -26,9 +24,8 @@ import com.lrcall.utils.StringTools;
 public class ActivityNews extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivityNews.class.getSimpleName();
-	private String newsId;
+	private String mNewsId;
 	private TextView tvContent, tvLink;
-	private NewsInfo newsInfo;
 	private NewsService mNewsService;
 
 	@Override
@@ -39,9 +36,9 @@ public class ActivityNews extends MyBaseActivity implements View.OnClickListener
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null)
 		{
-			newsId = bundle.getString(ConstValues.DATA_NEWS_ID);
+			mNewsId = bundle.getString(ConstValues.DATA_NEWS_ID);
 		}
-		if (StringTools.isNull(newsId))
+		if (StringTools.isNull(mNewsId))
 		{
 			finish();
 			Toast.makeText(this, "消息不存在！", Toast.LENGTH_LONG).show();
@@ -49,14 +46,14 @@ public class ActivityNews extends MyBaseActivity implements View.OnClickListener
 		mNewsService = new NewsService(this);
 		mNewsService.addDataResponse(this);
 		viewInit();
-		newsInfo = DbNewsInfoFactory.getInstance().getNewsInfo(newsId);
+		NewsInfo newsInfo = DbNewsInfoFactory.getInstance().getNewsInfo(mNewsId);
 		if (newsInfo == null || StringTools.isNull(newsInfo.getDescripition()))
 		{
-			mNewsService.getNewsInfo(newsId, "正在获取消息内容...", false);
+			mNewsService.getNewsInfo(mNewsId, "正在获取消息内容...", false);
 		}
 		else
 		{
-			initData();
+			initData(newsInfo);
 		}
 	}
 
@@ -71,7 +68,7 @@ public class ActivityNews extends MyBaseActivity implements View.OnClickListener
 		tvLink.setOnClickListener(this);
 	}
 
-	private void initData()
+	private void initData(NewsInfo newsInfo)
 	{
 		if (newsInfo != null)
 		{
@@ -89,7 +86,7 @@ public class ActivityNews extends MyBaseActivity implements View.OnClickListener
 		{
 			case R.id.tv_link:
 			{
-				String url = ApiConfig.getServerNewsUrl(newsId);
+				String url = ApiConfig.getServerNewsUrl(mNewsId);
 				ActivityWebView.startWebActivity(this, "消息详情", url);
 				break;
 			}
@@ -101,22 +98,14 @@ public class ActivityNews extends MyBaseActivity implements View.OnClickListener
 	{
 		if (url.endsWith(ApiConfig.GET_NEWS_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			NewsInfo newsInfo = GsonTools.getReturnObject(result, NewsInfo.class);
+			if (newsInfo != null)
 			{
-				newsInfo = GsonTools.getReturnObject(result, NewsInfo.class);
-				initData();
+				initData(newsInfo);
 			}
 			else
 			{
-				if (returnInfo != null)
-				{
-					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "获取消息失败：" + returnInfo.getErrmsg());
-				}
-				else
-				{
-					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "获取消息失败：" + result);
-				}
+				showServerMsg(result, null);
 			}
 			return true;
 		}

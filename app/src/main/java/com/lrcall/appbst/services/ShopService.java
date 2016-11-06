@@ -8,9 +8,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.androidquery.callback.AjaxStatus;
+import com.lrcall.appbst.models.TableOrderInfo;
+import com.lrcall.appbst.models.TableSearchInfo;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.PreferenceUtils;
+import com.lrcall.utils.StringTools;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -19,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -121,14 +125,26 @@ public class ShopService extends BaseService
 	}
 
 	/**
-	 * 下载用户头像
+	 * 获取商家列表
 	 *
-	 * @param picPath                图片路径
+	 * @param condition              查询条件
+	 * @param start
+	 * @param size
+	 * @param orderInfos
+	 * @param searchInfos
+	 * @param tips
 	 * @param needServiceProcessData
 	 */
-	public void getHead(String picPath, String tips, final boolean needServiceProcessData)
+	public void getShopList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
-		ajaxFileCallback(String.format("%s/../%s", ApiConfig.getServerUrl(), picPath), null, tips, needServiceProcessData);
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		if (!StringTools.isNull(condition))
+		{
+			params.put("search[value]", condition);
+		}
+		ajaxStringCallback(ApiConfig.GET_SHOP_LIST, params, tips, needServiceProcessData);
 	}
 
 	@Override
@@ -136,21 +152,6 @@ public class ShopService extends BaseService
 	{
 		if (url.endsWith(ApiConfig.SHOP_REGISTER))
 		{
-			//			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			//			if (ReturnInfo.isSuccess(returnInfo))
-			//			{
-			//				//注册成功
-			//			}
-			//			else
-			//			{
-			//				// 注册失败
-			//				String msg = result;
-			//				if (returnInfo != null)
-			//				{
-			//					msg = returnInfo.getErrmsg();
-			//				}
-			//				ToastView.showCenterToast(context, R.drawable.ic_do_fail, "注册失败:" + msg);
-			//			}
 		}
 	}
 

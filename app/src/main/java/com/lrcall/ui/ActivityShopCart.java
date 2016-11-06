@@ -7,7 +7,6 @@ package com.lrcall.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -28,7 +27,6 @@ import com.lrcall.appbst.services.ProductService;
 import com.lrcall.appbst.services.ShopCartService;
 import com.lrcall.db.DbProductInfoFactory;
 import com.lrcall.ui.adapter.ShopCartProductsAdapter;
-import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
@@ -58,7 +56,7 @@ public class ActivityShopCart extends MyBasePageActivity implements View.OnClick
 		viewInit();
 		mShopCartService = new ShopCartService(this);
 		mShopCartService.addDataResponse(this);
-		refreshData();
+		onRefresh();
 	}
 
 	@Override
@@ -169,7 +167,7 @@ public class ActivityShopCart extends MyBasePageActivity implements View.OnClick
 		tvTotalPrice.setText("￥" + StringTools.getPrice(mTotalPrice));
 		if (mShopCartProductsAdapter == null)
 		{
-			mShopCartProductsAdapter = new ShopCartProductsAdapter(this, mShopCartInfoList, mProductCheckBoxMap, new ShopCartProductsAdapter.IShopCartProductsAdapter()
+			mShopCartProductsAdapter = new ShopCartProductsAdapter(this, mShopCartInfoList, mProductCheckBoxMap, new ShopCartProductsAdapter.IItemClicked()
 			{
 				@Override
 				public void onProductClicked(ProductInfo productInfo)
@@ -277,54 +275,44 @@ public class ActivityShopCart extends MyBasePageActivity implements View.OnClick
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_SHOP_CART_LIST))
 		{
+			List<ShopCartInfo> shopCartInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<ShopCartInfo> shopCartInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ShopCartInfo>>()
+				shopCartInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ShopCartInfo>>()
 				{
 				}.getType());
-				refreshProducts(shopCartInfoList);
 			}
+			refreshProducts(shopCartInfoList);
 		}
 		else if (url.endsWith(ApiConfig.DELETE_SHOP_CART_INFO))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "删除成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "删除成功！");
-				refreshData();
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "删除失败：" + msg);
+				onRefresh();
 			}
 		}
 		return false;
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.menu_activity_shop_cart, menu);
-		mMenu = menu;
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		int id = item.getItemId();
-		if (id == R.id.action_shop_cart_edit)
-		{
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+	//	@Override
+	//	public boolean onCreateOptionsMenu(Menu menu)
+	//	{
+	//		getMenuInflater().inflate(R.menu.menu_activity_shop_cart, menu);
+	//		mMenu = menu;
+	//		return true;
+	//	}
+	//
+	//	@Override
+	//	public boolean onOptionsItemSelected(MenuItem item)
+	//	{
+	//		int id = item.getItemId();
+	//		if (id == R.id.action_shop_cart_edit)
+	//		{
+	//			return true;
+	//		}
+	//		return super.onOptionsItemSelected(item);
+	//	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)

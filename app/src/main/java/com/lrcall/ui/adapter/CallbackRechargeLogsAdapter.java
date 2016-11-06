@@ -24,12 +24,12 @@ import static com.lrcall.appbst.R.id.tv_remark;
  */
 public class CallbackRechargeLogsAdapter extends BaseUserAdapter<CallbackRechargeLogInfo>
 {
-	protected final ICallbackRechargeLogsAdapterItemClicked iCallbackRechargeLogsAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public CallbackRechargeLogsAdapter(Context context, List<CallbackRechargeLogInfo> list, ICallbackRechargeLogsAdapterItemClicked callbackRechargeLogsAdapterItemClicked)
+	public CallbackRechargeLogsAdapter(Context context, List<CallbackRechargeLogInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iCallbackRechargeLogsAdapterItemClicked = callbackRechargeLogsAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -56,21 +56,21 @@ public class CallbackRechargeLogsAdapter extends BaseUserAdapter<CallbackRecharg
 		viewHolder.tvAmount.setText("充值金额:" + callbackRechargeLogInfo.getAmount() + "(充值卡充值默认为0)");
 		viewHolder.tvRechargeDate.setText("充值时间:" + DateTimeTools.getRelativeTimeSpanString(callbackRechargeLogInfo.getRechargeDateLong()));
 		viewHolder.tvRemark.setText("备注:" + callbackRechargeLogInfo.getRemark());
-		if (iCallbackRechargeLogsAdapterItemClicked != null)
+		if (iItemClick != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					iCallbackRechargeLogsAdapterItemClicked.onItemClicked(callbackRechargeLogInfo);
+					iItemClick.onItemClicked(callbackRechargeLogInfo);
 				}
 			});
 		}
 		return convertView;
 	}
 
-	public interface ICallbackRechargeLogsAdapterItemClicked
+	public interface IItemClick
 	{
 		void onItemClicked(CallbackRechargeLogInfo callbackRechargeLogInfo);
 	}

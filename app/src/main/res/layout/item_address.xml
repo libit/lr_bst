@@ -16,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="15dp"
             android:layout_weight="1"
             android:orientation="vertical">
             <LinearLayout
@@ -29,7 +29,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0"
                     android:gravity="center_vertical"
-                    android:textColor="#ff485266"
+                    android:textColor="@color/black"
                     android:textSize="16sp"/>
                 <TextView
                     android:id="@+id/tv_number"
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:textColor="#ff485266"
+                android:textColor="@color/black"
                 android:textSize="16sp"/>
         </LinearLayout>
         <ImageView
@@ -58,16 +58,17 @@
             android:layout_marginTop="4dp"
             android:background="@color/transparent"
             android:gravity="center_vertical"
-            android:padding="8dp"
-            android:src="@drawable/orderdetail_comment_create"/>
+            android:padding="12dp"
+            android:src="@drawable/ic_edit_address"/>
     </LinearLayout>
     <ImageView
         android:id="@+id/iv_default"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="top|left"
+        android:alpha="0.5"
         android:background="@color/transparent"
         android:gravity="center_vertical"
-        android:src="@drawable/background_new_angle"
+        android:src="@drawable/ic_default_address"
         android:visibility="gone"/>
 </FrameLayout>

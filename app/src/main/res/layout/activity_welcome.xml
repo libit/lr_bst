@@ -33,7 +33,7 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/bg_index_new_product"
+        android:background="@drawable/bg_btn_common"
         android:text="立即体验"
         android:textSize="20sp"
         android:visibility="gone"/>

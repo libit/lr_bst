@@ -38,11 +38,10 @@ public class ShopProductService extends BaseService
 	 * @param size
 	 * @param orderInfos
 	 * @param searchInfos
-	 * @param advancedSearch
 	 * @param tips
 	 * @param needServiceProcessData
 	 */
-	public void getAdminProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
+	public void getAdminProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
@@ -60,7 +59,7 @@ public class ShopProductService extends BaseService
 	 * @param tips                   提示信息
 	 * @param needServiceProcessData
 	 */
-	public void getProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
+	public void getProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
@@ -80,11 +79,10 @@ public class ShopProductService extends BaseService
 	 * @param size
 	 * @param orderInfos
 	 * @param searchInfos
-	 * @param advancedSearch
 	 * @param tips
 	 * @param needServiceProcessData
 	 */
-	public void getAgentProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
+	public void getAgentProductList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
@@ -97,12 +95,39 @@ public class ShopProductService extends BaseService
 	}
 
 	/**
+	 * 如果提供商家ID，则返回商家的商品列表,否则根据提供的地址位置选择最近的商家
+	 *
+	 * @param shopId                 商家ID
+	 * @param location               地址位置
+	 * @param condition
+	 * @param start
+	 * @param size
+	 * @param orderInfos
+	 * @param searchInfos
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getShopProductList(String shopId, String location, String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("shopId", shopId);
+		params.put("location", location);
+		params.put("start", start);
+		params.put("length", size);
+		if (!StringTools.isNull(condition))
+		{
+			params.put("search[value]", condition);
+		}
+		ajaxStringCallback(ApiConfig.GET_LOCATION_SHOP_PRODUCT_LIST, params, tips, needServiceProcessData);
+	}
+
+	/**
 	 * 获取商品列表
 	 *
 	 * @param tips                   提示信息
 	 * @param needServiceProcessData
 	 */
-	public void getProductSortList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
+	public void getProductSortList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
@@ -121,7 +146,7 @@ public class ShopProductService extends BaseService
 	 * @param tips                   提示信息
 	 * @param needServiceProcessData
 	 */
-	public void getBrandList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, boolean advancedSearch, String tips, final boolean needServiceProcessData)
+	public void getBrandList(String condition, int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);

@@ -19,23 +19,26 @@ import com.lrcall.appbst.models.UserAddressInfo;
 import com.lrcall.appbst.services.AddressService;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
-import com.lrcall.db.DbUserAddressInfoFactory;
+import com.lrcall.events.AddressEvent;
 import com.lrcall.ui.adapter.AddressAdapter;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.PreferenceUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityAddressList extends MyBaseActivity implements IAjaxDataResponse, XListView.IXListViewListener
+public class ActivityAddressList extends MyBasePageActivity implements IAjaxDataResponse, View.OnClickListener
 {
 	private static final String TAG = ActivityAddressList.class.getSimpleName();
 	public static final int REQ_EDIT = 200;
 	public static final int REQ_ADD = 201;
-	private XListView xListView;
+	private View layoutAddressList, layoutNoAddress;
 	private AddressService mAddressService;
 	private List<UserAddressInfo> mUserAddressInfoList = new ArrayList<>();
+	private AddressAdapter mAddressAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -45,14 +48,27 @@ public class ActivityAddressList extends MyBaseActivity implements IAjaxDataResp
 		mAddressService = new AddressService(this);
 		mAddressService.addDataResponse(this);
 		viewInit();
+		EventBus.getDefault().register(this);
+		onRefresh();
 	}
 
 	@Override
-	protected void onResume()
+	protected void onDestroy()
 	{
-		super.onResume();
-		initData();
-		onRefresh();
+		EventBus.getDefault().unregister(this);
+		super.onDestroy();
+	}
+
+	@Subscribe
+	public void onEventMainThread(AddressEvent addressEvent)
+	{
+		if (addressEvent != null)
+		{
+			//			if (addressEvent.getEvent().equals(AddressEvent.EVENT_ADD) || addressEvent.getEvent().equals(AddressEvent.EVENT_UPDATE))
+			{
+				onRefresh();
+			}
+		}
 	}
 
 	@Override
@@ -60,65 +76,106 @@ public class ActivityAddressList extends MyBaseActivity implements IAjaxDataResp
 	{
 		super.viewInit();
 		setBackButton();
+		layoutAddressList = findViewById(R.id.layout_address_list);
+		layoutNoAddress = findViewById(R.id.layout_no_address);
 		xListView = (XListView) findViewById(R.id.xlist);
-	}
-
-	private void initData()
-	{
-		mUserAddressInfoList = DbUserAddressInfoFactory.getInstance().getUserAddressInfoList(PreferenceUtils.getInstance().getUsername());
-		AddressAdapter addressAdapter = new AddressAdapter(this, mUserAddressInfoList, new AddressAdapter.IAddressAdapterItemClicked()
-		{
-			@Override
-			public void onAddressClicked(View v, UserAddressInfo userAddressInfo)
-			{
-				Intent intent = new Intent();
-				intent.putExtra(ConstValues.DATA_ADDRESS_ID, userAddressInfo.getAddressId());
-				setResult(RESULT_OK, intent);
-				finish();
-			}
-
-//			@Override
-//			public void onAddressEditClicked(View v, UserAddressInfo userAddressInfo)
-//			{
-//				Intent intent = new Intent(ActivityAddressList.this, ActivityAddressEdit.class);
-//				intent.putExtra(ConstValues.DATA_ADDRESS_ID, userAddressInfo.getAddressId());
-//				ActivityAddressList.this.startActivityForResult(intent, REQ_EDIT);
-//			}
-		});
-		xListView.setAdapter(addressAdapter);
 		xListView.setPullRefreshEnable(true);
+		xListView.setPullLoadEnable(true);
 		xListView.setXListViewListener(this);
+		findViewById(R.id.btn_add).setOnClickListener(this);
 	}
 
 	@Override
-	public void onRefresh()
+	public void refreshData()
 	{
-		mAddressService.getUserAddressInfoList(null, true);
+		mUserAddressInfoList.clear();
+		mAddressAdapter = null;
+		loadMoreData();
 	}
 
 	@Override
-	public void onLoadMore()
+	public void loadMoreData()
 	{
+		String tips = (mDataStart == 0 ? "请稍后..." : "");
+		mAddressService.getUserAddressInfoList(mDataStart, getPageSize(), null, null, tips, true);
+	}
+
+	synchronized private void refreshAddressInfoList(List<UserAddressInfo> userAddressInfoList)
+	{
+		if (userAddressInfoList == null || userAddressInfoList.size() < 1)
+		{
+			xListView.setPullLoadEnable(false);
+			if (mUserAddressInfoList.size() < 1)
+			{
+				layoutAddressList.setVisibility(View.GONE);
+				layoutNoAddress.setVisibility(View.VISIBLE);
+			}
+			return;
+		}
+		layoutAddressList.setVisibility(View.VISIBLE);
+		layoutNoAddress.setVisibility(View.GONE);
+		if (userAddressInfoList.size() < getPageSize())
+		{
+			xListView.setPullLoadEnable(false);
+		}
+		for (UserAddressInfo userAddressInfo : userAddressInfoList)
+		{
+			mUserAddressInfoList.add(userAddressInfo);
+		}
+		if (mAddressAdapter == null)
+		{
+			AddressAdapter.IItemClick addressAdapterItemClicked = new AddressAdapter.IItemClick()
+			{
+				@Override
+				public void onAddressClicked(View v, final UserAddressInfo userAddressInfo)
+				{
+					if (userAddressInfo != null)
+					{
+						Intent intent = new Intent();
+						intent.putExtra(ConstValues.DATA_ADDRESS_ID, userAddressInfo.getAddressId());
+						setResult(RESULT_OK, intent);
+						finish();
+					}
+				}
+			};
+			mAddressAdapter = new AddressAdapter(this, mUserAddressInfoList, addressAdapterItemClicked);
+			xListView.setAdapter(mAddressAdapter);
+		}
+		else
+		{
+			mAddressAdapter.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
+			case R.id.btn_add:
+			{
+				startActivityForResult(new Intent(this, ActivityAddressAdd.class), REQ_ADD);
+				break;
+			}
+		}
 	}
 
 	@Override
 	public boolean onAjaxDataResponse(String url, String result, AjaxStatus status)
 	{
+		xListView.stopRefresh();
+		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_ADDRESS_LIST))
 		{
-			xListView.stopRefresh();
+			List<UserAddressInfo> userAddressInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<UserAddressInfo> userAddressInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<UserAddressInfo>>()
+				userAddressInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<UserAddressInfo>>()
 				{
 				}.getType());
-				if (userAddressInfoList != null && userAddressInfoList.size() > 0)
-				{
-					mUserAddressInfoList.clear();
-					initData();
-				}
 			}
+			refreshAddressInfoList(userAddressInfoList);
 			return true;
 		}
 		return false;
@@ -135,7 +192,12 @@ public class ActivityAddressList extends MyBaseActivity implements IAjaxDataResp
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
-		if (id == R.id.action_add_address)
+		if (id == R.id.action_refresh)
+		{
+			onRefresh();
+			return true;
+		}
+		else if (id == R.id.action_add_address)
 		{
 			startActivityForResult(new Intent(this, ActivityAddressAdd.class), REQ_ADD);
 			return true;
@@ -151,7 +213,7 @@ public class ActivityAddressList extends MyBaseActivity implements IAjaxDataResp
 		{
 			if (resultCode == RESULT_OK)
 			{
-				initData();
+				//				onRefresh();
 			}
 		}
 	}

@@ -109,7 +109,7 @@ public class FragmentCategory extends MyBaseFragment implements View.OnClickList
 	private void setFirstSortList()
 	{
 		List<ProductSortInfo> productSortInfoList = DbProductSortInfoFactory.getInstance().getProductSortInfoListByLevelId(1);
-		CategoryAdapter lvAdapter = new CategoryAdapter(getContext(), productSortInfoList, new CategoryAdapter.ICategoryProductSortAdapterItemClicked()
+		CategoryAdapter lvAdapter = new CategoryAdapter(getContext(), productSortInfoList, new CategoryAdapter.IItemClick()
 		{
 			@Override
 			public void onProductSortClicked(View v, ProductSortInfo productSortInfo)
@@ -168,7 +168,7 @@ public class FragmentCategory extends MyBaseFragment implements View.OnClickList
 	//设置二级分类
 	private void setSecondSortList(List<ProductSortInfo> productSortInfoList)
 	{
-		CategorySortAdapter gvAdapter = new CategorySortAdapter(getContext(), productSortInfoList, new CategorySortAdapter.IProductSortAdapterItemClicked()
+		CategorySortAdapter gvAdapter = new CategorySortAdapter(getContext(), productSortInfoList, new CategorySortAdapter.IItemClick()
 		{
 			@Override
 			public void onProductSortClicked(ProductSortInfo productSortInfo)

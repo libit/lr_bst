@@ -26,12 +26,12 @@ import java.util.List;
  */
 public class PayAdapter extends BaseUserAdapter<PayInfo>
 {
-	protected final IPayAdapterItemClicked iPayAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public PayAdapter(Context context, List<PayInfo> list, IPayAdapterItemClicked iPayAdapterItemClicked)
+	public PayAdapter(Context context, List<PayInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iPayAdapterItemClicked = iPayAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -44,10 +44,9 @@ public class PayAdapter extends BaseUserAdapter<PayInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new PayViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-			viewHolder.ivLogo = (ImageView) convertView.findViewById(R.id.iv_logo);
+			viewHolder = new PayViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -64,21 +63,21 @@ public class PayAdapter extends BaseUserAdapter<PayInfo>
 		{
 			viewHolder.ivLogo.setImageBitmap(null);
 		}
-		if (iPayAdapterItemClicked != null)
+		if (iItemClick != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					iPayAdapterItemClicked.onPayClicked(v, payInfo);
+					iItemClick.onPayClicked(v, payInfo);
 				}
 			});
 		}
 		return convertView;
 	}
 
-	public interface IPayAdapterItemClicked
+	public interface IItemClick
 	{
 		void onPayClicked(View v, PayInfo payInfo);
 	}
@@ -87,6 +86,12 @@ public class PayAdapter extends BaseUserAdapter<PayInfo>
 	{
 		public ImageView ivLogo;
 		public TextView tvName;
+
+		public void viewInit(View convertView)
+		{
+			tvName = (TextView) convertView.findViewById(R.id.tv_name);
+			ivLogo = (ImageView) convertView.findViewById(R.id.iv_logo);
+		}
 
 		public void clear()
 		{

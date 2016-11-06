@@ -83,18 +83,6 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 		mPointOrderService.addDataResponse(this);
 		viewInit();
 		initData();
-		if (payTypeInfo.getPayType().getType().equals(PayType.PAY_ORDER.getType()))
-		{
-			mOrderService.getOrderInfo(orderId, "请稍后...", false);
-		}
-		else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()))
-		{
-			mDataTrafficOrderService.getOrderInfo(orderId, "请稍后...", false);
-		}
-		else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_POINT_ORDER.getType()))
-		{
-			mPointOrderService.getOrderInfo(orderId, "请稍后...", false);
-		}
 	}
 
 	@Override
@@ -111,6 +99,18 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 	private void initData()
 	{
 		mUserService.getUserBalanceInfo(null, false);
+		if (payTypeInfo.getPayType().getType().equals(PayType.PAY_ORDER.getType()))
+		{
+			mOrderService.getOrderInfo(orderId, "请稍后...", false);
+		}
+		else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()))
+		{
+			mDataTrafficOrderService.getOrderInfo(orderId, "请稍后...", false);
+		}
+		else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_POINT_ORDER.getType()))
+		{
+			mPointOrderService.getOrderInfo(orderId, "请稍后...", false);
+		}
 	}
 
 	@Override
@@ -168,16 +168,11 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 		}
 		else if (url.endsWith(ApiConfig.PAY_BY_BALANCE))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "支付成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "支付成功！");
 				setResult(RESULT_OK);
 				finish();
-			}
-			else
-			{
-				showServerMsg(result);
 			}
 			return true;
 		}
@@ -192,16 +187,11 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 		}
 		else if (url.endsWith(ApiConfig.PAY_DATA_TRAFFIC_BY_BALANCE))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "支付成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "支付成功！");
 				setResult(RESULT_OK);
 				finish();
-			}
-			else
-			{
-				showServerMsg(result);
 			}
 			return true;
 		}
@@ -223,22 +213,17 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 			}
 			else
 			{
-				showServerMsg(result);
+				showServerMsg(result, null);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.PAY_POINT_ORDER_BY_BALANCE))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "支付成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "支付成功！");
 				setResult(RESULT_OK);
 				finish();
-			}
-			else
-			{
-				showServerMsg(result);
 			}
 			return true;
 		}

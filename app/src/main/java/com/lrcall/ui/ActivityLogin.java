@@ -20,6 +20,7 @@ import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
+import com.lrcall.utils.apptools.AppFactory;
 
 public class ActivityLogin extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
@@ -43,7 +44,12 @@ public class ActivityLogin extends MyBaseActivity implements View.OnClickListene
 		findViewById(R.id.btn_login).setOnClickListener(this);
 		findViewById(R.id.btn_register).setOnClickListener(this);
 		findViewById(R.id.tv_reset_pwd).setOnClickListener(this);
-		etUsername.setText(PreferenceUtils.getInstance().getUsername());
+		String number = PreferenceUtils.getInstance().getUsername();
+		if (StringTools.isNull(number))
+		{
+			number = AppFactory.getInstance().getPhoneNumber();
+		}
+		etUsername.setText(number);
 	}
 
 	@Override
@@ -134,14 +140,11 @@ public class ActivityLogin extends MyBaseActivity implements View.OnClickListene
 	{
 		if (url.endsWith(ApiConfig.USER_LOGIN))
 		{
+			showServerMsg(result, "登录成功！");
 			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
 				setResult(ConstValues.RESULT_LOGIN_SUCCESS);
 				finish();
-			}
-			else
-			{
-				showServerMsg(result);
 			}
 		}
 		return true;

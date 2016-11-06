@@ -28,12 +28,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
                         android:layout_marginRight="5dp"
                         android:gravity="center_vertical|right"
-                        android:minWidth="100dp"
+                        android:minWidth="120dp"
                         android:text="收件人姓名："
-                        android:textColor="@android:color/widget_edittext_dark"
+                        android:textColor="@color/black"
                         android:textSize="18sp"/>
                     <TextView
                         android:id="@+id/tv_name"
@@ -57,12 +56,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
                         android:layout_marginRight="5dp"
                         android:gravity="center_vertical|right"
-                        android:minWidth="100dp"
+                        android:minWidth="120dp"
                         android:text="联系电话："
-                        android:textColor="@android:color/widget_edittext_dark"
+                        android:textColor="@color/black"
                         android:textSize="18sp"/>
                     <TextView
                         android:id="@+id/tv_number"
@@ -84,14 +82,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
                         android:layout_marginTop="10dp"
-                        android:minWidth="100dp"
+                        android:gravity="center_vertical|right"
                         android:text="发货地址："
-                        android:textColor="@android:color/widget_edittext_dark"
+                        android:textColor="@color/black"
                         android:textSize="18sp"/>
                     <TextView
                         android:id="@+id/tv_address"
@@ -123,7 +119,7 @@
                         android:gravity="center_vertical|right"
                         android:minWidth="100dp"
                         android:text="选择快递："
-                        android:textColor="@android:color/widget_edittext_dark"
+                        android:textColor="@color/black"
                         android:textSize="18sp"/>
                     <Spinner
                         android:id="@+id/sp_express"
@@ -149,7 +145,7 @@
                         android:gravity="center_vertical|right"
                         android:minWidth="100dp"
                         android:text="快递单号："
-                        android:textColor="@android:color/widget_edittext_dark"
+                        android:textColor="@color/black"
                         android:textSize="18sp"/>
                     <EditText
                         android:id="@+id/et_express_id"
@@ -192,11 +188,10 @@
                 <Button
                     android:id="@+id/btn_send"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_primary"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_btn_common"
                     android:text="确定发货"
+                    android:textColor="@color/white"
                     android:textSize="18sp"/>
             </LinearLayout>
         </LinearLayout>

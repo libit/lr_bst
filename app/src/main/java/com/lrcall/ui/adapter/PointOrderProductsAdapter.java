@@ -31,12 +31,12 @@ import java.util.List;
  */
 public class PointOrderProductsAdapter extends BaseUserAdapter<OrderProductInfo>
 {
-	protected final IOrderProductsAdapter iOrderProductsAdapter;
+	protected final IItemClick iItemClick;
 
-	public PointOrderProductsAdapter(Context context, List<OrderProductInfo> list, IOrderProductsAdapter iOrderProductsAdapter)
+	public PointOrderProductsAdapter(Context context, List<OrderProductInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.iOrderProductsAdapter = iOrderProductsAdapter;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -49,12 +49,9 @@ public class PointOrderProductsAdapter extends BaseUserAdapter<OrderProductInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new ProductViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_order_product, null);
-			viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_label);
-			viewHolder.tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
-			viewHolder.tvAmount = (TextView) convertView.findViewById(R.id.tv_amount);
+			viewHolder = new ProductViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -101,20 +98,20 @@ public class PointOrderProductsAdapter extends BaseUserAdapter<OrderProductInfo>
 		viewHolder.tvName.setText(pointProductInfo.getName());
 		viewHolder.tvPrice.setText("" + pointProductInfo.getPoint());
 		viewHolder.tvAmount.setText("X " + orderProductInfo.getCount());
-		if (iOrderProductsAdapter != null)
+		if (iItemClick != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					iOrderProductsAdapter.onProductClicked(pointProductInfo);
+					iItemClick.onProductClicked(pointProductInfo);
 				}
 			});
 		}
 	}
 
-	public interface IOrderProductsAdapter
+	public interface IItemClick
 	{
 		/**
 		 * 点击商品事件
@@ -136,6 +133,14 @@ public class PointOrderProductsAdapter extends BaseUserAdapter<OrderProductInfo>
 		public TextView tvName;
 		public TextView tvPrice;
 		public TextView tvAmount;
+
+		public void viewInit(View convertView)
+		{
+			ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+			tvName = (TextView) convertView.findViewById(R.id.tv_label);
+			tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+			tvAmount = (TextView) convertView.findViewById(R.id.tv_amount);
+		}
 
 		public void clear()
 		{

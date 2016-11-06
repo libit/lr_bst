@@ -4,8 +4,6 @@
  */
 package com.lrcall.appbst.services;
 
-import com.lrcall.utils.AppConfig;
-
 /**
  * Created by libit on 16/4/6.
  */
@@ -14,9 +12,9 @@ public class ApiConfig
 	public static final String API_VERSION = "1";
 	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
 	private static final String DEBUG_URL = "http://192.168.168.6:8080/lr_bst/user";
-	//		private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	//		private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	public static final String SUBMIT_BUG = RELEASE_URL + "/lr_bst/user/ajaxAddClientBugInfo";//BUG日志提交
+	//	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	//	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
 	public static final String CHECK_UPDATE = RELEASE_URL + "/ajaxGetLastClientInfo";//检查更新
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
 	public static final String SUBMIT_ADVICE = getServerUrl() + "/ajaxAddAdviceInfo";//提交意见反馈
@@ -167,15 +165,18 @@ public class ApiConfig
 	public static final String GET_POINT_ORDER = getServerUrl() + "/ajaxGetPointOrder";//获取积分商品订单
 	public static final String GET_POINT_ORDER_EXPRESS_INFO = getServerUrl() + "/ajaxGetPointOrderExpressInfo";//获取积分商品订单快递信息
 	public static final String PAY_POINT_ORDER_BY_BALANCE = getServerUrl() + "/ajaxPointOrderPayByBalance";//余额方式支付积分订单
+	//微店
+	public static final String GET_LOCATION_SHOP_PRODUCT_LIST = getServerUrl() + "/ajaxGetShopProductList";//获取附近商家商品列表
+	public static final String GET_SHOP_LIST = getServerUrl() + "/ajaxGetShopList";//获取商家列表
 
 	//获取服务器地址
 	public static String getServerUrl()
 	{
-		if (AppConfig.isDebug())
-		{
-			return DEBUG_URL;
-		}
-		else
+		//		if (AppConfig.isDebug())
+		//		{
+		//			return DEBUG_URL;
+		//		}
+		//		else
 		{
 			return RELEASE_URL;
 		}

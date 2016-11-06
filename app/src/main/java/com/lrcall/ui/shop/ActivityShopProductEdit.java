@@ -2,7 +2,7 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui;
+package com.lrcall.ui.shop;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -30,6 +30,7 @@ import com.lrcall.appbst.services.PicService;
 import com.lrcall.appbst.services.ShopProductService;
 import com.lrcall.appbst.services.ShopService;
 import com.lrcall.enums.NeedExpress;
+import com.lrcall.ui.MyBaseActivity;
 import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
@@ -42,9 +43,9 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-public class ActivityProductEdit extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
+public class ActivityShopProductEdit extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
-	private static final String TAG = ActivityProductEdit.class.getSimpleName();
+	private static final String TAG = ActivityShopProductEdit.class.getSimpleName();
 	private EditText etName, etPrice, etPoint, etMarketPrice, etExpressPrice, etAgentShare, etAddShare, etCount, etSortIndex, etDesc, etConfig, etContent;
 	private CheckBox cbNeedExpress;
 	private ImageView ivProduct;
@@ -60,7 +61,7 @@ public class ActivityProductEdit extends MyBaseActivity implements View.OnClickL
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_product_edit);
+		setContentView(R.layout.activity_shop_product_edit);
 		String product = getIntent().getStringExtra(ConstValues.DATA_PRODUCT);
 		mProductInfo = GsonTools.getObject(product, ProductInfo.class);
 		if (mProductInfo == null)
@@ -71,8 +72,8 @@ public class ActivityProductEdit extends MyBaseActivity implements View.OnClickL
 		mShopProductService = new ShopProductService(this);
 		mShopProductService.addDataResponse(this);
 		viewInit();
-		mShopProductService.getProductSortList(null, 0, -1, null, null, false, null, false);
-		mShopProductService.getBrandList(null, 0, -1, null, null, false, null, false);
+		mShopProductService.getProductSortList(null, 0, -1, null, null, null, false);
+		mShopProductService.getBrandList(null, 0, -1, null, null, null, false);
 		etName.setText(mProductInfo.getName());
 		etPrice.setText(mProductInfo.getPrice() + "");
 		//		etPoint.setText(mProductInfo.getPrice());
@@ -244,21 +245,11 @@ public class ActivityProductEdit extends MyBaseActivity implements View.OnClickL
 	{
 		if (url.endsWith(ApiConfig.SHOP_UPDATE_PRODUCT))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			showServerMsg(result, "更新商品成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
 				setResult(RESULT_OK);
 				finish();
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "更新商品成功！");
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "更新商品失败：" + msg);
 			}
 			return true;
 		}
@@ -336,13 +327,7 @@ public class ActivityProductEdit extends MyBaseActivity implements View.OnClickL
 			}
 			else
 			{
-				String msg = result;
-				ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "上传图片失败:" + msg);
+				showServerMsg(result, null);
 			}
 			return true;
 		}

@@ -2,7 +2,7 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui;
+package com.lrcall.ui.shop;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,6 @@ import com.lrcall.appbst.models.ExpressInfo;
 import com.lrcall.appbst.models.OrderProductInfo;
 import com.lrcall.appbst.models.OrderSubInfo;
 import com.lrcall.appbst.models.ProductInfo;
-import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.UserAddressInfo;
 import com.lrcall.appbst.services.AddressService;
 import com.lrcall.appbst.services.ApiConfig;
@@ -28,8 +27,9 @@ import com.lrcall.appbst.services.ShopOrderService;
 import com.lrcall.db.DbProductInfoFactory;
 import com.lrcall.enums.NeedExpress;
 import com.lrcall.enums.OrderStatus;
+import com.lrcall.ui.ActivityOrderShip;
+import com.lrcall.ui.MyBaseActivity;
 import com.lrcall.ui.adapter.OrderProductsAdapter;
-import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.ui.dialog.DialogInputComment;
 import com.lrcall.utils.ConstValues;
@@ -170,7 +170,7 @@ public class ActivityShopOrderInfo extends MyBaseActivity implements View.OnClic
 				totalPrice = expressPrice + productsPrice;
 				tvTotalPrice.setText(String.format("￥%s", StringTools.getPrice(totalPrice)));
 				tvRemark.setText(orderSubInfo.getComment());
-				OrderProductsAdapter orderProductsAdapter = new OrderProductsAdapter(this, orderSubInfo.getOrderProductInfoList(), new OrderProductsAdapter.IOrderProductsAdapter()
+				OrderProductsAdapter orderProductsAdapter = new OrderProductsAdapter(this, orderSubInfo.getOrderProductInfoList(), new OrderProductsAdapter.IItemClick()
 				{
 					@Override
 					public void onProductClicked(ProductInfo productInfo)
@@ -202,13 +202,7 @@ public class ActivityShopOrderInfo extends MyBaseActivity implements View.OnClic
 			}
 			else
 			{
-				ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-				String msg = "";
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, msg);
+				showServerMsg(result, null);
 			}
 			return true;
 		}

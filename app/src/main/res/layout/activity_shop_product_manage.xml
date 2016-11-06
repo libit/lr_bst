@@ -13,8 +13,7 @@
         android:layout_height="48dp"
         android:background="@drawable/bg_search_panel"
         android:paddingBottom="3dp"
-        android:paddingTop="3dp"
-        android:visibility="gone">
+        android:paddingTop="3dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -83,8 +82,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -126,5 +124,29 @@
             android:headerDividersEnabled="false"
             android:scrollbars="none">
         </com.external.xlistview.XListView>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_no_product"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="您还没有商品"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_btn_common"
+            android:text="去发布"
+            android:textColor="@color/white"
+            android:textSize="16dp"/>
     </LinearLayout>
 </LinearLayout>

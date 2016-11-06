@@ -150,7 +150,7 @@ public class FragmentInteract extends MyBaseFragment implements View.OnClickList
 		viewInit(rootView);
 		updateView();
 		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList());
-		refreshData();
+		onRefresh();
 		return rootView;
 	}
 
@@ -322,7 +322,7 @@ public class FragmentInteract extends MyBaseFragment implements View.OnClickList
 		}
 		else if (url.endsWith(ApiConfig.USER_SIGN_TODAY))
 		{
-			showServerMsg(result);
+			showServerMsg(result, null);
 		}
 		return false;
 	}

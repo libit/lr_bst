@@ -22,12 +22,12 @@ import java.util.List;
  */
 public class ContactsSearchAdapter extends BaseContactsAdapter<ContactInfo>
 {
-	protected final IContactsSearchAdapterItemClick contactsAdapterItemClicked;
+	protected final IItemClick iItemClick;
 
-	public ContactsSearchAdapter(Context context, List<ContactInfo> list, IContactsSearchAdapterItemClick contactsAdapterItemClicked)
+	public ContactsSearchAdapter(Context context, List<ContactInfo> list, IItemClick iItemClick)
 	{
 		super(context, list);
-		this.contactsAdapterItemClicked = contactsAdapterItemClicked;
+		this.iItemClick = iItemClick;
 	}
 
 	@Override
@@ -40,11 +40,9 @@ public class ContactsSearchAdapter extends BaseContactsAdapter<ContactInfo>
 		}
 		if (contactViewHolder == null)
 		{
-			contactViewHolder = new ContactViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_contact, null);
-			contactViewHolder.ivHeader = (ImageView) convertView.findViewById(R.id.contact_picture);
-			contactViewHolder.tvName = (TextView) convertView.findViewById(R.id.contact_name);
-			contactViewHolder.tvNumber = (TextView) convertView.findViewById(R.id.contact_number);
+			contactViewHolder = new ContactViewHolder();
+			contactViewHolder.viewInit(convertView);
 			convertView.setTag(contactViewHolder);
 		}
 		else
@@ -60,21 +58,21 @@ public class ContactsSearchAdapter extends BaseContactsAdapter<ContactInfo>
 			LocalTools.setLocal(context, contactViewHolder.tvNumber, number, true);
 		}
 		loadBitmap(contactInfo.getContactId(), contactViewHolder.ivHeader);
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClick != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (contactsAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					contactsAdapterItemClicked.onItemClicked(contactInfo);
+					iItemClick.onItemClicked(contactInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
-	public interface IContactsSearchAdapterItemClick
+	public interface IItemClick
 	{
 		void onItemClicked(ContactInfo contactInfo);
 	}
@@ -84,6 +82,13 @@ public class ContactsSearchAdapter extends BaseContactsAdapter<ContactInfo>
 		public ImageView ivHeader;
 		public TextView tvName;
 		public TextView tvNumber;
+
+		public void viewInit(View convertView)
+		{
+			ivHeader = (ImageView) convertView.findViewById(R.id.contact_picture);
+			tvName = (TextView) convertView.findViewById(R.id.contact_name);
+			tvNumber = (TextView) convertView.findViewById(R.id.contact_number);
+		}
 
 		public void clear()
 		{

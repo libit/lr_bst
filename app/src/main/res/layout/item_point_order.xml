@@ -117,6 +117,31 @@
             android:textSize="16sp"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/layout_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:padding="6dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:minWidth="90dp"
+            android:text="备注："
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/layout_pay_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -151,19 +176,21 @@
         <Button
             android:id="@+id/btn_order_pay"
             android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/btn_primary"
+            android:background="@drawable/bg_btn_common"
             android:text="立即付款"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone"/>
         <Button
             android:id="@+id/btn_cancel_order"
             android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/btn_primary"
+            android:background="@drawable/bg_btn_common"
             android:text="取消订单"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone"/>
     </LinearLayout>

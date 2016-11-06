@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.lrcall.appbst.R;
 import com.lrcall.contacts.ContactsFactory;
 import com.lrcall.models.TabInfo;
-import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.utils.ConstValues;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
@@ -31,7 +30,7 @@ import java.util.List;
 
 public class ActivityDial extends MyBaseActivity
 {
-	private final List<TabInfo> tabInfos = new ArrayList<>();
+	private final List<TabInfo> mTabInfoList = new ArrayList<>();
 	private ViewPager viewPager;
 	private Menu menu;
 	private Boolean bShowPad = true;
@@ -79,28 +78,25 @@ public class ActivityDial extends MyBaseActivity
 	synchronized protected void viewInit()
 	{
 		super.viewInit();
-		//设置滑动返回区域
-		getSwipeBackLayout().setEdgeSize(DisplayTools.getWindowWidth(this) / 4);
 		setBackButton();
 		//初始化Tab
 		if (bShowPad)
 		{
-			tabInfos.add(new TabInfo(0, "拨号", R.drawable.ic_tab_dialer_normal, FragmentDialer2.class));
+			mTabInfoList.add(new TabInfo(0, "拨号", R.drawable.ic_tab_dialer_normal, FragmentDialer2.class));
 		}
-		tabInfos.add(new TabInfo(1, "联系人", R.drawable.ic_tab_contacts_normal, FragmentContacts.class));
+		mTabInfoList.add(new TabInfo(1, "联系人", R.drawable.ic_tab_contacts_normal, FragmentContacts.class));
 		ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
 		//加载tab布局
 		tab.addView(LayoutInflater.from(this).inflate(R.layout.layout_dial_tab, tab, false));
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-		final LayoutInflater inflater = LayoutInflater.from(viewPagerTab.getContext());
+		final SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 		viewPagerTab.setCustomTabView(new SmartTabLayout.TabProvider()
 		{
 			@Override
 			public View createTabView(ViewGroup container, int position, PagerAdapter adapter)
 			{
-				TabInfo tabInfo = tabInfos.get(position);
-				View view = inflater.inflate(R.layout.item_dial_tab, container, false);
+				TabInfo tabInfo = mTabInfoList.get(position);
+				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_dial_tab, container, false);
 				ImageView imageView = (ImageView) view.findViewById(R.id.tab_icon);
 				TextView textView = (TextView) view.findViewById(R.id.tab_label);
 				imageView.setImageResource(tabInfo.getImgResId());
@@ -120,10 +116,10 @@ public class ActivityDial extends MyBaseActivity
 			@Override
 			public void onPageSelected(int position)
 			{
-				int size = tabInfos.size();
+				int size = mTabInfoList.size();
 				for (int i = 0; i < size; i++)
 				{
-					TabInfo tabInfo = tabInfos.get(i);
+					TabInfo tabInfo = mTabInfoList.get(i);
 					if (i == position)
 					{
 						tabInfo.getTvLabel().setTextColor(getResources().getColor(R.color.icon_enabled));
@@ -143,7 +139,7 @@ public class ActivityDial extends MyBaseActivity
 			}
 		});
 		FragmentPagerItems pages = new FragmentPagerItems(this);
-		for (TabInfo tabInfo : tabInfos)
+		for (TabInfo tabInfo : mTabInfoList)
 		{
 			pages.add(FragmentPagerItem.of(tabInfo.getLabel(), tabInfo.getLoadClass()));
 		}
@@ -151,7 +147,7 @@ public class ActivityDial extends MyBaseActivity
 		viewPager.setAdapter(adapter);
 		viewPagerTab.setViewPager(viewPager);
 		setTitle("拨号");
-		tabInfos.get(0).getTvLabel().setTextColor(getResources().getColor(R.color.icon_enabled));
+		mTabInfoList.get(0).getTvLabel().setTextColor(getResources().getColor(R.color.icon_enabled));
 		if (!bShowPad)
 		{
 			setTitle("联系人");
@@ -166,7 +162,7 @@ public class ActivityDial extends MyBaseActivity
 	 */
 	public void setCurrentPage(int index)
 	{
-		if (index > -1 && index < tabInfos.size())
+		if (index > -1 && index < mTabInfoList.size())
 		{
 			viewPager.setCurrentItem(index);
 		}

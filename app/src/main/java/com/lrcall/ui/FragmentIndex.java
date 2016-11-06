@@ -73,11 +73,8 @@ import java.util.concurrent.TimeUnit;
 public class FragmentIndex extends MyBasePageFragment implements View.OnClickListener, AbsListView.OnScrollListener, IAjaxDataResponse, AMapLocationListener
 {
 	private static final String TAG = FragmentIndex.class.getSimpleName();
-	public final static int MSG_LOCATION_START = 113;
-	/**
-	 * 定位完成
-	 */
-	public static final int MSG_LOCATION_FINISH = 114;
+	public static final int MSG_LOCATION_START = 113;//开始定位
+	public static final int MSG_LOCATION_FINISH = 114;//定位完成
 	private static final int SCROLL_VIEW_PAGE = 111;
 	private static final int SCROLL_NEWS = 112;
 	private static final int FUNC_COLUMNS_NUM = 4;
@@ -89,8 +86,8 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	private static final int FUNC_ADDRESSES = 3;
 	private static final int FUNC_POINT_SHOP = 4;
 	private static final int FUNC_HISTORY = 5;
-	private static final int FUNC_SHARE = 6;
-	private static final int FUNC_SHOP = 7;
+	private static final int FUNC_SHOP = 6;
+	private static final int FUNC_DATA_TRAFFIC = 7;
 	private static final int FUNC_USER_CENTER = 8;
 	private static final long SCROLL_TIME = 5;
 	private static final int DATA_TRAFFIC_COUNT = 4;
@@ -107,10 +104,10 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	private ProductService mProductService;
 	private DataTrafficService mDataTrafficService;
 	private BannerService mBannerService;
-	private IndexRecommendProducts4Adapter indexRecommendProductsAdapter;
-	private IndexRecommendProducts4Adapter indexConcessionProductsAdapter;
-	private IndexNewProductsAdapter indexNewProductsAdapter;
-	private IndexDataTrafficProductsAdapter indexDataTrafficProductsAdapter;
+	private IndexRecommendProducts4Adapter mIndexRecommendProducts4Adapter;
+	private IndexRecommendProducts4Adapter mIndexConcessionProductsAdapter;
+	private IndexNewProductsAdapter mIndexNewProductsAdapter;
+	private IndexDataTrafficProductsAdapter mIndexDataTrafficProductsAdapter;
 	private final List<Fragment> mFragmentRecommendList = new ArrayList<>();
 	private final List<NewsInfo> mNewsInfoList = new ArrayList<>();
 	private final List<DataTrafficInfo> mDataTrafficProductInfoList = new ArrayList<>();
@@ -266,9 +263,9 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		viewInit(rootView);
 		initFuncData();
 		updateView();
-		beginLocation();
+		//		beginLocation();
 		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList());
-		refreshData();
+		onRefresh();
 		return rootView;
 	}
 
@@ -373,8 +370,8 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		funcInfoList.add(new FuncInfo(FUNC_ADDRESSES, R.drawable.mine_icon_address, "地址"));
 		funcInfoList.add(new FuncInfo(FUNC_POINT_SHOP, R.drawable.mine_icon_care, "积分商城"));
 		funcInfoList.add(new FuncInfo(FUNC_HISTORY, R.drawable.mine_icon_website, "浏览记录"));
-		funcInfoList.add(new FuncInfo(FUNC_SHARE, R.drawable.mine_icon_shipped, "分享"));
-		funcInfoList.add(new FuncInfo(FUNC_SHOP, R.drawable.mine_icon_changps, "流量充值"));
+		funcInfoList.add(new FuncInfo(FUNC_SHOP, R.drawable.mine_icon_shipped, "微店"));
+		funcInfoList.add(new FuncInfo(FUNC_DATA_TRAFFIC, R.drawable.mine_icon_changps, "流量充值"));
 		funcInfoList.add(new FuncInfo(FUNC_USER_CENTER, R.drawable.mine_icon_wallet, "用户中心"));
 		IndexFuncsAdapter indexFuncsAdapter = new IndexFuncsAdapter(this.getContext(), funcInfoList, new BaseFuncsAdapter.IFuncsAdapterItemClicked()
 		{
@@ -387,7 +384,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 					{
 						if (UserService.isLogin())
 						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityStarList.class));
+							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityProductStarList.class));
 						}
 						else
 						{
@@ -436,12 +433,13 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 						}
 						break;
 					}
-					case FUNC_SHARE:
+					case FUNC_SHOP:
 					{
-						new UserService(FragmentIndex.this.getContext()).share("请稍后...", true);
+						//						new UserService(FragmentIndex.this.getContext()).share("请稍后...", true);
+						startActivity(new Intent(FragmentIndex.this.getContext(), ActivityShopProducts.class));
 						break;
 					}
-					case FUNC_SHOP:
+					case FUNC_DATA_TRAFFIC:
 					{
 						if (UserService.isLogin())
 						{
@@ -479,7 +477,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	{
 		mBannerService.getBannerInfoList(0, RECOMMEND_COUNT, null, true);
 		//获取新闻
-		mNewsService.getNewsInfoList(null, true);
+		mNewsService.getNewsInfoList(0, SHOW_NEWS_COUNT, null, null, null, true);
 		mDataTrafficService.getNewDataTrafficInfoList(mDataStart, DATA_TRAFFIC_COUNT, null, true);
 		mProductService.getRecommendProductList(mDataStart, RECOMMEND_COUNT, null, true);
 		mProductService.getConcessionProductList(mDataStart, RECOMMEND_COUNT, null, true);
@@ -491,7 +489,6 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	@Override
 	synchronized public void loadMoreData()
 	{
-		LogcatTools.debug(TAG, "开始位置mDataStart：" + mDataStart);
 		mProductService.getNewProductList(mDataStart, getPageSize(), null, true);
 	}
 
@@ -499,7 +496,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	synchronized public void onRefresh()
 	{
 		mNewProductInfoList.clear();
-		indexNewProductsAdapter = null;
+		mIndexNewProductsAdapter = null;
 		super.onRefresh();
 	}
 
@@ -518,9 +515,9 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		{
 			mDataTrafficProductInfoList.add(dataTrafficInfo);
 		}
-		if (indexDataTrafficProductsAdapter == null)
+		if (mIndexDataTrafficProductsAdapter == null)
 		{
-			indexDataTrafficProductsAdapter = new IndexDataTrafficProductsAdapter(this.getContext(), mDataTrafficProductInfoList, new IndexDataTrafficProductsAdapter.IDataTrafficProductsAdapter()
+			mIndexDataTrafficProductsAdapter = new IndexDataTrafficProductsAdapter(this.getContext(), mDataTrafficProductInfoList, new IndexDataTrafficProductsAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(DataTrafficInfo dataTrafficInfo)
@@ -537,11 +534,11 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 					}
 				}
 			});
-			gvDataTrafficProducts.setAdapter(indexDataTrafficProductsAdapter);
+			gvDataTrafficProducts.setAdapter(mIndexDataTrafficProductsAdapter);
 		}
 		else
 		{
-			indexDataTrafficProductsAdapter.notifyDataSetChanged();
+			mIndexDataTrafficProductsAdapter.notifyDataSetChanged();
 		}
 		ViewHeightCalTools.setGridViewHeight(gvDataTrafficProducts, NEW_DATA_TRAFFIC_PRODUCT_COLUMNS_NUM, true);
 	}
@@ -561,9 +558,9 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		{
 			mNewProductInfoList.add(productInfo);
 		}
-		if (indexNewProductsAdapter == null)
+		if (mIndexNewProductsAdapter == null)
 		{
-			indexNewProductsAdapter = new IndexNewProductsAdapter(this.getContext(), mNewProductInfoList, new IndexNewProductsAdapter.INewProductsAdapter()
+			mIndexNewProductsAdapter = new IndexNewProductsAdapter(this.getContext(), mNewProductInfoList, new IndexNewProductsAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(ProductInfo productInfo)
@@ -573,11 +570,11 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 					startActivity(intent);
 				}
 			});
-			gvNewProducts.setAdapter(indexNewProductsAdapter);
+			gvNewProducts.setAdapter(mIndexNewProductsAdapter);
 		}
 		else
 		{
-			indexNewProductsAdapter.notifyDataSetChanged();
+			mIndexNewProductsAdapter.notifyDataSetChanged();
 		}
 		ViewHeightCalTools.setGridViewHeight(gvNewProducts, NEW_PRODUCT_COLUMNS_NUM, true);
 	}
@@ -589,14 +586,14 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			return;
 		}
 		mRecommendProductInfoList.clear();
-		indexRecommendProductsAdapter = null;
+		mIndexRecommendProducts4Adapter = null;
 		for (ProductInfo productInfo : productInfoList)
 		{
 			mRecommendProductInfoList.add(productInfo);
 		}
-		if (indexRecommendProductsAdapter == null)
+		if (mIndexRecommendProducts4Adapter == null)
 		{
-			indexRecommendProductsAdapter = new IndexRecommendProducts4Adapter(this.getContext(), mRecommendProductInfoList, new IndexRecommendProducts4Adapter.IRecommendProductsAdapter()
+			mIndexRecommendProducts4Adapter = new IndexRecommendProducts4Adapter(this.getContext(), mRecommendProductInfoList, new IndexRecommendProducts4Adapter.IItemClick()
 			{
 				@Override
 				public void onProduct1Clicked(ProductInfo productInfo)
@@ -630,11 +627,11 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 					startActivity(intent);
 				}
 			});
-			lvRecommendProducts.setAdapter(indexRecommendProductsAdapter);
+			lvRecommendProducts.setAdapter(mIndexRecommendProducts4Adapter);
 		}
 		else
 		{
-			indexRecommendProductsAdapter.notifyDataSetChanged();
+			mIndexRecommendProducts4Adapter.notifyDataSetChanged();
 		}
 		ViewHeightCalTools.setListViewHeight(lvRecommendProducts, true);
 	}
@@ -646,14 +643,14 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			return;
 		}
 		mConcessionProductInfoList.clear();
-		indexConcessionProductsAdapter = null;
+		mIndexConcessionProductsAdapter = null;
 		for (ProductInfo productInfo : productInfoList)
 		{
 			mConcessionProductInfoList.add(productInfo);
 		}
-		if (indexConcessionProductsAdapter == null)
+		if (mIndexConcessionProductsAdapter == null)
 		{
-			indexConcessionProductsAdapter = new IndexRecommendProducts4Adapter(this.getContext(), mConcessionProductInfoList, new IndexRecommendProducts4Adapter.IRecommendProductsAdapter()
+			mIndexConcessionProductsAdapter = new IndexRecommendProducts4Adapter(this.getContext(), mConcessionProductInfoList, new IndexRecommendProducts4Adapter.IItemClick()
 			{
 				@Override
 				public void onProduct1Clicked(ProductInfo productInfo)
@@ -687,11 +684,11 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 					startActivity(intent);
 				}
 			});
-			lvConcessionProducts.setAdapter(indexConcessionProductsAdapter);
+			lvConcessionProducts.setAdapter(mIndexConcessionProductsAdapter);
 		}
 		else
 		{
-			indexConcessionProductsAdapter.notifyDataSetChanged();
+			mIndexConcessionProductsAdapter.notifyDataSetChanged();
 		}
 		ViewHeightCalTools.setListViewHeight(lvConcessionProducts, true);
 	}
@@ -701,6 +698,8 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	{
 		super.fragmentShow();
 		updateView();
+		//获取新闻
+		mNewsService.getNewsInfoList(0, SHOW_NEWS_COUNT, null, null, null, true);
 	}
 
 	@Override
@@ -845,7 +844,6 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 				List<ProductInfo> productInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductInfo>>()
 				{
 				}.getType());
-				LogcatTools.debug("ApiConfig", "GET_RECOMMEND_PRODUCT_LIST:" + result);
 				refreshRecommendProducts(productInfoList);
 			}
 		}
@@ -857,21 +855,20 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 				List<ProductInfo> productInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductInfo>>()
 				{
 				}.getType());
-				LogcatTools.debug("ApiConfig", "GET_CONCESSION_PRODUCT_LIST:" + result);
 				refreshConcessionProducts(productInfoList);
 			}
 		}
 		else if (url.endsWith(ApiConfig.GET_NEW_PRODUCT_LIST))
 		{
+			List<ProductInfo> productInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<ProductInfo> productInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductInfo>>()
+				productInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductInfo>>()
 				{
 				}.getType());
-				LogcatTools.debug("ApiConfig", "GET_PRODUCT_LIST:" + result);
-				refreshNewProducts(productInfoList);
 			}
+			refreshNewProducts(productInfoList);
 		}
 		else if (url.endsWith(ApiConfig.GET_NEW_DATA_TRAFFIC_LIST))
 		{

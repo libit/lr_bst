@@ -73,7 +73,8 @@ public class ActivityBalanceRecharge extends MyBaseActivity implements View.OnCl
 				}
 				p = p * 100;//转化成分
 				Intent intent = new Intent(this, ActivityPayList.class);
-				intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_BALANCE, p, getString(R.string.app_name) + "账户充值", PreferenceUtils.getInstance().getUsername())));
+				PayTypeInfo payTypeInfo = new PayTypeInfo(PayType.PAY_BALANCE, p, getString(R.string.app_name) + "账户充值", PreferenceUtils.getInstance().getUsername());
+				intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(payTypeInfo));
 				startActivity(intent);
 				finish();
 				break;

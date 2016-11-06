@@ -38,12 +38,12 @@ import com.lrcall.ui.adapter.FuncsHorizontalAdapter;
 import com.lrcall.ui.adapter.FuncsVerticalAdapter;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogList;
+import com.lrcall.ui.shop.ActivityShopInfo;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.CallTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 
@@ -81,8 +81,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 	{
 		View rootView = inflater.inflate(R.layout.fragment_more, container, false);
 		viewInit(rootView);
-		initData();
 		EventBus.getDefault().register(this);
+		initData();
 		return rootView;
 	}
 
@@ -139,7 +139,6 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 
 	protected void initData()
 	{
-		mUserService.getClientConfig(null, false);
 		String config = PreferenceUtils.getInstance().getStringValue(PreferenceUtils.CLIENT_CONFIG);
 		ClientConfigInfo clientConfigInfo = GsonTools.getReturnObject(config, ClientConfigInfo.class);
 		if (clientConfigInfo != null)
@@ -147,13 +146,11 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			tvServerPhone.setText(clientConfigInfo.getKefuNumber());
 			tvOfficalWeb.setText(clientConfigInfo.getOfficalWeb());
 		}
-		String userId = PreferenceUtils.getInstance().getUsername();
-		String sessionId = PreferenceUtils.getInstance().getSessionId();
-		if (!StringTools.isNull(userId) && !StringTools.isNull(sessionId))
+		mUserService.getClientConfig(null, true);
+		if (isbLogin())
 		{
 			setbLogin(true);
-			mUserService.getUserInfo(null, false);
-			mUserService.getUserBalanceInfo(null, false);
+			mUserService.getUserInfo(null, true);
 		}
 		else
 		{
@@ -164,18 +161,24 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 	@Subscribe
 	public void onEventMainThread(UserEvent userEvent)
 	{
-		LogcatTools.debug(TAG, "收到用户登录登出操作！");
-		setbLogin(isbLogin());
-		if (isbLogin())
+		if (userEvent.getEvent().equals(UserEvent.EVENT_LOGINED) || userEvent.getEvent().equals(UserEvent.EVENT_LOGOUT))
 		{
-			mUserService.getUserInfo(null, false);
+			setbLogin(isbLogin());
+			if (isbLogin())
+			{
+				mUserService.getUserInfo(null, true);
+			}
+		}
+		else
+		{
+			mUserService.getUserInfo(null, true);
 		}
 	}
 
 	@Override
 	public void onRefresh()
 	{
-		setbLogin(isbLogin());
+		initData();
 		xListView.stopRefresh();
 	}
 
@@ -371,7 +374,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			{
 				if (isbLogin())
 				{
-					startActivity(new Intent(this.getContext(), ActivityStarList.class));
+					startActivity(new Intent(this.getContext(), ActivityProductStarList.class));
 				}
 				else
 				{
@@ -429,14 +432,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		if (url.endsWith(ApiConfig.GET_USER_INFO))
 		{
 			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
-			if (userInfo == null)
-			{
-				// 获取失败，清空SessionId
-				PreferenceUtils.getInstance().setSessionId("");
-				ToastView.showCenterToast(this.getContext(), R.drawable.ic_do_fail, "登录信息已过期，请重新登录！");
-				setbLogin(false);
-			}
-			else
+			if (userInfo != null)
 			{
 				setbLogin(true);
 				String level = UserLevel.getLevelDesc(userInfo.getUserLevel());
@@ -446,6 +442,12 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 					agent = UserType.getDesc(userInfo.getUserType());
 				}
 				tvUserType.setText(level + " " + agent);
+				mUserService.getUserBalanceInfo(null, false);
+			}
+			else
+			{
+				ToastView.showCenterToast(this.getContext(), R.drawable.ic_do_fail, "登录信息已过期，请重新登录！");
+				setbLogin(false);
 			}
 		}
 		else if (url.endsWith(ApiConfig.GET_USER_BALANCE_INFO))

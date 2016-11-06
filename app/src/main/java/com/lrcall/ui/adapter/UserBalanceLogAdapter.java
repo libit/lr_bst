@@ -22,12 +22,12 @@ import java.util.List;
  */
 public class UserBalanceLogAdapter extends BaseUserAdapter<UserBalanceLogInfo>
 {
-	protected final IUserBalanceLogAdapterItemClicked iUserBalanceLogAdapterItemClicked;
+	protected final IItemClicked iItemClicked;
 
-	public UserBalanceLogAdapter(Context context, List<UserBalanceLogInfo> list, IUserBalanceLogAdapterItemClicked iUserBalanceLogAdapterItemClicked)
+	public UserBalanceLogAdapter(Context context, List<UserBalanceLogInfo> list, IItemClicked iItemClicked)
 	{
 		super(context, list);
-		this.iUserBalanceLogAdapterItemClicked = iUserBalanceLogAdapterItemClicked;
+		this.iItemClicked = iItemClicked;
 	}
 
 	@Override
@@ -40,12 +40,9 @@ public class UserBalanceLogAdapter extends BaseUserAdapter<UserBalanceLogInfo>
 		}
 		if (viewHolder == null)
 		{
-			viewHolder = new UserBalanceLogViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_user_balance_log, null);
-			viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_content);
-			viewHolder.tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
-			viewHolder.tvStatus = (TextView) convertView.findViewById(R.id.tv_status);
-			viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tv_date);
+			viewHolder = new UserBalanceLogViewHolder();
+			viewHolder.viewInit(convertView);
 			convertView.setTag(viewHolder);
 		}
 		else
@@ -56,21 +53,21 @@ public class UserBalanceLogAdapter extends BaseUserAdapter<UserBalanceLogInfo>
 		viewHolder.tvName.setText(userBalanceLogInfo.getContent());
 		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(userBalanceLogInfo.getAmount()));
 		viewHolder.tvDate.setText(DateTimeTools.getDateTimeString(userBalanceLogInfo.getAddDateLong()));
-		convertView.setOnClickListener(new View.OnClickListener()
+		if (iItemClicked != null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView.setOnClickListener(new View.OnClickListener()
 			{
-				if (iUserBalanceLogAdapterItemClicked != null)
+				@Override
+				public void onClick(View v)
 				{
-					iUserBalanceLogAdapterItemClicked.onUserBalanceLogClicked(userBalanceLogInfo);
+					iItemClicked.onUserBalanceLogClicked(userBalanceLogInfo);
 				}
-			}
-		});
+			});
+		}
 		return convertView;
 	}
 
-	public interface IUserBalanceLogAdapterItemClicked
+	public interface IItemClicked
 	{
 		void onUserBalanceLogClicked(UserBalanceLogInfo userBalanceLogInfo);
 	}
@@ -81,6 +78,14 @@ public class UserBalanceLogAdapter extends BaseUserAdapter<UserBalanceLogInfo>
 		public TextView tvPrice;
 		public TextView tvStatus;
 		public TextView tvDate;
+
+		public void viewInit(View convertView)
+		{
+			tvName = (TextView) convertView.findViewById(R.id.tv_content);
+			tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
+			tvStatus = (TextView) convertView.findViewById(R.id.tv_status);
+			tvDate = (TextView) convertView.findViewById(R.id.tv_date);
+		}
 
 		public void clear()
 		{

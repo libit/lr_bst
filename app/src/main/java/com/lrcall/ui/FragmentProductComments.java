@@ -56,7 +56,7 @@ public class FragmentProductComments extends MyBasePageFragment implements View.
 	{
 		View rootView = inflater.inflate(R.layout.fragment_product_comments, container, false);
 		viewInit(rootView);
-		refreshData();
+		onRefresh();
 		return rootView;
 	}
 
@@ -91,7 +91,7 @@ public class FragmentProductComments extends MyBasePageFragment implements View.
 				type = null;
 				resetBtnBackground();
 				btnAllComments.setBackgroundColor(getResources().getColor(selectedColor));
-				refreshData();
+				onRefresh();
 				break;
 			}
 			case R.id.btn_good_comments:
@@ -99,7 +99,7 @@ public class FragmentProductComments extends MyBasePageFragment implements View.
 				type = CommentType.GOOD.getType();
 				resetBtnBackground();
 				btnGoodComments.setBackgroundColor(getResources().getColor(selectedColor));
-				refreshData();
+				onRefresh();
 				break;
 			}
 			case R.id.btn_mid_comments:
@@ -107,7 +107,7 @@ public class FragmentProductComments extends MyBasePageFragment implements View.
 				type = CommentType.MID.getType();
 				resetBtnBackground();
 				btnMidComments.setBackgroundColor(getResources().getColor(selectedColor));
-				refreshData();
+				onRefresh();
 				break;
 			}
 			case R.id.btn_bad_comments:
@@ -115,7 +115,7 @@ public class FragmentProductComments extends MyBasePageFragment implements View.
 				type = CommentType.BAD.getType();
 				resetBtnBackground();
 				btnBadComments.setBackgroundColor(getResources().getColor(selectedColor));
-				refreshData();
+				onRefresh();
 				break;
 			}
 		}
@@ -180,14 +180,15 @@ public class FragmentProductComments extends MyBasePageFragment implements View.
 		xListView.stopLoadMore();
 		if (url.endsWith(ApiConfig.GET_PRODUCT_COMMENT_LIST))
 		{
+			List<ProductCommentInfo> productCommentInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<ProductCommentInfo> productCommentInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductCommentInfo>>()
+				productCommentInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductCommentInfo>>()
 				{
 				}.getType());
-				setAdapter(productCommentInfoList);
 			}
+			setAdapter(productCommentInfoList);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_PRODUCT_COMMENT_COUNT))

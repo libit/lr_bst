@@ -7,10 +7,6 @@ package com.lrcall.appbst.services;
 import android.content.Context;
 
 import com.androidquery.callback.AjaxStatus;
-import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.ReturnInfo;
-import com.lrcall.ui.customer.ToastView;
-import com.lrcall.utils.GsonTools;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,20 +71,20 @@ public class UserAgentService extends BaseService
 	{
 		if (url.endsWith(ApiConfig.USER_APPLY_AGENT))
 		{
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
-			{
-				ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getErrmsg());
-			}
-			else
-			{
-				String msg = "申请失败：" + result;
-				if (returnInfo != null)
-				{
-					msg = "申请失败：" + returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(context, R.drawable.ic_do_fail, msg);
-			}
+			//			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			//			if (ReturnInfo.isSuccess(returnInfo))
+			//			{
+			//				ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getErrmsg());
+			//			}
+			//			else
+			//			{
+			//				String msg = "申请失败：" + result;
+			//				if (returnInfo != null)
+			//				{
+			//					msg = "申请失败：" + returnInfo.getErrmsg();
+			//				}
+			//				ToastView.showCenterToast(context, R.drawable.ic_do_fail, msg);
+			//			}
 		}
 	}
 }

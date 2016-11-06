@@ -87,11 +87,11 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		viewInit();
 		instance = this;
+		viewInit();
 		EventBus.getDefault().register(this);
 		//提交日志
-		new BugService(this).submitBug(null, true);
+		new BugService(this).uploadLogFile(null, true);
 		//检查更新
 		mUpdateService = new UpdateService(this);
 		mUpdateService.addDataResponse(this);
@@ -135,7 +135,6 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		tab.addView(LayoutInflater.from(this).inflate(R.layout.layout_main_tab, tab, false));
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		final SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-		//		final LayoutInflater inflater = LayoutInflater.from(viewPagerTab.getContext());
 		viewPagerTab.setCustomTabView(new SmartTabLayout.TabProvider()
 		{
 			@Override
@@ -251,12 +250,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		LogcatTools.debug("onOptionsItemSelected", "ActivityMain");
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent context in AndroidManifest.xml.
 		int id = item.getItemId();
-		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_search)
 		{
 			startActivity(new Intent(this, ActivitySearchProducts.class));
@@ -439,6 +433,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 	@Override
 	public void onLoadMore()
 	{
+		xListView.stopLoadMore();
 	}
 
 	@Override

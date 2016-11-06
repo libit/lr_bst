@@ -139,7 +139,7 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 
 	private void initData()
 	{
-		PayAdapter payAdapter = new PayAdapter(this, mPayInfoList, new PayAdapter.IPayAdapterItemClicked()
+		PayAdapter payAdapter = new PayAdapter(this, mPayInfoList, new PayAdapter.IItemClick()
 		{
 			@Override
 			public void onPayClicked(View v, PayInfo payInfo)
@@ -202,13 +202,7 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 			}
 			else
 			{
-				String msg = "查询升级费用出错！";
-				ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, msg);
+				showServerMsg(result, null);
 			}
 			mPayService.getPayTypeList("请稍后...", true);
 			return true;

@@ -23,12 +23,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="收件人姓名："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_name"
@@ -51,12 +50,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="联系电话："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_number"
@@ -82,12 +80,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
+                    android:minWidth="120dp"
                     android:text="国家："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_country"
@@ -111,12 +108,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="省："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:minWidth="120dp"
+                    android:text="所在省："
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_province"
@@ -145,12 +141,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="市："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:minWidth="120dp"
+                    android:text="所在市："
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_city"
@@ -179,12 +174,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="区："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:minWidth="120dp"
+                    android:text="所在区："
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_district"
@@ -195,7 +189,7 @@
                     android:hint="请选择区"
                     android:visibility="gone"/>
                 <Spinner
-                    android:id="@+id/sp_country"
+                    android:id="@+id/sp_district"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:dropDownWidth="match_parent"/>
@@ -213,12 +207,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical|right"
-                    android:minWidth="100dp"
-                    android:text="地址："
-                    android:textColor="@android:color/widget_edittext_dark"
+                    android:minWidth="120dp"
+                    android:text="详细地址："
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <EditText
                     android:id="@+id/et_address"
@@ -226,7 +219,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
                     android:background="@null"
-                    android:hint="请输入详细地址"/>
+                    android:hint="请输入您的详细地址"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -243,11 +236,10 @@
                 <Button
                     android:id="@+id/btn_add"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_primary"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_btn_common"
                     android:text="添加收货地址"
+                    android:textColor="@color/white"
                     android:textSize="18sp"/>
             </LinearLayout>
         </LinearLayout>
