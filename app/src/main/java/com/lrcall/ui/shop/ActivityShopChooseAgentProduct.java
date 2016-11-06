@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.androidquery.callback.AjaxStatus;
@@ -38,7 +37,6 @@ public class ActivityShopChooseAgentProduct extends MyBasePageActivity implement
 	private static final String TAG = ActivityShopChooseAgentProduct.class.getSimpleName();
 	private View layoutProductList, layoutNoProduct;
 	private EditText etSearch;
-	private ListView lvSearchHistory;
 	private SearchProductsAdapter searchProductsAdapter;
 	private ShopProductService mProductService;
 	private final List<ProductInfo> mProductInfoList = new ArrayList<>();
@@ -84,7 +82,6 @@ public class ActivityShopChooseAgentProduct extends MyBasePageActivity implement
 		xListView.setPullRefreshEnable(true);
 		xListView.setPullLoadEnable(true);
 		xListView.setXListViewListener(this);
-		lvSearchHistory = (ListView) findViewById(R.id.list_search_history);
 		etSearch = (EditText) findViewById(R.id.et_search);
 		etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener()
 		{

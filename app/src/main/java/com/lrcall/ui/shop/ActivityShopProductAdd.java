@@ -220,52 +220,52 @@ public class ActivityShopProductAdd extends MyBaseActivity implements View.OnCli
 		}
 		else if (url.endsWith(ApiConfig.GET_SHOP_PRODUCT_SORT_LIST))
 		{
+			//先清空
+			mSortsList.clear();
 			TableData tableData = GsonTools.getObject(result, TableData.class);
+			List<String> stringList = new ArrayList<>();
 			if (tableData != null)
 			{
-				//先清空分类
-				mSortsList.clear();
 				List<ProductSortInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductSortInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
 					for (ProductSortInfo productSortInfo : list)
 					{
 						mSortsList.add(productSortInfo);
 						stringList.add(productSortInfo.getName());
 					}
-					spSortsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spSortsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spSorts.setAdapter(spSortsAdapter);
 				}
 			}
+			spSortsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spSortsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spSorts.setAdapter(spSortsAdapter);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_BRAND_LIST))
 		{
+			//先清空
+			mBrandsList.clear();
 			TableData tableData = GsonTools.getObject(result, TableData.class);
+			List<String> stringList = new ArrayList<>();
 			if (tableData != null)
 			{
-				//先清空分类
-				mBrandsList.clear();
 				List<BrandInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<BrandInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
 					for (BrandInfo brandInfo : list)
 					{
 						mBrandsList.add(brandInfo);
 						stringList.add(brandInfo.getName());
 					}
-					spBrandsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spBrandsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spBrands.setAdapter(spBrandsAdapter);
 				}
 			}
+			spBrandsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spBrandsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spBrands.setAdapter(spBrandsAdapter);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.SHOP_UPDATE_PIC))

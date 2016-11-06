@@ -255,18 +255,18 @@ public class ActivityShopProductEdit extends MyBaseActivity implements View.OnCl
 		}
 		else if (url.endsWith(ApiConfig.GET_SHOP_PRODUCT_SORT_LIST))
 		{
+			//先清空
+			mSortsList.clear();
 			TableData tableData = GsonTools.getObject(result, TableData.class);
+			List<String> stringList = new ArrayList<>();
+			int index = 0;
 			if (tableData != null)
 			{
-				//先清空分类
-				mSortsList.clear();
 				List<ProductSortInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ProductSortInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
-					int index = 0;
 					for (int i = 0; i < list.size(); i++)
 					{
 						ProductSortInfo productSortInfo = list.get(i);
@@ -277,28 +277,31 @@ public class ActivityShopProductEdit extends MyBaseActivity implements View.OnCl
 							index = i;
 						}
 					}
-					spSortsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spSortsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spSorts.setAdapter(spSortsAdapter);
-					spSorts.setSelection(index);
 				}
+			}
+			spSortsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spSortsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spSorts.setAdapter(spSortsAdapter);
+			if (index >= 0)
+			{
+				spSorts.setSelection(index);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_BRAND_LIST))
 		{
+			//先清空
+			mBrandsList.clear();
 			TableData tableData = GsonTools.getObject(result, TableData.class);
+			List<String> stringList = new ArrayList<>();
+			int index = 0;
 			if (tableData != null)
 			{
-				//先清空分类
-				mBrandsList.clear();
 				List<BrandInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<BrandInfo>>()
 				{
 				}.getType());
 				if (list != null)
 				{
-					List<String> stringList = new ArrayList<>();
-					int index = 0;
 					for (int i = 0; i < list.size(); i++)
 					{
 						BrandInfo brandInfo = list.get(i);
@@ -309,11 +312,14 @@ public class ActivityShopProductEdit extends MyBaseActivity implements View.OnCl
 							index = i;
 						}
 					}
-					spBrandsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
-					spBrandsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spBrands.setAdapter(spBrandsAdapter);
-					spBrands.setSelection(index);
 				}
+			}
+			spBrandsAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, stringList);
+			spBrandsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spBrands.setAdapter(spBrandsAdapter);
+			if (index >= 0)
+			{
+				spBrands.setSelection(index);
 			}
 			return true;
 		}

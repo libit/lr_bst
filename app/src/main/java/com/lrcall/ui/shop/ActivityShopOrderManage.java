@@ -135,7 +135,6 @@ public class ActivityShopOrderManage extends MyBasePageActivity implements View.
 				{
 					etSearch.setTextKeepState(number.substring(0, number.length() - 1));
 				}
-				//				search();
 				break;
 			}
 		}

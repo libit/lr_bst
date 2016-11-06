@@ -32,6 +32,7 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 	private ImageView ivHead;
 	private View btnRegister, btnAuth, layoutFuncs;
 	private ShopService mShopService;
+	private boolean bFirst = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -57,7 +58,13 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 
 	private void refreshData()
 	{
-		mShopService.getShopInfo("请稍后...", false);
+		String tips = null;
+		if (bFirst)
+		{
+			tips = "请稍后...";
+		}
+		bFirst = false;
+		mShopService.getShopInfo(tips, false);
 	}
 
 	@Override
@@ -158,13 +165,4 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 		}
 		return false;
 	}
-	//	@Override
-	//	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	//	{
-	//		super.onActivityResult(requestCode, resultCode, data);
-	//		if (requestCode == RESULT_OK)
-	//		{
-	//			refreshData();
-	//		}
-	//	}
 }

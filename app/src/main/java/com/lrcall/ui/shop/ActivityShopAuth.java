@@ -176,30 +176,21 @@ public class ActivityShopAuth extends MyBaseActivity implements View.OnClickList
 	{
 		if (url.endsWith(ApiConfig.SHOP_AUTH))
 		{
+			showServerMsg(result, "审核资料上传成功,请等待系统审核！");
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
 				setResult(RESULT_OK);
 				finish();
-				ToastView.showCenterToast(this, R.drawable.ic_done, "审核资料上传成功,请等待管理员审核！");
-			}
-			else
-			{
-				String msg = result;
-				if (returnInfo != null)
-				{
-					msg = returnInfo.getErrmsg();
-				}
-				ToastView.showCenterToast(this, R.drawable.ic_do_fail, "资料上传失败:" + msg);
 			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.SHOP_UPDATE_PIC))
 		{
+			showServerMsg(result, "图片上传成功！");
 			PicInfo picInfo = GsonTools.getReturnObject(result, PicInfo.class);
 			if (picInfo != null)
 			{
-				ToastView.showCenterToast(this, R.drawable.ic_done, "图片上传成功！");
 				ImageView iv = null;
 				if (currentIndex == 0)
 				{

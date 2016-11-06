@@ -87,7 +87,8 @@
                         android:background="@drawable/bg_btn_common"
                         android:text="升级"
                         android:textColor="@color/white"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:visibility="gone"/>
                 </LinearLayout>
                 <TextView
                     android:id="@+id/tv_apply_status"
