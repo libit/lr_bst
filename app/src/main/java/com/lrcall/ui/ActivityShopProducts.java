@@ -262,6 +262,7 @@ public class ActivityShopProducts extends MyBasePageActivity implements View.OnC
 					{
 						Intent intent = new Intent(ActivityShopProducts.this, ActivityProduct.class);
 						intent.putExtra(ConstValues.DATA_PRODUCT_ID, productInfo.getProductId());
+						intent.putExtra(ConstValues.DATA_SHOP_ID, mShopId);
 						startActivity(intent);
 					}
 				}

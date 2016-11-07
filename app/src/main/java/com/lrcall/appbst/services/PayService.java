@@ -9,8 +9,12 @@ import android.content.Context;
 import com.androidquery.callback.AjaxStatus;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.models.PayInfo;
+import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
+import com.lrcall.events.UserEvent;
 import com.lrcall.utils.GsonTools;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -113,6 +117,20 @@ public class PayService extends BaseService
 		ajaxStringCallback(ApiConfig.USER_UPGRADE_BY_SHOP_CARD, params, tips, needServiceProcessData);
 	}
 
+	/**
+	 * 通过余额升级
+	 *
+	 * @param payPassword            支付密码
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void payUserUpgradeByBalance(String payPassword, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("payPassword", payPassword);
+		ajaxStringCallback(ApiConfig.USER_UPGRADE_BY_BALANCE, params, tips, needServiceProcessData);
+	}
+
 	@Override
 	public void parseData(String url, String result, AjaxStatus status)
 	{
@@ -138,6 +156,13 @@ public class PayService extends BaseService
 			PayInfo payInfo = GsonTools.getReturnObject(result, PayInfo.class);
 			if (payInfo != null)
 			{
+			}
+		}
+		else if (url.endsWith(ApiConfig.USER_UPGRADE_BY_BALANCE))
+		{
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
+			{
+				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_UPGRADE));
 			}
 		}
 	}

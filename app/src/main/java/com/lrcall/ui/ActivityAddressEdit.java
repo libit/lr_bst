@@ -89,7 +89,7 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 			{
-				LogcatTools.debug("AdapterView", "spProvince:" + mProvinceList.get(position).getProvinceId());
+				//				LogcatTools.debug("AdapterView", "spProvince:" + mProvinceList.get(position).getProvinceId());
 				mAreaService.getCityList(mProvinceList.get(position).getProvinceId(), null, false);
 			}
 
@@ -103,7 +103,7 @@ public class ActivityAddressEdit extends MyBaseActivity implements View.OnClickL
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 			{
-				LogcatTools.debug("AdapterView", "spCity:" + mCityList.get(position).getCityId());
+				//				LogcatTools.debug("AdapterView", "spCity:" + mCityList.get(position).getCityId());
 				mAreaService.getCountryList(mCityList.get(position).getCityId(), null, false);
 			}
 

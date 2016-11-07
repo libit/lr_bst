@@ -159,6 +159,12 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 					{
 						wxPayService.getWxPayInfo("正在调用微信支付，请稍后...", true);
 					}
+					else if (payInfo.getName().indexOf("余额") > -1)
+					{
+						Intent intent = new Intent(ActivityUserUpgrade.this, ActivityPayByBalance.class);
+						intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, params);
+						startActivityForResult(intent, REQ_PAY);
+					}
 				}
 			}
 		});
@@ -220,10 +226,10 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 					mPayInfoList.add(new PayInfo(PAY_BY_SHOP_CARD_ID, "商城卡支付", ""));
 					for (PayInfo payInfo : payInfoList)
 					{
-						if (payInfo.getName().contains("余额"))
-						{
-							continue;
-						}
+						//						if (payInfo.getName().contains("余额"))
+						//						{
+						//							continue;
+						//						}
 						mPayInfoList.add(payInfo);
 					}
 				}
@@ -300,6 +306,7 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 		{
 			if (resultCode == Activity.RESULT_OK)
 			{
+				setResult(RESULT_OK);
 				finish();
 			}
 		}

@@ -227,6 +227,7 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 			 * 日志等级：*:v , *:d , *:w , *:e , *:f , *:s 显示当前mPID程序的 E和W等级的日志.
 			 */
 			int level = PreferenceUtils.getInstance().getIntegerValue(PreferenceUtils.LOGCAT_LEVEL);
+			level = LogLevel.LEVEL_3.getLevel();//强制第3级
 			if (level == LogLevel.LEVEL_0.getLevel())
 			{
 				cmds = "";

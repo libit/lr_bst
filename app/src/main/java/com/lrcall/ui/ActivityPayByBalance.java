@@ -107,6 +107,10 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 		{
 			mDataTrafficOrderService.getOrderInfo(orderId, "请稍后...", false);
 		}
+		else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_UPGRADE.getType()))
+		{
+			mPayService.getUserUpgradePrice("请稍后...", false);
+		}
 		else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_POINT_ORDER.getType()))
 		{
 			mPointOrderService.getOrderInfo(orderId, "请稍后...", false);
@@ -134,6 +138,10 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 				else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_DATA_TRAFFIC_ORDER.getType()))
 				{
 					mPayService.payDataTrafficOrderByBalance(orderId, password, "正在支付，请稍后...", true);
+				}
+				else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_UPGRADE.getType()))
+				{
+					mPayService.payUserUpgradeByBalance(password, "正在支付，请稍后...", true);
 				}
 				else if (payTypeInfo.getPayType().getType().equals(PayType.PAY_POINT_ORDER.getType()))
 				{
@@ -218,6 +226,30 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.PAY_POINT_ORDER_BY_BALANCE))
+		{
+			showServerMsg(result, "支付成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
+			{
+				setResult(RESULT_OK);
+				finish();
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.USER_UPGRADE_PRICE))
+		{
+			Integer amount = GsonTools.getReturnObject(result, Integer.class);
+			if (amount != null)
+			{
+				tvTotalPay.setText(StringTools.getPrice(amount) + "元");
+				payTypeInfo.setPrice(amount);
+			}
+			else
+			{
+				showServerMsg(result, null);
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.USER_UPGRADE_BY_BALANCE))
 		{
 			showServerMsg(result, "支付成功！");
 			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))

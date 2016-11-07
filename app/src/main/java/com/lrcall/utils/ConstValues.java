@@ -23,17 +23,11 @@ public class ConstValues
 	// App属性--是否存在
 	public static final int STATUS_EXIST = 1;
 	public static final int STATUS_NOT_EXIST = 2;
-	public static final String DATA_TITLE = "dialog.layout_title";
-	public static final String DATA_CONTENT = "dialog.content";
 	public static final String DATA_WEB_TITLE = "data.web.layout_title";
 	public static final String DATA_WEB_URL = "data.web.url";
-	public static final String DATA_PACKAGE_NAME = "data.package.name";
-	public static final String DATA_ACTION = "data.action";
 	public static final String DATA_NUMBER = "number";
 	// 登录结果
-	public static final int REQUEST_LOGIN = 1000;//登录代码
 	public static final int REQUEST_LOGIN_USER = 1001;//登录代码，跳转到用户中心
-	public static final int REQUEST_LOGIN_ADVICE = 1002;//登录代码，跳转到意见反馈
 	public static final int RESULT_LOGIN_SUCCESS = 2000;//登录成功代码
 	public static final int RESULT_LOGIN_ERROR = 2001;//登录失败代码
 	// 注册结果
@@ -43,13 +37,10 @@ public class ConstValues
 	// 重置密码结果
 	public static final int REQUEST_RESET_PWD = 2100;//重置密码代码
 	public static final int RESULT_RESET_PWD_SUCCESS = 2102;//重置密码成功代码
-	public static final int RESULT_RESET_PWD_ERROR = 2103;//重置密码失败代码
 	// 请求拍照
 	public static final int REQUEST_CAPTURE_SET_PIC = 1003;//请求拍照，完成后跳转到设置头像
 	public static final int REQUEST_PICK_SET_PIC = 1004;//请求相册，完成后跳转到设置头像
 	public static final int REQUEST_EDIT_PIC = 1005;//请求裁剪图片，完成后跳转到设置头像
-	//
-	public static final String DATA_SHOW_SERVER = "data.show_server";//是否显示云端
 	//联系人
 	public static final String DATA_CONTACT_ID = "contact_id";
 	//订单
@@ -62,8 +53,6 @@ public class ConstValues
 	public static final String DATA_PRODUCT_SORT_ID = "product_sort_id";
 	public static final String DATA_ORDER_PRODUCT_LIST = "order_product_list";
 	public static final String DATA_ADDRESS_ID = "address_id";
-	//	public static final String DATA_PAY_CONTENT = "pay_content";//支付的内容类型，比如是余额充值还是流量充值或者是订单支付
-	//	public static final String DATA_PAY_AMOUNT = "pay_amount";//支付金额
 	public static final String DATA_PAY_TYPE_INFO = "pay_type_info";//支付信息
 	public static final String DATA_SHOW_PAD = "show_pad";
 	public static final String DATA_PRODUCT_TYPE = "product_type";//商品类型

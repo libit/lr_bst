@@ -62,6 +62,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 	private ShopCartService mShopCartService;
 	private ProductHistoryService mProductHistoryService;
 	private boolean isStared = false;
+	private String mShopId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -72,6 +73,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		if (bundle != null)
 		{
 			productId = bundle.getString(ConstValues.DATA_PRODUCT_ID);
+			mShopId = bundle.getString(ConstValues.DATA_SHOP_ID);
 		}
 		if (StringTools.isNull(productId))
 		{
@@ -271,6 +273,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 					//					orderProductInfo.setProductInfo(productInfo);
 					orderProductInfos.add(orderProductInfo);
 					intent.putExtra(ConstValues.DATA_ORDER_PRODUCT_LIST, GsonTools.toJson(orderProductInfos));
+					intent.putExtra(ConstValues.DATA_SHOP_ID, mShopId);
 					startActivity(intent);
 				}
 				else

@@ -40,8 +40,6 @@ import com.lrcall.utils.StringTools;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
-
 public class ActivityShopProductEdit extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivityShopProductEdit.class.getSimpleName();
@@ -161,22 +159,93 @@ public class ActivityShopProductEdit extends MyBaseActivity implements View.OnCl
 			case R.id.btn_submit:
 			{
 				String name = etName.getText().toString();
-				int price = parseInt(etPrice.getText().toString());
-				String pointStr = etPoint.getText().toString();
+				String sPrice = etPrice.getText().toString();
+				String sPoint = etPoint.getText().toString();
+				String sMarketPrice = etMarketPrice.getText().toString();
+				String sExpressPrice = etExpressPrice.getText().toString();
+				String sAgentShare = etAgentShare.getText().toString();
+				String sAddShare = etAddShare.getText().toString();
+				String sCount = etCount.getText().toString();
+				String sSortIndex = etSortIndex.getText().toString();
+				int price = 0, marketPrice = 0, expressPrice = 0, agentShare = 0, addShare = 0, count = 0, sortIndex = 100;
 				Integer point = null;
 				try
 				{
-					point = Integer.parseInt(pointStr);
+					price = Integer.parseInt(sPrice);
 				}
-				catch (Exception e)
+				catch (NumberFormatException e)
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "价格输入错误！");
+					etPrice.requestFocus();
+					return;
+				}
+				try
+				{
+					point = Integer.parseInt(sPoint);
+				}
+				catch (NumberFormatException e)
 				{
 				}
-				int marketPrice = Integer.parseInt(etMarketPrice.getText().toString());
-				int expressPrice = Integer.parseInt(etExpressPrice.getText().toString());
-				int agentShare = Integer.parseInt(etAgentShare.getText().toString());
-				int addShare = Integer.parseInt(etAddShare.getText().toString());
-				int count = Integer.parseInt(etCount.getText().toString());
-				int sortIndex = Integer.parseInt(etSortIndex.getText().toString());
+				try
+				{
+					marketPrice = Integer.parseInt(sMarketPrice);
+				}
+				catch (NumberFormatException e)
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "市场价输入错误！");
+					etMarketPrice.requestFocus();
+					return;
+				}
+				try
+				{
+					expressPrice = Integer.parseInt(sExpressPrice);
+				}
+				catch (NumberFormatException e)
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "快递费输入错误！");
+					etExpressPrice.requestFocus();
+					return;
+				}
+				try
+				{
+					agentShare = Integer.parseInt(sAgentShare);
+				}
+				catch (NumberFormatException e)
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "代理商利润输入错误！");
+					etAgentShare.requestFocus();
+					return;
+				}
+				try
+				{
+					addShare = Integer.parseInt(sAddShare);
+				}
+				catch (NumberFormatException e)
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "无限级返利输入错误！");
+					etAddShare.requestFocus();
+					return;
+				}
+				try
+				{
+					count = Integer.parseInt(sCount);
+				}
+				catch (NumberFormatException e)
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "库存数量输入错误！");
+					etCount.requestFocus();
+					return;
+				}
+				try
+				{
+					sortIndex = Integer.parseInt(sSortIndex);
+				}
+				catch (NumberFormatException e)
+				{
+					ToastView.showCenterToast(this, R.drawable.ic_do_fail, "排序序号输入错误！");
+					etSortIndex.requestFocus();
+					return;
+				}
 				String desc = etDesc.getText().toString();
 				String config = etConfig.getText().toString();
 				String content = etContent.getText().toString();
