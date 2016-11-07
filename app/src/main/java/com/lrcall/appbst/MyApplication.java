@@ -2,14 +2,8 @@ package com.lrcall.appbst;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 
 import com.lrcall.utils.LogcatTools;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
 
 /**
  * Created by libit on 15/8/19.
@@ -42,34 +36,33 @@ public class MyApplication extends Application
 		instance = null;
 		super.onTerminate();
 	}
-
-	public String sHA1(Context context)
-	{
-		try
-		{
-			PackageInfo info = getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
-			byte[] cert = info.signatures[0].toByteArray();
-			MessageDigest md = MessageDigest.getInstance("SHA1");
-			byte[] publicKey = md.digest(cert);
-			StringBuilder hexString = new StringBuilder();
-			for (int i = 0; i < publicKey.length; i++)
-			{
-				String appendString = Integer.toHexString(0xFF & publicKey[i]).toUpperCase(Locale.US);
-				if (appendString.length() == 1)
-					hexString.append("0");
-				hexString.append(appendString);
-				hexString.append(":");
-			}
-			return hexString.toString();
-		}
-		catch (PackageManager.NameNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (NoSuchAlgorithmException e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-	}
+	//	public String sHA1(Context context)
+	//	{
+	//		try
+	//		{
+	//			PackageInfo info = getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+	//			byte[] cert = info.signatures[0].toByteArray();
+	//			MessageDigest md = MessageDigest.getInstance("SHA1");
+	//			byte[] publicKey = md.digest(cert);
+	//			StringBuilder hexString = new StringBuilder();
+	//			for (int i = 0; i < publicKey.length; i++)
+	//			{
+	//				String appendString = Integer.toHexString(0xFF & publicKey[i]).toUpperCase(Locale.US);
+	//				if (appendString.length() == 1)
+	//					hexString.append("0");
+	//				hexString.append(appendString);
+	//				hexString.append(":");
+	//			}
+	//			return hexString.toString();
+	//		}
+	//		catch (PackageManager.NameNotFoundException e)
+	//		{
+	//			e.printStackTrace();
+	//		}
+	//		catch (NoSuchAlgorithmException e)
+	//		{
+	//			e.printStackTrace();
+	//		}
+	//		return null;
+	//	}
 }

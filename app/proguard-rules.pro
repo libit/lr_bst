@@ -32,6 +32,9 @@
 #-libraryjars libs/pinyin4j-2.5.0.jar
 #-libraryjars libs/gson-2.2.4.jar
 #-libraryjars libs/org.apache.http.legacy.jar
+#-libraryjars libs/alipaySdk-20160825.jar
+#-libraryjars libs/AMap3DMap_3.3.2_AMapLocation_2.6.0_20160628.jar
+#-libraryjars libs/libammsdk.jar
 
 -keepattributes *Annotation*
 #-keep public class com.google.vending.licensing.ILicensingService
@@ -97,7 +100,6 @@
 -keepclassmembers class * extends android.support.v4.app.Fragment {
    *;
 }
-
 ############################# 不要混淆Activity和Fragment类 -- End -- #############################
 
 ############################# 不要混淆enum类 #####################################################
