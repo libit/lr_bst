@@ -4,16 +4,22 @@
  */
 package com.lrcall.utils;
 
+import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.lrcall.appbst.MyApplication;
 import com.lrcall.enums.LogLevel;
 import com.lrcall.utils.apptools.AppFactory;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,15 +33,16 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 	private final int mPId;
 	private Thread.UncaughtExceptionHandler mDefaultHandler;// 系统默认的UncaughtException处理类
 	private LogDumper mLogDumper = null;
-	private String fileName;
+	private String mFileName;
 
 	private LogcatTools()
 	{
-		init();
 		mPId = android.os.Process.myPid();
+		mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();// 获取系统默认的UncaughtException处理器
+		Thread.setDefaultUncaughtExceptionHandler(this);// 设置该CrashHandler为程序的默认处理器
 	}
 
-	public static LogcatTools getInstance()
+	synchronized public static LogcatTools getInstance()
 	{
 		if (instance == null)
 		{
@@ -74,17 +81,9 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 	}
 
 	/**
-	 * 初始化目录
-	 */
-	private void init()
-	{
-		mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();// 获取系统默认的UncaughtException处理器
-		Thread.setDefaultUncaughtExceptionHandler(this);// 设置该CrashHandler为程序的默认处理器
-	}
-
-	/**
 	 * 当UncaughtException发生时会转入该重写的方法来处理
 	 */
+	@Override
 	public void uncaughtException(Thread thread, Throwable ex)
 	{
 		if (!handleException(ex) && mDefaultHandler != null)
@@ -100,21 +99,21 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 	 * @param ex 异常信息
 	 * @return true 如果处理了该异常信息;否则返回false.
 	 */
-	public boolean handleException(Throwable ex)
+	private boolean handleException(Throwable ex)
 	{
 		if (ex == null)
 		{
 			return false;
 		}
 		// 保存出错日志
-		saveCrashFile();
+		saveCrashFile(ex);
 		//        android.os.Process.killProcess(android.os.Process.myPid());
 		//        new DialogCommon(context, null, "提示", "哦哦，出错了！", true, false, false).show();
-		//        Toast.makeText(context, "哦哦，出错了！", Toast.LENGTH_LONG).show();
+		Toast.makeText(MyApplication.getContext(), "哦哦，出错了！", Toast.LENGTH_LONG).show();
 		return false;
 	}
 
-	public void start()
+	synchronized public void start()
 	{
 		if (mLogDumper == null)
 		{
@@ -124,7 +123,6 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 		{
 			mLogDumper.start();
 		}
-		//只保留最近5个log日志
 		String dir = FileTools.getDir(AppConfig.getLogcatFolder());
 		if (StringTools.isNull(dir))
 		{
@@ -140,26 +138,30 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 				return;
 			}
 			int count = files.length;
-			final int MAX_SAVE = 5;
+			final int MAX_SAVE = 5;//只保留最近5个log日志
 			if (count > MAX_SAVE)
 			{
 				List<File> saveFiles = new ArrayList<>();
 				for (int i = 0; i < count; i++)
 				{
-					saveFiles.add(i, files[i]);
-					for (int j = i; j > 0; j--)
+					if (files[i].isDirectory())
+					{
+						continue;
+					}
+					saveFiles.add(files[i]);
+					int index = saveFiles.size() - 1;
+					for (int j = index; j > 0; j--)
 					{
 						try
 						{
-							String fileName1 = saveFiles.get(j).getName();
-							long date1 = Long.parseLong(fileName1.substring(fileName1.lastIndexOf("_") + 1, fileName1.lastIndexOf(".")));
-							String fileName2 = saveFiles.get(j - 1).getName();
-							long date2 = Long.parseLong(fileName2.substring(fileName2.lastIndexOf("_") + 1, fileName2.lastIndexOf(".")));
+							File file1 = saveFiles.get(j);
+							File file2 = saveFiles.get(j - 1);
+							long date1 = file1.lastModified();
+							long date2 = file2.lastModified();
 							if (date1 > date2)
 							{
-								File tmp = saveFiles.get(j - 1);
-								saveFiles.set(j - 1, saveFiles.get(j));
-								saveFiles.set(j, tmp);
+								saveFiles.set(j - 1, file1);
+								saveFiles.set(j, file2);
 							}
 							else
 							{
@@ -168,7 +170,7 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 						}
 						catch (Exception e)
 						{
-							saveFiles.remove(i);
+							saveFiles.remove(index);
 						}
 					}
 				}
@@ -181,7 +183,7 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 						saveFiles.get(i).delete();
 					}
 				}
-				if (AppConfig.isDebug())
+				if (AppConfig.isDebug())//如果是调试模式，则将所有的日志都保存
 				{
 					PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE, saveFiles.get(0).getName());
 				}
@@ -193,20 +195,45 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 	{
 		if (mLogDumper != null)
 		{
-			mLogDumper.stopLogs();
-			mLogDumper = null;
+			synchronized (mLogDumper)
+			{
+				if (mLogDumper != null)
+				{
+					mLogDumper.stopLogs();
+					mLogDumper = null;
+				}
+			}
 		}
-		//		LogcatTools.debug(TAG + "stop", "停止纪录日志！");
+		//		LogcatTools.debug(TAG + "stop", "停止记录日志！");
 	}
 
 	/**
 	 * 保存当前记录的日志为出错日志
 	 */
-	public void saveCrashFile()
+	public void saveCrashFile(Throwable ex)
 	{
-		if (!StringTools.isNull(fileName))
+		if (!StringTools.isNull(mFileName))
 		{
-			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE, fileName);
+			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE, mFileName);
+			try
+			{
+				File file = FileTools.getFile(AppConfig.getLogcatFolder(), mFileName + ".err");
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println("================================================================");
+				pw.println(String.format("程序出错时间：%s。", DateTimeTools.getCurrentTime()));
+				pw.println(String.format("安卓系统版本：%s_%d。", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+				pw.println(String.format("  手机制造商：%s，品牌：%s，型号：%s。", Build.MANUFACTURER, Build.BRAND, Build.MODEL));
+				pw.println(String.format("  处理器架构：%s。", Build.CPU_ABI));
+				ex.printStackTrace(pw);
+				pw.close();
+				//提交日志
+				//				new BugService(MyApplication.getContext()).uploadLogFile(null, true);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				Log.e(TAG, "保存异常信息到文件失败！");
+			}
 		}
 	}
 
@@ -259,8 +286,8 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 				// cmds = "logcat *:e *:i | grep \"(" + mPID + ")\"";
 				try
 				{
-					fileName = getFileName();
-					out = new FileOutputStream(FileTools.getFile(AppConfig.getLogcatFolder(), fileName));
+					mFileName = getFileName();
+					out = new FileOutputStream(FileTools.getFile(AppConfig.getLogcatFolder(), mFileName));
 				}
 				catch (Exception e)
 				{

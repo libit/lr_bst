@@ -3,6 +3,7 @@ package com.lrcall.appbst;
 import android.app.Application;
 import android.content.Context;
 
+import com.lrcall.appbst.services.BugService;
 import com.lrcall.utils.LogcatTools;
 
 /**
@@ -27,6 +28,8 @@ public class MyApplication extends Application
 	{
 		super.onCreate();
 		instance = this;
+		//提交日志
+		new BugService(this).uploadLogFile(null, true);
 	}
 
 	@Override

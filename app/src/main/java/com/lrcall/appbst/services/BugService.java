@@ -34,7 +34,7 @@ public class BugService extends BaseService
 	}
 
 	/**
-	 * 提交BUG信息
+	 * 提交日志文件
 	 */
 	public void uploadLogFile(String tips, final boolean needServiceProcessData)
 	{
@@ -44,6 +44,7 @@ public class BugService extends BaseService
 			return;
 		}
 		File file = new File(FileTools.getDir(AppConfig.getLogcatFolder()) + "/" + path);
+		File file1 = new File(FileTools.getDir(AppConfig.getLogcatFolder()) + "/" + path + ".err");
 		if (file.exists())
 		{
 			Map<String, Object> params = new HashMap<>();
@@ -53,6 +54,12 @@ public class BugService extends BaseService
 		else
 		{
 			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE, "");
+		}
+		if (file1.exists())
+		{
+			Map<String, Object> params = new HashMap<>();
+			params.put("upload", file1);
+			ajaxStringCallback(ApiConfig.UPLOAD_DEBUG_FILE, params, tips, needServiceProcessData);
 		}
 	}
 

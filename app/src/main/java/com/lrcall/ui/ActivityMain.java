@@ -27,7 +27,6 @@ import com.external.xlistview.XListView;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.UpdateInfo;
 import com.lrcall.appbst.services.ApiConfig;
-import com.lrcall.appbst.services.BugService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UpdateService;
 import com.lrcall.appbst.services.UserService;
@@ -90,12 +89,11 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		instance = this;
 		viewInit();
 		EventBus.getDefault().register(this);
-		//提交日志
-		new BugService(this).uploadLogFile(null, true);
 		//检查更新
 		mUpdateService = new UpdateService(this);
 		mUpdateService.addDataResponse(this);
 		mUpdateService.checkUpdate(null, false);
+		//		int i = 9 / 0;
 	}
 
 	@Override
