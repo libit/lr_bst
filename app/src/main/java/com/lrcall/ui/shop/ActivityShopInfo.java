@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ShopInfo;
+import com.lrcall.appbst.models.ShopSaleData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ShopService;
@@ -24,11 +25,12 @@ import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
+import com.lrcall.utils.StringTools;
 
 public class ActivityShopInfo extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivityShopInfo.class.getSimpleName();
-	private TextView tvType, tvApplyStatus;
+	private TextView tvType, tvApplyStatus, tvAmount, tvRecentPeople, tvRecentOrderCount, tvRecentSaleAmount;
 	private ImageView ivHead;
 	private View btnRegister, btnAuth, layoutFuncs;
 	private ShopService mShopService;
@@ -65,6 +67,7 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 		}
 		bFirst = false;
 		mShopService.getShopInfo(tips, false);
+		mShopService.getSaleData(null, false);
 	}
 
 	@Override
@@ -74,6 +77,10 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 		setBackButton();
 		tvType = (TextView) findViewById(R.id.tv_type);
 		tvApplyStatus = (TextView) findViewById(R.id.tv_apply_status);
+		tvAmount = (TextView) findViewById(R.id.tv_amount);
+		tvRecentPeople = (TextView) findViewById(R.id.tv_people_count);
+		tvRecentOrderCount = (TextView) findViewById(R.id.tv_recent_order_count);
+		tvRecentSaleAmount = (TextView) findViewById(R.id.tv_recent_sale_amount);
 		ivHead = (ImageView) findViewById(R.id.iv_head);
 		btnRegister = findViewById(R.id.btn_register);
 		btnAuth = findViewById(R.id.btn_auth);
@@ -160,6 +167,17 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 				btnRegister.setVisibility(View.VISIBLE);
 				btnAuth.setVisibility(View.GONE);
 				layoutFuncs.setVisibility(View.GONE);
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.GET_SHOP_SALE_DATA))
+		{
+			ShopSaleData shopSaleData = GsonTools.getReturnObject(result, ShopSaleData.class);
+			if (shopSaleData != null)
+			{
+				tvAmount.setText(StringTools.getPrice(shopSaleData.getTotalSaleAmount()));
+				tvRecentSaleAmount.setText(StringTools.getPrice(shopSaleData.getRecent7SaleAmont()));
+				tvRecentOrderCount.setText(shopSaleData.getRecent7OrderCount() + "");
 			}
 			return true;
 		}

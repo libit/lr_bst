@@ -147,6 +147,18 @@ public class ShopService extends BaseService
 		ajaxStringCallback(ApiConfig.GET_SHOP_LIST, params, tips, needServiceProcessData);
 	}
 
+	/**
+	 * 获取商家销售数据
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getSaleData(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.GET_SHOP_SALE_DATA, params, tips, needServiceProcessData);
+	}
+
 	@Override
 	public void parseData(String url, String result, AjaxStatus status)
 	{

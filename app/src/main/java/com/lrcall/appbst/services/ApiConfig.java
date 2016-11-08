@@ -157,6 +157,7 @@ public class ApiConfig
 	public static final String GET_EXPRESS_LIST = getServerUrl() + "/ajaxGetExpressInfoList";//快递列表
 	public static final String SHOP_ADD_PRODUCT_AGENT = getServerUrl() + "/../shop/ajaxAddProductAgent";//添加代理商品
 	public static final String SHOP_DELETE_PRODUCT_AGENT = getServerUrl() + "/../shop/ajaxDeleteProductAgent";//取消代理商品
+	public static final String GET_SHOP_SALE_DATA = getServerUrl() + "/../shop//ajaxGetSaleData";//获取商家营收数据
 	//积分商城
 	public static final String GET_POINT_PRODUCT_LIST = getServerUrl() + "/ajaxGetPointProductList";//获取所有积分商品列表
 	public static final String GET_POINT_PRODUCT = getServerUrl() + "/ajaxGetPointProduct";//获取积分商品信息

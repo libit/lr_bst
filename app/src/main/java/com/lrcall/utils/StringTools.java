@@ -145,7 +145,7 @@ public class StringTools
 	 * @param pricce 以分为单位的价格
 	 * @return
 	 */
-	public static String getPrice(int pricce)
+	public static String getPrice(long pricce)
 	{
 		return String.format("%.2f", (double) ((double) pricce / 100));
 	}

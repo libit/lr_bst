@@ -38,7 +38,6 @@ import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BmpTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.apptools.AppFactory;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -151,12 +150,12 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 						@Override
 						public void onClick(View v)
 						{
-							LogcatTools.debug("onPageSelected", "点击事件");
+							//							LogcatTools.debug("onPageSelected", "点击事件");
 							if (viewPager.getCurrentItem() == DIALER)
 							{
 								if (FragmentDialer2.getInstance() != null)
 								{
-									LogcatTools.debug("onPageSelected", "切换键盘2");
+									//									LogcatTools.debug("onPageSelected", "切换键盘2");
 									FragmentDialer2.getInstance().switchPad();
 								}
 							}
@@ -166,7 +165,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 							}
 						}
 					};
-					LogcatTools.debug("onPageSelected", "添加点击事件");
+					//					LogcatTools.debug("onPageSelected", "添加点击事件");
 					tabInfo.getImgIcon().setOnClickListener(listener);
 					tabInfo.getTvLabel().setOnClickListener(listener);
 					//					view.setOnClickListener(listener);
