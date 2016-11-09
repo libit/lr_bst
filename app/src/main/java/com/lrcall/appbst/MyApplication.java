@@ -28,6 +28,15 @@ public class MyApplication extends Application
 	{
 		super.onCreate();
 		instance = this;
+		new Thread("splash")
+		{
+			@Override
+			public void run()
+			{
+				super.run();
+				LogcatTools.getInstance().start();
+			}
+		}.start();
 		//提交日志
 		new BugService(this).uploadLogFile(null, true);
 	}

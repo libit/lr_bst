@@ -4,16 +4,18 @@
  */
 package com.lrcall.appbst.services;
 
+import com.lrcall.utils.AppConfig;
+
 /**
  * Created by libit on 16/4/6.
  */
 public class ApiConfig
 {
 	public static final String API_VERSION = "1";
-	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
-	private static final String DEBUG_URL = "http://192.168.0.108:8080/lr_bst/user";
-	//		private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	//		private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	//	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
+	//	private static final String DEBUG_URL = "http://192.168.0.108:8080/lr_bst/user";
+	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
 	public static final String CHECK_UPDATE = RELEASE_URL + "/ajaxGetLastClientInfo";//检查更新
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
@@ -174,11 +176,11 @@ public class ApiConfig
 	//获取服务器地址
 	public static String getServerUrl()
 	{
-		//		if (AppConfig.isDebug())
-		//		{
-		//			return DEBUG_URL;
-		//		}
-		//		else
+		if (AppConfig.isDebug())
+		{
+			return DEBUG_URL;
+		}
+		else
 		{
 			return RELEASE_URL;
 		}

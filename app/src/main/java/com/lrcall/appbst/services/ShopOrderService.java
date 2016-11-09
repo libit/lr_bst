@@ -77,6 +77,22 @@ public class ShopOrderService extends BaseService
 	}
 
 	/**
+	 * 修改运费
+	 *
+	 * @param orderSubId             子订单ID
+	 * @param expressPrice           修改后的运费
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void orderChangeExpress(String orderSubId, int expressPrice, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("orderSubId", orderSubId);
+		params.put("expressPrice", expressPrice);
+		ajaxStringCallback(ApiConfig.SHOP_ORDER_CHANGE_EXPRESS_PRICE, params, tips, needServiceProcessData);
+	}
+
+	/**
 	 * 订单发货
 	 *
 	 * @param orderSubId             订单ID

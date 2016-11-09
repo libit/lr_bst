@@ -17,7 +17,6 @@ import android.view.animation.Animation;
 import android.widget.Toast;
 
 import com.lrcall.appbst.R;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.apptools.AppFactory;
 
@@ -98,15 +97,6 @@ public class ActivitySplash extends Activity
 				mHandler.sendEmptyMessage(INIT_RESULT);
 			}
 		});
-		new Thread("splash")
-		{
-			@Override
-			public void run()
-			{
-				super.run();
-				LogcatTools.getInstance().start();
-			}
-		}.start();
 	}
 
 	@OnPermissionDenied({Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.FLASHLIGHT, Manifest.permission.ACCESS_COARSE_LOCATION})

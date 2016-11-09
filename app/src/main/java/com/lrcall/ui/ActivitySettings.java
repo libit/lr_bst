@@ -14,16 +14,18 @@ import com.lrcall.appbst.R;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.UpdateService;
 import com.lrcall.enums.AutoAnswerType;
+import com.lrcall.enums.CallbackLineType;
 import com.lrcall.ui.dialog.DialogCommon;
 import com.lrcall.ui.dialog.DialogSettingAutoAnswer;
 import com.lrcall.ui.dialog.DialogSettingBugLevel;
+import com.lrcall.ui.dialog.DialogSettingCallbackLine;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.apptools.AppFactory;
 
 public class ActivitySettings extends MyBaseActivity implements View.OnClickListener
 {
 	private ImageView ivIsDebug;
-	private TextView tvVersion, tvAutoAnswerStatus;
+	private TextView tvVersion, tvCallbackLine, tvAutoAnswerStatus;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -42,9 +44,11 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 		ivIsDebug = (ImageView) findViewById(R.id.app_setting_debug_value);
 		tvVersion = (TextView) findViewById(R.id.app_setting_current_version);
 		tvVersion.setText(AppFactory.getInstance().getVersionName());
+		tvCallbackLine = (TextView) findViewById(R.id.tv_choose_callback_line);
 		tvAutoAnswerStatus = (TextView) findViewById(R.id.tv_auto_answer_status);
 		findViewById(R.id.layout_debug).setOnClickListener(this);
 		findViewById(R.id.layout_about).setOnClickListener(this);
+		findViewById(R.id.layout_choose_callback_line).setOnClickListener(this);
 		findViewById(R.id.layout_auto_answer).setOnClickListener(this);
 		findViewById(R.id.layout_advice).setOnClickListener(this);
 		findViewById(R.id.layout_bug_level).setOnClickListener(this);
@@ -62,6 +66,8 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 		{
 			ivIsDebug.setImageResource(R.drawable.btn_nocheck);
 		}
+		int callbackLine = PreferenceUtils.getInstance().getIntegerValue(PreferenceUtils.PREF_CALLBACK_LINE_KEY);
+		tvCallbackLine.setText(CallbackLineType.getTypeDesc(callbackLine));
 		int answerType = PreferenceUtils.getInstance().getIntegerValue(PreferenceUtils.PREF_CALLBACK_AUTO_ANSWER_KEY);
 		tvAutoAnswerStatus.setText(AutoAnswerType.getTypeDesc(answerType));
 	}
@@ -88,6 +94,23 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 			case R.id.layout_about:
 			{
 				ActivityWebView.startWebActivity(this, "关于我们", ApiConfig.getServerAboutUrl());
+				break;
+			}
+			case R.id.layout_choose_callback_line:
+			{
+				new DialogSettingCallbackLine(this, new DialogCommon.LibitDialogListener()
+				{
+					@Override
+					public void onOkClick()
+					{
+						initData();
+					}
+
+					@Override
+					public void onCancelClick()
+					{
+					}
+				}).show();
 				break;
 			}
 			case R.id.layout_auto_answer:

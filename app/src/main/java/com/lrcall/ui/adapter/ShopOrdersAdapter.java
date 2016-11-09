@@ -49,28 +49,44 @@ public class ShopOrdersAdapter extends BaseUserAdapter<OrderSubInfo>
 		}
 		else
 		{
+			convertView.findViewById(R.id.btn_change_express).setVisibility(View.GONE);
 			convertView.findViewById(R.id.btn_send_express).setVisibility(View.GONE);
 			viewHolder.clear();
 		}
 		//设置控件的值
-		final OrderSubInfo orderInfo = list.get(position);
-		viewHolder.tvOrderId.setText(orderInfo.getOrderId());
+		final OrderSubInfo orderSubInfo = list.get(position);
+		viewHolder.tvOrderId.setText(orderSubInfo.getOrderId());
 		int count = 0;
-		if (orderInfo.getOrderProductInfoList() != null)
+		if (orderSubInfo.getOrderProductInfoList() != null)
 		{
-			for (OrderProductInfo orderProductInfo : orderInfo.getOrderProductInfoList())
+			for (OrderProductInfo orderProductInfo : orderSubInfo.getOrderProductInfoList())
 			{
 				count += orderProductInfo.getCount();
 			}
 		}
 		viewHolder.tvOrderProductCount.setText(String.format("共%d件商品", count));
-		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(orderInfo.getTotalPrice()));
-		viewHolder.lvProducts.setAdapter(new OrderProductsAdapter(context, orderInfo.getOrderProductInfoList(), null));
-		if (orderInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
+		viewHolder.tvPrice.setText("￥" + StringTools.getPrice(orderSubInfo.getTotalPrice()));
+		viewHolder.lvProducts.setAdapter(new OrderProductsAdapter(context, orderSubInfo.getOrderProductInfoList(), null));
+		if (orderSubInfo.getStatus() == OrderStatus.WAIT_PAY.getStatus())
 		{
 			viewHolder.tvOrderStatus.setText(OrderStatus.WAIT_PAY.getDesc());
+			if (iItemClick != null)
+			{
+				if (orderSubInfo.getExpressPrice() > 0)
+				{
+					convertView.findViewById(R.id.btn_change_express).setVisibility(View.VISIBLE);
+					convertView.findViewById(R.id.btn_change_express).setOnClickListener(new View.OnClickListener()
+					{
+						@Override
+						public void onClick(View v)
+						{
+							iItemClick.onOrderChangeExpressClicked(orderSubInfo);
+						}
+					});
+				}
+			}
 		}
-		else if (orderInfo.getStatus() == OrderStatus.PAYED.getStatus())
+		else if (orderSubInfo.getStatus() == OrderStatus.PAYED.getStatus())
 		{
 			viewHolder.tvOrderStatus.setText(OrderStatus.PAYED.getDesc());
 			convertView.findViewById(R.id.btn_send_express).setVisibility(View.VISIBLE);
@@ -81,16 +97,16 @@ public class ShopOrdersAdapter extends BaseUserAdapter<OrderSubInfo>
 					@Override
 					public void onClick(View v)
 					{
-						iItemClick.onOrderSendExpressClicked(orderInfo);
+						iItemClick.onOrderSendExpressClicked(orderSubInfo);
 					}
 				});
 			}
 		}
-		else if (orderInfo.getStatus() == OrderStatus.EXPRESS.getStatus())
+		else if (orderSubInfo.getStatus() == OrderStatus.EXPRESS.getStatus())
 		{
 			viewHolder.tvOrderStatus.setText(OrderStatus.EXPRESS.getDesc());
 		}
-		else if (orderInfo.getStatus() == OrderStatus.FINISH.getStatus())
+		else if (orderSubInfo.getStatus() == OrderStatus.FINISH.getStatus())
 		{
 			viewHolder.tvOrderStatus.setText(OrderStatus.FINISH.getDesc());
 		}
@@ -101,7 +117,7 @@ public class ShopOrdersAdapter extends BaseUserAdapter<OrderSubInfo>
 				@Override
 				public void onClick(View v)
 				{
-					iItemClick.onOrderClicked(orderInfo);
+					iItemClick.onOrderClicked(orderSubInfo);
 				}
 			});
 		}
@@ -110,9 +126,11 @@ public class ShopOrdersAdapter extends BaseUserAdapter<OrderSubInfo>
 
 	public interface IItemClick
 	{
-		void onOrderClicked(OrderSubInfo orderInfo);
+		void onOrderClicked(OrderSubInfo orderSubInfo);
 
-		void onOrderSendExpressClicked(OrderSubInfo orderInfo);
+		void onOrderChangeExpressClicked(OrderSubInfo orderSubInfo);
+
+		void onOrderSendExpressClicked(OrderSubInfo orderSubInfo);
 	}
 
 	public static class SearchProductViewHolder

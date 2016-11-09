@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:gravity="center"
-        android:text="请输积分"
+        android:text="请输入价格（元）"
         android:textColor="@color/black"
         android:textSize="18sp"/>
     <ImageView
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/body_cont"
                 android:gravity="top|left"
-                android:hint="输入积分数量"
+                android:hint="输入价格"
                 android:inputType="numberSigned"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>

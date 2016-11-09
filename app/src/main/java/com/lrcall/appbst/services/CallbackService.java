@@ -20,6 +20,7 @@ import com.lrcall.models.ContactInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.CallTools;
 import com.lrcall.utils.GsonTools;
+import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 
 import org.greenrobot.eventbus.EventBus;
@@ -87,8 +88,10 @@ public class CallbackService extends BaseService
 			CallLogsFactory.getInstance().addCallLogInfo(context, callLogInfo);
 			EventBus.getDefault().post(new CallLogEvent(CallLogEvent.EVENT_CALLLOG_ADD));
 		}
+		int line = PreferenceUtils.getInstance().getIntegerValue(PreferenceUtils.PREF_CALLBACK_LINE_KEY);
 		Map<String, Object> params = new HashMap<>();
 		params.put("number", number);
+		params.put("line", line);
 		ajaxStringCallback(ApiConfig.CALLBACK_MAKE_CALL, params, tips, needServiceProcessData);
 	}
 

@@ -19,12 +19,16 @@ import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.OrderSubInfo;
+import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ShopOrderService;
+import com.lrcall.ui.ActivityOrderShip;
 import com.lrcall.ui.MyBasePageActivity;
 import com.lrcall.ui.adapter.ShopOrdersAdapter;
+import com.lrcall.ui.customer.ToastView;
+import com.lrcall.ui.dialog.DialogInputPrice;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
@@ -167,19 +171,55 @@ public class ActivityShopOrderManage extends MyBasePageActivity implements View.
 			mShopOrdersAdapter = new ShopOrdersAdapter(this, mOrderInfoList, new ShopOrdersAdapter.IItemClick()
 			{
 				@Override
-				public void onOrderClicked(OrderSubInfo orderInfo)
+				public void onOrderClicked(OrderSubInfo orderSubInfo)
 				{
-					if (orderInfo != null)
+					if (orderSubInfo != null)
 					{
 						Intent intent = new Intent(ActivityShopOrderManage.this, ActivityShopOrderInfo.class);
-						intent.putExtra(ConstValues.DATA_ORDER_ID, orderInfo.getOrderSubId());
+						intent.putExtra(ConstValues.DATA_ORDER_ID, orderSubInfo.getOrderSubId());
 						startActivity(intent);
 					}
 				}
 
 				@Override
-				public void onOrderSendExpressClicked(OrderSubInfo orderInfo)
+				public void onOrderChangeExpressClicked(final OrderSubInfo orderSubInfo)
 				{
+					if (orderSubInfo != null)
+					{
+						DialogInputPrice dialogInputPrice = new DialogInputPrice(ActivityShopOrderManage.this, new DialogInputPrice.OnInputListenser()
+						{
+							@Override
+							public void onOkClick(String content)
+							{
+								try
+								{
+									int expressPrice = Integer.parseInt(content);
+									mShopOrderService.orderChangeExpress(orderSubInfo.getOrderSubId(), expressPrice * 100, "请稍后...", true);
+								}
+								catch (NumberFormatException e)
+								{
+									ToastView.showCenterToast(ActivityShopOrderManage.this, R.drawable.ic_do_fail, "价格输入错误！");
+								}
+							}
+
+							@Override
+							public void onCancelClick()
+							{
+							}
+						});
+						dialogInputPrice.show();
+					}
+				}
+
+				@Override
+				public void onOrderSendExpressClicked(OrderSubInfo orderSubInfo)
+				{
+					if (orderSubInfo != null)
+					{
+						Intent intent = new Intent(ActivityShopOrderManage.this, ActivityOrderShip.class);
+						intent.putExtra(ConstValues.DATA_ORDER_ID, orderSubInfo.getOrderSubId());
+						startActivity(intent);
+					}
 				}
 			});
 			xListView.setAdapter(mShopOrdersAdapter);
@@ -206,6 +246,14 @@ public class ActivityShopOrderManage extends MyBasePageActivity implements View.
 				}.getType());
 			}
 			refreshOrders(list);
+		}
+		else if (url.endsWith(ApiConfig.SHOP_ORDER_CHANGE_EXPRESS_PRICE))
+		{
+			showServerMsg(result, "修改运费成功！");
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
+			{
+				onRefresh();
+			}
 		}
 		return false;
 	}

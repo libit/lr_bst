@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.lrcall.appbst.MyApplication;
 import com.lrcall.enums.AutoAnswerType;
+import com.lrcall.enums.CallbackLineType;
 import com.lrcall.enums.LogLevel;
 import com.lrcall.enums.ModType;
 import com.lrcall.enums.PicQuality;
@@ -35,6 +36,7 @@ public class PreferenceUtils
 	public static final String IS_DEBUG = "is_debug";
 	public static final String CLIENT_CONFIG = "client_config";
 	public static final String PREF_CALLBACK_AUTO_ANSWER_KEY = "pref_callback_answer_key";
+	public static final String PREF_CALLBACK_LINE_KEY = "pref_callback_line_key";
 	private final static HashMap<String, String> STRING_PREFS = new HashMap<String, String>()
 	{
 		private static final long serialVersionUID = 1L;
@@ -50,6 +52,7 @@ public class PreferenceUtils
 			put(WX_APP_ID, "");
 			put(CLIENT_CONFIG, "");
 			put(PREF_CALLBACK_AUTO_ANSWER_KEY, AutoAnswerType.ANSWER_USER.getType() + "");
+			put(PREF_CALLBACK_LINE_KEY, CallbackLineType.LINE_1.getType() + "");
 		}
 	};
 	private final static HashMap<String, Boolean> BOOLEAN_PREFS = new HashMap<String, Boolean>()
