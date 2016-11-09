@@ -39,22 +39,25 @@
                 android:id="@+id/rg_callback_line"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:checkedButton="@+id/rb_answer1"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:checkedButton="@+id/rb_line1"
                 android:orientation="vertical">
                 <RadioButton
                     android:id="@+id/rb_line1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:text="普通通道"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
                 <RadioButton
                     android:id="@+id/rb_line2"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="高清通道"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
             </RadioGroup>
         </LinearLayout>
     </ScrollView>
