@@ -16,6 +16,7 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.NewsService;
 import com.lrcall.db.DbNewsInfoFactory;
+import com.lrcall.enums.NewsStatus;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
@@ -48,6 +49,7 @@ public class ActivityNews extends MyBaseActivity implements View.OnClickListener
 		NewsInfo newsInfo = DbNewsInfoFactory.getInstance().getNewsInfo(mNewsId);
 		if (newsInfo == null || StringTools.isNull(newsInfo.getDescripition()))
 		{
+			DbNewsInfoFactory.getInstance().updateNewsInfoStatus(mNewsId, NewsStatus.READ.getStatus());
 			mNewsService.getNewsInfo(mNewsId, "正在获取消息内容...", false);
 		}
 		else

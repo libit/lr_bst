@@ -60,7 +60,15 @@ import com.google.zxing.client.android.result.ResultHandlerFactory;
 import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
 import com.google.zxing.client.android.share.ShareActivity;
 import com.lrcall.appbst.R;
+import com.lrcall.models.ShareProductData;
+import com.lrcall.models.ShareData;
+import com.lrcall.ui.ActivityProduct;
+import com.lrcall.ui.ActivityRegister;
+import com.lrcall.ui.ActivityWebView;
 import com.lrcall.ui.MyBaseActivity;
+import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.GsonTools;
+import com.lrcall.utils.StringTools;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -79,8 +87,8 @@ import java.util.Map;
  */
 public final class CaptureActivity extends MyBaseActivity implements SurfaceHolder.Callback
 {
-	public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
 	private static final String TAG = CaptureActivity.class.getSimpleName();
+	public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
 	private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 1500L;
 	private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 	private static final String[] ZXING_URLS = {"http://zxing.appspot.com/scan", "zxing://scan/"};
@@ -476,7 +484,35 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 			historyManager.addHistoryItem(rawResult, resultHandler);
 			// Then not from history, so beep/vibrate and we have an image to draw on
 			beepManager.playBeepSoundAndVibrate();
-			drawResultPoints(barcode, scaleFactor, rawResult);
+			//			drawResultPoints(barcode, scaleFactor, rawResult);
+			//重写这个方法返回
+			String str = rawResult.getText();
+			ShareData shareData = GsonTools.getObject(str, ShareData.class);
+			if (shareData != null && !StringTools.isNull(shareData.getUrl()))
+			{
+				if (shareData.getUrl().contains("/product?"))
+				{
+					ShareProductData shareProductData = GsonTools.getObject(str, ShareProductData.class);
+					if (shareProductData != null && !StringTools.isNull(shareProductData.getProductId()))
+					{
+						Intent intent = new Intent(this, ActivityProduct.class);
+						intent.putExtra(ConstValues.DATA_PRODUCT_ID, shareProductData.getProductId());
+						startActivity(intent);
+					}
+				}
+				else if (shareData.getUrl().contains("/register?"))
+				{
+					Intent intent = new Intent(this, ActivityRegister.class);
+					intent.putExtra(ConstValues.DATA_USER_ID, shareData.getShareUserId());
+					startActivity(intent);
+				}
+				else
+				{
+					ActivityWebView.startWebActivity(this, "来自二维码扫描", shareData.getUrl());
+				}
+				finish();
+				return;
+			}
 		}
 		switch (source)
 		{

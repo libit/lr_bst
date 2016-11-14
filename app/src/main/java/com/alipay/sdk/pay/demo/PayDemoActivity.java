@@ -25,13 +25,13 @@ import java.util.Random;
 public class PayDemoActivity extends FragmentActivity
 {
 	// 商户PID
-	public static final String PARTNER = "";//"2088311368979045";
+	public static final String PARTNER = "";
 	// 商户收款账号
-	public static final String SELLER = "";//"dongfangxd@126.com";
+	public static final String SELLER = "";
 	// 商户私钥，pkcs8格式
-	public static final String RSA_PRIVATE = "";//"MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALnH5XgkjOWHDeddTLUgeM7zQ24AGufLC+ezFXL4PjuBbzZpX81RCF+2LaRsKqqqfmTUjAB0qNKDxAZ7UYzgjTt308uy39Int7ZFa2TZbK3gLjOIW4Pf8RejdZirno2m/uMvqZMZ3xnkFsYgcS6PLBc36dm6jkLjAZ8MmugWB9qTAgMBAAECgYA2ZKR2zJzEBwq3FsYCsgMs9GRlrHo0K2rM583731q5KWhaUffOsU72Vux+G31SgqCG/QQQjhdvq0yVaT2zNXuj0eW3KYqzg96RyLl6Sp2Fx6QINQmmgYtEtyJsVMq0S6aiTX2ACfty31jA0pLjNvQgB0EBc6ACGsj8roucDmSYgQJBAOHYIp0QtRk8BJE1Ap+07UYgNhQ5c9tG9eMSMKw9KRskzIe5gJALVj+Dkqofuz17p/V4YOb2BrFyJmA9r5jpX1ECQQDSlk2SPDv5lshJmHwbaHG11aMJRKZ4O6+fGVck6PumOrWiOuzr+bJQlLFqon2YJFxSmXzSFLdu8boAF7PYhwqjAkB1vrGNIcDJPzlCW1ja2wE5pmGLecilcgGQOVOW+OwNcsoPmO8mKkL1Kiu09oYwL+AJYpFi2LH0oYbQdliuaD2BAkEAiA8SaWQ/f8AbAenibbbqmQhCAU/4moA9tPajZjaduMX/6qRVxRUcT5HymyoHKZB8keWXTwiRh73oZfzqdwCxLwJAHkkqGKe/lI80cBNrGRudoVgAVLRxljI0p1idGmWwTjU/xPE3aOJaC2v7CQNzELMpNPM2VlqT45fQKJKEO9027Q==";
+	public static final String RSA_PRIVATE = "";
 	// 支付宝公钥
-	public static final String RSA_PUBLIC = "";// "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5x+V4JIzlhw3nXUy1IHjO80NuABrnywvnsxVy+D47gW82aV/NUQhfti2kbCqqqn5k1IwAdKjSg8QGe1GM4I07d9PLst/SJ7e2RWtk2Wyt4C4ziFuD3/EXo3WYq56Npv7jL6mTGd8Z5BbGIHEujywXN+nZuo5C4wGfDJroFgfakwIDAQAB";
+	public static final String RSA_PUBLIC = "";
 	private static final int SDK_PAY_FLAG = 1;
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler()

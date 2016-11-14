@@ -104,13 +104,16 @@ public class ActivityNewsList extends MyBasePageActivity implements IAjaxDataRes
 				@Override
 				public void onNewsClicked(View v, NewsInfo newsInfo)
 				{
-					Intent intent = new Intent(ActivityNewsList.this, ActivityNews.class);
-					intent.putExtra(ConstValues.DATA_NEWS_ID, newsInfo.getNewsId());
-					startActivity(intent);
-					if (newsInfo.getIsRead() == NewsStatus.UNREAD.getStatus())
+					if (newsInfo != null)
 					{
-						v.setBackgroundColor(getResources().getColor(R.color.read_news_bg));
-						DbNewsInfoFactory.getInstance().updateNewsInfoStatus(newsInfo.getNewsId(), NewsStatus.READ.getStatus());
+						Intent intent = new Intent(ActivityNewsList.this, ActivityNews.class);
+						intent.putExtra(ConstValues.DATA_NEWS_ID, newsInfo.getNewsId());
+						startActivity(intent);
+						if (newsInfo.getIsRead() == NewsStatus.UNREAD.getStatus())
+						{
+							v.setBackgroundColor(getResources().getColor(R.color.read_news_bg));
+							DbNewsInfoFactory.getInstance().updateNewsInfoStatus(newsInfo.getNewsId(), NewsStatus.READ.getStatus());
+						}
 					}
 				}
 			});

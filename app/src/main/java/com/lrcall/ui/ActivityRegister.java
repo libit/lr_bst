@@ -41,6 +41,7 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 	private UserService mUserService;
 	private Byte sex = 1;
 	private String picId = null;
+	private String mShareUserId = "";
 	private ScheduledExecutorService scheduledExecutorService = null;
 	private ScheduledFuture scheduledFuture = null;
 	private int tm = 60;
@@ -129,11 +130,20 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null)
+		{
+			mShareUserId = bundle.getString(ConstValues.DATA_USER_ID);
+		}
 		viewInit();
 		mUserService = new UserService(this);
 		mUserService.addDataResponse(this);
 		String number = AppFactory.getInstance().getPhoneNumber();
 		etUsername.setText(number);
+		if (!StringTools.isNull(mShareUserId))
+		{
+			etReferrerId.setText(mShareUserId);
+		}
 	}
 
 	@Override

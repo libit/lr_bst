@@ -13,9 +13,13 @@ import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.models.TableOrderInfo;
 import com.lrcall.appbst.models.TableSearchInfo;
 import com.lrcall.db.DbNewsInfoFactory;
+import com.lrcall.enums.NewsStatus;
 import com.lrcall.ui.ActivityWebView;
 import com.lrcall.ui.dialog.DialogCommon;
+import com.lrcall.utils.DateTimeTools;
 import com.lrcall.utils.GsonTools;
+import com.lrcall.utils.PreferenceUtils;
+import com.lrcall.utils.StringTools;
 
 import java.util.HashMap;
 import java.util.List;
@@ -80,10 +84,22 @@ public class NewsService extends BaseService
 					//					DbNewsInfoFactory.getInstance().clearNewsInfo();
 					for (NewsInfo newsInfo : newsInfoList)
 					{
-						//						LogcatTools.debug("newsInfo", "newsInfo:" + newsInfo.getNewsId());
-						if (DbNewsInfoFactory.getInstance().getNewsInfo(newsInfo.getNewsId()) == null)
+						long lastReadTime = 0;
+						String time = PreferenceUtils.getInstance().getStringValue(PreferenceUtils.PREF_LAST_READ_NEWS_TIME);
+						if (!StringTools.isNull(time))
 						{
-							//							LogcatTools.debug("newsInfo", "新消息->newsInfo:" + newsInfo.getNewsId());
+							try
+							{
+								lastReadTime = Long.parseLong(time);
+							}
+							catch (Exception e)
+							{
+							}
+						}
+						boolean show = (DateTimeTools.getTodayEndDateTimeLong() - lastReadTime) > 24 * 60 * 60 * 1000;
+						final NewsInfo dbNewsInfo = DbNewsInfoFactory.getInstance().getNewsInfo(newsInfo.getNewsId());
+						if (dbNewsInfo == null || (show && dbNewsInfo.getIsRead() == NewsStatus.UNREAD.getStatus() && dbNewsInfo.getValideDateLong() != null && dbNewsInfo.getValideDateLong() > System.currentTimeMillis()))
+						{
 							final String newsId = newsInfo.getNewsId();
 							DialogCommon dialogCommon = new DialogCommon(context, new DialogCommon.LibitDialogListener()
 							{
@@ -92,6 +108,11 @@ public class NewsService extends BaseService
 								{
 									String url = ApiConfig.getServerNewsUrl(newsId);
 									ActivityWebView.startWebActivity(context, "消息详情", url);
+									if (dbNewsInfo.getValideDateLong() == null || dbNewsInfo.getValideDateLong() <= System.currentTimeMillis())
+									{
+										DbNewsInfoFactory.getInstance().updateNewsInfoStatus(newsId, NewsStatus.READ.getStatus());
+									}
+									PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_LAST_READ_NEWS_TIME, System.currentTimeMillis() + "");
 								}
 
 								@Override

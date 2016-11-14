@@ -12,10 +12,10 @@ import com.lrcall.utils.AppConfig;
 public class ApiConfig
 {
 	public static final String API_VERSION = "1";
-	//	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
-	//	private static final String DEBUG_URL = "http://192.168.0.108:8080/lr_bst/user";
-	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
+	private static final String DEBUG_URL = "http://192.168.1.111:8080/lr_bst/user";
+	//	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	//	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
 	public static final String CHECK_UPDATE = RELEASE_URL + "/ajaxGetLastClientInfo";//检查更新
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
@@ -187,7 +187,7 @@ public class ApiConfig
 	}
 
 	/**
-	 * 获取服务器地址
+	 * 获取服务器图片地址
 	 *
 	 * @param picUrl
 	 * @return
@@ -198,7 +198,7 @@ public class ApiConfig
 	}
 
 	/**
-	 * 获取消息地址
+	 * 获取服务器消息地址
 	 *
 	 * @param newsId
 	 * @return
@@ -206,6 +206,28 @@ public class ApiConfig
 	public static String getServerNewsUrl(String newsId)
 	{
 		return getServerUrl() + "/news?newsId=" + newsId;
+	}
+
+	/**
+	 * 获取服务器商品地址
+	 *
+	 * @param productId
+	 * @return
+	 */
+	public static String getServerProductUrl(String productId)
+	{
+		return getServerUrl() + "/product?productId=" + productId;
+	}
+
+	/**
+	 * 获取服务器注册地址
+	 *
+	 * @param shareUserId
+	 * @return
+	 */
+	public static String getServerRegisterUrl(String shareUserId)
+	{
+		return getServerUrl() + "/register?referrerId=" + shareUserId;
 	}
 
 	/**

@@ -55,6 +55,7 @@
     <string name="func_backup_and_restore">备份/恢复</string>
     <string name="func_about">关于我们</string>
     <string name="func_advice">意见反馈</string>
+    <string name="func_share">推荐好友</string>
     <string name="func_bug_level">日志级别</string>
     <string name="func_check_update">检查更新</string>
     <string name="func_more_app">更多应用</string>
@@ -135,6 +136,8 @@
     <string name="title_activity_shop_products">微店商品</string>
     <!-- 微店列表Activity -->
     <string name="title_activity_shop_list">微店列表</string>
+    <!-- 分享Activity -->
+    <string name="title_activity_share">分享</string>
     <string name="dialog_title_bug_level">日志记录级别</string>
     <string name="auto_update_log">自动上报错误日志</string>
     <string name="log_tips">提示：日志级别越高记录的信息越详细，可以让开发者更全面的定位错误，但记录的越详细相应的日志文件则越大，建议选择级别3</string>

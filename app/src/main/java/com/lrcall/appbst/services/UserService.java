@@ -310,7 +310,7 @@ public class UserService extends BaseService
 				intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); // 分享的主题
 				intent.putExtra(Intent.EXTRA_TEXT, msg); // 分享的内容
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 允许intent启动新的activity
-				context.startActivity(Intent.createChooser(intent, "来自" + context.getString(R.string.app_name) + "的分享")); // //目标应用选择对话框的
+				context.startActivity(Intent.createChooser(intent, "来自" + context.getString(R.string.app_name) + "的分享")); // 目标应用选择对话框
 			}
 			else
 			{

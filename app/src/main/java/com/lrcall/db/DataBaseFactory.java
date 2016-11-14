@@ -28,7 +28,7 @@ public class DataBaseFactory
 {
 	public static class DBHelper extends SQLiteOpenHelper
 	{
-		private static final int DATABASE_VERSION = 18;
+		private static final int DATABASE_VERSION = 19;
 		private static final String[] TABLES = new String[]{NumberLocalInfo.getCreateTableSQL()// 归属地信息表
 				, NumberLabelInfo.getCreateTableSQL()//号码标记信息
 				, BlackNumberInfo.getCreateTableSQL()//号码黑名单
@@ -118,6 +118,10 @@ public class DataBaseFactory
 			if (oldVersion < 18)
 			{
 				db.execSQL("DROP TABLE IF EXISTS " + DbConstant.TABLE_NAME_PRODUCT);
+			}
+			if (oldVersion < 19)
+			{
+				db.execSQL("ALTER TABLE " + DbConstant.TABLE_NAME_NEWS + " ADD COLUMN '" + NewsInfo.FIELD_VALIDATE_DATE_LONG + "' BIGINT;");
 			}
 			onCreate(db);
 		}

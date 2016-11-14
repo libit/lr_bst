@@ -189,6 +189,9 @@
             android:name="com.lrcall.ui.ActivityShopList"
             android:label="@string/title_activity_shop_list"/>
         <activity
+            android:name="com.lrcall.ui.ActivityShare"
+            android:label="@string/title_activity_share"/>
+        <activity
             android:name="com.lrcall.ui.ActivityWebView">
             <!-- 拦截打开网址请求 -->
             <!--<intent-filter>-->

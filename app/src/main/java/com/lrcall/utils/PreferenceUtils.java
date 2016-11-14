@@ -20,23 +20,22 @@ import java.util.Map;
 public class PreferenceUtils
 {
 	private static final String TAG = PreferenceUtils.class.getName();
-	public static final String PREF_USERNAME_KEY = "userId";
-	public static final String PREF_SESSION_ID_KEY = "session_id";
-	public static final String PREF_CRASH_FILE = "crash_file_name";
-	public static final String LOGCAT_LEVEL = "logcat_level";
-	public static final String LOGCAT_AUTO_UPDATE = "logcat_auto_update";
-	public static final String IS_ROOT = "is_root";
-	public static final String IS_FIRST_RUN = "is_first_run";
-	public static final String IS_SHOW_NOTIFICATION = "is_show_notification";
-	public static final String IS_ACCEPT_ROLE = "is_accepted_role";
-	public static final String DIAL_PRESS_TONE_MODE = "dial_press_tone_mode";
-	public static final String DIAL_PRESS_VIBRATE_MODE = "dial_press_vibrate_mode";
-	public static final String PIC_QUALITY = "pic_quality";
-	public static final String WX_APP_ID = "wx_app_id";
-	public static final String IS_DEBUG = "is_debug";
-	public static final String CLIENT_CONFIG = "client_config";
-	public static final String PREF_CALLBACK_AUTO_ANSWER_KEY = "pref_callback_answer_key";
-	public static final String PREF_CALLBACK_LINE_KEY = "pref_callback_line_key";
+	public static final String PREF_USERNAME_KEY = "userId";//用户ID
+	public static final String PREF_SESSION_ID_KEY = "session_id";// 会话ID
+	public static final String PREF_CRASH_FILE = "crash_file_name";//崩溃日志名
+	public static final String LOGCAT_LEVEL = "logcat_level";//日志记录级别
+	public static final String LOGCAT_AUTO_UPDATE = "logcat_auto_update";//自动上传日志
+	public static final String IS_FIRST_RUN = "is_first_run";//是否第一次运行
+	public static final String IS_SHOW_NOTIFICATION = "is_show_notification";//是否显示系统通知栏
+	public static final String DIAL_PRESS_TONE_MODE = "dial_press_tone_mode";//拨号按键铃音模式
+	public static final String DIAL_PRESS_VIBRATE_MODE = "dial_press_vibrate_mode";//拨号按键震动模式
+	public static final String PIC_QUALITY = "pic_quality";//图片质量
+	public static final String WX_APP_ID = "wx_app_id";//微信支付ID
+	public static final String IS_DEBUG = "is_debug";//是否调试
+	public static final String CLIENT_CONFIG = "client_config";// 客户端配置
+	public static final String PREF_CALLBACK_AUTO_ANSWER_KEY = "pref_callback_answer_key";//自动接听
+	public static final String PREF_CALLBACK_LINE_KEY = "pref_callback_line_key";//语音通道
+	public static final String PREF_LAST_READ_NEWS_TIME = "pref_last_read_news_time";// 上次阅读新闻的时间
 	private final static HashMap<String, String> STRING_PREFS = new HashMap<String, String>()
 	{
 		private static final long serialVersionUID = 1L;
@@ -53,16 +52,15 @@ public class PreferenceUtils
 			put(CLIENT_CONFIG, "");
 			put(PREF_CALLBACK_AUTO_ANSWER_KEY, AutoAnswerType.ANSWER_USER.getType() + "");
 			put(PREF_CALLBACK_LINE_KEY, CallbackLineType.LINE_1.getType() + "");
+			put(PREF_LAST_READ_NEWS_TIME, "");
 		}
 	};
 	private final static HashMap<String, Boolean> BOOLEAN_PREFS = new HashMap<String, Boolean>()
 	{
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 2L;
 
 		{
 			put(LOGCAT_AUTO_UPDATE, true);
-			put(IS_ACCEPT_ROLE, false);
-			put(IS_ROOT, false);
 			put(IS_FIRST_RUN, true);
 			put(IS_SHOW_NOTIFICATION, true);
 			put(IS_DEBUG, true);

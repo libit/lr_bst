@@ -15,10 +15,13 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.UpdateService;
 import com.lrcall.enums.AutoAnswerType;
 import com.lrcall.enums.CallbackLineType;
+import com.lrcall.models.ShareData;
 import com.lrcall.ui.dialog.DialogCommon;
 import com.lrcall.ui.dialog.DialogSettingAutoAnswer;
 import com.lrcall.ui.dialog.DialogSettingBugLevel;
 import com.lrcall.ui.dialog.DialogSettingCallbackLine;
+import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.apptools.AppFactory;
 
@@ -54,6 +57,7 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 		findViewById(R.id.layout_bug_level).setOnClickListener(this);
 		findViewById(R.id.layout_update).setOnClickListener(this);
 		findViewById(R.id.layout_more_app).setOnClickListener(this);
+		findViewById(R.id.layout_share).setOnClickListener(this);
 	}
 
 	private void initData()
@@ -148,6 +152,14 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 			case R.id.layout_more_app:
 			{
 				ActivityWebView.startWebActivity(this, "更多应用", ApiConfig.getServerMoreAppUrl());
+				break;
+			}
+			case R.id.layout_share:
+			{
+				Intent intent = new Intent(this, ActivityShare.class);
+				String data = GsonTools.toJson(new ShareData(ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername()), PreferenceUtils.getInstance().getUsername()));
+				intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
+				startActivity(intent);
 				break;
 			}
 		}

@@ -30,6 +30,7 @@ import com.lrcall.appbst.services.ShopCartService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbProductStarInfoFactory;
 import com.lrcall.enums.ProductType;
+import com.lrcall.models.ShareProductData;
 import com.lrcall.models.TabInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
@@ -56,13 +57,13 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 	private static final int PAGE_COUNT = 3;
 	private ViewPager viewPager;
 	private ImageView ivAddStar;
-	private String productId;
 	private final List<TabInfo> mTabInfos = new ArrayList<>();
 	private ProductStarService mProductStarService;
 	private ShopCartService mShopCartService;
 	private ProductHistoryService mProductHistoryService;
 	private boolean isStared = false;
 	private String mShopId;
+	private String productId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -143,6 +144,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		findViewById(R.id.btn_buy).setOnClickListener(this);
 		findViewById(R.id.btn_add_cart).setOnClickListener(this);
 		findViewById(R.id.btn_go_cart).setOnClickListener(this);
+		findViewById(R.id.iv_share).setOnClickListener(this);
 	}
 
 	public void setPage(int index)
@@ -293,6 +295,14 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 				{
 					startActivity(new Intent(this, ActivityLogin.class));
 				}
+				break;
+			}
+			case R.id.iv_share:
+			{
+				Intent intent = new Intent(this, ActivityShare.class);
+				String data = GsonTools.toJson(new ShareProductData(ApiConfig.getServerProductUrl(productId), productId, PreferenceUtils.getInstance().getUsername()));
+				intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
+				startActivity(intent);
 				break;
 			}
 		}

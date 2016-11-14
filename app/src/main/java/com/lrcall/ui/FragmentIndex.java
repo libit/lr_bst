@@ -53,6 +53,7 @@ import com.lrcall.ui.adapter.IndexNewProductsAdapter;
 import com.lrcall.ui.adapter.IndexRecommendProducts4Adapter;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
@@ -68,6 +69,8 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FragmentIndex extends MyBasePageFragment implements View.OnClickListener, AbsListView.OnScrollListener, IAjaxDataResponse, AMapLocationListener
 {
@@ -91,6 +94,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	private static final long SCROLL_TIME = 5;
 	private static final int DATA_TRAFFIC_COUNT = 4;
 	private static final int RECOMMEND_COUNT = 4;
+	private static final int REQ_SCAN_QR = 1200;
 	private View layoutSearch, headView;
 	private EditText etSearch;
 	private TextView tvLoaction, tvAddress, tvNews;
@@ -777,7 +781,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			case R.id.btn_qr:
 			{
 				Intent intent = new Intent(this.getContext(), CaptureActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, REQ_SCAN_QR);
 				break;
 			}
 			case R.id.tv_new_product_more:
@@ -931,6 +935,21 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			msg.obj = loc;
 			msg.what = MSG_LOCATION_FINISH;
 			mHandler.sendMessage(msg);
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQ_SCAN_QR)
+		{
+			if (resultCode == RESULT_OK)
+			{
+				Bundle bundle = data.getExtras();
+				String scanResult = bundle.getString("result");
+				ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, "扫描结果：" + scanResult);
+			}
 		}
 	}
 }

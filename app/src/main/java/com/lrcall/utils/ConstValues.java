@@ -57,4 +57,6 @@ public class ConstValues
 	public static final String DATA_SHOW_PAD = "show_pad";
 	public static final String DATA_PRODUCT_TYPE = "product_type";//商品类型
 	public static final String DATA_SHOP_ID = "shop_id";
+	public static final String DATA_SHARE_DATA = "share_data";
+	public static final String DATA_USER_ID = "user_id";
 }

@@ -85,6 +85,7 @@ public class LayoutSideMain extends LinearLayout implements View.OnClickListener
 		rootView.findViewById(R.id.layout_dial).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_change_password).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_share).setOnClickListener(this);
+		rootView.findViewById(R.id.layout_news_list).setOnClickListener(this);
 		btnLogout.setOnClickListener(this);
 		this.addView(rootView);
 		setbLogin(false);
@@ -201,6 +202,11 @@ public class LayoutSideMain extends LinearLayout implements View.OnClickListener
 			case R.id.layout_share:
 			{
 				mUserService.share("请稍后...", true);
+				break;
+			}
+			case R.id.layout_news_list:
+			{
+				mContext.startActivity(new Intent(mContext, ActivityNewsList.class));
 				break;
 			}
 			case R.id.btn_logout:

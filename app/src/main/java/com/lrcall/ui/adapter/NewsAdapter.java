@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.NewsInfo;
+import com.lrcall.db.DbNewsInfoFactory;
 import com.lrcall.enums.NewsStatus;
 import com.lrcall.models.CallLogInfo;
 
@@ -53,13 +54,13 @@ public class NewsAdapter extends BaseUserAdapter<NewsInfo>
 		viewHolder.tvTitle.setText(newsInfo.getTitle());
 		viewHolder.tvDate.setText(CallLogInfo.getCustomerDate(newsInfo.getUpdateDateLong()));
 		viewHolder.tvDesc.setText(newsInfo.getDescripition());
-		if (newsInfo.getIsRead() == NewsStatus.UNREAD.getStatus())
+		if (DbNewsInfoFactory.getInstance().getNewsInfo(newsInfo.getNewsId()) != null && DbNewsInfoFactory.getInstance().getNewsInfo(newsInfo.getNewsId()).getIsRead() == NewsStatus.READ.getStatus())
 		{
-			convertView.setBackgroundColor(context.getResources().getColor(R.color.unread_news_bg));
+			convertView.setBackgroundColor(context.getResources().getColor(R.color.read_news_bg));
 		}
 		else
 		{
-			convertView.setBackgroundColor(context.getResources().getColor(R.color.read_news_bg));
+			convertView.setBackgroundColor(context.getResources().getColor(R.color.unread_news_bg));
 		}
 		if (iItemClick != null)
 		{

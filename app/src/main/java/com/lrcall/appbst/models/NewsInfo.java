@@ -24,6 +24,7 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 	public static final String FIELD_DESCRIPTION = "description";
 	public static final String FIELD_CONTENT = "content";
 	public static final String FIELD_DATE_LONG = "date";
+	public static final String FIELD_VALIDATE_DATE_LONG = "valide_date";
 	public static final String FIELD_IS_READ = "read";
 	@SerializedName("newsId")
 	private String newsId;//消息ID
@@ -39,6 +40,8 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 	private String content;
 	@SerializedName("updateDateLong")
 	private long updateDateLong;
+	@SerializedName("valideDateLong")
+	private Long valideDateLong;
 	@SerializedName("isRead")
 	private int isRead;
 
@@ -65,7 +68,7 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 	public static final String getCreateTableSQL()
 	{
 		// 归属地信息表
-		return String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL,%s TEXT NOT NULL,%s TEXT,%s TEXT NOT NULL,%s TEXT,%s BIGINT NOT NULL,%s INT NOT NULL DEFAULT 0);", DbConstant.TABLE_NAME_NEWS, FIELD_ID, FIELD_NEWS_ID, FIELD_TITLE, FIELD_SORT_ID, FIELD_AUTHOR, FIELD_DESCRIPTION, FIELD_CONTENT, FIELD_DATE_LONG, FIELD_IS_READ);
+		return String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL,%s TEXT NOT NULL,%s TEXT,%s TEXT NOT NULL,%s TEXT,%s BIGINT NOT NULL,%s BIGINT,%s INT NOT NULL DEFAULT 0);", DbConstant.TABLE_NAME_NEWS, FIELD_ID, FIELD_NEWS_ID, FIELD_TITLE, FIELD_SORT_ID, FIELD_AUTHOR, FIELD_DESCRIPTION, FIELD_CONTENT, FIELD_DATE_LONG, FIELD_VALIDATE_DATE_LONG, FIELD_IS_READ);
 	}
 
 	/**
@@ -84,6 +87,7 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 		newsInfo.setDescripition(cursor.getString(cursor.getColumnIndex(FIELD_DESCRIPTION)));
 		newsInfo.setContent(cursor.getString(cursor.getColumnIndex(FIELD_CONTENT)));
 		newsInfo.setUpdateDateLong(cursor.getLong(cursor.getColumnIndex(FIELD_DATE_LONG)));
+		newsInfo.setValideDateLong(cursor.getLong(cursor.getColumnIndex(FIELD_VALIDATE_DATE_LONG)));
 		newsInfo.setIsRead(cursor.getInt(cursor.getColumnIndex(FIELD_IS_READ)));
 		return newsInfo;
 	}
@@ -103,6 +107,7 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 		contentValues.put(FIELD_DESCRIPTION, descripition);
 		contentValues.put(FIELD_CONTENT, content);
 		contentValues.put(FIELD_DATE_LONG, updateDateLong);
+		contentValues.put(FIELD_VALIDATE_DATE_LONG, valideDateLong);
 		//		contentValues.put(FIELD_IS_READ, isRead);
 		return contentValues;
 	}
@@ -175,6 +180,16 @@ public class NewsInfo extends DbObject implements Comparator<NewsInfo>
 	public void setUpdateDateLong(long updateDateLong)
 	{
 		this.updateDateLong = updateDateLong;
+	}
+
+	public Long getValideDateLong()
+	{
+		return valideDateLong;
+	}
+
+	public void setValideDateLong(Long valideDateLong)
+	{
+		this.valideDateLong = valideDateLong;
 	}
 
 	public int getIsRead()
