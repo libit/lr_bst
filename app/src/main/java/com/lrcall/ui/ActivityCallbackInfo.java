@@ -19,7 +19,7 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.CallbackService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.utils.AppConfig;
-import com.lrcall.utils.BmpTools;
+import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 
@@ -40,7 +40,7 @@ public class ActivityCallbackInfo extends MyBaseActivity implements View.OnClick
 		mCallbackService = new CallbackService(this);
 		mCallbackService.addDataResponse(this);
 		viewInit();
-		Bitmap bitmap = BmpTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
 		if (bitmap != null)
 		{
 			ivHead.setImageBitmap(bitmap);

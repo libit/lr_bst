@@ -1,21 +1,10 @@
 /*
- * Copyright (C) 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Libit保留所有版权，如有疑问联系QQ：308062035
+ * Copyright (c) 2016.
  */
 package com.google.zxing.client.android;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -29,9 +18,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -60,15 +53,11 @@ import com.google.zxing.client.android.result.ResultHandlerFactory;
 import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
 import com.google.zxing.client.android.share.ShareActivity;
 import com.lrcall.appbst.R;
-import com.lrcall.models.ShareProductData;
-import com.lrcall.models.ShareData;
-import com.lrcall.ui.ActivityProduct;
-import com.lrcall.ui.ActivityRegister;
-import com.lrcall.ui.ActivityWebView;
+import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.ui.MyBaseActivity;
+import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
-import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.StringTools;
+import com.lrcall.utils.ZXingUtils;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -76,6 +65,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
+
+import static android.R.attr.data;
+import static com.google.zxing.client.android.IntentSource.NATIVE_APP_INTENT;
+import static com.google.zxing.client.android.IntentSource.PRODUCT_SEARCH_LINK;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -92,6 +85,7 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 	private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 1500L;
 	private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 	private static final String[] ZXING_URLS = {"http://zxing.appspot.com/scan", "zxing://scan/"};
+	private static final String[] BST_URLS = {ApiConfig.getServerUrl()};
 	private static final Collection<ResultMetadataType> DISPLAYABLE_METADATA_TYPES = EnumSet.of(ResultMetadataType.ISSUE_NUMBER, ResultMetadataType.SUGGESTED_PRICE, ResultMetadataType.ERROR_CORRECTION_LEVEL, ResultMetadataType.POSSIBLE_COUNTRY);
 	private CameraManager cameraManager;
 	private CaptureActivityHandler handler;
@@ -120,6 +114,22 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 			return false;
 		}
 		for (String url : ZXING_URLS)
+		{
+			if (dataString.startsWith(url))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean isBstURL(String dataString)
+	{
+		if (dataString == null)
+		{
+			return false;
+		}
+		for (String url : BST_URLS)
 		{
 			if (dataString.startsWith(url))
 			{
@@ -171,6 +181,7 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 	protected void viewInit()
 	{
 		super.viewInit();
+		setBackButton();
 	}
 
 	@Override
@@ -218,7 +229,7 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 			if (Intents.Scan.ACTION.equals(action))
 			{
 				// Scan the formats the intent requested, and return the result to the calling activity.
-				source = IntentSource.NATIVE_APP_INTENT;
+				source = NATIVE_APP_INTENT;
 				decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
 				decodeHints = DecodeHintManager.parseDecodeHints(intent);
 				if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT))
@@ -247,7 +258,7 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 			else if (dataString != null && dataString.contains("http://www.google") && dataString.contains("/m/products/scan"))
 			{
 				// Scan only products and send the result to mobile Product Search.
-				source = IntentSource.PRODUCT_SEARCH_LINK;
+				source = PRODUCT_SEARCH_LINK;
 				sourceUrl = dataString;
 				decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
 			}
@@ -263,6 +274,18 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 				// Allow a sub-set of the hints to be specified by the caller.
 				decodeHints = DecodeHintManager.parseDecodeHints(inputUri);
 			}
+			//			else if (isBstURL(dataString))
+			//			{
+			//				// Scan formats requested in query string (all formats if none specified).
+			//				// If a return URL is specified, send the results there. Otherwise, handle it ourselves.
+			//				source = IntentSource.ZXING_LINK;
+			//				sourceUrl = dataString;
+			//				Uri inputUri = Uri.parse(dataString);
+			//				scanFromWebPageManager = new ScanFromWebPageManager(inputUri);
+			//				decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
+			//				// Allow a sub-set of the hints to be specified by the caller.
+			//				decodeHints = DecodeHintManager.parseDecodeHints(inputUri);
+			//			}
 			characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
 		}
 		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
@@ -342,7 +365,7 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 		switch (keyCode)
 		{
 			case KeyEvent.KEYCODE_BACK:
-				if (source == IntentSource.NATIVE_APP_INTENT)
+				if (source == NATIVE_APP_INTENT)
 				{
 					setResult(RESULT_CANCELED);
 					finish();
@@ -368,13 +391,14 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	//	@Override
-	//	public boolean onCreateOptionsMenu(Menu menu)
-	//	{
-	//		MenuInflater menuInflater = getMenuInflater();
-	//		menuInflater.inflate(R.menu.capture, menu);
-	//		return super.onCreateOptionsMenu(menu);
-	//	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.capture, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
@@ -387,6 +411,13 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 				intent.setClassName(this, ShareActivity.class.getName());
 				startActivity(intent);
 				break;
+			case R.id.menu_choose_pic:
+			{
+				Intent albumIntent = new Intent(Intent.ACTION_PICK, null);
+				albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+				startActivityForResult(albumIntent, ConstValues.REQUEST_PICK_SET_PIC);
+				break;
+			}
 			case R.id.menu_history:
 				intent.setClassName(this, HistoryActivity.class.getName());
 				startActivityForResult(intent, HISTORY_REQUEST_CODE);
@@ -406,17 +437,55 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent intent)
+	protected void picSelected(final Bitmap bitmap)
 	{
-		if (resultCode == RESULT_OK && requestCode == HISTORY_REQUEST_CODE && historyManager != null)
+		super.picSelected(bitmap);
+		Result result = ZXingUtils.scanningImage(bitmap);
+		if (result != null)
 		{
-			int itemNumber = intent.getIntExtra(Intents.History.ITEM_NUMBER, -1);
-			if (itemNumber >= 0)
+			boolean b = ZXingUtils.parseResult(this, result);
+			if (b)
 			{
-				HistoryItem historyItem = historyManager.buildHistoryItem(itemNumber);
-				decodeOrStoreSavedBitmap(null, historyItem.getResult());
+				finish();
+				return;
 			}
 		}
+		else
+		{
+			ToastView.showCenterToast(this, R.drawable.ic_do_fail, "图片格式有误");
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent)
+	{
+		if (requestCode == HISTORY_REQUEST_CODE)
+		{
+			if (resultCode == RESULT_OK && historyManager != null)
+			{
+				int itemNumber = intent.getIntExtra(Intents.History.ITEM_NUMBER, -1);
+				if (itemNumber >= 0)
+				{
+					HistoryItem historyItem = historyManager.buildHistoryItem(itemNumber);
+					decodeOrStoreSavedBitmap(null, historyItem.getResult());
+				}
+			}
+			return;
+		}
+		else if (requestCode == ConstValues.REQUEST_PICK_SET_PIC)
+		{
+			if (resultCode == Activity.RESULT_OK)
+			{
+				Uri uri = intent.getData();
+				clipPhoto(uri);
+			}
+			else
+			{
+				Toast.makeText(this, "用户取消操作！", Toast.LENGTH_SHORT).show();
+			}
+			return;
+		}
+		super.onActivityResult(requestCode, resultCode, intent);
 	}
 
 	private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result)
@@ -486,30 +555,9 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 			beepManager.playBeepSoundAndVibrate();
 			//			drawResultPoints(barcode, scaleFactor, rawResult);
 			//重写这个方法返回
-			String str = rawResult.getText();
-			ShareData shareData = GsonTools.getObject(str, ShareData.class);
-			if (shareData != null && !StringTools.isNull(shareData.getUrl()))
+			boolean b = ZXingUtils.parseResult(this, rawResult);
+			if (b)
 			{
-				if (shareData.getUrl().contains("/product?"))
-				{
-					ShareProductData shareProductData = GsonTools.getObject(str, ShareProductData.class);
-					if (shareProductData != null && !StringTools.isNull(shareProductData.getProductId()))
-					{
-						Intent intent = new Intent(this, ActivityProduct.class);
-						intent.putExtra(ConstValues.DATA_PRODUCT_ID, shareProductData.getProductId());
-						startActivity(intent);
-					}
-				}
-				else if (shareData.getUrl().contains("/register?"))
-				{
-					Intent intent = new Intent(this, ActivityRegister.class);
-					intent.putExtra(ConstValues.DATA_USER_ID, shareData.getShareUserId());
-					startActivity(intent);
-				}
-				else
-				{
-					ActivityWebView.startWebActivity(this, "来自二维码扫描", shareData.getUrl());
-				}
 				finish();
 				return;
 			}
@@ -702,7 +750,7 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 			CharSequence text = resultHandler.getDisplayContents();
 			ClipboardInterface.setText(text, this);
 		}
-		if (source == IntentSource.NATIVE_APP_INTENT)
+		if (source == NATIVE_APP_INTENT)
 		{
 			// Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
 			// the deprecated intent is retired.
@@ -745,7 +793,7 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 			}
 			sendReplyMessage(R.id.return_scan_result, intent, resultDurationMS);
 		}
-		else if (source == IntentSource.PRODUCT_SEARCH_LINK)
+		else if (source == PRODUCT_SEARCH_LINK)
 		{
 			// Reformulate the URL which triggered us into a query, so that the request goes to the same
 			// TLD as the scan URL.

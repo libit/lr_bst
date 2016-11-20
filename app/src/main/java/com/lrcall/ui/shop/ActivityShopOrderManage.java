@@ -259,9 +259,9 @@ public class ActivityShopOrderManage extends MyBasePageActivity implements View.
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		super.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, intent);
 		if (resultCode == RESULT_OK)
 		{
 			onRefresh();

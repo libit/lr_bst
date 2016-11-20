@@ -50,7 +50,7 @@ public class ContactNumbersAdapter extends BaseUserAdapter<ContactInfo.PhoneInfo
 		}
 		final ContactInfo.PhoneInfo phoneInfo = list.get(position);
 		final String number = phoneInfo.getNumber();
-		String type = phoneInfo.getType();
+		String type = phoneInfo.getTypeStr();
 		viewHolder.tvNumber.setText(number);
 		viewHolder.tvType.setText(type);
 		if (iItemClick != null)

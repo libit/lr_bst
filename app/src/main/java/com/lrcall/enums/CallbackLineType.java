@@ -9,7 +9,7 @@ package com.lrcall.enums;
  */
 public enum CallbackLineType
 {
-	LINE_1(1, "普通通道"), LINE_2(2, "高清通道");
+	LINE_1(1, "快速通道"), LINE_2(2, "高清通道");
 	private int type;
 	private String desc;
 

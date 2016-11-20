@@ -1,17 +1,6 @@
 /*
- * Copyright (C) 2010 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Libit保留所有版权，如有疑问联系QQ：308062035
+ * Copyright (c) 2016.
  */
 package com.google.zxing.client.android;
 
@@ -32,12 +21,12 @@ public final class DecodeFormatManager
 {
 	static final Set<BarcodeFormat> PRODUCT_FORMATS;
 	static final Set<BarcodeFormat> INDUSTRIAL_FORMATS;
-	static final Set<BarcodeFormat> QR_CODE_FORMATS = EnumSet.of(BarcodeFormat.QR_CODE);
-	static final Set<BarcodeFormat> DATA_MATRIX_FORMATS = EnumSet.of(BarcodeFormat.DATA_MATRIX);
+	public static final Set<BarcodeFormat> QR_CODE_FORMATS = EnumSet.of(BarcodeFormat.QR_CODE);
+	public static final Set<BarcodeFormat> DATA_MATRIX_FORMATS = EnumSet.of(BarcodeFormat.DATA_MATRIX);
 	static final Set<BarcodeFormat> AZTEC_FORMATS = EnumSet.of(BarcodeFormat.AZTEC);
 	static final Set<BarcodeFormat> PDF417_FORMATS = EnumSet.of(BarcodeFormat.PDF_417);
 	private static final Pattern COMMA_PATTERN = Pattern.compile(",");
-	private static final Set<BarcodeFormat> ONE_D_FORMATS;
+	public static final Set<BarcodeFormat> ONE_D_FORMATS;
 	private static final Map<String, Set<BarcodeFormat>> FORMATS_FOR_MODE;
 
 	static

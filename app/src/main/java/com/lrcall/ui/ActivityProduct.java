@@ -30,7 +30,6 @@ import com.lrcall.appbst.services.ShopCartService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbProductStarInfoFactory;
 import com.lrcall.enums.ProductType;
-import com.lrcall.models.ShareProductData;
 import com.lrcall.models.TabInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
@@ -300,7 +299,8 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 			case R.id.iv_share:
 			{
 				Intent intent = new Intent(this, ActivityShare.class);
-				String data = GsonTools.toJson(new ShareProductData(ApiConfig.getServerProductUrl(productId), productId, PreferenceUtils.getInstance().getUsername()));
+				//				String data = GsonTools.toJson(new ShareProductData(ApiConfig.getServerProductUrl(productId), productId, PreferenceUtils.getInstance().getUsername()));
+				String data = ApiConfig.getServerProductUrl(productId);
 				intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
 				startActivity(intent);
 				break;

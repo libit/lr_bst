@@ -321,14 +321,14 @@ public class ActivityPointOrderAdd extends MyBaseActivity implements View.OnClic
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		super.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, intent);
 		if (requestCode == REQ_SELECT_ADDRESS)
 		{
 			if (resultCode == RESULT_OK)
 			{
-				addressId = data.getStringExtra(ConstValues.DATA_ADDRESS_ID);
+				addressId = intent.getStringExtra(ConstValues.DATA_ADDRESS_ID);
 				if (!StringTools.isNull(addressId))
 				{
 					UserAddressInfo userAddressInfo = DbUserAddressInfoFactory.getInstance().getUserAddressInfo(addressId);

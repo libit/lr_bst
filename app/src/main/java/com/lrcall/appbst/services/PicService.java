@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.androidquery.AQuery;
 import com.lrcall.appbst.MyApplication;
 import com.lrcall.ui.customer.DisplayTools;
-import com.lrcall.utils.BmpTools;
+import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.LogcatTools;
 
 /**
@@ -62,7 +62,7 @@ public class PicService extends BaseService
 		if (bitmap != null)
 		{
 			LogcatTools.debug("ajaxGetRoundPic", "从缓存读取图片:" + url);
-			bitmap = BmpTools.createRoundConerImage(bitmap, width, width, 50 * width / DisplayTools.getWindowWidth(MyApplication.getContext()), 50 * width / DisplayTools.getWindowWidth(MyApplication.getContext()));
+			bitmap = BitmapTools.createRoundConerImage(bitmap, width, width, 50 * width / DisplayTools.getWindowWidth(MyApplication.getContext()), 50 * width / DisplayTools.getWindowWidth(MyApplication.getContext()));
 			imageView.setImageBitmap(bitmap);
 		}
 		else
@@ -86,7 +86,7 @@ public class PicService extends BaseService
 		if (bitmap != null)
 		{
 			LogcatTools.debug("ajaxGetRoundPic", "从缓存读取图片:" + url);
-			bitmap = BmpTools.createRoundConerImage(bitmap, width, height, radiusX, radiusY);
+			bitmap = BitmapTools.createRoundConerImage(bitmap, width, height, radiusX, radiusY);
 			imageView.setImageBitmap(bitmap);
 		}
 		else
@@ -110,7 +110,7 @@ public class PicService extends BaseService
 		if (bitmap != null)
 		{
 			LogcatTools.debug("ajaxGetRoundTopPic", "从缓存读取图片:" + url);
-			bitmap = BmpTools.fillet(BmpTools.TOP, bitmap, radius);
+			bitmap = BitmapTools.fillet(BitmapTools.TOP, bitmap, radius);
 			imageView.setImageBitmap(bitmap);
 		}
 		else

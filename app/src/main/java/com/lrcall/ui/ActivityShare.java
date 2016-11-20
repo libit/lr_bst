@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -18,7 +17,10 @@ import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.AppConfig;
+import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.CryptoTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
 import com.lrcall.utils.ZXingUtils;
@@ -46,6 +48,7 @@ public class ActivityShare extends MyBaseActivity implements View.OnClickListene
 		if (!StringTools.isNull(mData))
 		{
 			bitmap = ZXingUtils.Create2QR(mData, DisplayTools.getWindowWidth(this) / 2);
+			BitmapTools.saveBmpFile(bitmap, AppConfig.getPicFile(CryptoTools.getMD5Str(mData) + ".jpg"));
 		}
 		ivQr.setImageBitmap(bitmap);
 	}
@@ -69,10 +72,9 @@ public class ActivityShare extends MyBaseActivity implements View.OnClickListene
 				Intent intent = new Intent(Intent.ACTION_SEND); // 启动分享发送到属性
 				intent.setType("image/*"); // 分享发送到数据类型
 				intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); // 分享的主题
-				intent.putExtra(Intent.EXTRA_TEXT, "分享"); // 分享的内容
-				intent.putExtra("sms_body", "分享");//如果是分享到短信应用
-				Uri uri = Uri.parse("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png");
-				Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "kjztmp_1477292935266.jpg"));
+				intent.putExtra(Intent.EXTRA_TEXT, "分享的内容"); // 分享的内容
+				intent.putExtra("sms_body", "分享到短信应用");//如果是分享到短信应用
+				Uri imageUri = Uri.fromFile(new File(AppConfig.getPicFile(CryptoTools.getMD5Str(mData) + ".jpg")));
 				intent.putExtra(Intent.EXTRA_STREAM, imageUri); // 分享的内容
 				startActivity(Intent.createChooser(intent, "来自" + getString(R.string.app_name) + "的分享"));
 				break;

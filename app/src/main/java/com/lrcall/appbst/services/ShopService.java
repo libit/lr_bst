@@ -11,7 +11,7 @@ import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.models.TableOrderInfo;
 import com.lrcall.appbst.models.TableSearchInfo;
 import com.lrcall.utils.AppConfig;
-import com.lrcall.utils.BmpTools;
+import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 
@@ -111,7 +111,7 @@ public class ShopService extends BaseService
 	public void updateShopPic(Bitmap bitmap, String tips, final boolean needServiceProcessData)
 	{
 		byte[] data = null;
-		ByteArrayOutputStream b = BmpTools.compressToByteArrayOutputStream(bitmap);
+		ByteArrayOutputStream b = BitmapTools.compressToByteArrayOutputStream(bitmap);
 		if (b != null)
 		{
 			data = b.toByteArray();

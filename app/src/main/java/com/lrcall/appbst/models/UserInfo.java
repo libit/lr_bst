@@ -44,6 +44,8 @@ public class UserInfo
 	private String language;
 	@SerializedName("remark")
 	private String remark;
+	@SerializedName("addDateLong")
+	private long addDateLong;
 	@SerializedName("picInfo")
 	private PicInfo picInfo;
 
@@ -260,5 +262,15 @@ public class UserInfo
 	public void setUserLevel(byte userLevel)
 	{
 		this.userLevel = userLevel;
+	}
+
+	public long getAddDateLong()
+	{
+		return addDateLong;
+	}
+
+	public void setAddDateLong(long addDateLong)
+	{
+		this.addDateLong = addDateLong;
 	}
 }

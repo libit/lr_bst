@@ -5,6 +5,7 @@
 package com.lrcall.appbst.services;
 
 import com.lrcall.utils.AppConfig;
+import com.lrcall.utils.PreferenceUtils;
 
 /**
  * Created by libit on 16/4/6.
@@ -13,7 +14,7 @@ public class ApiConfig
 {
 	public static final String API_VERSION = "1";
 	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
-	private static final String DEBUG_URL = "http://192.168.1.111:8080/lr_bst/user";
+	private static final String DEBUG_URL = "http://192.168.168.6:8080/lr_bst/user";
 	//	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	//	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
@@ -120,6 +121,7 @@ public class ApiConfig
 	public static final String CALLBACK_MAKE_CALL = getServerUrl() + "/ajaxCallbackMakecall";//回拨呼叫
 	public static final String CALLBACK_GET_CALL_LOG_LIST = getServerUrl() + "/ajaxCallbackCallList";//回拨呼叫记录列表
 	public static final String CALLBACK_GET_RECHARGE_LOG_LIST = getServerUrl() + "/ajaxCallbackRechargeList";//回拨充值记录列表
+	public static final String CALLBACK_GET_NUMBER_LIST = getServerUrl() + "/ajaxGetCallbackNumbers";//回拨回铃号码列表
 	//商品积分抵扣
 	public static final String GET_PRICE_POINT_INFO = getServerUrl() + "/ajaxGetProductPricePointInfo";//获取商品积分抵扣信息
 	public static final String GET_PRICE_POINT_INFO_LIST = getServerUrl() + "/ajaxGetProductPricePointInfoList";//批量获取商品积分抵扣信息
@@ -128,6 +130,7 @@ public class ApiConfig
 	public static final String USER_APPLY_AGENT = getServerUrl() + "/ajaxAddUserApplyAgent";//用户申请代理
 	public static final String GET_USER_LAST_APPLY_AGENT_INFO = getServerUrl() + "/ajaxGetLastUserApplyAgentInfo";//查询用户最后一次申请代理记录
 	public static final String GET_USER_AGENT_INFO = getServerUrl() + "/ajaxGetUserAgentInfo";//获取用户代理信息
+	public static final String GET_REFERRER_USER_LIST = getServerUrl() + "/ajaxGetUserReferrerList";//获取用户推荐列表
 	//区域
 	public static final String GET_PROVINCE_LIST = getServerUrl() + "/ajaxGetProvinceList";//获取省列表
 	public static final String GET_CITY_LIST = getServerUrl() + "/ajaxGetCityList";//获取市列表
@@ -139,6 +142,8 @@ public class ApiConfig
 	public static final String GET_PRODUCT_HISTORY_INFO = getServerUrl() + "/ajaxGetProductStarInfo";//获取用户商品浏览信息
 	//用户余额变动日志
 	public static final String GET_USER_BALANCE_LOG_LIST = getServerUrl() + "/ajaxGetUserBalanceLogList";//用户余额变动日志列表
+	public static final String GET_USER_SHARE_PROFIT_LIST = getServerUrl() + "/ajaxGetUserShareProfitList";//获取用户分润列表
+	public static final String GET_TOTAL_USER_SHARE_PROFIT = getServerUrl() + "/ajaxGetTotalUserShareProfit";//获取用户分润总额
 	//商家相关
 	public static final String SHOP_REGISTER = getServerUrl() + "/../shop/ajaxRegister";//商家注册
 	public static final String SHOP_AUTH = getServerUrl() + "/../shop/ajaxShopAuth";//商家认证
@@ -216,7 +221,8 @@ public class ApiConfig
 	 */
 	public static String getServerProductUrl(String productId)
 	{
-		return getServerUrl() + "/product?productId=" + productId;
+		String url = getServerUrl() + "/product?productId=" + productId + "&shareUserId=" + PreferenceUtils.getInstance().getUsername();
+		return url;
 	}
 
 	/**
@@ -227,7 +233,8 @@ public class ApiConfig
 	 */
 	public static String getServerRegisterUrl(String shareUserId)
 	{
-		return getServerUrl() + "/register?referrerId=" + shareUserId;
+		String url = getServerUrl() + "/register?referrerId=" + shareUserId + "&shareUserId=" + PreferenceUtils.getInstance().getUsername();
+		return url;
 	}
 
 	/**

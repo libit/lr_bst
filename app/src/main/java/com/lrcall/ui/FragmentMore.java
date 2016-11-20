@@ -23,11 +23,13 @@ import com.external.xlistview.XListView;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ClientConfigInfo;
 import com.lrcall.appbst.models.ReturnInfo;
+import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.models.UserBalanceInfo;
 import com.lrcall.appbst.models.UserInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ProductStarService;
+import com.lrcall.appbst.services.UserAgentService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.enums.OrderStatus;
 import com.lrcall.enums.UserLevel;
@@ -40,9 +42,10 @@ import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogList;
 import com.lrcall.ui.shop.ActivityShopInfo;
 import com.lrcall.utils.AppConfig;
-import com.lrcall.utils.BmpTools;
+import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.CallTools;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.DateTimeTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
@@ -60,10 +63,11 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 {
 	private static final String TAG = FragmentMore.class.getSimpleName();
 	private XListView xListView;
-	private View headView, vLogined, vUnLogin;
-	private TextView tvName, tvUserType, tvOfficalWeb, tvServerPhone, tvBalance, tvFreezeBalance, tvPoint, tvStarCount, tvHistoryCount;
+	private View headView, vLogined, vUnLogin, vAgents, vIsAgent, vNotAgent;
+	private TextView tvName, tvUserType, tvRegisterDate, tvOfficalWeb, tvServerPhone, tvBalance, tvFreezeBalance, tvPoint, tvStarCount, tvHistoryCount, tvFansAmount, tvFansShareProfit, tvShareProfit;
 	private ImageView ivPhoto;
 	private UserService mUserService;
+	private UserAgentService mUserAgentService;
 	private ProductStarService mProductStarService;
 
 	@Override
@@ -72,6 +76,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		super.onCreate(savedInstanceState);
 		mUserService = new UserService(this.getContext());
 		mUserService.addDataResponse(this);
+		mUserAgentService = new UserAgentService(this.getContext());
+		mUserAgentService.addDataResponse(this);
 		mProductStarService = new ProductStarService(this.getContext());
 		mProductStarService.addDataResponse(this);
 	}
@@ -105,8 +111,12 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		xListView.setXListViewListener(this);
 		vUnLogin = rootView.findViewById(R.id.layout_unlogin);
 		vLogined = rootView.findViewById(R.id.layout_logined);
+		vAgents = rootView.findViewById(R.id.layout_agents);
+		vIsAgent = rootView.findViewById(R.id.layout_is_agent);
+		vNotAgent = rootView.findViewById(R.id.layout_apply_agent);
 		tvName = (TextView) rootView.findViewById(R.id.tv_name);
 		tvUserType = (TextView) rootView.findViewById(R.id.tv_user_type);
+		tvRegisterDate = (TextView) rootView.findViewById(R.id.tv_register_date);
 		tvOfficalWeb = (TextView) rootView.findViewById(R.id.tv_url);
 		tvServerPhone = (TextView) rootView.findViewById(R.id.tv_server_phone);
 		tvBalance = (TextView) rootView.findViewById(R.id.tv_balance);
@@ -114,6 +124,9 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		tvPoint = (TextView) rootView.findViewById(R.id.tv_point);
 		tvStarCount = (TextView) rootView.findViewById(R.id.tv_star_count);
 		tvHistoryCount = (TextView) rootView.findViewById(R.id.tv_history_count);
+		tvFansAmount = (TextView) rootView.findViewById(R.id.tv_fans_count);
+		tvFansShareProfit = (TextView) rootView.findViewById(R.id.tv_fans_share_profit);
+		tvShareProfit = (TextView) rootView.findViewById(R.id.tv_share_profit);
 		ivPhoto = (ImageView) rootView.findViewById(R.id.iv_photo);
 		rootView.findViewById(R.id.layout_orders).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_order_wait_pay).setOnClickListener(this);
@@ -131,8 +144,11 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		rootView.findViewById(R.id.layout_history).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_settings).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_apply_shop).setOnClickListener(this);
-		rootView.findViewById(R.id.layout_apply_agent).setOnClickListener(this);
+		rootView.findViewById(R.id.layout_user_agent).setOnClickListener(this);
+		vNotAgent.setOnClickListener(this);
 		rootView.findViewById(R.id.btn_upgrade).setOnClickListener(this);
+		rootView.findViewById(R.id.btn_sign).setOnClickListener(this);
+		rootView.findViewById(R.id.btn_share).setOnClickListener(this);
 		ivPhoto.setOnClickListener(this);
 		super.viewInit(rootView);
 	}
@@ -194,6 +210,31 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		switch (v.getId())
 		{
 			case R.id.btn_upgrade:
+			{
+				if (isbLogin())
+				{
+					Intent intent = new Intent(this.getContext(), ActivityUserUpgrade.class);
+					startActivity(intent);
+				}
+				else
+				{
+					startActivityForResult(new Intent(this.getContext(), ActivityLogin.class), ConstValues.REQUEST_LOGIN_USER);
+				}
+				break;
+			}
+			case R.id.btn_sign:
+			{
+				if (isbLogin())
+				{
+					mUserService.userSignToday("正在签到，请稍后...", true);
+				}
+				else
+				{
+					startActivityForResult(new Intent(this.getContext(), ActivityLogin.class), ConstValues.REQUEST_LOGIN_USER);
+				}
+				break;
+			}
+			case R.id.btn_share:
 			{
 				if (isbLogin())
 				{
@@ -411,6 +452,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				}
 				break;
 			}
+			case R.id.layout_user_agent:
 			case R.id.layout_apply_agent:
 			{
 				if (isbLogin())
@@ -436,12 +478,45 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			{
 				setbLogin(true);
 				String level = UserLevel.getLevelDesc(userInfo.getUserLevel());
-				String agent = "";
+				if (userInfo.getUserLevel() == UserLevel.L1.getLevel())
+				{
+					tvUserType.setTextColor(getResources().getColor(R.color.black));
+				}
+				else if (userInfo.getUserLevel() == UserLevel.L2.getLevel())
+				{
+					tvUserType.setTextColor(getResources().getColor(R.color.red));
+				}
+				else if (userInfo.getUserLevel() == UserLevel.L3.getLevel())
+				{
+					tvUserType.setTextColor(getResources().getColor(R.color.setting_gray));
+				}
+				else if (userInfo.getUserLevel() == UserLevel.L4.getLevel())
+				{
+					tvUserType.setTextColor(getResources().getColor(R.color.accent));
+				}
+				else if (userInfo.getUserLevel() == UserLevel.L5.getLevel())
+				{
+					tvUserType.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+				}
+				//				String agent = "";
 				if (userInfo.getUserType() > UserType.COMMON.getType())
 				{
-					agent = UserType.getDesc(userInfo.getUserType());
+					//					agent = UserType.getDesc(userInfo.getUserType());
+					vAgents.setVisibility(View.VISIBLE);
+					vIsAgent.setVisibility(View.VISIBLE);
+					vNotAgent.setVisibility(View.GONE);
+					mUserAgentService.getReferrerUserList(0, 1, null, false);
+					mUserAgentService.getTotalUserShareProfit(null, false);
 				}
-				tvUserType.setText(level + " " + agent);
+				else
+				{
+					vAgents.setVisibility(View.VISIBLE);
+					vIsAgent.setVisibility(View.GONE);
+					vNotAgent.setVisibility(View.VISIBLE);
+				}
+				tvUserType.setText(level);
+				//				tvUserType.setText(level + " " + agent);
+				tvRegisterDate.setText(DateTimeTools.getDateTimeString(userInfo.getAddDateLong()));
 				mUserService.getUserBalanceInfo(null, false);
 			}
 			else
@@ -461,9 +536,35 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			}
 			return true;
 		}
+		else if (url.endsWith(ApiConfig.GET_REFERRER_USER_LIST))
+		{
+			TableData tableData = GsonTools.getObject(result, TableData.class);
+			if (tableData != null)
+			{
+				tvFansAmount.setText(String.format("%d", tableData.getRecordsTotal()));
+			}
+			else
+			{
+				tvFansAmount.setText("获取失败");
+			}
+		}
+		else if (url.endsWith(ApiConfig.GET_TOTAL_USER_SHARE_PROFIT))
+		{
+			Double amount = GsonTools.getReturnObject(result, Double.class);
+			if (amount != null)
+			{
+				tvFansShareProfit.setText(String.format("%.2f", amount));
+				tvShareProfit.setText(String.format("%.2f", amount));
+			}
+			else
+			{
+				tvFansShareProfit.setText("获取失败");
+				tvShareProfit.setText("获取失败");
+			}
+		}
 		else if (url.endsWith(ApiConfig.USER_UPDATE_PIC_INFO))
 		{
-			Bitmap bitmap = BmpTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
 			if (bitmap != null)
 			{
 				ivPhoto.setImageBitmap(bitmap);
@@ -493,6 +594,11 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			}
 			return true;
 		}
+		else if (url.endsWith(ApiConfig.USER_SIGN_TODAY))
+		{
+			showServerMsg(result, null);
+			return true;
+		}
 		return true;
 	}
 
@@ -507,7 +613,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		{
 			String userId = PreferenceUtils.getInstance().getUsername();
 			tvName.setText(userId);
-			Bitmap bitmap = BmpTools.getBmpFile(AppConfig.getUserPicCacheDir(userId));
+			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(userId));
 			if (bitmap != null)
 			{
 				ivPhoto.setImageBitmap(bitmap);
@@ -523,6 +629,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			tvUserType.setText("");
 			vLogined.setVisibility(View.GONE);
 			vUnLogin.setVisibility(View.VISIBLE);
+			vAgents.setVisibility(View.GONE);
 			tvBalance.setText("0");
 			tvFreezeBalance.setText("0");
 			tvPoint.setText("0");
@@ -566,7 +673,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				{
 					file.mkdirs();
 				}
-				ByteArrayOutputStream b = BmpTools.compressToByteArrayOutputStream(bitmap);
+				ByteArrayOutputStream b = BitmapTools.compressToByteArrayOutputStream(bitmap);
 				if (b != null)
 				{
 					mUserService.updateUserHead(b.toByteArray(), "正在上传图片...", true);
@@ -575,7 +682,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				{
 					Toast.makeText(this.getContext(), "上传图片失败：数据为空！", Toast.LENGTH_LONG).show();
 				}
-				FileOutputStream f = BmpTools.compressToFileOutputStream(bitmap, userHeadPath);
+				FileOutputStream f = BitmapTools.compressToFileOutputStream(bitmap, userHeadPath);
 				if (f == null)
 				{
 					Toast.makeText(this.getContext(), "保存图片到手机失败！", Toast.LENGTH_LONG).show();

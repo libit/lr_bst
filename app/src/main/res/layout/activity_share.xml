@@ -30,7 +30,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_btn_common"
-                android:text="分享"/>
+                android:text="分享"
+                android:textSize="18sp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

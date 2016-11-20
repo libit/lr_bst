@@ -129,14 +129,14 @@ public abstract class MyBaseActivity extends SwipeBackActivity
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		super.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, intent);
 		if (requestCode == ConstValues.REQUEST_CAPTURE_SET_PIC)
 		{
 			if (resultCode == Activity.RESULT_OK)
 			{
-				Uri uri = data.getData();
+				Uri uri = intent.getData();
 				clipPhoto(uri);
 			}
 		}
@@ -144,7 +144,7 @@ public abstract class MyBaseActivity extends SwipeBackActivity
 		{
 			if (resultCode == Activity.RESULT_OK)
 			{
-				Bundle bundle = data.getExtras();
+				Bundle bundle = intent.getExtras();
 				Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
 				picSelected(bitmap);
 			}
@@ -157,7 +157,7 @@ public abstract class MyBaseActivity extends SwipeBackActivity
 		{
 			if (resultCode == Activity.RESULT_OK)
 			{
-				Uri uri = data.getData();
+				Uri uri = intent.getData();
 				clipPhoto(uri);
 			}
 			else

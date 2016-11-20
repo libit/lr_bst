@@ -289,9 +289,9 @@ public class ActivityAddressManage extends MyBasePageActivity implements IAjaxDa
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	public void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		super.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, intent);
 		if (requestCode == REQ_ADD || requestCode == REQ_EDIT)
 		{
 			if (resultCode == RESULT_OK)

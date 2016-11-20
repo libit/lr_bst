@@ -66,6 +66,32 @@ public class UserAgentService extends BaseService
 		ajaxStringCallback(ApiConfig.GET_USER_LAST_APPLY_AGENT_INFO, params, tips, needServiceProcessData);
 	}
 
+	/**
+	 * 获取用户推荐人列表
+	 *
+	 * @param tips               提示信息
+	 * @param needServiceProcess
+	 */
+	public void getReferrerUserList(int start, int size, String tips, final boolean needServiceProcess)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		ajaxStringCallback(ApiConfig.GET_REFERRER_USER_LIST, params, tips, needServiceProcess);
+	}
+
+	/**
+	 * 获取用户分润总额
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getTotalUserShareProfit(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.GET_TOTAL_USER_SHARE_PROFIT, params, tips, needServiceProcessData);
+	}
+
 	@Override
 	public void parseData(String url, String result, AjaxStatus status)
 	{

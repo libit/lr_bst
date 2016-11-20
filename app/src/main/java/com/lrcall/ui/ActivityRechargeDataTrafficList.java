@@ -199,9 +199,9 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		super.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, intent);
 		//		refreshData();
 		finish();
 	}

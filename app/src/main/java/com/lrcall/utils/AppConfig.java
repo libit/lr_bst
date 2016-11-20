@@ -76,6 +76,27 @@ public class AppConfig
 	}
 
 	/**
+	 * 图片目录
+	 *
+	 * @return
+	 */
+	public static String getPicFolder()
+	{
+		return "pic";
+	}
+
+	/**
+	 * 图片路径
+	 *
+	 * @param fileName
+	 * @return
+	 */
+	public static String getPicFile(String fileName)
+	{
+		return FileTools.getDir(AppConfig.getPicFolder()) + "/" + fileName;
+	}
+
+	/**
 	 * 日志记录的文件夹
 	 *
 	 * @return

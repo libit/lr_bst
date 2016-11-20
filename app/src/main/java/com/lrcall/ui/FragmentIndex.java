@@ -53,7 +53,6 @@ import com.lrcall.ui.adapter.IndexNewProductsAdapter;
 import com.lrcall.ui.adapter.IndexRecommendProducts4Adapter;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.DisplayTools;
-import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
@@ -69,8 +68,6 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
-import static android.app.Activity.RESULT_OK;
 
 public class FragmentIndex extends MyBasePageFragment implements View.OnClickListener, AbsListView.OnScrollListener, IAjaxDataResponse, AMapLocationListener
 {
@@ -937,19 +934,18 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			mHandler.sendMessage(msg);
 		}
 	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQ_SCAN_QR)
-		{
-			if (resultCode == RESULT_OK)
-			{
-				Bundle bundle = data.getExtras();
-				String scanResult = bundle.getString("result");
-				ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, "扫描结果：" + scanResult);
-			}
-		}
-	}
+	//	@Override
+	//	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	//	{
+	//		super.onActivityResult(requestCode, resultCode, data);
+	//		if (requestCode == REQ_SCAN_QR)
+	//		{
+	//			if (resultCode == RESULT_OK)
+	//			{
+	//				Bundle bundle = data.getExtras();
+	//				String scanResult = bundle.getString("result");
+	//				ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, "扫描结果：" + scanResult);
+	//			}
+	//		}
+	//	}
 }

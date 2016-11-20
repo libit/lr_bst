@@ -71,7 +71,7 @@ public class ContactsUtils8 extends ContactsFactory
 				do
 				{
 					String number = cursor.getString(cursor.getColumnIndex(NUMBER8));
-					String type = cursor.getString(cursor.getColumnIndex(TYPE8));
+					int type = cursor.getInt(cursor.getColumnIndex(TYPE8));
 					phoneInfos.add(new ContactInfo.PhoneInfo(number, type));
 				}
 				while (cursor.moveToNext());
@@ -90,7 +90,7 @@ public class ContactsUtils8 extends ContactsFactory
 			{
 				Long contactId = cursor.getLong(cursor.getColumnIndex(CONTACT_ID8));
 				String number = cursor.getString(cursor.getColumnIndex(NUMBER8));
-				String type = cursor.getString(cursor.getColumnIndex(TYPE8));
+				int type = cursor.getInt(cursor.getColumnIndex(TYPE8));
 				// 如果和上个联系人ID一样则合并
 				if (list.size() > 0 && list.get(list.size() - 1).getContactId() == contactId)
 				{
@@ -165,7 +165,6 @@ public class ContactsUtils8 extends ContactsFactory
 					contactInfo.setPy(py);
 					contactInfo.setPhotoId(photoId);
 					contactInfo.setStarred(starred);
-					//				LogcatTools.debug("getContactInfos", "name:" + name + ",py:" + py + ",sortOrder:" + sortOrder);
 					list.add(contactInfo);
 				}
 				if (!cursor.isClosed())
@@ -203,7 +202,6 @@ public class ContactsUtils8 extends ContactsFactory
 					contactInfo.setPy(py);
 					contactInfo.setPhotoId(photoId);
 					contactInfo.setStarred(starred);
-					//				LogcatTools.debug("getContactInfos", "name:" + name + ",py:" + py + ",sortOrder:" + sortOrder);
 					list.add(contactInfo);
 				}
 				if (!cursor.isClosed())
@@ -508,15 +506,24 @@ public class ContactsUtils8 extends ContactsFactory
 		}
 		try
 		{
-		/* 往 raw_contacts 中添加数据，并获取添加的id号*/
-			Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
+			long contactId = 0;
 			ContentResolver resolver = context.getContentResolver();
 			ContentValues values = new ContentValues();
-			long contactId = ContentUris.parseId(resolver.insert(uri, values));
+			List<ContactInfo> contactInfoList = getContactInfosByName(context, contactInfo.getName(), false);
+			if (contactInfoList != null && contactInfoList.size() > 0)
+			{
+				contactId = contactInfoList.get(0).getContactId();
+			}
+			else
+			{
+				/* 往 raw_contacts 中添加数据，并获取添加的id号*/
+				Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
+				contactId = ContentUris.parseId(resolver.insert(uri, values));
+			}
 
-        /* 往 data 中添加数据（要根据前面获取的id号） */
+            /* 往 data 中添加数据（要根据前面获取的id号） */
 			// 添加姓名
-			uri = Uri.parse("content://com.android.contacts/data");
+			Uri uri = Uri.parse("content://com.android.contacts/data");
 			values.put("raw_contact_id", contactId);
 			values.put("mimetype", "vnd.android.cursor.item/name");
 			values.put("data2", contactInfo.getName());
@@ -535,7 +542,7 @@ public class ContactsUtils8 extends ContactsFactory
 					values.clear();
 					values.put("raw_contact_id", contactId);
 					values.put("mimetype", "vnd.android.cursor.item/phone_v2");
-					values.put("data2", phoneInfo.getType());
+					values.put("data2", phoneInfo.getType() + "");
 					values.put("data1", phoneInfo.getNumber());
 					contactUri = resolver.insert(uri, values);
 					if (contactUri == null)

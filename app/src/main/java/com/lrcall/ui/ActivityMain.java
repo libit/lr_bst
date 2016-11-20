@@ -27,6 +27,7 @@ import com.external.xlistview.XListView;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.UpdateInfo;
 import com.lrcall.appbst.services.ApiConfig;
+import com.lrcall.appbst.services.CallbackService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UpdateService;
 import com.lrcall.appbst.services.UserService;
@@ -35,7 +36,7 @@ import com.lrcall.events.UserEvent;
 import com.lrcall.models.TabInfo;
 import com.lrcall.ui.customer.MyActionBarDrawerToggle;
 import com.lrcall.utils.AppConfig;
-import com.lrcall.utils.BmpTools;
+import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
@@ -92,6 +93,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		mUpdateService = new UpdateService(this);
 		mUpdateService.addDataResponse(this);
 		mUpdateService.checkUpdate(null, false);
+		new CallbackService(this).getNumberList(0, -1, null, null, null, true);
 		//		int i = 9 / 0;
 	}
 
@@ -301,9 +303,9 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	public void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		super.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, intent);
 		if (requestCode == ConstValues.REQUEST_LOGIN_USER)
 		{
 			if (resultCode == ConstValues.RESULT_LOGIN_SUCCESS)
@@ -320,7 +322,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		{
 			if (resultCode == Activity.RESULT_OK)
 			{
-				Bitmap bitmap = (Bitmap) data.getExtras().get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
+				Bitmap bitmap = (Bitmap) intent.getExtras().get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
 				picSelected(bitmap);
 			}
 			else
@@ -341,7 +343,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		{
 			file.mkdirs();
 		}
-		ByteArrayOutputStream b = BmpTools.compressToByteArrayOutputStream(bitmap);
+		ByteArrayOutputStream b = BitmapTools.compressToByteArrayOutputStream(bitmap);
 		if (b != null)
 		{
 			new UserService(this).updateUserHead(b.toByteArray(), "正在上传图片...", true);
@@ -350,7 +352,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 		{
 			Toast.makeText(this, "上传图片失败：数据为空！", Toast.LENGTH_LONG).show();
 		}
-		FileOutputStream f = BmpTools.compressToFileOutputStream(bitmap, userHeadPath);
+		FileOutputStream f = BitmapTools.compressToFileOutputStream(bitmap, userHeadPath);
 		if (f == null)
 		{
 			Toast.makeText(this, "保存图片到手机失败！", Toast.LENGTH_LONG).show();

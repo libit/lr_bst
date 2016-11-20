@@ -108,7 +108,7 @@ public class NewsService extends BaseService
 								{
 									String url = ApiConfig.getServerNewsUrl(newsId);
 									ActivityWebView.startWebActivity(context, "消息详情", url);
-									if (dbNewsInfo.getValideDateLong() == null || dbNewsInfo.getValideDateLong() <= System.currentTimeMillis())
+									if (dbNewsInfo != null && (dbNewsInfo.getValideDateLong() == null || dbNewsInfo.getValideDateLong() <= System.currentTimeMillis()))
 									{
 										DbNewsInfoFactory.getInstance().updateNewsInfoStatus(newsId, NewsStatus.READ.getStatus());
 									}

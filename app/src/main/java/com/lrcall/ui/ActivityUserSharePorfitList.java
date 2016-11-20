@@ -24,9 +24,9 @@ import com.lrcall.utils.GsonTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataResponse
+public class ActivityUserSharePorfitList extends MyBasePageActivity implements IAjaxDataResponse
 {
-	private static final String TAG = ActivityBalanceLog.class.getSimpleName();
+	private static final String TAG = ActivityUserSharePorfitList.class.getSimpleName();
 	private View layoutLogList, layoutNoLog;
 	private UserBalanceLogAdapter mUserBalanceLogAdapter;
 	private UserBalanceLogService mUserBalanceLogService;
@@ -89,7 +89,7 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 	public void loadMoreData()
 	{
 		String tips = (mDataStart == 0 ? "请稍后..." : "");
-		mUserBalanceLogService.getUserBalanceLogList(mDataStart, getPageSize(), null, null, tips, true);
+		mUserBalanceLogService.getUserShareProfitList(mDataStart, getPageSize(), tips, true);
 	}
 
 	synchronized private void refreshUserBalanceLogs(List<UserBalanceLogInfo> userBalanceLogInfoList)
@@ -139,7 +139,7 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 	{
 		xListView.stopRefresh();
 		xListView.stopLoadMore();
-		if (url.endsWith(ApiConfig.GET_USER_BALANCE_LOG_LIST))
+		if (url.endsWith(ApiConfig.GET_USER_SHARE_PROFIT_LIST))
 		{
 			List<UserBalanceLogInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);

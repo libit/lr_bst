@@ -47,7 +47,7 @@
                     android:id="@+id/rb_line1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="普通通道"
+                    android:text="快速通道"
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <RadioButton

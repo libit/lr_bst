@@ -29,7 +29,7 @@ import com.lrcall.ui.adapter.FuncsVerticalAdapter;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogList;
 import com.lrcall.utils.AppConfig;
-import com.lrcall.utils.BmpTools;
+import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
@@ -250,7 +250,7 @@ public class LayoutSideMain extends LinearLayout implements View.OnClickListener
 		}
 		else if (url.endsWith(ApiConfig.USER_UPDATE_PIC_INFO))
 		{
-			Bitmap bitmap = BmpTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
 			if (bitmap != null)
 			{
 				ivPhoto.setImageBitmap(bitmap);
@@ -272,7 +272,7 @@ public class LayoutSideMain extends LinearLayout implements View.OnClickListener
 		{
 			String userId = PreferenceUtils.getInstance().getUsername();
 			tvName.setText(userId);
-			Bitmap bitmap = BmpTools.getBmpFile(AppConfig.getUserPicCacheDir(userId));
+			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(userId));
 			if (bitmap != null)
 			{
 				ivPhoto.setImageBitmap(bitmap);

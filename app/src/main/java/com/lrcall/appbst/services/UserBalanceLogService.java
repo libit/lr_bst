@@ -9,6 +9,8 @@ import android.content.Context;
 import com.androidquery.callback.AjaxStatus;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.models.TableData;
+import com.lrcall.appbst.models.TableOrderInfo;
+import com.lrcall.appbst.models.TableSearchInfo;
 import com.lrcall.appbst.models.UserBalanceLogInfo;
 import com.lrcall.utils.GsonTools;
 
@@ -33,12 +35,30 @@ public class UserBalanceLogService extends BaseService
 	 * @param tips               提示信息
 	 * @param needServiceProcess
 	 */
-	public void getUserBalanceLogList(int start, int size, String tips, final boolean needServiceProcess)
+	public void getUserBalanceLogList(int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcess)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
 		params.put("length", size);
+		if (searchInfos != null && searchInfos.size() > 0)
+		{
+			params.put("search[value]", searchInfos.get(0).getSearchValue());
+		}
 		ajaxStringCallback(ApiConfig.GET_USER_BALANCE_LOG_LIST, params, tips, needServiceProcess);
+	}
+
+	/**
+	 * 获取用户分润列表
+	 *
+	 * @param tips               提示信息
+	 * @param needServiceProcess
+	 */
+	public void getUserShareProfitList(int start, int size, String tips, final boolean needServiceProcess)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		ajaxStringCallback(ApiConfig.GET_USER_SHARE_PROFIT_LIST, params, tips, needServiceProcess);
 	}
 
 	@Override

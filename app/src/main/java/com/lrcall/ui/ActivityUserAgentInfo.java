@@ -4,6 +4,7 @@
  */
 package com.lrcall.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,9 +32,8 @@ import com.lrcall.ui.customer.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogSelectArea;
 import com.lrcall.utils.AppConfig;
-import com.lrcall.utils.BmpTools;
+import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
@@ -72,7 +72,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 		picUrlList.add("file/upload/images/product_pic/bar21468831427508_1920x500.png");
 		picUrlList.add("file/upload/images/product_pic/ios1468832053086_500x500.jpg");
 		//		setViewPagerAdapter(picUrlList);
-		Bitmap bitmap = BmpTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
 		if (bitmap != null)
 		{
 			ivHead.setImageBitmap(bitmap);
@@ -124,6 +124,8 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 		});
 		btnUpgrade = (Button) findViewById(R.id.btn_upgrade);
 		btnUpgrade.setOnClickListener(this);
+		findViewById(R.id.layout_my_fans).setOnClickListener(this);
+		findViewById(R.id.layout_my_performance).setOnClickListener(this);
 	}
 
 	//设置图片适配器
@@ -147,6 +149,16 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 	{
 		switch (v.getId())
 		{
+			case R.id.layout_my_fans:
+			{
+				startActivity(new Intent(this, ActivityReferrerUserList.class));
+				break;
+			}
+			case R.id.layout_my_performance:
+			{
+				startActivity(new Intent(this, ActivityUserSharePorfitList.class));
+				break;
+			}
 			case R.id.btn_upgrade:
 			{
 				final byte type = UserType.getNextType(userType);
@@ -202,6 +214,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 			UserAgentInfo userAgentInfo = GsonTools.getReturnObject(result, UserAgentInfo.class);
 			if (userAgentInfo != null)
 			{
+				findViewById(R.id.layout_funcs).setVisibility(View.VISIBLE);
 				mUserAgentInfo = userAgentInfo;
 				userType = userAgentInfo.getUserType();
 				String provinceName = userAgentInfo.getProvinceId();

@@ -126,12 +126,14 @@ public class ContactInfo
 	public static class PhoneInfo
 	{
 		private String number;// 号码
-		private String type;// 类型
+		private int type;// 类型
+		private String typeStr;// 字符串类型
 
-		public PhoneInfo(String n, String t)
+		public PhoneInfo(String number, int type)
 		{
-			this.number = n;
-			this.type = t;
+			this.number = number;
+			this.type = type;
+			this.typeStr = convertTypeToString(type);
 		}
 
 		public String getNumber()
@@ -144,21 +146,24 @@ public class ContactInfo
 			this.number = number;
 		}
 
-		public String getType()
+		public int getType()
 		{
-			try
-			{
-				return convertTypeToString(Integer.parseInt(type));
-			}
-			catch (Exception e)
-			{
-				return type;
-			}
+			return type;
 		}
 
-		public void setType(String type)
+		public void setType(int type)
 		{
 			this.type = type;
+		}
+
+		public String getTypeStr()
+		{
+			return typeStr;
+		}
+
+		public void setTypeStr(String typeStr)
+		{
+			this.typeStr = typeStr;
 		}
 
 		private String convertTypeToString(int type)
@@ -169,7 +174,7 @@ public class ContactInfo
 		@Override
 		public String toString()
 		{
-			return String.format("number:%s,type:%s", number, type);
+			return String.format("number:%s,type:%s", number, typeStr);
 		}
 	}
 }

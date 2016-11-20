@@ -316,9 +316,9 @@ public class ActivityPayList extends MyBaseActivity implements IAjaxDataResponse
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		super.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, intent);
 		if (requestCode == REQ_PAY)
 		{
 			if (resultCode == Activity.RESULT_OK)

@@ -15,7 +15,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,7 +22,7 @@ import java.io.IOException;
 /**
  * Created by libit on 16/7/10.
  */
-public class BmpTools
+public class BitmapTools
 {
 	/**
 	 * 压缩Bmp到ByteArrayOutputStream
@@ -37,9 +36,10 @@ public class BmpTools
 		{
 			return null;
 		}
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		ByteArrayOutputStream byteArrayOutputStream = null;
 		try
 		{
+			byteArrayOutputStream = new ByteArrayOutputStream();
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);// 把数据写入文件
 		}
 		catch (Exception e)
@@ -78,11 +78,11 @@ public class BmpTools
 		{
 			return null;
 		}
-		FileOutputStream f = null;
+		FileOutputStream fileOutputStream = null;
 		try
 		{
-			f = new FileOutputStream(filePath);
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, f);// 把数据写入文件
+			fileOutputStream = new FileOutputStream(filePath);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);// 把数据写入文件
 		}
 		catch (FileNotFoundException e)
 		{
@@ -91,12 +91,12 @@ public class BmpTools
 		}
 		finally
 		{
-			if (f != null)
+			if (fileOutputStream != null)
 			{
 				try
 				{
-					f.flush();
-					f.close();
+					fileOutputStream.flush();
+					fileOutputStream.close();
 				}
 				catch (IOException e)
 				{
@@ -104,7 +104,7 @@ public class BmpTools
 				}
 			}
 		}
-		return f;
+		return fileOutputStream;
 	}
 
 	/**
@@ -121,15 +121,14 @@ public class BmpTools
 	/**
 	 * 保存Bmp文件
 	 *
-	 * @param file
+	 * @param bitmap   要保存的图片
 	 * @param filePath 保存的文件路径
 	 */
-	public static void saveBmpFile(File file, String filePath)
+	public static void saveBmpFile(Bitmap bitmap, String filePath)
 	{
 		try
 		{
 			FileOutputStream fOut = new FileOutputStream(filePath);
-			Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
 			fOut.flush();
 			fOut.close();
@@ -190,8 +189,8 @@ public class BmpTools
 	/**
 	 * 指定图片的切边，对图片进行圆角处理
 	 *
-	 * @param type    具体参见：{@link BmpTools.ALL} , {@link BmpTools.TOP} ,
-	 *                {@link BmpTools.LEFT} , {@link BmpTools.RIGHT} , {@link BmpTools.BOTTOM}
+	 * @param type    具体参见：{@link BitmapTools.ALL} , {@link BitmapTools.TOP} ,
+	 *                {@link BitmapTools.LEFT} , {@link BitmapTools.RIGHT} , {@link BitmapTools.BOTTOM}
 	 * @param bitmap  需要被切圆角的图片
 	 * @param roundPx 要切的像素大小
 	 * @return

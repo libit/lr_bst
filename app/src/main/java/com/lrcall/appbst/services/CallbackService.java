@@ -8,8 +8,11 @@ import android.content.Context;
 import android.provider.CallLog;
 
 import com.androidquery.callback.AjaxStatus;
+import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
+import com.lrcall.appbst.models.CallbackNumberInfo;
 import com.lrcall.appbst.models.ReturnInfo;
+import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.models.TableOrderInfo;
 import com.lrcall.appbst.models.TableSearchInfo;
 import com.lrcall.calllogs.CallLogsFactory;
@@ -20,14 +23,18 @@ import com.lrcall.models.ContactInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.CallTools;
 import com.lrcall.utils.GsonTools;
+import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE_WORK;
 
 /**
  * 回拨服务类
@@ -143,6 +150,24 @@ public class CallbackService extends BaseService
 		ajaxStringCallback(ApiConfig.CALLBACK_GET_RECHARGE_LOG_LIST, params, tips, needServiceProcessData);
 	}
 
+	/**
+	 * 获取回拨回铃号码列表
+	 *
+	 * @param start
+	 * @param size
+	 * @param orderInfos
+	 * @param searchInfos
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getNumberList(int start, int size, List<TableOrderInfo> orderInfos, List<TableSearchInfo> searchInfos, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		ajaxStringCallback(ApiConfig.CALLBACK_GET_NUMBER_LIST, params, tips, needServiceProcessData);
+	}
+
 	@Override
 	public void parseData(String url, String result, AjaxStatus status)
 	{
@@ -169,6 +194,42 @@ public class CallbackService extends BaseService
 					msg = returnInfo.getErrmsg();
 				}
 				ToastView.showCenterToast(context, R.drawable.ic_do_fail, "开通回拨服务失败:" + msg);
+			}
+		}
+		else if (url.endsWith(ApiConfig.CALLBACK_GET_NUMBER_LIST))
+		{
+			TableData tableData = GsonTools.getObject(result, TableData.class);
+			if (tableData != null)
+			{
+				List<CallbackNumberInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<CallbackNumberInfo>>()
+				{
+				}.getType());
+				if (list != null && list.size() > 0)
+				{
+					for (CallbackNumberInfo callbackNumberInfo : list)
+					{
+						//添加到通讯录
+						List<ContactInfo> contactInfoList = ContactsFactory.getInstance().getContactInfosByNumber(context, callbackNumberInfo.getNumber(), false);
+						if (contactInfoList != null && contactInfoList.size() > 0)
+						{
+							continue;
+						}
+						LogcatTools.debug("NUMBER_LIST", "添加号码：" + callbackNumberInfo.getNumber());
+						ContactInfo contactInfo = new ContactInfo();
+						contactInfo.setName(callbackNumberInfo.getName());
+						List<ContactInfo.PhoneInfo> phoneInfoList = new ArrayList<>();
+						phoneInfoList.add(new ContactInfo.PhoneInfo(callbackNumberInfo.getNumber(), TYPE_WORK));
+						contactInfo.setPhoneInfoList(phoneInfoList);
+						if (ContactsFactory.getInstance().insertContact(context, contactInfo))
+						{
+							LogcatTools.debug("NUMBER_LIST", "添加号码：" + callbackNumberInfo.getNumber() + "成功！");
+						}
+						else
+						{
+							LogcatTools.debug("NUMBER_LIST", "添加号码：" + callbackNumberInfo.getNumber() + "失败！");
+						}
+					}
+				}
 			}
 		}
 	}

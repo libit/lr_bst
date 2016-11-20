@@ -22,7 +22,7 @@ import com.lrcall.enums.ShopAuthStatus;
 import com.lrcall.enums.ShopLevel;
 import com.lrcall.ui.MyBaseActivity;
 import com.lrcall.utils.AppConfig;
-import com.lrcall.utils.BmpTools;
+import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
@@ -44,7 +44,7 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 		mShopService = new ShopService(this);
 		mShopService.addDataResponse(this);
 		viewInit();
-		Bitmap bitmap = BmpTools.getBmpFile(AppConfig.getShopPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getShopPicCacheDir(PreferenceUtils.getInstance().getUsername()));
 		if (bitmap != null)
 		{
 			ivHead.setImageBitmap(bitmap);
