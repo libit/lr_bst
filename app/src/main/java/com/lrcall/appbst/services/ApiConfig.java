@@ -14,7 +14,7 @@ public class ApiConfig
 {
 	public static final String API_VERSION = "1";
 	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
-	private static final String DEBUG_URL = "http://192.168.168.6:8080/lr_bst/user";
+	private static final String DEBUG_URL = "http://192.168.0.109:8080/lr_bst/user";
 	//	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	//	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
@@ -33,6 +33,9 @@ public class ApiConfig
 	public static final String GET_BACKUP_CONFIG = getServerUrl() + "/ajaxUserToGetBackupConfig";//获取用户配置备份信息
 	public static final String UPDATE_BACKUP_CONFIG = getServerUrl() + "/ajaxUserToUpdateBackupConfig";//用户配置备份
 	public static final String USER_SHARE = getServerUrl() + "/ajaxShareApp";//用户分享App
+	public static final String USER_SHARE2 = getServerUrl() + "/ajaxUserShare";//用户推荐分享
+	public static final String USER_SHARE_TIPS = getServerUrl() + "/ajaxUserShareTips";//推荐文字说明
+	public static final String USER_UPGRADE_TIPS = getServerUrl() + "/ajaxUserUpgradeTips";//升级文字说明
 	public static final String GET_CLIENT_CONFIG = getServerUrl() + "/ajaxGetClientConfig";//客户端公共配置信息
 	//用户升级
 	public static final String USER_UPGRADE_PRICE = getServerUrl() + "/ajaxGetUserUpgradePrice";//用户升级费用
@@ -144,6 +147,7 @@ public class ApiConfig
 	public static final String GET_USER_BALANCE_LOG_LIST = getServerUrl() + "/ajaxGetUserBalanceLogList";//用户余额变动日志列表
 	public static final String GET_USER_SHARE_PROFIT_LIST = getServerUrl() + "/ajaxGetUserShareProfitList";//获取用户分润列表
 	public static final String GET_TOTAL_USER_SHARE_PROFIT = getServerUrl() + "/ajaxGetTotalUserShareProfit";//获取用户分润总额
+	public static final String GET_USER_POINT_LOG_LIST = getServerUrl() + "/ajaxGetUserPointLogList";//用户积分变动日志列表
 	//商家相关
 	public static final String SHOP_REGISTER = getServerUrl() + "/../shop/ajaxRegister";//商家注册
 	public static final String SHOP_AUTH = getServerUrl() + "/../shop/ajaxShopAuth";//商家认证

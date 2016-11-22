@@ -58,5 +58,6 @@ public class ConstValues
 	public static final String DATA_PRODUCT_TYPE = "product_type";//商品类型
 	public static final String DATA_SHOP_ID = "shop_id";
 	public static final String DATA_SHARE_DATA = "share_data";
+	public static final String DATA_SHARE_CONTENT = "share_content";
 	public static final String DATA_USER_ID = "user_id";
 }

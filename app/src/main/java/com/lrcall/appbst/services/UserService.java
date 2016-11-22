@@ -13,8 +13,10 @@ import com.lrcall.appbst.models.PicInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.models.UserInfo;
 import com.lrcall.events.UserEvent;
+import com.lrcall.ui.ActivityShare;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.AppConfig;
+import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
@@ -154,6 +156,42 @@ public class UserService extends BaseService
 	{
 		Map<String, Object> params = new HashMap<>();
 		ajaxStringCallback(ApiConfig.USER_SHARE, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 用户推荐
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void share2(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.USER_SHARE2, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 推荐文字说明
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void shareTips(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.USER_SHARE_TIPS, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 升级文字说明
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void upgradeTips(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.USER_UPGRADE_TIPS, params, tips, needServiceProcessData);
 	}
 
 	/**
@@ -374,6 +412,27 @@ public class UserService extends BaseService
 				PreferenceUtils.getInstance().setUsername("");
 				PreferenceUtils.getInstance().setSessionId("");
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGOUT));
+			}
+		}
+		else if (url.endsWith(ApiConfig.USER_SHARE2))
+		{
+			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			if (ReturnInfo.isSuccess(returnInfo))
+			{
+				Intent intent = new Intent(context, ActivityShare.class);
+				String data = ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername());
+				String content = returnInfo.getErrmsg();
+				if (!StringTools.isNull(content) && content.contains("{appName}"))
+				{
+					content = content.replace("{appName}", context.getText(R.string.app_name));
+				}
+				intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
+				intent.putExtra(ConstValues.DATA_SHARE_CONTENT, content);
+				context.startActivity(intent);
+			}
+			else
+			{
+				ToastView.showCenterToast(context, R.drawable.ic_do_fail, "暂时无法分享！");
 			}
 		}
 	}

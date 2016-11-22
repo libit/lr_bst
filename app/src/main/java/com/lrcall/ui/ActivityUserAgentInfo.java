@@ -53,7 +53,6 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 	private UserService mUserService;
 	private UserAgentService mUserAgentService;
 	private byte userType = -1;
-	private UserAgentInfo mUserAgentInfo;
 	private boolean bFirst = true;
 
 	@Override
@@ -207,6 +206,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 		else if (url.endsWith(ApiConfig.USER_APPLY_AGENT))
 		{
 			showServerMsg(result, null);
+			mUserService.getUserInfo(null, false);
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.GET_USER_AGENT_INFO))
@@ -215,7 +215,6 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 			if (userAgentInfo != null)
 			{
 				findViewById(R.id.layout_funcs).setVisibility(View.VISIBLE);
-				mUserAgentInfo = userAgentInfo;
 				userType = userAgentInfo.getUserType();
 				String provinceName = userAgentInfo.getProvinceId();
 				if (userAgentInfo.getProvinceInfo() != null)
@@ -256,6 +255,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 					return true;
 				}
 			}
+			btnUpgrade.setVisibility(View.VISIBLE);
 			tvApplyStatus.setVisibility(View.GONE);
 			return true;
 		}

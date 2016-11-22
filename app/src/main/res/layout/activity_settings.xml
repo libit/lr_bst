@@ -498,7 +498,8 @@
                 android:layout_marginRight="@dimen/margin0"
                 android:layout_marginTop="@dimen/margin10"
                 android:background="@color/white"
-                android:contentDescription="@null">
+                android:contentDescription="@null"
+                android:visibility="gone">
                 <TextView
                     android:id="@+id/app_setting_share"
                     android:layout_width="wrap_content"

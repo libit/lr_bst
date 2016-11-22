@@ -23,12 +23,15 @@ import com.external.xlistview.XListView;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ClientConfigInfo;
 import com.lrcall.appbst.models.ReturnInfo;
+import com.lrcall.appbst.models.ShopInfo;
+import com.lrcall.appbst.models.ShopSaleData;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.models.UserBalanceInfo;
 import com.lrcall.appbst.models.UserInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ProductStarService;
+import com.lrcall.appbst.services.ShopService;
 import com.lrcall.appbst.services.UserAgentService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.enums.OrderStatus;
@@ -63,12 +66,13 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 {
 	private static final String TAG = FragmentMore.class.getSimpleName();
 	private XListView xListView;
-	private View headView, vLogined, vUnLogin, vAgents, vIsAgent, vNotAgent;
-	private TextView tvName, tvUserType, tvRegisterDate, tvOfficalWeb, tvServerPhone, tvBalance, tvFreezeBalance, tvPoint, tvStarCount, tvHistoryCount, tvFansAmount, tvFansShareProfit, tvShareProfit;
+	private View headView, vLogined, vUnLogin, vAgents, vIsAgent, vNotAgent, vShops, vIsShop, vNotShop;
+	private TextView tvName, tvUserType, tvRegisterDate, tvOfficalWeb, tvServerPhone, tvBalance, tvFreezeBalance, tvPoint, tvStarCount, tvHistoryCount, tvFansAmount, tvFansShareProfit, tvShareProfit, tvPeopleAmount, tvRecentOrderCount, tvSaleAmount;
 	private ImageView ivPhoto;
 	private UserService mUserService;
 	private UserAgentService mUserAgentService;
 	private ProductStarService mProductStarService;
+	private ShopService mShopService;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState)
@@ -80,6 +84,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		mUserAgentService.addDataResponse(this);
 		mProductStarService = new ProductStarService(this.getContext());
 		mProductStarService.addDataResponse(this);
+		mShopService = new ShopService(this.getContext());
+		mShopService.addDataResponse(this);
 	}
 
 	@Override
@@ -114,6 +120,9 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		vAgents = rootView.findViewById(R.id.layout_agents);
 		vIsAgent = rootView.findViewById(R.id.layout_is_agent);
 		vNotAgent = rootView.findViewById(R.id.layout_apply_agent);
+		vShops = rootView.findViewById(R.id.layout_shops);
+		vIsShop = rootView.findViewById(R.id.layout_is_shop);
+		vNotShop = rootView.findViewById(R.id.layout_apply_shop);
 		tvName = (TextView) rootView.findViewById(R.id.tv_name);
 		tvUserType = (TextView) rootView.findViewById(R.id.tv_user_type);
 		tvRegisterDate = (TextView) rootView.findViewById(R.id.tv_register_date);
@@ -127,6 +136,9 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		tvFansAmount = (TextView) rootView.findViewById(R.id.tv_fans_count);
 		tvFansShareProfit = (TextView) rootView.findViewById(R.id.tv_fans_share_profit);
 		tvShareProfit = (TextView) rootView.findViewById(R.id.tv_share_profit);
+		tvPeopleAmount = (TextView) rootView.findViewById(R.id.tv_people_count);
+		tvRecentOrderCount = (TextView) rootView.findViewById(R.id.tv_recent_order_count);
+		tvSaleAmount = (TextView) rootView.findViewById(R.id.tv_sale_amount);
 		ivPhoto = (ImageView) rootView.findViewById(R.id.iv_photo);
 		rootView.findViewById(R.id.layout_orders).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_order_wait_pay).setOnClickListener(this);
@@ -145,6 +157,9 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		rootView.findViewById(R.id.layout_settings).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_apply_shop).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_user_agent).setOnClickListener(this);
+		rootView.findViewById(R.id.btn_be_agent).setOnClickListener(this);
+		rootView.findViewById(R.id.layout_shop_info).setOnClickListener(this);
+		rootView.findViewById(R.id.btn_be_shop).setOnClickListener(this);
 		vNotAgent.setOnClickListener(this);
 		rootView.findViewById(R.id.btn_upgrade).setOnClickListener(this);
 		rootView.findViewById(R.id.btn_sign).setOnClickListener(this);
@@ -238,8 +253,12 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			{
 				if (isbLogin())
 				{
-					Intent intent = new Intent(this.getContext(), ActivityUserUpgrade.class);
-					startActivity(intent);
+					//					Intent intent = new Intent(this.getContext(), ActivityShare.class);
+					//					//				String data = GsonTools.toJson(new ShareData(ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername()), PreferenceUtils.getInstance().getUsername()));
+					//					String data = ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername());
+					//					intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
+					//					startActivity(intent);
+					mUserService.share2("请稍后...", true);
 				}
 				else
 				{
@@ -440,6 +459,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				startActivity(new Intent(this.getContext(), ActivitySettings.class));
 				break;
 			}
+			case R.id.btn_be_shop:
+			case R.id.layout_shop_info:
 			case R.id.layout_apply_shop:
 			{
 				if (isbLogin())
@@ -452,6 +473,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				}
 				break;
 			}
+			case R.id.btn_be_agent:
 			case R.id.layout_user_agent:
 			case R.id.layout_apply_agent:
 			{
@@ -518,6 +540,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				//				tvUserType.setText(level + " " + agent);
 				tvRegisterDate.setText(DateTimeTools.getDateTimeString(userInfo.getAddDateLong()));
 				mUserService.getUserBalanceInfo(null, false);
+				mShopService.getShopInfo(null, false);
 			}
 			else
 			{
@@ -561,6 +584,36 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				tvFansShareProfit.setText("获取失败");
 				tvShareProfit.setText("获取失败");
 			}
+		}
+		else if (url.endsWith(ApiConfig.GET_SHOP_INFO))
+		{
+			ShopInfo shopInfo = GsonTools.getReturnObject(result, ShopInfo.class);
+			if (shopInfo != null)
+			{
+				vShops.setVisibility(View.VISIBLE);
+				vIsShop.setVisibility(View.VISIBLE);
+				vNotShop.setVisibility(View.GONE);
+				mShopService.getSaleData(null, false);
+			}
+			else
+			{
+				vShops.setVisibility(View.VISIBLE);
+				vIsShop.setVisibility(View.GONE);
+				vNotShop.setVisibility(View.VISIBLE);
+			}
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.GET_SHOP_SALE_DATA))
+		{
+			ShopSaleData shopSaleData = GsonTools.getReturnObject(result, ShopSaleData.class);
+			if (shopSaleData != null)
+			{
+				tvPeopleAmount.setText("0");
+				tvSaleAmount.setText(StringTools.getPrice(shopSaleData.getTotalSaleAmount()));
+				//				tvSaleAmount.setText(StringTools.getPrice(shopSaleData.getRecent7SaleAmont()));
+				tvRecentOrderCount.setText(shopSaleData.getRecent7OrderCount() + "");
+			}
+			return true;
 		}
 		else if (url.endsWith(ApiConfig.USER_UPDATE_PIC_INFO))
 		{

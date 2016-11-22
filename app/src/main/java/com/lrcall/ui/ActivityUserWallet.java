@@ -46,6 +46,8 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 		tvPoint = (TextView) findViewById(R.id.tv_point);
 		findViewById(R.id.layout_add_balance).setOnClickListener(this);
 		findViewById(R.id.btn_duihuan).setOnClickListener(this);
+		findViewById(R.id.layout_user_balance).setOnClickListener(this);
+		findViewById(R.id.layout_user_point).setOnClickListener(this);
 	}
 
 	@Override
@@ -104,6 +106,18 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 			case R.id.btn_duihuan:
 			{
 				Intent intent = new Intent(this, ActivityPointProductShop.class);
+				startActivity(intent);
+				break;
+			}
+			case R.id.layout_user_balance:
+			{
+				Intent intent = new Intent(this, ActivityBalanceLog.class);
+				startActivity(intent);
+				break;
+			}
+			case R.id.layout_user_point:
+			{
+				Intent intent = new Intent(this, ActivityUserPointLog.class);
 				startActivity(intent);
 				break;
 			}

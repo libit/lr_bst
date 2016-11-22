@@ -11,7 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +36,7 @@ import com.lrcall.enums.PayType;
 import com.lrcall.enums.UserLevel;
 import com.lrcall.ui.adapter.PayAdapter;
 import com.lrcall.ui.customer.ToastView;
+import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
@@ -53,8 +54,8 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 	private static final String TAG = ActivityUserUpgrade.class.getSimpleName();
 	public static final int REQ_PAY = 2002;
 	private static final String PAY_BY_SHOP_CARD_ID = "shop_card_id";
-	private TextView tvCurrentLevel, tvNextLevel, tvPrice;
-	private ListView xListView;
+	private TextView tvCurrentLevel, tvNextLevel, tvPrice, tvTips;
+	private GridView xListView;
 	private final List<PayInfo> mPayInfoList = new ArrayList<>();
 	private UserService mUserService;
 	private AlipayService alipayService;
@@ -121,6 +122,7 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 		mUserService = new UserService(this);
 		mUserService.addDataResponse(this);
 		viewInit();
+		mUserService.upgradeTips(null, false);
 		mUserService.getUserInfo("请稍后...", false);
 	}
 
@@ -132,7 +134,8 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 		tvCurrentLevel = (TextView) findViewById(R.id.tv_current_level);
 		tvNextLevel = (TextView) findViewById(R.id.tv_next_level);
 		tvPrice = (TextView) findViewById(R.id.tv_price);
-		xListView = (ListView) findViewById(R.id.xlist);
+		tvTips = (TextView) findViewById(R.id.tv_tips);
+		xListView = (GridView) findViewById(R.id.xlist);
 		findViewById(R.id.btn_upgrade).setOnClickListener(this);
 	}
 
@@ -169,6 +172,7 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 			}
 		});
 		xListView.setAdapter(payAdapter);
+		ViewHeightCalTools.setGridViewHeight(xListView, 2, true);
 	}
 
 	@Override
@@ -195,6 +199,25 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 				tvNextLevel.setText(UserLevel.getNextLevelDesc(userInfo.getUserLevel()));
 			}
 			mPayService.getUserUpgradePrice("请稍后...", false);
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.USER_UPGRADE_TIPS))
+		{
+			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			if (ReturnInfo.isSuccess(returnInfo))
+			{
+				String tips = returnInfo.getErrmsg();
+				tips = tips.replace("<br>", "\r\n");
+				tips = tips.replace("<br/>", "\r\n");
+				tips = tips.replace("<br />", "\r\n");
+				tvTips.setText(tips);
+				findViewById(R.id.layout_tips).setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				tvTips.setText("");
+				findViewById(R.id.layout_tips).setVisibility(View.GONE);
+			}
 			return true;
 		}
 		else if (url.endsWith(ApiConfig.USER_UPGRADE_PRICE))
@@ -224,14 +247,16 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 				{
 					mPayInfoList.clear();
 					mPayInfoList.add(new PayInfo(PAY_BY_SHOP_CARD_ID, "商城卡支付", ""));
+					String picUrl = "";
 					for (PayInfo payInfo : payInfoList)
 					{
-						//						if (payInfo.getName().contains("余额"))
-						//						{
-						//							continue;
-						//						}
+						if (payInfo.getName().contains("余额"))
+						{
+							picUrl = payInfo.getPicUrl();
+						}
 						mPayInfoList.add(payInfo);
 					}
+					mPayInfoList.get(0).setPicUrl(picUrl);
 				}
 			}
 			initData();

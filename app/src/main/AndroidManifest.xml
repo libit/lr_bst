@@ -6,7 +6,6 @@
 <manifest
     package="com.lrcall.appbst"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
@@ -97,7 +96,6 @@
             android:name="com.amap.api.v2.apikey"
             android:value="ffc26ecb301d4dfde3f9d0770e3915ea">
         </meta-data>
-
         <activity
             android:name="com.lrcall.ui.ActivitySplash"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
@@ -281,6 +279,9 @@
         <activity
             android:name="com.lrcall.ui.ActivityPayByShopCard"
             android:label="@string/title_activity_pay_by_shop_card"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityUserPointLog"
+            android:label="@string/title_activity_user_point_log"/>
         <!-- 商家 -->
         <activity
             android:name="com.lrcall.ui.shop.ActivityShopRegister"
@@ -315,7 +316,6 @@
         <activity
             android:name="com.lrcall.ui.shop.ActivityShopChooseAgentProduct"
             android:label="@string/title_activity_choose_agent_product"/>
-
         <service android:name="com.lrcall.services.AutoAnswerIntentService"/>
         <service android:name="com.lrcall.services.AutoAnswerIntentService2"/>
         <!-- alipay sdk begin -->
@@ -340,10 +340,8 @@
             <!-- Allow web apps to launch Barcode Scanner by linking to http://zxing.appspot.com/scan. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-
                 <data
                     android:host="zxing.appspot.com"
                     android:path="/scan"
@@ -352,10 +350,8 @@
             <!-- We also support a Google Product Search URL. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-
                 <data
                     android:host="www.google.com"
                     android:path="/m/products/scan"
@@ -364,10 +360,8 @@
             <!-- And the UK version. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-
                 <data
                     android:host="www.google.co.uk"
                     android:path="/m/products/scan"
@@ -376,10 +370,8 @@
             <!-- Support zxing://scan/?... like iPhone app -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-
                 <data
                     android:host="scan"
                     android:path="/"
@@ -422,7 +414,6 @@
             android:label="@string/menu_help"
             android:screenOrientation="user"
             android:stateNotNeeded="true"/>
-
         <provider
             android:name="com.lrcall.db.DataBaseProvider"
             android:authorities="lr_bst.db"

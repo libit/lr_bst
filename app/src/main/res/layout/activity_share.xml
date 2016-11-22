@@ -23,6 +23,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:src="@drawable/ic_download_qr"/>
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"/>
             <Button
                 android:id="@+id/btn_share"
                 android:layout_width="wrap_content"
@@ -30,8 +39,30 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_btn_common"
-                android:text="分享"
+                android:minWidth="150dp"
+                android:text="我要推广"
+                android:textColor="@color/white"
                 android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/tv_tips_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp"
+                android:text="邀请说明："
+                android:textColor="@color/red"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/tv_tips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/setting_gray"
+                android:textSize="16sp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
