@@ -41,7 +41,7 @@ import com.lrcall.db.DbBannerInfoFactory;
 import com.lrcall.ui.adapter.IndexRecommendProducts4Adapter;
 import com.lrcall.ui.adapter.PointProductsAdapter;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;

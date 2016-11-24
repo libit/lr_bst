@@ -26,7 +26,7 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.AreaService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.enums.UserType;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LogcatTools;

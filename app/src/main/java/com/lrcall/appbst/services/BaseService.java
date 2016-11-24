@@ -88,7 +88,7 @@ public abstract class BaseService
 		}
 		if (!params.containsKey("userId"))
 		{
-			params.put("userId", PreferenceUtils.getInstance().getUsername());
+			params.put("userId", PreferenceUtils.getInstance().getUserId());
 		}
 		if (!params.containsKey("sessionId"))
 		{
@@ -104,7 +104,7 @@ public abstract class BaseService
 		params.put("versionCode", AppFactory.getInstance().getVersionCode());
 		String signData = CryptoTools.getSignValue(params.values());
 		params.put("sign", signData);
-		params.put("picQuality", AppConfig.PLATFORM);
+		//		params.put("picQuality", AppConfig.PLATFORM);
 		params.put("v", ApiConfig.API_VERSION);
 		return params;
 	}

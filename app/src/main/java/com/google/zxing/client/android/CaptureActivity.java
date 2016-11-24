@@ -123,22 +123,6 @@ public final class CaptureActivity extends MyBaseActivity implements SurfaceHold
 		return false;
 	}
 
-	private static boolean isBstURL(String dataString)
-	{
-		if (dataString == null)
-		{
-			return false;
-		}
-		for (String url : BST_URLS)
-		{
-			if (dataString.startsWith(url))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b, float scaleFactor)
 	{
 		if (a != null && b != null)

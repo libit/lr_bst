@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.androidquery.AQuery;
 import com.lrcall.appbst.MyApplication;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.LogcatTools;
 

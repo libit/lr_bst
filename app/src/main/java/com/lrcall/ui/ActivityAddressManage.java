@@ -54,7 +54,7 @@ public class ActivityAddressManage extends MyBasePageActivity implements IAjaxDa
 		mAddressService.addDataResponse(this);
 		viewInit();
 		EventBus.getDefault().register(this);
-		//		mUserAddressInfoList = DbUserAddressInfoFactory.getInstance().getUserAddressInfoList(PreferenceUtils.getInstance().getUsername());
+		//		mUserAddressInfoList = DbUserAddressInfoFactory.getInstance().getUserAddressInfoList(PreferenceUtils.getInstance().getUserId());
 		onRefresh();
 	}
 

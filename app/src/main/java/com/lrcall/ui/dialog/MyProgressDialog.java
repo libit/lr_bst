@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lrcall.appbst.R;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 
 public class MyProgressDialog
 {

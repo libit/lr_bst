@@ -20,9 +20,9 @@ import java.util.Map;
 public class PreferenceUtils
 {
 	private static final String TAG = PreferenceUtils.class.getName();
-	public static final String PREF_USERNAME_KEY = "userId";//用户ID
-	public static final String PREF_SESSION_ID_KEY = "session_id";// 会话ID
-	public static final String PREF_CRASH_FILE = "crash_file_name";//崩溃日志名
+	public static final String PREF_USER_ID = "userId";//用户ID
+	public static final String PREF_SESSION_ID = "session_id";// 会话ID
+	public static final String PREF_CRASH_FILE_NAME = "crash_file_name";//崩溃日志名
 	public static final String LOGCAT_LEVEL = "logcat_level";//日志记录级别
 	public static final String LOGCAT_AUTO_UPDATE = "logcat_auto_update";//自动上传日志
 	public static final String IS_FIRST_RUN = "is_first_run";//是否第一次运行
@@ -41,9 +41,9 @@ public class PreferenceUtils
 		private static final long serialVersionUID = 1L;
 
 		{
-			put(PREF_USERNAME_KEY, "");
-			put(PREF_SESSION_ID_KEY, "");
-			put(PREF_CRASH_FILE, "");
+			put(PREF_USER_ID, "");
+			put(PREF_SESSION_ID, "");
+			put(PREF_CRASH_FILE_NAME, "");
 			put(LOGCAT_LEVEL, LogLevel.LEVEL_3.getLevel() + "");
 			put(DIAL_PRESS_TONE_MODE, ModType.GENERIC_TYPE_PREVENT.getType() + "");
 			put(DIAL_PRESS_VIBRATE_MODE, ModType.GENERIC_TYPE_PREVENT.getType() + "");
@@ -110,24 +110,24 @@ public class PreferenceUtils
 		return false;
 	}
 
-	public String getUsername()
+	public String getUserId()
 	{
-		return getStringValue(PREF_USERNAME_KEY);
+		return getStringValue(PREF_USER_ID);
 	}
 
-	public void setUsername(String value)
+	public void setUserId(String value)
 	{
-		setStringValue(PREF_USERNAME_KEY, value);
+		setStringValue(PREF_USER_ID, value);
 	}
 
 	public String getSessionId()
 	{
-		return getStringValue(PREF_SESSION_ID_KEY);
+		return getStringValue(PREF_SESSION_ID);
 	}
 
 	public void setSessionId(String value)
 	{
-		setStringValue(PREF_SESSION_ID_KEY, value);
+		setStringValue(PREF_SESSION_ID, value);
 	}
 
 	public void setStringValue(String key, String value)

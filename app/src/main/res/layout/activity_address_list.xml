@@ -48,7 +48,7 @@
             android:background="@drawable/bg_btn_common"
             android:text="去添加"
             android:textColor="@color/white"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

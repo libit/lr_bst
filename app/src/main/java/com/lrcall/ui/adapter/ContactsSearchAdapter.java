@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.lrcall.appbst.R;
 import com.lrcall.models.ContactInfo;
-import com.lrcall.ui.customer.LocalTools;
+import com.lrcall.utils.LocalTools;
 
 import java.util.List;
 

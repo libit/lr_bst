@@ -52,7 +52,7 @@ import com.lrcall.ui.adapter.IndexFuncsAdapter;
 import com.lrcall.ui.adapter.IndexNewProductsAdapter;
 import com.lrcall.ui.adapter.IndexRecommendProducts4Adapter;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;

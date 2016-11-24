@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.lrcall.appbst.R;
+import com.lrcall.utils.DisplayTools;
 
 /**
  * Created by libit on 16/7/21.

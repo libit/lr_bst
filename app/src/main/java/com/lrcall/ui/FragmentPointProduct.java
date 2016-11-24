@@ -28,7 +28,7 @@ import com.lrcall.appbst.services.PointProductService;
 import com.lrcall.appbst.services.ProductService;
 import com.lrcall.enums.ProductPicType;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.FloatProductSelectCount;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;

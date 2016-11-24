@@ -44,7 +44,7 @@ public class ActivityShopInfo extends MyBaseActivity implements View.OnClickList
 		mShopService = new ShopService(this);
 		mShopService.addDataResponse(this);
 		viewInit();
-		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getShopPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getShopPicCacheDir(PreferenceUtils.getInstance().getUserId()));
 		if (bitmap != null)
 		{
 			ivHead.setImageBitmap(bitmap);

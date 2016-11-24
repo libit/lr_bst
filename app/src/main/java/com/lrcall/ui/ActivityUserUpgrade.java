@@ -111,7 +111,7 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_upgrade);
 		//需要支付的类型
-		payTypeInfo = new PayTypeInfo(PayType.PAY_UPGRADE, 0, "用户升级", PreferenceUtils.getInstance().getUsername());
+		payTypeInfo = new PayTypeInfo(PayType.PAY_UPGRADE, 0, "用户升级", PreferenceUtils.getInstance().getUserId());
 		params = GsonTools.toJson(payTypeInfo);
 		alipayService = new AlipayService(this);
 		alipayService.addDataResponse(this);

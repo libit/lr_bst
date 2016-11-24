@@ -41,7 +41,6 @@
             android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn_common"
-            android:backgroundTintMode="src_in"
             android:text="立即兑换"
             android:textColor="@color/white"
             android:textSize="18sp"/>

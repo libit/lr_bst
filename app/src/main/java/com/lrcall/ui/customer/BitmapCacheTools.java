@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lrcall.appbst.R;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.apptools.AppFactory;
 

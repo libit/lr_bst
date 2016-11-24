@@ -162,7 +162,7 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 	@NeedsPermission({Manifest.permission.SYSTEM_ALERT_WINDOW})
 	protected void initData()
 	{
-		ProductStarInfo productStarInfo = DbProductStarInfoFactory.getInstance().getProductStarInfo(PreferenceUtils.getInstance().getUsername(), productId);
+		ProductStarInfo productStarInfo = DbProductStarInfoFactory.getInstance().getProductStarInfo(PreferenceUtils.getInstance().getUserId(), productId);
 		if (productStarInfo != null)
 		{
 			isStared = true;

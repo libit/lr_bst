@@ -175,7 +175,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 	@NeedsPermission({Manifest.permission.SYSTEM_ALERT_WINDOW})
 	protected void initData()
 	{
-		ProductStarInfo productStarInfo = DbProductStarInfoFactory.getInstance().getProductStarInfo(PreferenceUtils.getInstance().getUsername(), productId);
+		ProductStarInfo productStarInfo = DbProductStarInfoFactory.getInstance().getProductStarInfo(PreferenceUtils.getInstance().getUserId(), productId);
 		if (productStarInfo != null)
 		{
 			isStared = true;
@@ -299,7 +299,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 			case R.id.iv_share:
 			{
 				Intent intent = new Intent(this, ActivityShare.class);
-				//				String data = GsonTools.toJson(new ShareProductData(ApiConfig.getServerProductUrl(productId), productId, PreferenceUtils.getInstance().getUsername()));
+				//				String data = GsonTools.toJson(new ShareProductData(ApiConfig.getServerProductUrl(productId), productId, PreferenceUtils.getInstance().getUserId()));
 				String data = ApiConfig.getServerProductUrl(productId);
 				intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
 				startActivity(intent);

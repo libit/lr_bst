@@ -254,8 +254,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				if (isbLogin())
 				{
 					//					Intent intent = new Intent(this.getContext(), ActivityShare.class);
-					//					//				String data = GsonTools.toJson(new ShareData(ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername()), PreferenceUtils.getInstance().getUsername()));
-					//					String data = ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername());
+					//					//				String data = GsonTools.toJson(new ShareData(ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUserId()), PreferenceUtils.getInstance().getUserId()));
+					//					String data = ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUserId());
 					//					intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
 					//					startActivity(intent);
 					mUserService.share2("请稍后...", true);
@@ -456,7 +456,17 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			}
 			case R.id.layout_settings:
 			{
-				startActivity(new Intent(this.getContext(), ActivitySettings.class));
+				//				startActivity(new Intent(this.getContext(), ActivitySettings.class));
+				if (isbLogin())
+				{
+					Intent intent = new Intent(this.getContext(), ActivityOrders.class);
+					intent.putExtra(ConstValues.DATA_ORDER_TYPE, OrderStatus.WAIT_PAY.getStatus());
+					startActivity(intent);
+				}
+				else
+				{
+					startActivityForResult(new Intent(this.getContext(), ActivityLogin.class), ConstValues.REQUEST_LOGIN_USER);
+				}
 				break;
 			}
 			case R.id.btn_be_shop:
@@ -502,29 +512,28 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				String level = UserLevel.getLevelDesc(userInfo.getUserLevel());
 				if (userInfo.getUserLevel() == UserLevel.L1.getLevel())
 				{
-					tvUserType.setTextColor(getResources().getColor(R.color.black));
+					tvUserType.setBackgroundResource(R.drawable.bg_l1_corner_3);
 				}
 				else if (userInfo.getUserLevel() == UserLevel.L2.getLevel())
 				{
-					tvUserType.setTextColor(getResources().getColor(R.color.red));
+					tvUserType.setBackgroundResource(R.drawable.bg_l2_corner_3);
 				}
 				else if (userInfo.getUserLevel() == UserLevel.L3.getLevel())
 				{
-					tvUserType.setTextColor(getResources().getColor(R.color.setting_gray));
+					tvUserType.setBackgroundResource(R.drawable.bg_l3_corner_3);
 				}
 				else if (userInfo.getUserLevel() == UserLevel.L4.getLevel())
 				{
-					tvUserType.setTextColor(getResources().getColor(R.color.accent));
+					tvUserType.setBackgroundResource(R.drawable.bg_l4_corner_3);
 				}
 				else if (userInfo.getUserLevel() == UserLevel.L5.getLevel())
 				{
-					tvUserType.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+					tvUserType.setBackgroundResource(R.drawable.bg_l5_corner_3);
 				}
 				//				String agent = "";
 				if (userInfo.getUserType() > UserType.COMMON.getType())
 				{
 					//					agent = UserType.getDesc(userInfo.getUserType());
-					vAgents.setVisibility(View.VISIBLE);
 					vIsAgent.setVisibility(View.VISIBLE);
 					vNotAgent.setVisibility(View.GONE);
 					mUserAgentService.getReferrerUserList(0, 1, null, false);
@@ -532,13 +541,12 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				}
 				else
 				{
-					vAgents.setVisibility(View.VISIBLE);
 					vIsAgent.setVisibility(View.GONE);
 					vNotAgent.setVisibility(View.VISIBLE);
 				}
 				tvUserType.setText(level);
 				//				tvUserType.setText(level + " " + agent);
-				tvRegisterDate.setText(DateTimeTools.getDateTimeString(userInfo.getAddDateLong()));
+				tvRegisterDate.setText(DateTimeTools.getDateString(userInfo.getAddDateLong()));
 				mUserService.getUserBalanceInfo(null, false);
 				mShopService.getShopInfo(null, false);
 			}
@@ -590,14 +598,12 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			ShopInfo shopInfo = GsonTools.getReturnObject(result, ShopInfo.class);
 			if (shopInfo != null)
 			{
-				vShops.setVisibility(View.VISIBLE);
 				vIsShop.setVisibility(View.VISIBLE);
 				vNotShop.setVisibility(View.GONE);
 				mShopService.getSaleData(null, false);
 			}
 			else
 			{
-				vShops.setVisibility(View.VISIBLE);
 				vIsShop.setVisibility(View.GONE);
 				vNotShop.setVisibility(View.VISIBLE);
 			}
@@ -617,7 +623,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		}
 		else if (url.endsWith(ApiConfig.USER_UPDATE_PIC_INFO))
 		{
-			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUserId()));
 			if (bitmap != null)
 			{
 				ivPhoto.setImageBitmap(bitmap);
@@ -664,7 +670,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 	{
 		if (bLogin)
 		{
-			String userId = PreferenceUtils.getInstance().getUsername();
+			String userId = PreferenceUtils.getInstance().getUserId();
 			tvName.setText(userId);
 			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(userId));
 			if (bitmap != null)
@@ -682,7 +688,6 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			tvUserType.setText("");
 			vLogined.setVisibility(View.GONE);
 			vUnLogin.setVisibility(View.VISIBLE);
-			vAgents.setVisibility(View.GONE);
 			tvBalance.setText("0");
 			tvFreezeBalance.setText("0");
 			tvPoint.setText("0");
@@ -719,7 +724,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			{
 				Bundle bundle = data.getExtras();
 				Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
-				String userId = PreferenceUtils.getInstance().getUsername();
+				String userId = PreferenceUtils.getInstance().getUserId();
 				String userHeadPath = AppConfig.getUserPicCacheDir(userId);
 				File file = new File(userHeadPath.substring(0, userHeadPath.lastIndexOf("/")));
 				if (!file.exists())

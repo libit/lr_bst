@@ -121,6 +121,24 @@ public class DateTimeTools
 	}
 
 	/**
+	 * 获取指定时间，格式为yyyy-MM-dd
+	 *
+	 * @param time
+	 * @return
+	 */
+	public static String getDateString(long time)
+	{
+		Date tm = new Date(time);
+		SimpleDateFormat from = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String timestamp = Timestamp.valueOf(from.format(tm)).toString();
+		if (timestamp.lastIndexOf(" ") > -1)
+		{
+			timestamp = timestamp.substring(0, timestamp.lastIndexOf(" "));
+		}
+		return timestamp;
+	}
+
+	/**
 	 * 获取当前时间，格式为yyyy-MM-dd HH:mm:ss
 	 *
 	 * @return 获取当前时间，格式为yyyy-MM-dd HH:mm:ss

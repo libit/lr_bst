@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.lrcall.appbst.R;
+import com.lrcall.utils.DisplayTools;
 
 /**
  * Created by libit on 16/9/10.

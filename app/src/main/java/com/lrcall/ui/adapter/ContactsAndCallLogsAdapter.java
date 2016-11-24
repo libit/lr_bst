@@ -16,7 +16,7 @@ import com.lrcall.appbst.R;
 import com.lrcall.models.CallLogInfo;
 import com.lrcall.models.ContactInfo;
 import com.lrcall.ui.customer.LoadImageTask;
-import com.lrcall.ui.customer.LocalTools;
+import com.lrcall.utils.LocalTools;
 import com.lrcall.utils.DateTimeTools;
 
 import java.util.List;

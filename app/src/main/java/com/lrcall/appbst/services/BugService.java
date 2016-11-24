@@ -38,7 +38,7 @@ public class BugService extends BaseService
 	 */
 	public void uploadLogFile(String tips, final boolean needServiceProcessData)
 	{
-		String path = PreferenceUtils.getInstance().getStringValue(PreferenceUtils.PREF_CRASH_FILE);
+		String path = PreferenceUtils.getInstance().getStringValue(PreferenceUtils.PREF_CRASH_FILE_NAME);
 		if (StringTools.isNull(path))
 		{
 			return;
@@ -53,7 +53,7 @@ public class BugService extends BaseService
 		}
 		else
 		{
-			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE, "");
+			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE_NAME, "");
 		}
 		if (file1.exists())
 		{
@@ -72,7 +72,7 @@ public class BugService extends BaseService
 		String content = bug;
 		if (StringTools.isNull(bug))
 		{
-			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE, "");
+			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE_NAME, "");
 			OnDataResponse(ApiConfig.SUBMIT_BUG, new ReturnInfo(ErrorInfo.getParamErrorId(), "日志内容为空！").toString(), null);
 			return;
 		}
@@ -110,7 +110,7 @@ public class BugService extends BaseService
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				String path = PreferenceUtils.getInstance().getStringValue(PreferenceUtils.PREF_CRASH_FILE);
+				String path = PreferenceUtils.getInstance().getStringValue(PreferenceUtils.PREF_CRASH_FILE_NAME);
 				if (StringTools.isNull(path))
 				{
 					return;

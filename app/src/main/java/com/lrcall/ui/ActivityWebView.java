@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.external.xlistview.XListView;
 import com.lrcall.appbst.R;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogFileList;
 import com.lrcall.utils.ConstValues;

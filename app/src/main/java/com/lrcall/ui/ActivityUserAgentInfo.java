@@ -28,7 +28,7 @@ import com.lrcall.appbst.services.UserService;
 import com.lrcall.enums.UserApplyStatus;
 import com.lrcall.enums.UserType;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogSelectArea;
 import com.lrcall.utils.AppConfig;
@@ -71,7 +71,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 		picUrlList.add("file/upload/images/product_pic/bar21468831427508_1920x500.png");
 		picUrlList.add("file/upload/images/product_pic/ios1468832053086_500x500.jpg");
 		//		setViewPagerAdapter(picUrlList);
-		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUserId()));
 		if (bitmap != null)
 		{
 			ivHead.setImageBitmap(bitmap);

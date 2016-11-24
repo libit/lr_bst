@@ -19,7 +19,7 @@ import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.models.FuncInfo;
 import com.lrcall.ui.adapter.FuncsHorizontalAdapter;
 import com.lrcall.ui.adapter.FuncsVerticalAdapter;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogList;
 import com.lrcall.utils.ConstValues;

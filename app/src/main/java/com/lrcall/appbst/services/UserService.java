@@ -49,7 +49,7 @@ public class UserService extends BaseService
 	 */
 	public static boolean isLogin()
 	{
-		return (!StringTools.isNull(PreferenceUtils.getInstance().getUsername()) && !StringTools.isNull(PreferenceUtils.getInstance().getSessionId()));
+		return (!StringTools.isNull(PreferenceUtils.getInstance().getUserId()) && !StringTools.isNull(PreferenceUtils.getInstance().getSessionId()));
 	}
 
 	/**
@@ -293,7 +293,7 @@ public class UserService extends BaseService
 			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
 			if (userInfo != null)
 			{
-				PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
+				PreferenceUtils.getInstance().setUserId(userInfo.getUserId());
 				PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
 				if (userInfo.getPicInfo() != null)
 				{
@@ -314,7 +314,7 @@ public class UserService extends BaseService
 			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
 			if (userInfo != null)
 			{
-				PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
+				PreferenceUtils.getInstance().setUserId(userInfo.getUserId());
 				PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
 				//注册回拨功能
@@ -403,13 +403,13 @@ public class UserService extends BaseService
 			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
 			if (userInfo != null)
 			{
-				PreferenceUtils.getInstance().setUsername(userInfo.getUserId());
+				PreferenceUtils.getInstance().setUserId(userInfo.getUserId());
 				PreferenceUtils.getInstance().setSessionId(userInfo.getSessionId());
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
 			}
 			else
 			{
-				PreferenceUtils.getInstance().setUsername("");
+				PreferenceUtils.getInstance().setUserId("");
 				PreferenceUtils.getInstance().setSessionId("");
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGOUT));
 			}
@@ -420,7 +420,7 @@ public class UserService extends BaseService
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
 				Intent intent = new Intent(context, ActivityShare.class);
-				String data = ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername());
+				String data = ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUserId());
 				String content = returnInfo.getErrmsg();
 				if (!StringTools.isNull(content) && content.contains("{appName}"))
 				{
@@ -445,7 +445,7 @@ public class UserService extends BaseService
 		{
 			if (file != null)
 			{
-				String userId = PreferenceUtils.getInstance().getUsername();
+				String userId = PreferenceUtils.getInstance().getUserId();
 				String userHeadPath = AppConfig.getUserPicCacheDir(userId);
 				File userHeadFile = new File(userHeadPath);//new File(userHeadPath.substring(0, userHeadPath.lastIndexOf("/")));
 				File f = new File(userHeadPath.substring(0, userHeadPath.lastIndexOf("/")));

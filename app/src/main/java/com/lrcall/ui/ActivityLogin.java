@@ -44,7 +44,7 @@ public class ActivityLogin extends MyBaseActivity implements View.OnClickListene
 		findViewById(R.id.btn_login).setOnClickListener(this);
 		findViewById(R.id.btn_register).setOnClickListener(this);
 		findViewById(R.id.tv_reset_pwd).setOnClickListener(this);
-		String number = PreferenceUtils.getInstance().getUsername();
+		String number = PreferenceUtils.getInstance().getUserId();
 		if (StringTools.isNull(number))
 		{
 			number = AppFactory.getInstance().getPhoneNumber();

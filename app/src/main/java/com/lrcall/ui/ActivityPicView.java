@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.lrcall.appbst.R;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.ConstValues;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 

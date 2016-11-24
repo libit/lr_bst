@@ -185,7 +185,7 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 				}
 				if (AppConfig.isDebug())//如果是调试模式，则将所有的日志都保存
 				{
-					PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE, saveFiles.get(0).getName());
+					PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE_NAME, saveFiles.get(0).getName());
 				}
 			}
 		}
@@ -214,7 +214,7 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 	{
 		if (!StringTools.isNull(mFileName))
 		{
-			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE, mFileName);
+			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE_NAME, mFileName);
 			try
 			{
 				File file = FileTools.getFile(AppConfig.getLogcatFolder(), mFileName + ".err");

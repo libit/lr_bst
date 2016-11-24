@@ -19,7 +19,7 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.PicService;
 import com.lrcall.enums.DataTrafficStatus;
 import com.lrcall.enums.DataTrafficType;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.List;

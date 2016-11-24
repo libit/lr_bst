@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.lrcall.utils.DisplayTools;
+
 /**
  * Created by libit on 16/5/9.
  */

@@ -31,7 +31,7 @@ import com.lrcall.appbst.services.ProductSortService;
 import com.lrcall.db.DbProductSortInfoFactory;
 import com.lrcall.ui.adapter.CategoryAdapter;
 import com.lrcall.ui.adapter.CategorySortAdapter;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;

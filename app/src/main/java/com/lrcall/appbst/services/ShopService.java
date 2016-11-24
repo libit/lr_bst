@@ -48,7 +48,7 @@ public class ShopService extends BaseService
 	public void register(String name, String nickname, String email, String picId, String code, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
-		params.put("shopId", PreferenceUtils.getInstance().getUsername());
+		params.put("shopId", PreferenceUtils.getInstance().getUserId());
 		params.put("name", name);
 		params.put("nickname", nickname);
 		params.put("email", email);
@@ -78,7 +78,7 @@ public class ShopService extends BaseService
 	public void auth(String name, String number, byte sex, String address, String email, String picId, String identityCard, String identityCardPicId1, String identityCardPicId2, String businessLicense, String businessLicensePicId, String remark, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
-		params.put("shopId", PreferenceUtils.getInstance().getUsername());
+		params.put("shopId", PreferenceUtils.getInstance().getUserId());
 		params.put("name", name);
 		params.put("number", number);
 		params.put("sex", sex);
@@ -175,7 +175,7 @@ public class ShopService extends BaseService
 		{
 			if (file != null)
 			{
-				String userId = PreferenceUtils.getInstance().getUsername();
+				String userId = PreferenceUtils.getInstance().getUserId();
 				String headPath = AppConfig.getShopPicCacheDir(userId);
 				File headFile = new File(headPath);
 				File f = new File(headPath.substring(0, headPath.lastIndexOf("/")));

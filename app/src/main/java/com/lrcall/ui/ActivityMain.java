@@ -336,7 +336,7 @@ public class ActivityMain extends MyBaseActivity implements MyActionBarDrawerTog
 	protected void picSelected(Bitmap bitmap)
 	{
 		super.picSelected(bitmap);
-		String userId = PreferenceUtils.getInstance().getUsername();
+		String userId = PreferenceUtils.getInstance().getUserId();
 		String userHeadPath = AppConfig.getUserPicCacheDir(userId);
 		File file = new File(userHeadPath.substring(0, userHeadPath.lastIndexOf("/")));
 		if (!file.exists())

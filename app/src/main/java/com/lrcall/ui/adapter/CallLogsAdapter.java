@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.lrcall.appbst.R;
 import com.lrcall.models.CallLogInfo;
-import com.lrcall.ui.customer.LocalTools;
+import com.lrcall.utils.LocalTools;
 import com.lrcall.utils.DateTimeTools;
 import com.lrcall.utils.StringTools;
 

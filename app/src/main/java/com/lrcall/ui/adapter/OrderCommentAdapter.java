@@ -20,7 +20,7 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.PicService;
 import com.lrcall.appbst.services.ProductService;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
 
 import java.util.List;

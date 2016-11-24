@@ -21,7 +21,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="3.0dp"
             android:layout_marginRight="3.0dp"
-            android:background="@drawable/bg_contact_search_edittext">
+            android:background="@drawable/bg_white">
             <ImageView
                 android:id="@+id/search_icon"
                 android:layout_width="40dp"
@@ -52,7 +52,7 @@
                 android:hint="@string/hint_search_text"
                 android:imeOptions="actionDone"
                 android:inputType="text"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:textSize="15sp"/>
         </RelativeLayout>
     </RelativeLayout>

@@ -8,7 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_recharges"
-        android:icon="@drawable/ic_history"
+        android:icon="@drawable/ic_recharge_log"
         android:orderInCategory="100"
         android:title="充值记录"
         app:showAsAction="always"/>

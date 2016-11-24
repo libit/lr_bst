@@ -55,7 +55,7 @@ public class ActivityProductStarList extends MyBasePageActivity implements IAjax
 		//		mProductService = new ProductService(this);
 		//		mProductService.addDataResponse(this);
 		viewInit();
-		//		List<ProductStarInfo> productStarInfoList = DbProductStarInfoFactory.getInstance().getProductStarInfoList(PreferenceUtils.getInstance().getUsername());
+		//		List<ProductStarInfo> productStarInfoList = DbProductStarInfoFactory.getInstance().getProductStarInfoList(PreferenceUtils.getInstance().getUserId());
 		//		if (productStarInfoList != null && productStarInfoList.size() > 0)
 		//		{
 		//			for (ProductStarInfo productStarInfo : productStarInfoList)

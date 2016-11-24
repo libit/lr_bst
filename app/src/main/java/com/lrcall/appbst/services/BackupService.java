@@ -55,7 +55,7 @@ public class BackupService extends BaseService
 		params.put("name", name);
 		params.put("data", data);
 		params.put("description", description);
-		params.put("signData", CryptoTools.getMD5Str(PreferenceUtils.getInstance().getUsername() + data));
+		params.put("signData", CryptoTools.getMD5Str(PreferenceUtils.getInstance().getUserId() + data));
 		ajaxStringCallback(ApiConfig.UPDATE_BACKUP_CONFIG, params, tips, needServiceProcessData);
 	}
 

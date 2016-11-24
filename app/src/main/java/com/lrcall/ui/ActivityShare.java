@@ -21,7 +21,7 @@ import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UserService;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.ConstValues;
@@ -62,7 +62,7 @@ public class ActivityShare extends MyBaseActivity implements View.OnClickListene
 		}
 		ivQr.setImageBitmap(bitmap);
 		tvContent.setText(mContent);
-		if (mData.contains(ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername())))
+		if (mData.contains(ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUserId())))
 		{
 			UserService userService = new UserService(this);
 			userService.addDataResponse(new IAjaxDataResponse()

@@ -2,15 +2,13 @@
  * Libit保留所有版权，如有疑问联系QQ：308062035
  * Copyright (c) 2016.
  */
-package com.lrcall.ui.customer;
+package com.lrcall.utils;
 
 import android.content.Context;
 import android.widget.TextView;
 
 import com.lrcall.appbst.services.NumberService;
 import com.lrcall.db.DbNumberLocalInfoFactory;
-import com.lrcall.utils.CallTools;
-import com.lrcall.utils.StringTools;
 
 /**
  * Created by libit on 16/7/17.

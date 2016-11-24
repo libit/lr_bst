@@ -79,6 +79,12 @@ public class ZXingUtils
 			}
 			return true;
 		}
+		else if (str.startsWith("http://") || str.startsWith("https://"))
+		{
+			String url = str;
+			ActivityWebView.startWebActivity(context, "来自二维码扫描", url);
+			return true;
+		}
 		return false;
 	}
 

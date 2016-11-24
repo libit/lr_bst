@@ -65,33 +65,68 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/tv_name"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text=""
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tv_user_type"
+                        android:layout_marginTop="3dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="会员账号："
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textSize="18sp"/>
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:layout_marginTop="3dp"
-                        android:gravity="center_vertical"
-                        android:text=""
-                        android:textSize="18sp"/>
-                    <TextView
-                        android:id="@+id/tv_register_date"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="会员级别："
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:id="@+id/tv_user_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="3dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="3dp"
+                            android:text=""
+                            android:textSize="18sp"/>
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
-                        android:gravity="center_vertical"
-                        android:text=""
-                        android:textSize="18sp"/>
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="注册日期："
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:id="@+id/tv_register_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text=""
+                            android:textSize="18sp"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -112,7 +147,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_btn_login"
+                    android:background="@drawable/bg_l2_corner_3"
                     android:padding="5dp"
                     android:text="会员升级"
                     android:textColor="@color/white"
@@ -125,9 +160,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
+                    android:background="@drawable/bg_white"
                     android:padding="5dp"
                     android:text="签到有奖"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="16sp"/>
                 <Button
                     android:id="@+id/btn_share"
@@ -137,9 +173,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
+                    android:background="@drawable/bg_white"
                     android:padding="5dp"
                     android:text="分享有礼"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="16sp"/>
             </LinearLayout>
             <LinearLayout
@@ -152,8 +189,8 @@
                 android:background="@color/white"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp">
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
                 <LinearLayout
                     android:id="@+id/layout_star"
                     android:layout_width="match_parent"
@@ -236,7 +273,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="5dp"
                         android:gravity="center"
-                        android:text="设置"
+                        android:text="我的订单"
                         android:textSize="18sp"/>
                 </LinearLayout>
             </LinearLayout>
@@ -246,12 +283,14 @@
         android:layout_width="match_parent"
         android:layout_height="0.7dp"
         android:layout_marginTop="20dp"
-        android:background="@color/line"/>
+        android:background="@color/line"
+        android:visibility="gone"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
         <LinearLayout
             android:id="@+id/layout_orders"
             android:layout_width="match_parent"
@@ -510,8 +549,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0.7dp"
@@ -558,8 +596,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
             <Button
                 android:id="@+id/btn_be_agent"
                 android:layout_width="match_parent"
@@ -658,8 +695,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0.7dp"
@@ -706,8 +742,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
             <Button
                 android:id="@+id/btn_be_shop"
                 android:layout_width="match_parent"

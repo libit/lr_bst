@@ -29,7 +29,7 @@ import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbBannerInfoFactory;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LogcatTools;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;

@@ -155,8 +155,8 @@ public class ActivitySettings extends MyBaseActivity implements View.OnClickList
 			case R.id.layout_share:
 			{
 				Intent intent = new Intent(this, ActivityShare.class);
-				//				String data = GsonTools.toJson(new ShareData(ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername()), PreferenceUtils.getInstance().getUsername()));
-				String data = ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUsername());
+				//				String data = GsonTools.toJson(new ShareData(ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUserId()), PreferenceUtils.getInstance().getUserId()));
+				String data = ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUserId());
 				intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
 				startActivity(intent);
 				break;

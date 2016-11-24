@@ -28,7 +28,7 @@ import com.lrcall.ui.adapter.CallLogsAdapter;
 import com.lrcall.ui.adapter.ContactsSearchAdapter;
 import com.lrcall.ui.customer.AddressAware;
 import com.lrcall.ui.customer.AddressText;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.DraftImageView;
 import com.lrcall.ui.customer.EraseButton;
 import com.lrcall.utils.ConstValues;

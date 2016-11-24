@@ -15,19 +15,19 @@
  */
 package com.google.zxing.client.android;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 
 import com.lrcall.appbst.R;
+import com.lrcall.ui.MyBaseActivity;
 
 /**
  * An HTML-based help screen.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class HelpActivity extends Activity
+public final class HelpActivity extends MyBaseActivity
 {
 	private static final String BASE_URL = "file:///android_asset/html-" + LocaleManager.getTranslatedAssetLanguage() + '/';
 	private WebView webView;
@@ -37,7 +37,7 @@ public final class HelpActivity extends Activity
 	{
 		super.onCreate(icicle);
 		setContentView(R.layout.help);
-		webView = (WebView) findViewById(R.id.help_contents);
+		viewInit();
 		if (icicle == null)
 		{
 			webView.loadUrl(BASE_URL + "index.html");
@@ -46,6 +46,14 @@ public final class HelpActivity extends Activity
 		{
 			webView.restoreState(icicle);
 		}
+	}
+
+	@Override
+	protected void viewInit()
+	{
+		super.viewInit();
+		setBackButton();
+		webView = (WebView) findViewById(R.id.help_contents);
 	}
 
 	@Override

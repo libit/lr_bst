@@ -96,7 +96,7 @@ public class LayoutSideMain extends LinearLayout implements View.OnClickListener
 	{
 		if (UserService.isLogin())
 		{
-			String userId = PreferenceUtils.getInstance().getUsername();
+			String userId = PreferenceUtils.getInstance().getUserId();
 			tvName.setText(userId);
 			mUserService.getUserInfo(null, true);
 		}
@@ -250,7 +250,7 @@ public class LayoutSideMain extends LinearLayout implements View.OnClickListener
 		}
 		else if (url.endsWith(ApiConfig.USER_UPDATE_PIC_INFO))
 		{
-			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUserId()));
 			if (bitmap != null)
 			{
 				ivPhoto.setImageBitmap(bitmap);
@@ -270,7 +270,7 @@ public class LayoutSideMain extends LinearLayout implements View.OnClickListener
 		this.bLogin = bLogin;
 		if (bLogin)
 		{
-			String userId = PreferenceUtils.getInstance().getUsername();
+			String userId = PreferenceUtils.getInstance().getUserId();
 			tvName.setText(userId);
 			Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(userId));
 			if (bitmap != null)

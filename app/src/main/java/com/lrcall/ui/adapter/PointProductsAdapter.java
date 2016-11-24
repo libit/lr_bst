@@ -16,7 +16,7 @@ import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.PointProductInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.PicService;
-import com.lrcall.ui.customer.DisplayTools;
+import com.lrcall.utils.DisplayTools;
 
 import java.util.List;
 

@@ -28,7 +28,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
-            android:background="@drawable/bg_contact_search_edittext">
+            android:background="@drawable/bg_white">
             <ImageView
                 android:id="@+id/search_icon"
                 android:layout_width="42dp"

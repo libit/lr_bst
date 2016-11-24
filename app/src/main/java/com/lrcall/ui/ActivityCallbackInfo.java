@@ -40,7 +40,7 @@ public class ActivityCallbackInfo extends MyBaseActivity implements View.OnClick
 		mCallbackService = new CallbackService(this);
 		mCallbackService.addDataResponse(this);
 		viewInit();
-		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUsername()));
+		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUserId()));
 		if (bitmap != null)
 		{
 			ivHead.setImageBitmap(bitmap);

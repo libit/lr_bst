@@ -4,8 +4,6 @@
   -->
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="tab_main_height">52dp</dimen>
     <dimen name="tab_dial_height">30dp</dimen>
     <dimen name="tab_backup_height">30dp</dimen>

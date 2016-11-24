@@ -168,7 +168,7 @@ public class ActivityShopRegister extends MyBaseActivity implements View.OnClick
 			{
 				UserService userService = new UserService(this);
 				userService.addDataResponse(this);
-				userService.getSmsCode(PreferenceUtils.getInstance().getUsername(), SmsCodeType.SHOP_REGISTER.getType(), "正在请求短信验证码,请稍后...", false);
+				userService.getSmsCode(PreferenceUtils.getInstance().getUserId(), SmsCodeType.SHOP_REGISTER.getType(), "正在请求短信验证码,请稍后...", false);
 				updateView();
 				break;
 			}
