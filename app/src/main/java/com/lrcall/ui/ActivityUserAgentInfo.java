@@ -7,11 +7,7 @@ package com.lrcall.ui;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,18 +23,12 @@ import com.lrcall.appbst.services.UserAgentService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.enums.UserApplyStatus;
 import com.lrcall.enums.UserType;
-import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.dialog.DialogSelectArea;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
 {
@@ -46,10 +36,6 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 	private TextView tvType, tvApplyStatus;
 	private ImageView ivHead;
 	private Button btnUpgrade;
-	private ViewPager viewPager;
-	private SmartTabLayout viewPagerTab;
-	private SectionsPagerAdapter sectionsPagerAdapter;
-	private final List<Fragment> mFragmentTipsList = new ArrayList<>();
 	private UserService mUserService;
 	private UserAgentService mUserAgentService;
 	private byte userType = -1;
@@ -65,12 +51,6 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 		mUserAgentService = new UserAgentService(this);
 		mUserAgentService.addDataResponse(this);
 		viewInit();
-		List<String> picUrlList = new ArrayList<>();
-		picUrlList.add("file/upload/images/product/p51473063314171_600x600.jpg");
-		picUrlList.add("file/upload/images/brands/android1468600412067_500x500.jpg");
-		picUrlList.add("file/upload/images/product_pic/bar21468831427508_1920x500.png");
-		picUrlList.add("file/upload/images/product_pic/ios1468832053086_500x500.jpg");
-		//		setViewPagerAdapter(picUrlList);
 		Bitmap bitmap = BitmapTools.getBmpFile(AppConfig.getUserPicCacheDir(PreferenceUtils.getInstance().getUserId()));
 		if (bitmap != null)
 		{
@@ -99,48 +79,10 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 		tvType = (TextView) findViewById(R.id.tv_type);
 		tvApplyStatus = (TextView) findViewById(R.id.tv_apply_status);
 		ivHead = (ImageView) findViewById(R.id.iv_head);
-		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		//设置图片的长宽，这里便于制作图片
-		ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
-		layoutParams.width = DisplayTools.getWindowWidth(this);
-		layoutParams.height = DisplayTools.getWindowWidth(this) * 3 / 4;
-		viewPager.setLayoutParams(layoutParams);
-		viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
-		viewPager.setOnTouchListener(new View.OnTouchListener()
-		{
-			@Override
-			public boolean onTouch(View v, MotionEvent event)
-			{
-				int action = event.getAction();
-				if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE)
-				{
-				}
-				else
-				{
-				}
-				return false;
-			}
-		});
 		btnUpgrade = (Button) findViewById(R.id.btn_upgrade);
 		btnUpgrade.setOnClickListener(this);
 		findViewById(R.id.layout_my_fans).setOnClickListener(this);
 		findViewById(R.id.layout_my_performance).setOnClickListener(this);
-	}
-
-	//设置图片适配器
-	private void setViewPagerAdapter(List<String> picUrlList)
-	{
-		if (picUrlList != null && picUrlList.size() > 0)
-		{
-			mFragmentTipsList.clear();
-			for (String picUrl : picUrlList)
-			{
-				mFragmentTipsList.add(FragmentServerImage.newInstance(ApiConfig.getServerPicUrl(picUrl), DisplayTools.getWindowWidth(this), null));
-			}
-			sectionsPagerAdapter = new SectionsPagerAdapter(this.getSupportFragmentManager(), mFragmentTipsList);
-			viewPager.setAdapter(sectionsPagerAdapter);
-			viewPagerTab.setViewPager(viewPager);
-		}
 	}
 
 	@Override
@@ -150,12 +92,12 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 		{
 			case R.id.layout_my_fans:
 			{
-				startActivity(new Intent(this, ActivityReferrerUserList.class));
+				startActivity(new Intent(this, ActivityAgentUserList.class));
 				break;
 			}
 			case R.id.layout_my_performance:
 			{
-				startActivity(new Intent(this, ActivityUserSharePorfitList.class));
+				startActivity(new Intent(this, ActivityUserAgentSharePorfitList.class));
 				break;
 			}
 			case R.id.btn_upgrade:

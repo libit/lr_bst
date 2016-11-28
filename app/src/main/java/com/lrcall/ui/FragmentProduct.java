@@ -29,9 +29,9 @@ import com.lrcall.appbst.services.ProductService;
 import com.lrcall.db.DbProductInfoFactory;
 import com.lrcall.enums.ProductPicType;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.FloatProductSelectCount;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -46,7 +46,7 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 	private ViewPager viewPager;
 	private SectionsPagerAdapter sectionsPagerAdapter;
 	private SmartTabLayout viewPagerTab;
-	private TextView tvTitle, tvDesc, tvPrice, tvMarketPrice;
+	private TextView tvTitle, tvDesc, tvPrice, tvMarketPrice, tvPoint;
 	public TextView tvAmount;
 	private String productId;
 	private ProductInfo mProductInfo;
@@ -117,6 +117,7 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 		tvTitle = (TextView) rootView.findViewById(R.id.tv_title);
 		tvDesc = (TextView) rootView.findViewById(R.id.tv_desc);
 		tvPrice = (TextView) rootView.findViewById(R.id.tv_price);
+		tvPoint = (TextView) rootView.findViewById(R.id.tv_point);
 		tvMarketPrice = (TextView) rootView.findViewById(R.id.tv_market_price);
 		tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 		tvAmount = (TextView) rootView.findViewById(R.id.tv_amount);
@@ -124,6 +125,7 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 		rootView.findViewById(R.id.btn_show_choose_amount).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_comment).setOnClickListener(this);
 		rootView.findViewById(R.id.btn_kefu).setOnClickListener(this);
+		rootView.findViewById(R.id.tv_share).setOnClickListener(this);
 		viewPager.setOnTouchListener(new View.OnTouchListener()
 		{
 			boolean b;
@@ -179,6 +181,7 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 			tvDesc.setText(mProductInfo.getDescription());
 			tvPrice.setText("￥" + StringTools.getPrice(mProductInfo.getPrice()));
 			tvMarketPrice.setText("￥" + StringTools.getPrice(mProductInfo.getMarketPrice()));
+			tvPoint.setText(String.format("购买此商品赠送%d积分。", (int) Math.floor(mProductInfo.getPrice() / 100)));
 		}
 	}
 
@@ -249,6 +252,11 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 			{
 				break;
 			}
+			case R.id.tv_share:
+			{
+				mProductService.getProductShareText(mProductInfo.getProductId(), "请稍后...", true);
+				break;
+			}
 		}
 	}
 
@@ -280,6 +288,23 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 				}
 			}
 			initPicData();
+			return true;
+		}
+		else if (url.endsWith(ApiConfig.GET_SHARE_PRODUCT_TEXT))
+		{
+			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			if (ReturnInfo.isSuccess(returnInfo))
+			{
+				Intent intent = new Intent(this.getContext(), ActivityShare.class);
+				String data = ApiConfig.getServerProductUrl(productId);
+				intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
+				intent.putExtra(ConstValues.DATA_SHARE_CONTENT, returnInfo.getErrmsg());
+				startActivity(intent);
+			}
+			else
+			{
+				showServerMsg(result, null);
+			}
 			return true;
 		}
 		return false;

@@ -97,6 +97,17 @@ public class AppConfig
 	}
 
 	/**
+	 * 系统图片路径
+	 *
+	 * @param fileName
+	 * @return
+	 */
+	public static String getSysPicFile(String fileName)
+	{
+		return FileTools.getDir("") + "/../../DCIM/Camera/" + fileName;
+	}
+
+	/**
 	 * 日志记录的文件夹
 	 *
 	 * @return

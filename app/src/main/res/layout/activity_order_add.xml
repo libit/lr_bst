@@ -371,7 +371,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="60dp"
                             android:layout_marginTop="10dp"
-                            android:background="@drawable/ic_bg_point"
                             android:gravity="center"/>
                     </FrameLayout>
                     <LinearLayout

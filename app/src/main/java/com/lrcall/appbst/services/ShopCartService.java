@@ -49,11 +49,12 @@ public class ShopCartService extends BaseService
 	 * @param tips                   提示信息
 	 * @param needServiceProcessData
 	 */
-	public void addShopCartInfo(String productId, int amount, String tips, final boolean needServiceProcessData)
+	public void addShopCartInfo(String productId, int amount, String referrerId, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
 		params.put("productId", productId);
 		params.put("amount", amount);
+		params.put("referrerId", referrerId);
 		ajaxStringCallback(ApiConfig.ADD_SHOP_CART_INFO, params, tips, needServiceProcessData);
 	}
 

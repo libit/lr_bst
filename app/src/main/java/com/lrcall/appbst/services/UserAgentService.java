@@ -81,6 +81,22 @@ public class UserAgentService extends BaseService
 	}
 
 	/**
+	 * 获取代理商下级列表
+	 *
+	 * @param start
+	 * @param size
+	 * @param tips
+	 * @param needServiceProcess
+	 */
+	public void getUserAgentList(int start, int size, String tips, final boolean needServiceProcess)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		ajaxStringCallback(ApiConfig.GET_USER_AGENT_LIST, params, tips, needServiceProcess);
+	}
+
+	/**
 	 * 获取用户分润总额
 	 *
 	 * @param tips
@@ -90,6 +106,18 @@ public class UserAgentService extends BaseService
 	{
 		Map<String, Object> params = new HashMap<>();
 		ajaxStringCallback(ApiConfig.GET_TOTAL_USER_SHARE_PROFIT, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 获取代理商用户分润总额
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getTotalUserAgentShareProfit(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.GET_TOTAL_USER_AGENT_SHARE_PROFIT, params, tips, needServiceProcessData);
 	}
 
 	@Override

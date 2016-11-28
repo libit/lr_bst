@@ -116,6 +116,20 @@ public class ProductService extends BaseService
 		ajaxStringCallback(ApiConfig.GET_PRODUCT_PIC_LIST, params, tips, needServiceProcessData);
 	}
 
+	/**
+	 * 获取商品分享文字
+	 *
+	 * @param productId              商品ID
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getProductShareText(String productId, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("productId", productId);
+		ajaxStringCallback(ApiConfig.GET_SHARE_PRODUCT_TEXT, params, tips, needServiceProcessData);
+	}
+
 	@Override
 	public void parseData(String url, String result, AjaxStatus status)
 	{

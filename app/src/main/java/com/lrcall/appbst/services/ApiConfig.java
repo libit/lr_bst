@@ -15,8 +15,8 @@ public class ApiConfig
 	public static final String API_VERSION = "1";
 	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
 	private static final String DEBUG_URL = "http://192.168.168.6:8080/lr_bst/user";
-	//		private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	//		private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	//	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	//	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
 	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
 	public static final String CHECK_UPDATE = RELEASE_URL + "/ajaxGetLastClientInfo";//检查更新
 	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
@@ -37,6 +37,7 @@ public class ApiConfig
 	public static final String USER_SHARE_TIPS = getServerUrl() + "/ajaxUserShareTips";//推荐文字说明
 	public static final String USER_UPGRADE_TIPS = getServerUrl() + "/ajaxUserUpgradeTips";//升级文字说明
 	public static final String GET_CLIENT_CONFIG = getServerUrl() + "/ajaxGetClientConfig";//客户端公共配置信息
+	public static final String GET_SHARE_PRODUCT_TEXT = getServerUrl() + "/ajaxGetProductShareText";//获取商品分享文字
 	//用户升级
 	public static final String USER_UPGRADE_PRICE = getServerUrl() + "/ajaxGetUserUpgradePrice";//用户升级费用
 	public static final String USER_UPGRADE_BY_SHOP_CARD = getServerUrl() + "/ajaxUserUpgradeByShopCard";//用户商城卡升级
@@ -134,6 +135,7 @@ public class ApiConfig
 	public static final String GET_USER_LAST_APPLY_AGENT_INFO = getServerUrl() + "/ajaxGetLastUserApplyAgentInfo";//查询用户最后一次申请代理记录
 	public static final String GET_USER_AGENT_INFO = getServerUrl() + "/ajaxGetUserAgentInfo";//获取用户代理信息
 	public static final String GET_REFERRER_USER_LIST = getServerUrl() + "/ajaxGetUserReferrerList";//获取用户推荐列表
+	public static final String GET_USER_AGENT_LIST = getServerUrl() + "/ajaxGetUserAgentList";//获取用户下级代理列表
 	//区域
 	public static final String GET_PROVINCE_LIST = getServerUrl() + "/ajaxGetProvinceList";//获取省列表
 	public static final String GET_CITY_LIST = getServerUrl() + "/ajaxGetCityList";//获取市列表
@@ -146,7 +148,9 @@ public class ApiConfig
 	//用户余额变动日志
 	public static final String GET_USER_BALANCE_LOG_LIST = getServerUrl() + "/ajaxGetUserBalanceLogList";//用户余额变动日志列表
 	public static final String GET_USER_SHARE_PROFIT_LIST = getServerUrl() + "/ajaxGetUserShareProfitList";//获取用户分润列表
+	public static final String GET_USER_AGENT_SHARE_PROFIT_LIST = getServerUrl() + "/ajaxGetUserAgentShareProfitList";//获取代理商用户分润列表
 	public static final String GET_TOTAL_USER_SHARE_PROFIT = getServerUrl() + "/ajaxGetTotalUserShareProfit";//获取用户分润总额
+	public static final String GET_TOTAL_USER_AGENT_SHARE_PROFIT = getServerUrl() + "/ajaxGetTotalUserAgentShareProfit";//获取代理商用户分润总额
 	public static final String GET_USER_POINT_LOG_LIST = getServerUrl() + "/ajaxGetUserPointLogList";//用户积分变动日志列表
 	//商家相关
 	public static final String SHOP_REGISTER = getServerUrl() + "/../shop/ajaxRegister";//商家注册

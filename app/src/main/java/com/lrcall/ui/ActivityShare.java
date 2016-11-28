@@ -8,7 +8,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,18 +20,16 @@ import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UserService;
-import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.BitmapTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.CryptoTools;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 import com.lrcall.utils.ZXingUtils;
 import com.lrcall.utils.apptools.AppFactory;
-
-import java.io.File;
 
 public class ActivityShare extends MyBaseActivity implements View.OnClickListener
 {
@@ -103,6 +100,16 @@ public class ActivityShare extends MyBaseActivity implements View.OnClickListene
 		tvTips = (TextView) findViewById(R.id.tv_tips);
 		findViewById(R.id.btn_share).setOnClickListener(this);
 		tvContent.setOnClickListener(this);
+		ivQr.setOnLongClickListener(new View.OnLongClickListener()
+		{
+			@Override
+			public boolean onLongClick(View v)
+			{
+				BitmapTools.saveBmpFile(bitmap, AppConfig.getSysPicFile(AppConfig.AGENT_ID + "_" + CryptoTools.getMD5Str(mData) + ".jpg"));
+				Toast.makeText(ActivityShare.this, "二维码已保存到系统相册！", Toast.LENGTH_LONG).show();
+				return true;
+			}
+		});
 	}
 
 	@Override
@@ -112,13 +119,19 @@ public class ActivityShare extends MyBaseActivity implements View.OnClickListene
 		{
 			case R.id.btn_share:
 			{
+				//				Intent intent = new Intent(Intent.ACTION_SEND); // 启动分享发送到属性
+				//				intent.setType("image/*"); // 分享发送到数据类型
+				//				intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); // 分享的主题
+				//				intent.putExtra(Intent.EXTRA_TEXT, mContent); // 分享的内容
+				//				intent.putExtra("sms_body", mContent);//如果是分享到短信应用
+				//				Uri imageUri = Uri.fromFile(new File(AppConfig.getPicFile(CryptoTools.getMD5Str(mData) + ".jpg")));
+				//				intent.putExtra(Intent.EXTRA_STREAM, imageUri); // 分享的内容
+				//				startActivity(Intent.createChooser(intent, "来自" + getString(R.string.app_name) + "的分享"));
 				Intent intent = new Intent(Intent.ACTION_SEND); // 启动分享发送到属性
-				intent.setType("image/*"); // 分享发送到数据类型
+				intent.setType("text/plain"); // 分享发送到数据类型
 				intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); // 分享的主题
 				intent.putExtra(Intent.EXTRA_TEXT, mContent); // 分享的内容
 				intent.putExtra("sms_body", mContent);//如果是分享到短信应用
-				Uri imageUri = Uri.fromFile(new File(AppConfig.getPicFile(CryptoTools.getMD5Str(mData) + ".jpg")));
-				intent.putExtra(Intent.EXTRA_STREAM, imageUri); // 分享的内容
 				startActivity(Intent.createChooser(intent, "来自" + getString(R.string.app_name) + "的分享"));
 				break;
 			}

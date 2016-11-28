@@ -41,8 +41,7 @@ public class ZXingUtils
 	//生成二维码
 	public static Bitmap Create2QR(String data, int width)
 	{
-		Bitmap bitmap = null;
-		bitmap = create2DCoderBitmap(data, width, width);
+		Bitmap bitmap = create2DCoderBitmap(data, width, width);
 		return bitmap;
 	}
 
@@ -63,14 +62,16 @@ public class ZXingUtils
 			{
 				Intent intent = new Intent(context, ActivityProduct.class);
 				String productId = StringTools.getValue(url, "productId=", "&shareUserId=");
+				String referrerId = StringTools.getValue(url, "shareUserId=", "");
 				intent.putExtra(ConstValues.DATA_PRODUCT_ID, productId);
+				intent.putExtra(ConstValues.DATA_REFERRER_ID, referrerId);
 				context.startActivity(intent);
 			}
 			else if (url.contains("/register?"))
 			{
 				Intent intent = new Intent(context, ActivityRegister.class);
 				String userId = StringTools.getValue(url, "referrerId=", "&shareUserId=");
-				intent.putExtra(ConstValues.DATA_USER_ID, userId);
+				intent.putExtra(ConstValues.DATA_REFERRER_ID, userId);
 				context.startActivity(intent);
 			}
 			else

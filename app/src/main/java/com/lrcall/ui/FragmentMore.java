@@ -66,8 +66,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 {
 	private static final String TAG = FragmentMore.class.getSimpleName();
 	private XListView xListView;
-	private View headView, vLogined, vUnLogin, vAgents, vIsAgent, vNotAgent, vShops, vIsShop, vNotShop;
-	private TextView tvName, tvUserType, tvRegisterDate, tvOfficalWeb, tvServerPhone, tvBalance, tvFreezeBalance, tvPoint, tvStarCount, tvHistoryCount, tvFansAmount, tvFansShareProfit, tvShareProfit, tvPeopleAmount, tvRecentOrderCount, tvSaleAmount;
+	private View headView, vLogined, vUnLogin, vReferrers, vIsReferrer, vNotReferrer, vAgents, vIsAgent, vNotAgent, vShops, vIsShop, vNotShop;
+	private TextView tvName, tvUserLevel, tvRegisterDate, tvOfficalWeb, tvServerPhone, tvBalance, tvFreezeBalance, tvPoint, tvStarCount, tvHistoryCount, tvFansAmount, tvFansShareProfit, tvShareProfit, tvAgentAmount, tvAgentShareProfit, tvAgentShareProfit2, tvPeopleAmount, tvRecentOrderCount, tvSaleAmount;
 	private ImageView ivPhoto;
 	private UserService mUserService;
 	private UserAgentService mUserAgentService;
@@ -117,6 +117,9 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		xListView.setXListViewListener(this);
 		vUnLogin = rootView.findViewById(R.id.layout_unlogin);
 		vLogined = rootView.findViewById(R.id.layout_logined);
+		vReferrers = rootView.findViewById(R.id.layout_referrers);
+		vIsReferrer = rootView.findViewById(R.id.layout_is_referrer);
+		vNotReferrer = rootView.findViewById(R.id.layout_apply_referrer);
 		vAgents = rootView.findViewById(R.id.layout_agents);
 		vIsAgent = rootView.findViewById(R.id.layout_is_agent);
 		vNotAgent = rootView.findViewById(R.id.layout_apply_agent);
@@ -124,7 +127,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		vIsShop = rootView.findViewById(R.id.layout_is_shop);
 		vNotShop = rootView.findViewById(R.id.layout_apply_shop);
 		tvName = (TextView) rootView.findViewById(R.id.tv_name);
-		tvUserType = (TextView) rootView.findViewById(R.id.tv_user_type);
+		tvUserLevel = (TextView) rootView.findViewById(R.id.tv_user_type);
 		tvRegisterDate = (TextView) rootView.findViewById(R.id.tv_register_date);
 		tvOfficalWeb = (TextView) rootView.findViewById(R.id.tv_url);
 		tvServerPhone = (TextView) rootView.findViewById(R.id.tv_server_phone);
@@ -136,6 +139,9 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		tvFansAmount = (TextView) rootView.findViewById(R.id.tv_fans_count);
 		tvFansShareProfit = (TextView) rootView.findViewById(R.id.tv_fans_share_profit);
 		tvShareProfit = (TextView) rootView.findViewById(R.id.tv_share_profit);
+		tvAgentAmount = (TextView) rootView.findViewById(R.id.tv_agent_count);
+		tvAgentShareProfit = (TextView) rootView.findViewById(R.id.tv_agent_share_profit);
+		tvAgentShareProfit2 = (TextView) rootView.findViewById(R.id.tv_agent_share_profit2);
 		tvPeopleAmount = (TextView) rootView.findViewById(R.id.tv_people_count);
 		tvRecentOrderCount = (TextView) rootView.findViewById(R.id.tv_recent_order_count);
 		tvSaleAmount = (TextView) rootView.findViewById(R.id.tv_sale_amount);
@@ -156,6 +162,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		rootView.findViewById(R.id.layout_history).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_settings).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_apply_shop).setOnClickListener(this);
+		rootView.findViewById(R.id.layout_user_referrers).setOnClickListener(this);
+		rootView.findViewById(R.id.btn_be_referrer).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_user_agent).setOnClickListener(this);
 		rootView.findViewById(R.id.btn_be_agent).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_shop_info).setOnClickListener(this);
@@ -497,6 +505,20 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				}
 				break;
 			}
+			case R.id.btn_be_referrer:
+			case R.id.layout_user_referrers:
+			case R.id.layout_apply_referrer:
+			{
+				if (isbLogin())
+				{
+					startActivity(new Intent(this.getContext(), ActivityUserReferrerInfo.class));
+				}
+				else
+				{
+					startActivityForResult(new Intent(this.getContext(), ActivityLogin.class), ConstValues.REQUEST_LOGIN_USER);
+				}
+				break;
+			}
 		}
 	}
 
@@ -512,40 +534,49 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				String level = UserLevel.getLevelDesc(userInfo.getUserLevel());
 				if (userInfo.getUserLevel() == UserLevel.L1.getLevel())
 				{
-					tvUserType.setBackgroundResource(R.drawable.bg_l1_corner_3);
+					tvUserLevel.setBackgroundResource(R.drawable.bg_l1_corner_3);
 				}
 				else if (userInfo.getUserLevel() == UserLevel.L2.getLevel())
 				{
-					tvUserType.setBackgroundResource(R.drawable.bg_l2_corner_3);
+					tvUserLevel.setBackgroundResource(R.drawable.bg_l2_corner_3);
 				}
 				else if (userInfo.getUserLevel() == UserLevel.L3.getLevel())
 				{
-					tvUserType.setBackgroundResource(R.drawable.bg_l3_corner_3);
+					tvUserLevel.setBackgroundResource(R.drawable.bg_l3_corner_3);
 				}
 				else if (userInfo.getUserLevel() == UserLevel.L4.getLevel())
 				{
-					tvUserType.setBackgroundResource(R.drawable.bg_l4_corner_3);
+					tvUserLevel.setBackgroundResource(R.drawable.bg_l4_corner_3);
 				}
 				else if (userInfo.getUserLevel() == UserLevel.L5.getLevel())
 				{
-					tvUserType.setBackgroundResource(R.drawable.bg_l5_corner_3);
+					tvUserLevel.setBackgroundResource(R.drawable.bg_l5_corner_3);
 				}
-				//				String agent = "";
-				if (userInfo.getUserType() > UserType.COMMON.getType())
+				tvUserLevel.setText(level);
+				if (userInfo.getUserLevel() >= UserLevel.L2.getLevel())
 				{
-					//					agent = UserType.getDesc(userInfo.getUserType());
-					vIsAgent.setVisibility(View.VISIBLE);
-					vNotAgent.setVisibility(View.GONE);
+					vIsReferrer.setVisibility(View.VISIBLE);
+					vNotReferrer.setVisibility(View.GONE);
 					mUserAgentService.getReferrerUserList(0, 1, null, false);
 					mUserAgentService.getTotalUserShareProfit(null, false);
+				}
+				else
+				{
+					vIsReferrer.setVisibility(View.GONE);
+					vNotReferrer.setVisibility(View.VISIBLE);
+				}
+				if (userInfo.getUserType() > UserType.COMMON.getType())
+				{
+					vIsAgent.setVisibility(View.VISIBLE);
+					vNotAgent.setVisibility(View.GONE);
+					mUserAgentService.getUserAgentList(0, 1, null, false);
+					mUserAgentService.getTotalUserAgentShareProfit(null, false);
 				}
 				else
 				{
 					vIsAgent.setVisibility(View.GONE);
 					vNotAgent.setVisibility(View.VISIBLE);
 				}
-				tvUserType.setText(level);
-				//				tvUserType.setText(level + " " + agent);
 				tvRegisterDate.setText(DateTimeTools.getDateString(userInfo.getAddDateLong()));
 				mUserService.getUserBalanceInfo(null, false);
 				mShopService.getShopInfo(null, false);
@@ -581,16 +612,42 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		}
 		else if (url.endsWith(ApiConfig.GET_TOTAL_USER_SHARE_PROFIT))
 		{
-			Double amount = GsonTools.getReturnObject(result, Double.class);
+			Long amount = GsonTools.getReturnObject(result, Long.class);
 			if (amount != null)
 			{
-				tvFansShareProfit.setText(String.format("%.2f", amount));
-				tvShareProfit.setText(String.format("%.2f", amount));
+				tvFansShareProfit.setText(String.format("%s", StringTools.getPrice(amount)));
+				tvShareProfit.setText(String.format("%s", StringTools.getPrice(amount)));
 			}
 			else
 			{
 				tvFansShareProfit.setText("获取失败");
 				tvShareProfit.setText("获取失败");
+			}
+		}
+		else if (url.endsWith(ApiConfig.GET_USER_AGENT_LIST))
+		{
+			TableData tableData = GsonTools.getObject(result, TableData.class);
+			if (tableData != null)
+			{
+				tvAgentAmount.setText(String.format("%d", tableData.getRecordsTotal()));
+			}
+			else
+			{
+				tvAgentAmount.setText("获取失败");
+			}
+		}
+		else if (url.endsWith(ApiConfig.GET_TOTAL_USER_AGENT_SHARE_PROFIT))
+		{
+			Long amount = GsonTools.getReturnObject(result, Long.class);
+			if (amount != null)
+			{
+				tvAgentShareProfit.setText(String.format("%s", StringTools.getPrice(amount)));
+				tvAgentShareProfit2.setText(String.format("%s", StringTools.getPrice(amount)));
+			}
+			else
+			{
+				tvFansShareProfit.setText("获取失败");
+				tvAgentShareProfit2.setText("获取失败");
 			}
 		}
 		else if (url.endsWith(ApiConfig.GET_SHOP_INFO))
@@ -685,7 +742,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		else
 		{
 			tvName.setText("请登录！");
-			tvUserType.setText("");
+			tvUserLevel.setText("");
 			vLogined.setVisibility(View.GONE);
 			vUnLogin.setVisibility(View.VISIBLE);
 			tvBalance.setText("0");

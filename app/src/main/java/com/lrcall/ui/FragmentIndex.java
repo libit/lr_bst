@@ -365,7 +365,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	synchronized protected void initFuncData()
 	{
 		List<FuncInfo> funcInfoList = new ArrayList<>();
-		funcInfoList.add(new FuncInfo(FUNC_STAR, R.drawable.mine_icon_waitpay, "收藏"));
+		funcInfoList.add(new FuncInfo(FUNC_STAR, R.drawable.mine_icon_waitpay, "推广"));
 		funcInfoList.add(new FuncInfo(FUNC_ORDERS, R.drawable.mine_icon_ordrers, "订单"));
 		funcInfoList.add(new FuncInfo(FUNC_ADDRESSES, R.drawable.mine_icon_address, "地址"));
 		funcInfoList.add(new FuncInfo(FUNC_POINT_SHOP, R.drawable.mine_icon_care, "积分商城"));
@@ -384,7 +384,8 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 					{
 						if (UserService.isLogin())
 						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityProductStarList.class));
+							//							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityProductStarList.class));
+							new UserService(FragmentIndex.this.getContext()).share2("请稍后...", true);
 						}
 						else
 						{

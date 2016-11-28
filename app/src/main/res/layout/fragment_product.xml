@@ -118,7 +118,15 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="1"
-                    android:textColor="#ff0000"
+                    android:textColor="@color/red"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/tv_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="推广赚取佣金"
+                    android:textColor="@color/black"
                     android:textSize="16sp"/>
                 <ImageView
                     android:id="@+id/btn_show_choose_amount"
@@ -126,6 +134,29 @@
                     android:layout_height="40dp"
                     android:padding="5dp"
                     android:src="@drawable/setting_right_arrow"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0.7dp"
+                android:background="@color/line"/>
+            <LinearLayout
+                android:id="@+id/layout_point"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_point"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="#ff0000"
+                    android:textSize="16sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

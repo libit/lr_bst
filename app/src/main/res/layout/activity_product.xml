@@ -14,15 +14,15 @@
         <FrameLayout
             android:id="@+id/tab"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="60dp"/>
+            android:layout_height="match_parent"/>
         <ImageView
             android:id="@+id/iv_share"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:padding="10dp"
-            android:src="@drawable/ic_share"/>
+            android:src="@drawable/ic_share"
+            android:visibility="gone"/>
     </FrameLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

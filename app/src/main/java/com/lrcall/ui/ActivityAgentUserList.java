@@ -25,9 +25,9 @@ import com.lrcall.utils.GsonTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityReferrerUserList extends MyBasePageActivity implements IAjaxDataResponse
+public class ActivityAgentUserList extends MyBasePageActivity implements IAjaxDataResponse
 {
-	private static final String TAG = ActivityReferrerUserList.class.getSimpleName();
+	private static final String TAG = ActivityAgentUserList.class.getSimpleName();
 	private View layoutUserList, layoutNoUser;
 	private TextView tvInfo;
 	private ReferrerUserAdapter mReferrerUserAdapter;
@@ -38,7 +38,7 @@ public class ActivityReferrerUserList extends MyBasePageActivity implements IAja
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_referrer_user_list);
+		setContentView(R.layout.activity_agent_user_list);
 		mUserAgentService = new UserAgentService(this);
 		mUserAgentService.addDataResponse(this);
 		viewInit();
@@ -70,7 +70,7 @@ public class ActivityReferrerUserList extends MyBasePageActivity implements IAja
 		super.viewInit();
 		setBackButton();
 		layoutUserList = findViewById(R.id.layout_user_list);
-		layoutNoUser = findViewById(R.id.layout_no_referrer);
+		layoutNoUser = findViewById(R.id.layout_no_agent);
 		tvInfo = (TextView) findViewById(R.id.tv_info);
 		xListView = (XListView) findViewById(R.id.xlist);
 		xListView.setPullRefreshEnable(true);
@@ -92,7 +92,7 @@ public class ActivityReferrerUserList extends MyBasePageActivity implements IAja
 	public void loadMoreData()
 	{
 		String tips = (mDataStart == 0 ? "请稍后..." : "");
-		mUserAgentService.getReferrerUserList(mDataStart, getPageSize(), tips, true);
+		mUserAgentService.getUserAgentList(mDataStart, getPageSize(), tips, true);
 	}
 
 	synchronized private void refreshUserInfos(List<UserInfo> userInfoList)
@@ -139,7 +139,7 @@ public class ActivityReferrerUserList extends MyBasePageActivity implements IAja
 	{
 		xListView.stopRefresh();
 		xListView.stopLoadMore();
-		if (url.endsWith(ApiConfig.GET_REFERRER_USER_LIST))
+		if (url.endsWith(ApiConfig.GET_USER_AGENT_LIST))
 		{
 			List<UserInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
@@ -148,7 +148,7 @@ public class ActivityReferrerUserList extends MyBasePageActivity implements IAja
 				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<UserInfo>>()
 				{
 				}.getType());
-				tvInfo.setText(String.format("您的总推荐人数：%d人。", tableData.getRecordsTotal()));
+				tvInfo.setText(String.format("您的下级代理人数：%d人。", tableData.getRecordsTotal()));
 			}
 			refreshUserInfos(list);
 		}

@@ -61,6 +61,22 @@ public class UserBalanceLogService extends BaseService
 		ajaxStringCallback(ApiConfig.GET_USER_SHARE_PROFIT_LIST, params, tips, needServiceProcess);
 	}
 
+	/**
+	 * 获取代理商用户分润列表
+	 *
+	 * @param start
+	 * @param size
+	 * @param tips
+	 * @param needServiceProcess
+	 */
+	public void getUserAgentShareProfitList(int start, int size, String tips, final boolean needServiceProcess)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		ajaxStringCallback(ApiConfig.GET_USER_AGENT_SHARE_PROFIT_LIST, params, tips, needServiceProcess);
+	}
+
 	@Override
 	public void parseData(String url, String result, AjaxStatus status)
 	{

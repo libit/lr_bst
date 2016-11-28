@@ -11,7 +11,7 @@ package com.lrcall.enums;
  */
 public enum ShopLevel
 {
-	L2((byte) 10, "铜牌"), L3((byte) 20, "银牌"), L4((byte) 30, "金牌"), L5((byte) 40, "白金");
+	L2((byte) 10, "推广员"), L3((byte) 20, "掌柜"), L4((byte) 30, "渠道商"), L5((byte) 40, "供应商");
 	private byte level;
 	private String desc;
 

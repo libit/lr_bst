@@ -77,6 +77,7 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 	private int mMaxPoint = 0;
 	private int mNeedPoint = 0;
 	private String mShopId;
+	private String mReferrerId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)

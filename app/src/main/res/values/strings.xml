@@ -141,8 +141,14 @@
     <string name="title_activity_share">分享</string>
     <!-- 用户推荐人列表Activity -->
     <string name="title_activity_referrer_user_list">推荐列表</string>
+    <!-- 用户下级代理列表Activity -->
+    <string name="title_activity_agent_user_list">下级代理列表</string>
+    <!-- 用户推荐信息Activity -->
+    <string name="title_activity_user_referrer_info">我的分销</string>
     <!-- 用户分润列表Activity -->
     <string name="title_activity_user_share_profit_list">我的业绩</string>
+    <!-- 代理商用户分润列表Activity -->
+    <string name="title_activity_user_agent_share_profit_list">我的代理商业绩</string>
     <string name="dialog_title_bug_level">日志记录级别</string>
     <string name="auto_update_log">自动上报错误日志</string>
     <string name="log_tips">提示：日志级别越高记录的信息越详细，可以让开发者更全面的定位错误，但记录的越详细相应的日志文件则越大，建议选择级别3</string>

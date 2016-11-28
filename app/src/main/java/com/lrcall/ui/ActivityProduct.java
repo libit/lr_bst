@@ -63,6 +63,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 	private boolean isStared = false;
 	private String mShopId;
 	private String productId;
+	private String mReferrerId = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -74,6 +75,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		{
 			productId = bundle.getString(ConstValues.DATA_PRODUCT_ID);
 			mShopId = bundle.getString(ConstValues.DATA_SHOP_ID);
+			mReferrerId = bundle.getString(ConstValues.DATA_REFERRER_ID);
 		}
 		if (StringTools.isNull(productId))
 		{
@@ -240,7 +242,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 							amount = 1;
 						}
 					}
-					mShopCartService.addShopCartInfo(productId, amount, "请稍后...", true);
+					mShopCartService.addShopCartInfo(productId, amount, mReferrerId, "请稍后...", true);
 				}
 				else
 				{
@@ -275,6 +277,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 					orderProductInfos.add(orderProductInfo);
 					intent.putExtra(ConstValues.DATA_ORDER_PRODUCT_LIST, GsonTools.toJson(orderProductInfos));
 					intent.putExtra(ConstValues.DATA_SHOP_ID, mShopId);
+					intent.putExtra(ConstValues.DATA_REFERRER_ID, mReferrerId);
 					startActivity(intent);
 				}
 				else

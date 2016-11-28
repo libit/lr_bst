@@ -32,45 +32,30 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/default_header"/>
                 <TextView
-                    android:id="@+id/tv_type"
+                    android:id="@+id/tv_level"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text=""
                     android:textColor="@color/black"
                     android:textSize="16sp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="升级即可尊享特权"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"/>
-                    <Button
-                        android:id="@+id/btn_upgrade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_btn_common"
-                        android:text="升级"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:visibility="gone"/>
-                </LinearLayout>
                 <TextView
-                    android:id="@+id/tv_apply_status"
+                    android:id="@+id/tv_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text=""
                     android:textColor="@color/red"
-                    android:textSize="16sp"
-                    android:visibility="gone"/>
+                    android:textSize="16sp"/>
+                <Button
+                    android:id="@+id/btn_upgrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_btn_common"
+                    android:text="升级"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -108,7 +93,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="left|center_vertical"
-                            android:text="下级代理"
+                            android:text="我的粉丝"
                             android:textSize="16sp"/>
                         <ImageView
                             android:layout_width="wrap_content"
@@ -145,44 +130,6 @@
                             android:layout_weight="1"
                             android:gravity="left|center_vertical"
                             android:text="我的业绩"
-                            android:textSize="16sp"/>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:padding="5dp"
-                            android:src="@drawable/setting_right_arrow"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.7dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/line"
-                    android:visibility="gone"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-                    <LinearLayout
-                        android:id="@+id/layout_withdraw"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:padding="10dp"
-                            android:src="@drawable/icon_find_suggest_white"/>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical"
-                            android:text="提现"
                             android:textSize="16sp"/>
                         <ImageView
                             android:layout_width="wrap_content"

@@ -133,7 +133,7 @@ public class ActivityRegister extends MyBaseActivity implements View.OnClickList
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null)
 		{
-			mShareUserId = bundle.getString(ConstValues.DATA_USER_ID);
+			mShareUserId = bundle.getString(ConstValues.DATA_REFERRER_ID);
 		}
 		viewInit();
 		mUserService = new UserService(this);

@@ -60,4 +60,5 @@ public class ConstValues
 	public static final String DATA_SHARE_DATA = "share_data";
 	public static final String DATA_SHARE_CONTENT = "share_content";
 	public static final String DATA_USER_ID = "user_id";
+	public static final String DATA_REFERRER_ID = "referrer_id";
 }
