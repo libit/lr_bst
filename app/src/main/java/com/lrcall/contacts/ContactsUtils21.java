@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 public class ContactsUtils21 extends ContactsUtils14
 {
+	//	public static final String CONTACT_ID = ContactsContract.Contacts._ID;
+	//	public static final String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
 	public static final String SORT_KEY = "phonebook_label";
 
 	@Override
@@ -19,6 +21,51 @@ public class ContactsUtils21 extends ContactsUtils14
 	{
 		return SORT_KEY;
 	}
+	/**
+	 * 获取所有联系人，不查询号码
+	 *
+	 * @param context 应用Context
+	 * @return 联系人数组
+	 */
+	//	@Override
+	//	public List<ContactInfo> getContactInfos(Context context)
+	//	{
+	//		String sort_key = getSortKey();
+	//		Uri uri = ContactsContract.Contacts.CONTENT_URI;
+	//		String[] projection = new String[]{CONTACT_ID, DISPLAY_NAME, sort_key};//PHOTO_ID, STARRED,
+	//		String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " = '1'";
+	//		String[] selectionArgs = null;
+	//		String sortOrder = sort_key + " COLLATE LOCALIZED ASC";
+	//		Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, sortOrder);
+	//		List<ContactInfo> list = new ArrayList<>();
+	//		if (cursor != null)
+	//		{
+	//			while (cursor.moveToNext())
+	//			{
+	//				ContactInfo contactInfo = new ContactInfo();
+	//				Long id = cursor.getLong(cursor.getColumnIndex(CONTACT_ID));
+	//				String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+	//				String py = cursor.getString(cursor.getColumnIndex(sort_key));
+	//				Long photoId = null;//cursor.getLong(cursor.getColumnIndex(PHOTO_ID));
+	//				boolean starred = false;// cursor.getInt(cursor.getColumnIndex(STARRED)) == 1;
+	//				if (photoId == null)
+	//				{
+	//					photoId = 0L;
+	//				}
+	//				contactInfo.setContactId(id);
+	//				contactInfo.setName(name);
+	//				contactInfo.setPy(py);
+	//				contactInfo.setPhotoId(photoId);
+	//				contactInfo.setStarred(starred);
+	//				list.add(contactInfo);
+	//			}
+	//			if (!cursor.isClosed())
+	//			{
+	//				cursor.close();
+	//			}
+	//		}
+	//		return list;
+	//	}
 
 	/**
 	 * 删除联系人

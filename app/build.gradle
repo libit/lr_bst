@@ -14,8 +14,8 @@ android {
         applicationId "com.lrcall.appbst"
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 1108
-        versionName "1.1.0"
+        versionCode 1110
+        versionName "1.1.1"
         ndk {
             moduleName "appbstsdk"
             //abiFilters "armeabi", "arm64-v8a", "x86"

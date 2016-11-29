@@ -226,7 +226,7 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 						{
 						}
 					}
-					mShopCartService.addShopCartInfo(productId, amount, null, "请稍后...", true);
+					mShopCartService.addShopCartInfo(productId, amount, null, null, "请稍后...", true);
 				}
 				else
 				{

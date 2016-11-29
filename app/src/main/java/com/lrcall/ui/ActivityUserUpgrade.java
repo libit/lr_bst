@@ -9,8 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +24,7 @@ import com.androidquery.callback.AjaxStatus;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.AlipayConfigInfo;
+import com.lrcall.appbst.models.BannerInfo;
 import com.lrcall.appbst.models.PayInfo;
 import com.lrcall.appbst.models.PayTypeInfo;
 import com.lrcall.appbst.models.ReturnInfo;
@@ -28,19 +33,24 @@ import com.lrcall.appbst.models.UserInfo;
 import com.lrcall.appbst.models.WxPayInfo;
 import com.lrcall.appbst.services.AlipayService;
 import com.lrcall.appbst.services.ApiConfig;
+import com.lrcall.appbst.services.BannerService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.PayService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.appbst.services.WxPayService;
+import com.lrcall.enums.ClientBannerType;
 import com.lrcall.enums.PayType;
 import com.lrcall.enums.UserLevel;
 import com.lrcall.ui.adapter.PayAdapter;
+import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
@@ -63,6 +73,11 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 	private PayService mPayService;
 	private String params;
 	private PayTypeInfo payTypeInfo;
+	private ViewPager viewPager;
+	private final List<Fragment> mFragmentRecommendList = new ArrayList<>();
+	private SmartTabLayout viewPagerTab;
+	private SectionsPagerAdapter sectionsPagerAdapter;
+	private BannerService mBannerService;
 	private final Handler mHandler = new Handler()
 	{
 		public void handleMessage(Message msg)
@@ -121,8 +136,11 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 		mPayService.addDataResponse(this);
 		mUserService = new UserService(this);
 		mUserService.addDataResponse(this);
+		mBannerService = new BannerService(this);
+		mBannerService.addDataResponse(this);
 		viewInit();
 		mUserService.upgradeTips(null, false);
+		mBannerService.getBannerInfoList(ClientBannerType.USER_UPGRADE.getType(), 0, -1, null, true);
 		mUserService.getUserInfo("请稍后...", false);
 	}
 
@@ -137,6 +155,44 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 		tvTips = (TextView) findViewById(R.id.tv_tips);
 		xListView = (GridView) findViewById(R.id.xlist);
 		findViewById(R.id.btn_upgrade).setOnClickListener(this);
+		viewPager = (ViewPager) findViewById(R.id.viewpager);
+		//设置图片的长宽，这里便于制作图片
+		ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
+		layoutParams.width = DisplayTools.getWindowWidth(this);
+		layoutParams.height = DisplayTools.getWindowWidth(this) * 1 / 2;
+		viewPager.setLayoutParams(layoutParams);
+		viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
+		viewPager.setOnTouchListener(new View.OnTouchListener()
+		{
+			@Override
+			public boolean onTouch(View v, MotionEvent event)
+			{
+				int action = event.getAction();
+				if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE)
+				{
+				}
+				else
+				{
+				}
+				return false;
+			}
+		});
+	}
+
+	//设置图片适配器
+	private void setViewPagerAdapter(List<BannerInfo> bannerInfoList)
+	{
+		if (bannerInfoList != null && bannerInfoList.size() > 0)
+		{
+			mFragmentRecommendList.clear();
+			for (BannerInfo bannerInfo : bannerInfoList)
+			{
+				mFragmentRecommendList.add(FragmentServerImage.newInstance(ApiConfig.getServerPicUrl(bannerInfo.getPicUrl()), DisplayTools.getWindowWidth(this), bannerInfo.getContent()));
+			}
+			sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mFragmentRecommendList);
+			viewPager.setAdapter(sectionsPagerAdapter);
+			viewPagerTab.setViewPager(viewPager);
+		}
 	}
 
 	private void initData()
@@ -267,7 +323,7 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 			AlipayConfigInfo alipayConfigInfo = GsonTools.getReturnObject(result, AlipayConfigInfo.class);
 			if (alipayConfigInfo != null)
 			{
-				alipayService.pay(ActivityUserUpgrade.this, mHandler, alipayConfigInfo, payTypeInfo.getSubject(), params, String.format("%.2f", (double) payTypeInfo.getPrice() / 100));
+				alipayService.pay(ActivityUserUpgrade.this, mHandler, alipayConfigInfo, payTypeInfo.getSubject(), params, StringTools.getPrice(payTypeInfo.getPrice()));
 			}
 			return true;
 		}
@@ -319,6 +375,18 @@ public class ActivityUserUpgrade extends MyBaseActivity implements View.OnClickL
 				}
 				wxPayService.wxPrePay(params, "正在调用微信支付，请稍后...", false);
 			}
+		}
+		else if (url.endsWith(ApiConfig.GET_BANNER_LIST))
+		{
+			List<BannerInfo> bannerInfoList = null;
+			TableData tableData = GsonTools.getObject(result, TableData.class);
+			if (tableData != null)
+			{
+				bannerInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<BannerInfo>>()
+				{
+				}.getType());
+			}
+			setViewPagerAdapter(bannerInfoList);
 		}
 		return false;
 	}

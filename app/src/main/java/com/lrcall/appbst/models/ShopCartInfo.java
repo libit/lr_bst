@@ -19,6 +19,8 @@ public class ShopCartInfo extends DbObject
 	public static final String FIELD_USER_ID = "user_id";
 	public static final String FIELD_PRODUCT_ID = "product_id";
 	public static final String FIELD_AMOUNT = "amount";
+	public static final String FIELD_SHOP_ID = "shop_id";
+	public static final String FIELD_REFERRER_ID = "referrer_id";
 	public static final String FIELD_DATE = "date";
 	@SerializedName("cartId")
 	private String cartId;//ID
@@ -28,6 +30,10 @@ public class ShopCartInfo extends DbObject
 	private String productId;//商品ID
 	@SerializedName("amount")
 	private int amount;//数量
+	@SerializedName("shopId")
+	private String shopId;
+	@SerializedName("referrerId")
+	private String referrerId;//推荐人
 	@SerializedName("updateDateLong")
 	private long date;//更新时间
 
@@ -38,7 +44,7 @@ public class ShopCartInfo extends DbObject
 	 */
 	public static final String getCreateTableSQL()
 	{
-		return String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL,%s TEXT NOT NULL,%s INT NOT NULL,%s INT DEFAULT 0);", DbConstant.TABLE_NAME_SHOP_CART, FIELD_ID, FIELD_CART_ID, FIELD_USER_ID, FIELD_PRODUCT_ID, FIELD_AMOUNT, FIELD_DATE);
+		return String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL,%s TEXT NOT NULL,%s INT NOT NULL,%s TEXT,%s TEXT,%s INT DEFAULT 0);", DbConstant.TABLE_NAME_SHOP_CART, FIELD_ID, FIELD_CART_ID, FIELD_USER_ID, FIELD_PRODUCT_ID, FIELD_AMOUNT, FIELD_SHOP_ID, FIELD_REFERRER_ID, FIELD_DATE);
 	}
 
 	/**
@@ -54,6 +60,8 @@ public class ShopCartInfo extends DbObject
 		shopCartInfo.setUserId(cursor.getString(cursor.getColumnIndex(FIELD_USER_ID)));
 		shopCartInfo.setProductId(cursor.getString(cursor.getColumnIndex(FIELD_PRODUCT_ID)));
 		shopCartInfo.setAmount(cursor.getInt(cursor.getColumnIndex(FIELD_AMOUNT)));
+		shopCartInfo.setShopId(cursor.getString(cursor.getColumnIndex(FIELD_SHOP_ID)));
+		shopCartInfo.setReferrerId(cursor.getString(cursor.getColumnIndex(FIELD_REFERRER_ID)));
 		shopCartInfo.setDate(cursor.getLong(cursor.getColumnIndex(FIELD_DATE)));
 		return shopCartInfo;
 	}
@@ -70,6 +78,8 @@ public class ShopCartInfo extends DbObject
 		contentValues.put(FIELD_USER_ID, userId);
 		contentValues.put(FIELD_PRODUCT_ID, productId);
 		contentValues.put(FIELD_AMOUNT, amount);
+		contentValues.put(FIELD_SHOP_ID, shopId);
+		contentValues.put(FIELD_REFERRER_ID, referrerId);
 		contentValues.put(FIELD_DATE, date);
 		return contentValues;
 	}
@@ -78,12 +88,14 @@ public class ShopCartInfo extends DbObject
 	{
 	}
 
-	public ShopCartInfo(String cartId, String userId, String productId, int amount, long date)
+	public ShopCartInfo(String cartId, String userId, String productId, int amount, String shopId, String referrerId, long date)
 	{
 		this.cartId = cartId;
 		this.userId = userId;
 		this.productId = productId;
 		this.amount = amount;
+		this.shopId = shopId;
+		this.referrerId = referrerId;
 		this.date = date;
 	}
 
@@ -125,6 +137,26 @@ public class ShopCartInfo extends DbObject
 	public void setAmount(int amount)
 	{
 		this.amount = amount;
+	}
+
+	public String getShopId()
+	{
+		return shopId;
+	}
+
+	public void setShopId(String shopId)
+	{
+		this.shopId = shopId;
+	}
+
+	public String getReferrerId()
+	{
+		return referrerId;
+	}
+
+	public void setReferrerId(String referrerId)
+	{
+		this.referrerId = referrerId;
 	}
 
 	public long getDate()

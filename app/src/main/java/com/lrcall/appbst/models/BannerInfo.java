@@ -16,12 +16,15 @@ import com.lrcall.db.DbConstant;
 public class BannerInfo extends DbObject
 {
 	public static final String FIELD_BANNER_ID = "banner_id";
+	public static final String FIELD_BANNER_TYPE = "banner_type";
 	public static final String FIELD_PIC_URL = "pic_url";
 	public static final String FIELD_CLICK_TYPE = "click_type";
 	public static final String FIELD_CONTENT = "content";
 	public static final String FIELD_DATE = "date";
 	@SerializedName("bannerId")
 	private String bannerId;//ID
+	@SerializedName("bannerType")
+	private String bannerType;//客户端位置
 	@SerializedName("picId")
 	private String picUrl;//图片地址
 	@SerializedName("clickType")
@@ -35,9 +38,10 @@ public class BannerInfo extends DbObject
 	{
 	}
 
-	public BannerInfo(String bannerId, String picUrl, String clickType, String content, long date)
+	public BannerInfo(String bannerId, String bannerType, String picUrl, String clickType, String content, long date)
 	{
 		this.bannerId = bannerId;
+		this.bannerType = bannerType;
 		this.picUrl = picUrl;
 		this.clickType = clickType;
 		this.content = content;
@@ -51,7 +55,7 @@ public class BannerInfo extends DbObject
 	 */
 	public static final String getCreateTableSQL()
 	{
-		return String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL,%s TEXT NOT NULL,%s TEXT NOT NULL,%s INT DEFAULT 0);", DbConstant.TABLE_NAME_BANNER, FIELD_ID, FIELD_BANNER_ID, FIELD_PIC_URL, FIELD_CLICK_TYPE, FIELD_CONTENT, FIELD_DATE);
+		return String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL,%s TEXT NOT NULL,%s TEXT NOT NULL,%s TEXT NOT NULL,%s INT DEFAULT 0);", DbConstant.TABLE_NAME_BANNER, FIELD_ID, FIELD_BANNER_ID, FIELD_BANNER_TYPE, FIELD_PIC_URL, FIELD_CLICK_TYPE, FIELD_CONTENT, FIELD_DATE);
 	}
 
 	/**
@@ -63,8 +67,8 @@ public class BannerInfo extends DbObject
 	public static BannerInfo getObjectFromDb(Cursor cursor)
 	{
 		BannerInfo bannerInfo = new BannerInfo();
-
 		bannerInfo.setBannerId(cursor.getString(cursor.getColumnIndex(FIELD_BANNER_ID)));
+		bannerInfo.setBannerType(cursor.getString(cursor.getColumnIndex(FIELD_BANNER_TYPE)));
 		bannerInfo.setPicUrl(cursor.getString(cursor.getColumnIndex(FIELD_PIC_URL)));
 		bannerInfo.setClickType(cursor.getString(cursor.getColumnIndex(FIELD_CLICK_TYPE)));
 		bannerInfo.setContent(cursor.getString(cursor.getColumnIndex(FIELD_CONTENT)));
@@ -81,6 +85,7 @@ public class BannerInfo extends DbObject
 	{
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(FIELD_BANNER_ID, bannerId);
+		contentValues.put(FIELD_BANNER_TYPE, bannerType);
 		contentValues.put(FIELD_PIC_URL, picUrl);
 		contentValues.put(FIELD_CLICK_TYPE, clickType);
 		contentValues.put(FIELD_CONTENT, content);
@@ -96,6 +101,16 @@ public class BannerInfo extends DbObject
 	public void setBannerId(String bannerId)
 	{
 		this.bannerId = bannerId;
+	}
+
+	public String getBannerType()
+	{
+		return bannerType;
+	}
+
+	public void setBannerType(String bannerType)
+	{
+		this.bannerType = bannerType;
 	}
 
 	public String getPicUrl()

@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="7dp"
             android:layout_weight="1"
             android:ellipsize="marquee"
             android:gravity="center_vertical"
@@ -38,8 +39,32 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:maxLines="1"
             android:textColor="#ff999999"
+            android:textSize="16.0sp"
+            android:visibility="gone"/>
+        <com.lrcall.ui.customer.MarqueeTextView
+            android:id="@+id/tv_register_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center_vertical"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxLines="1"
+            android:textColor="#ff999999"
             android:textSize="16.0sp"/>
     </LinearLayout>
+    <TextView
+        android:id="@+id/tv_user_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="10dp"
+        android:maxLines="1"
+        android:textColor="@color/red"
+        android:textSize="16.0sp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0.7dp"

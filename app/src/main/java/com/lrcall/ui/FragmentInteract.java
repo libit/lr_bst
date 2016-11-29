@@ -28,6 +28,7 @@ import com.lrcall.appbst.services.BannerService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbBannerInfoFactory;
+import com.lrcall.enums.ClientBannerType;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
@@ -148,7 +149,7 @@ public class FragmentInteract extends MyBaseFragment implements View.OnClickList
 		View rootView = inflater.inflate(R.layout.fragment_interact, container, false);
 		viewInit(rootView);
 		updateView();
-		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList());
+		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList(ClientBannerType.PAGE_INDEX.getType()));
 		onRefresh();
 		return rootView;
 	}
@@ -220,7 +221,7 @@ public class FragmentInteract extends MyBaseFragment implements View.OnClickList
 	//刷新数据
 	synchronized public void refreshData()
 	{
-		mBannerService.getBannerInfoList(0, RECOMMEND_COUNT, null, true);
+		mBannerService.getBannerInfoList(ClientBannerType.PAGE_INDEX.getType(), 0, RECOMMEND_COUNT, null, true);
 	}
 
 	@Override

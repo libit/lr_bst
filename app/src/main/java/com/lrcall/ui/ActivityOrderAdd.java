@@ -76,8 +76,6 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 	private ProductPricePointService mProductPricePointService;
 	private int mMaxPoint = 0;
 	private int mNeedPoint = 0;
-	private String mShopId;
-	private String mReferrerId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -94,7 +92,6 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 				{
 				}.getType());
 			}
-			mShopId = bundle.getString(ConstValues.DATA_SHOP_ID);
 		}
 		if (mOrderProductInfoArrayList == null || mOrderProductInfoArrayList.size() < 1)
 		{

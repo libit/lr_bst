@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.UserInfo;
+import com.lrcall.enums.UserLevel;
+import com.lrcall.utils.DateTimeTools;
 
 import java.util.List;
 
@@ -52,6 +54,8 @@ public class ReferrerUserAdapter extends BaseUserAdapter<UserInfo>
 		String userId = userInfo.getUserId();
 		viewHolder.tvName.setText(name);
 		viewHolder.tvUserId.setText(userId);
+		viewHolder.tvRegisterDate.setText("注册时间：" + DateTimeTools.getDateTimeString(userInfo.getAddDateLong()));
+		viewHolder.tvUserLevel.setText(UserLevel.getLevelDesc(userInfo.getUserLevel()));
 		if (iItemClick != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()
@@ -75,11 +79,15 @@ public class ReferrerUserAdapter extends BaseUserAdapter<UserInfo>
 	{
 		public TextView tvName;
 		public TextView tvUserId;
+		public TextView tvRegisterDate;
+		public TextView tvUserLevel;
 
 		public void viewInit(View convertView)
 		{
 			tvName = (TextView) convertView.findViewById(R.id.tv_name);
 			tvUserId = (TextView) convertView.findViewById(R.id.tv_user_id);
+			tvRegisterDate = (TextView) convertView.findViewById(R.id.tv_register_date);
+			tvUserLevel = (TextView) convertView.findViewById(R.id.tv_user_level);
 		}
 
 		public void clear()

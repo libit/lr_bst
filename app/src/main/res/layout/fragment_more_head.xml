@@ -752,7 +752,7 @@
                 android:layout_marginRight="40dp"
                 android:background="@drawable/bg_btn_common"
                 android:gravity="center"
-                android:text="开通代理拿高额佣金"
+                android:text="开通区域代理拿分红"
                 android:textColor="@color/white"
                 android:textSize="16sp"/>
         </LinearLayout>

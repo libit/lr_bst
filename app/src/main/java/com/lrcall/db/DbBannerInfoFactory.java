@@ -36,31 +36,12 @@ public class DbBannerInfoFactory
 	/**
 	 * 增加或更新Banner信息
 	 *
-	 * @param bannerId
-	 * @param picUrl
-	 * @param clickType
-	 * @param content
-	 * @return
-	 */
-	public boolean addOrUpdateBannerInfo(String bannerId, String picUrl, String clickType, String content)
-	{
-		if (StringTools.isNull(bannerId) || StringTools.isNull(picUrl))
-		{
-			return false;
-		}
-		BannerInfo bannerInfo = new BannerInfo(bannerId, picUrl, clickType, content, System.currentTimeMillis());
-		return addOrUpdateBannerInfo(bannerInfo);
-	}
-
-	/**
-	 * 增加或更新Banner信息
-	 *
 	 * @param bannerInfo
 	 * @return
 	 */
 	public boolean addOrUpdateBannerInfo(BannerInfo bannerInfo)
 	{
-		if (bannerInfo == null || StringTools.isNull(bannerInfo.getBannerId()) || StringTools.isNull(bannerInfo.getPicUrl()))
+		if (bannerInfo == null || StringTools.isNull(bannerInfo.getBannerId()) || StringTools.isNull(bannerInfo.getBannerType()) || StringTools.isNull(bannerInfo.getPicUrl()))
 		{
 			return false;
 		}
@@ -134,10 +115,10 @@ public class DbBannerInfoFactory
 	 *
 	 * @return
 	 */
-	public List<BannerInfo> getBannerInfoList()
+	public List<BannerInfo> getBannerInfoList(String bannerType)
 	{
 		List<BannerInfo> list = new ArrayList<>();
-		Cursor cursor = MyApplication.getContext().getContentResolver().query(DbConstant.getTableUri(TABLE_NAME), null, null, null, null);
+		Cursor cursor = MyApplication.getContext().getContentResolver().query(DbConstant.getTableUri(TABLE_NAME), null, BannerInfo.FIELD_BANNER_TYPE + " = ?", new String[]{bannerType}, null);
 		if (cursor != null)
 		{
 			while (cursor.moveToNext())

@@ -6,7 +6,6 @@ package com.lrcall.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -42,7 +41,6 @@ public class ActivityShopCart extends MyBasePageActivity implements View.OnClick
 	private final List<ShopCartInfo> mShopCartInfoList = new ArrayList<>();
 	private View layoutNoProducts, layoutProducts;
 	private ShopCartProductsAdapter mShopCartProductsAdapter;
-	private Menu mMenu;
 	private CheckBox cbSelectAll;
 	private TextView tvTotalPrice;
 	private int mTotalPrice;
@@ -249,6 +247,8 @@ public class ActivityShopCart extends MyBasePageActivity implements View.OnClick
 						OrderProductInfo orderProductInfo = new OrderProductInfo();
 						orderProductInfo.setCount(shopCartInfo.getAmount());
 						orderProductInfo.setProductId(shopCartInfo.getProductId());
+						orderProductInfo.setShopId(shopCartInfo.getShopId());
+						orderProductInfo.setReferrerId(shopCartInfo.getReferrerId());
 						//						orderProductInfo.setProductInfo(productInfo);
 						orderProductInfos.add(orderProductInfo);
 					}

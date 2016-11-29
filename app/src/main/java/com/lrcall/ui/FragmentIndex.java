@@ -45,6 +45,7 @@ import com.lrcall.appbst.services.NewsService;
 import com.lrcall.appbst.services.ProductService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbBannerInfoFactory;
+import com.lrcall.enums.ClientBannerType;
 import com.lrcall.models.FuncInfo;
 import com.lrcall.ui.adapter.BaseFuncsAdapter;
 import com.lrcall.ui.adapter.IndexDataTrafficProductsAdapter;
@@ -76,18 +77,20 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	public static final int MSG_LOCATION_FINISH = 114;//定位完成
 	private static final int SCROLL_VIEW_PAGE = 111;
 	private static final int SCROLL_NEWS = 112;
-	private static final int FUNC_COLUMNS_NUM = 4;
+	private static final int FUNC_COLUMNS_NUM = 5;
 	private static final int NEW_PRODUCT_COLUMNS_NUM = 2;
 	private static final int NEW_DATA_TRAFFIC_PRODUCT_COLUMNS_NUM = 2;
 	private static final int SHOW_NEWS_COUNT = 3;
-	private static final int FUNC_STAR = 1;
-	private static final int FUNC_ORDERS = 2;
-	private static final int FUNC_ADDRESSES = 3;
-	private static final int FUNC_POINT_SHOP = 4;
-	private static final int FUNC_HISTORY = 5;
-	private static final int FUNC_SHOP = 6;
-	private static final int FUNC_DATA_TRAFFIC = 7;
-	private static final int FUNC_USER_CENTER = 8;
+	private static final int FUNC_SHENXIAN = 1;
+	private static final int FUNC_MEISHI = 2;
+	private static final int FUNC_MEIZHUAN = 3;
+	private static final int FUNC_HAIWAIGOU = 4;
+	private static final int FUNC_GUANFANZHIYIN = 5;
+	private static final int FUNC_TECHANG = 6;
+	private static final int FUNC_FUZHUAN = 7;
+	private static final int FUNC_SHUMA = 8;
+	private static final int FUNC_DATA_TRAFFIC = 9;
+	private static final int FUNC_JIFENSANCHENG = 10;
 	private static final long SCROLL_TIME = 5;
 	private static final int DATA_TRAFFIC_COUNT = 4;
 	private static final int RECOMMEND_COUNT = 4;
@@ -264,7 +267,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		initFuncData();
 		updateView();
 		//		beginLocation();
-		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList());
+		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList(ClientBannerType.PAGE_INDEX.getType()));
 		onRefresh();
 		return rootView;
 	}
@@ -365,14 +368,16 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	synchronized protected void initFuncData()
 	{
 		List<FuncInfo> funcInfoList = new ArrayList<>();
-		funcInfoList.add(new FuncInfo(FUNC_STAR, R.drawable.mine_icon_waitpay, "推广"));
-		funcInfoList.add(new FuncInfo(FUNC_ORDERS, R.drawable.mine_icon_ordrers, "订单"));
-		funcInfoList.add(new FuncInfo(FUNC_ADDRESSES, R.drawable.mine_icon_address, "地址"));
-		funcInfoList.add(new FuncInfo(FUNC_POINT_SHOP, R.drawable.mine_icon_care, "积分商城"));
-		funcInfoList.add(new FuncInfo(FUNC_HISTORY, R.drawable.mine_icon_website, "浏览记录"));
-		funcInfoList.add(new FuncInfo(FUNC_SHOP, R.drawable.mine_icon_shipped, "微店"));
-		funcInfoList.add(new FuncInfo(FUNC_DATA_TRAFFIC, R.drawable.mine_icon_changps, "流量充值"));
-		funcInfoList.add(new FuncInfo(FUNC_USER_CENTER, R.drawable.mine_icon_wallet, "用户中心"));
+		funcInfoList.add(new FuncInfo(FUNC_SHENXIAN, R.drawable.mine_icon_waitpay, "生鲜"));
+		funcInfoList.add(new FuncInfo(FUNC_MEISHI, R.drawable.mine_icon_ordrers, "美食"));
+		funcInfoList.add(new FuncInfo(FUNC_MEIZHUAN, R.drawable.mine_icon_address, "美妆"));
+		funcInfoList.add(new FuncInfo(FUNC_HAIWAIGOU, R.drawable.mine_icon_care, "海外购"));
+		funcInfoList.add(new FuncInfo(FUNC_GUANFANZHIYIN, R.drawable.mine_icon_website, "官方直营"));
+		funcInfoList.add(new FuncInfo(FUNC_TECHANG, R.drawable.mine_icon_shipped, "特产"));
+		funcInfoList.add(new FuncInfo(FUNC_FUZHUAN, R.drawable.mine_icon_changps, "服装"));
+		funcInfoList.add(new FuncInfo(FUNC_SHUMA, R.drawable.mine_icon_wallet, "数码"));
+		funcInfoList.add(new FuncInfo(FUNC_DATA_TRAFFIC, R.drawable.mine_icon_changps, "充值中心"));
+		funcInfoList.add(new FuncInfo(FUNC_JIFENSANCHENG, R.drawable.mine_icon_wallet, "积分商城"));
 		IndexFuncsAdapter indexFuncsAdapter = new IndexFuncsAdapter(this.getContext(), funcInfoList, new BaseFuncsAdapter.IFuncsAdapterItemClicked()
 		{
 			@Override
@@ -380,64 +385,37 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			{
 				switch (funcInfo.getId())
 				{
-					case FUNC_STAR:
+					case FUNC_SHENXIAN:
 					{
-						if (UserService.isLogin())
-						{
-							//							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityProductStarList.class));
-							new UserService(FragmentIndex.this.getContext()).share2("请稍后...", true);
-						}
-						else
-						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityLogin.class));
-						}
 						break;
 					}
-					case FUNC_ORDERS:
+					case FUNC_MEISHI:
 					{
-						if (UserService.isLogin())
-						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityOrders.class));
-						}
-						else
-						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityLogin.class));
-						}
 						break;
 					}
-					case FUNC_ADDRESSES:
+					case FUNC_MEIZHUAN:
 					{
-						if (UserService.isLogin())
-						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityAddressManage.class));
-						}
-						else
-						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityLogin.class));
-						}
 						break;
 					}
-					case FUNC_POINT_SHOP:
+					case FUNC_HAIWAIGOU:
 					{
-						startActivity(new Intent(FragmentIndex.this.getContext(), ActivityPointProductShop.class));
 						break;
 					}
-					case FUNC_HISTORY:
+					case FUNC_GUANFANZHIYIN:
 					{
-						if (UserService.isLogin())
-						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityProductHistoryList.class));
-						}
-						else
-						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityLogin.class));
-						}
-						break;
-					}
-					case FUNC_SHOP:
-					{
-						//						new UserService(FragmentIndex.this.getContext()).share("请稍后...", true);
 						startActivity(new Intent(FragmentIndex.this.getContext(), ActivityShopProducts.class));
+						break;
+					}
+					case FUNC_TECHANG:
+					{
+						break;
+					}
+					case FUNC_FUZHUAN:
+					{
+						break;
+					}
+					case FUNC_SHUMA:
+					{
 						break;
 					}
 					case FUNC_DATA_TRAFFIC:
@@ -452,12 +430,9 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 						}
 						break;
 					}
-					case FUNC_USER_CENTER:
+					case FUNC_JIFENSANCHENG:
 					{
-						if (ActivityMain.getInstance() != null)
-						{
-							ActivityMain.getInstance().setCurrentPage(ActivityMain.USER);
-						}
+						startActivity(new Intent(FragmentIndex.this.getContext(), ActivityPointProductShop.class));
 						break;
 					}
 					default:
@@ -476,7 +451,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	@Override
 	synchronized public void refreshData()
 	{
-		mBannerService.getBannerInfoList(0, RECOMMEND_COUNT, null, true);
+		mBannerService.getBannerInfoList(ClientBannerType.PAGE_INDEX.getType(), 0, RECOMMEND_COUNT, null, true);
 		//获取新闻
 		mNewsService.getNewsInfoList(0, SHOW_NEWS_COUNT, null, null, null, true);
 		mDataTrafficService.getNewDataTrafficInfoList(mDataStart, DATA_TRAFFIC_COUNT, null, true);

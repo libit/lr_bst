@@ -23,6 +23,10 @@ public class OrderProductInfo
 	private int price;//单价
 	@SerializedName("totalPrice")
 	private int totalPrice;//总价
+	@SerializedName("shopId")
+	private String shopId;//商家ID
+	@SerializedName("referrerId")
+	private String referrerId;//推荐人
 	@SerializedName("updateDateLong")
 	private long updateDateLong;//最后更新状态时间
 	//	@SerializedName("productInfo")
@@ -34,23 +38,27 @@ public class OrderProductInfo
 	{
 	}
 
-	public OrderProductInfo(String orderProductId, String orderId, int count, int price, int totalPrice, long updateDateLong)
+	public OrderProductInfo(String orderProductId, String orderId, int count, int price, int totalPrice, String shopId, String referrerId, long updateDateLong)
 	{
 		this.orderProductId = orderProductId;
 		this.orderId = orderId;
 		this.count = count;
 		this.price = price;
 		this.totalPrice = totalPrice;
+		this.shopId = shopId;
+		this.referrerId = referrerId;
 		this.updateDateLong = updateDateLong;
 	}
 
-	public OrderProductInfo(String orderProductId, String orderId, int count, int price, int totalPrice, long updateDateLong, ProductInfo productInfo)
+	public OrderProductInfo(String orderProductId, String orderId, int count, int price, int totalPrice, String shopId, String referrerId, long updateDateLong, ProductInfo productInfo)
 	{
 		this.orderProductId = orderProductId;
 		this.orderId = orderId;
 		this.count = count;
 		this.price = price;
 		this.totalPrice = totalPrice;
+		this.shopId = shopId;
+		this.referrerId = referrerId;
 		this.updateDateLong = updateDateLong;
 		//		this.productInfo = productInfo;
 	}
@@ -132,5 +140,25 @@ public class OrderProductInfo
 	public void setProductId(String productId)
 	{
 		this.productId = productId;
+	}
+
+	public String getShopId()
+	{
+		return shopId;
+	}
+
+	public void setShopId(String shopId)
+	{
+		this.shopId = shopId;
+	}
+
+	public String getReferrerId()
+	{
+		return referrerId;
+	}
+
+	public void setReferrerId(String referrerId)
+	{
+		this.referrerId = referrerId;
 	}
 }

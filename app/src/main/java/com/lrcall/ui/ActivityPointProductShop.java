@@ -38,6 +38,7 @@ import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.NewsService;
 import com.lrcall.appbst.services.PointProductService;
 import com.lrcall.db.DbBannerInfoFactory;
+import com.lrcall.enums.ClientBannerType;
 import com.lrcall.ui.adapter.IndexRecommendProducts4Adapter;
 import com.lrcall.ui.adapter.PointProductsAdapter;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
@@ -204,7 +205,7 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 		mBannerService.addDataResponse(this);
 		viewInit();
 		updateView();
-		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList());
+		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList(ClientBannerType.POINT_PRODUCT.getType()));
 		onRefresh();
 	}
 
@@ -312,7 +313,7 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 	{
 		mNewProductInfoList.clear();
 		mPointProductsAdapter = null;
-		mBannerService.getBannerInfoList(0, RECOMMEND_COUNT, null, true);
+		mBannerService.getBannerInfoList(ClientBannerType.POINT_PRODUCT.getType(), 0, RECOMMEND_COUNT, null, true);
 		//获取新闻
 		//		mNewsService.getNewsInfoList(null, true);
 		//		mPointProductService.getRecommendProductList(mDataStart, RECOMMEND_COUNT, null, true);
@@ -560,14 +561,15 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 		}
 		else if (url.endsWith(ApiConfig.GET_BANNER_LIST))
 		{
+			List<BannerInfo> bannerInfoList = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<BannerInfo> bannerInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<BannerInfo>>()
+				bannerInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<BannerInfo>>()
 				{
 				}.getType());
-				setViewPagerAdapter(bannerInfoList);
 			}
+			setViewPagerAdapter(bannerInfoList);
 		}
 		return false;
 	}

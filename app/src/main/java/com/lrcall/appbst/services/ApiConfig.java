@@ -63,7 +63,7 @@ public class ApiConfig
 	//消息
 	public static final String GET_NEWS_LIST = getServerUrl() + "/ajaxGetNewsList";//获取消息列表
 	public static final String GET_NEWS_INFO = getServerUrl() + "/ajaxGetNewsInfo";//获取消息信息
-	public static final String GET_BANNER_LIST = getServerUrl() + "/ajaxGetClientBannerList";//获取首页Banner列表
+	public static final String GET_BANNER_LIST = getServerUrl() + "/ajaxGetClientBannerList";//获取Banner列表
 	//商品收藏
 	public static final String GET_STAR_LIST = getServerUrl() + "/ajaxGetProductStarList";//获取商品收藏列表
 	public static final String GET_STAR_LIST_COUNT = getServerUrl() + "/ajaxGetProductStarListCount";//获取商品收藏列表数量

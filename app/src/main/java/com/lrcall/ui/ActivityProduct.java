@@ -132,6 +132,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		//初始化Tab
 		Bundle bundle = new Bundle();
 		bundle.putString(ConstValues.DATA_PRODUCT_ID, productId);
+		bundle.putString(ConstValues.DATA_SHOP_ID, mShopId);
 		bundle.putString(ConstValues.DATA_PRODUCT_TYPE, ProductType.PRODUCT.getType() + "");
 		for (TabInfo tabInfo : mTabInfos)
 		{
@@ -242,7 +243,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 							amount = 1;
 						}
 					}
-					mShopCartService.addShopCartInfo(productId, amount, mReferrerId, "请稍后...", true);
+					mShopCartService.addShopCartInfo(productId, amount, mShopId, mReferrerId, "请稍后...", true);
 				}
 				else
 				{
@@ -273,11 +274,13 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 					OrderProductInfo orderProductInfo = new OrderProductInfo();
 					orderProductInfo.setCount(amount);
 					orderProductInfo.setProductId(productId);
+					orderProductInfo.setShopId(mShopId);
+					orderProductInfo.setReferrerId(mReferrerId);
 					//					orderProductInfo.setProductInfo(productInfo);
 					orderProductInfos.add(orderProductInfo);
 					intent.putExtra(ConstValues.DATA_ORDER_PRODUCT_LIST, GsonTools.toJson(orderProductInfos));
-					intent.putExtra(ConstValues.DATA_SHOP_ID, mShopId);
-					intent.putExtra(ConstValues.DATA_REFERRER_ID, mReferrerId);
+					//					intent.putExtra(ConstValues.DATA_SHOP_ID, mShopId);
+					//					intent.putExtra(ConstValues.DATA_REFERRER_ID, mReferrerId);
 					startActivity(intent);
 				}
 				else

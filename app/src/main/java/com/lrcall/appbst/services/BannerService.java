@@ -34,9 +34,10 @@ public class BannerService extends BaseService
 	 * @param tips                   提示信息
 	 * @param needServiceProcessData
 	 */
-	public void getBannerInfoList(int start, int size, String tips, final boolean needServiceProcessData)
+	public void getBannerInfoList(String type, int start, int size, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
+		params.put("bannerType", type);
 		params.put("start", start);
 		params.put("length", size);
 		ajaxStringCallback(ApiConfig.GET_BANNER_LIST, params, tips, needServiceProcessData);
