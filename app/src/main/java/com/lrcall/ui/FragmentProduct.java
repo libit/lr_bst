@@ -26,6 +26,7 @@ import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ProductService;
+import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbProductInfoFactory;
 import com.lrcall.enums.ProductPicType;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
@@ -254,7 +255,14 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 			}
 			case R.id.tv_share:
 			{
-				mProductService.getProductShareText(mProductInfo.getProductId(), "请稍后...", true);
+				if (UserService.isLogin())
+				{
+					mProductService.getProductShareText(mProductInfo.getProductId(), "请稍后...", true);
+				}
+				else
+				{
+					startActivity(new Intent(this.getContext(), ActivityLogin.class));
+				}
 				break;
 			}
 		}

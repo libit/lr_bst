@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -33,12 +32,14 @@ import com.google.gson.reflect.TypeToken;
 import com.google.zxing.client.android.CaptureActivity;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.BannerInfo;
+import com.lrcall.appbst.models.ClientIndexFuncInfo;
 import com.lrcall.appbst.models.DataTrafficInfo;
 import com.lrcall.appbst.models.NewsInfo;
 import com.lrcall.appbst.models.ProductInfo;
 import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.BannerService;
+import com.lrcall.appbst.services.ClientService;
 import com.lrcall.appbst.services.DataTrafficService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.NewsService;
@@ -46,16 +47,15 @@ import com.lrcall.appbst.services.ProductService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbBannerInfoFactory;
 import com.lrcall.enums.ClientBannerType;
-import com.lrcall.models.FuncInfo;
-import com.lrcall.ui.adapter.BaseFuncsAdapter;
+import com.lrcall.enums.ClientFuncType;
 import com.lrcall.ui.adapter.IndexDataTrafficProductsAdapter;
 import com.lrcall.ui.adapter.IndexFuncsAdapter;
 import com.lrcall.ui.adapter.IndexNewProductsAdapter;
 import com.lrcall.ui.adapter.IndexRecommendProducts4Adapter;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LocationTools;
 import com.lrcall.utils.LogcatTools;
@@ -107,6 +107,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	private ProductService mProductService;
 	private DataTrafficService mDataTrafficService;
 	private BannerService mBannerService;
+	private ClientService mClientService;
 	private IndexRecommendProducts4Adapter mIndexRecommendProducts4Adapter;
 	private IndexRecommendProducts4Adapter mIndexConcessionProductsAdapter;
 	private IndexNewProductsAdapter mIndexNewProductsAdapter;
@@ -257,6 +258,8 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		mDataTrafficService.addDataResponse(this);
 		mBannerService = new BannerService(this.getContext());
 		mBannerService.addDataResponse(this);
+		mClientService = new ClientService(this.getContext());
+		mClientService.addDataResponse(this);
 	}
 
 	@Override
@@ -264,7 +267,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	{
 		View rootView = inflater.inflate(R.layout.fragment_index, container, false);
 		viewInit(rootView);
-		initFuncData();
+		//		initFuncData();
 		updateView();
 		//		beginLocation();
 		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList(ClientBannerType.PAGE_INDEX.getType()));
@@ -365,80 +368,60 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	}
 
 	//初始化数据
-	synchronized protected void initFuncData()
+	synchronized protected void initFuncData(List<ClientIndexFuncInfo> list)
 	{
-		List<FuncInfo> funcInfoList = new ArrayList<>();
-		funcInfoList.add(new FuncInfo(FUNC_SHENXIAN, R.drawable.mine_icon_waitpay, "生鲜"));
-		funcInfoList.add(new FuncInfo(FUNC_MEISHI, R.drawable.mine_icon_ordrers, "美食"));
-		funcInfoList.add(new FuncInfo(FUNC_MEIZHUAN, R.drawable.mine_icon_address, "美妆"));
-		funcInfoList.add(new FuncInfo(FUNC_HAIWAIGOU, R.drawable.mine_icon_care, "海外购"));
-		funcInfoList.add(new FuncInfo(FUNC_GUANFANZHIYIN, R.drawable.mine_icon_website, "官方直营"));
-		funcInfoList.add(new FuncInfo(FUNC_TECHANG, R.drawable.mine_icon_shipped, "特产"));
-		funcInfoList.add(new FuncInfo(FUNC_FUZHUAN, R.drawable.mine_icon_changps, "服装"));
-		funcInfoList.add(new FuncInfo(FUNC_SHUMA, R.drawable.mine_icon_wallet, "数码"));
-		funcInfoList.add(new FuncInfo(FUNC_DATA_TRAFFIC, R.drawable.mine_icon_changps, "充值中心"));
-		funcInfoList.add(new FuncInfo(FUNC_JIFENSANCHENG, R.drawable.mine_icon_wallet, "积分商城"));
-		IndexFuncsAdapter indexFuncsAdapter = new IndexFuncsAdapter(this.getContext(), funcInfoList, new BaseFuncsAdapter.IFuncsAdapterItemClicked()
+		if (list == null || list.size() < 1)
+		{
+			gvFuncs.setVisibility(View.GONE);
+			return;
+		}
+		//		List<FuncInfo> funcInfoList = new ArrayList<>();
+		//		funcInfoList.add(new FuncInfo(FUNC_SHENXIAN, R.drawable.mine_icon_waitpay, "生鲜"));
+		//		funcInfoList.add(new FuncInfo(FUNC_MEISHI, R.drawable.mine_icon_ordrers, "美食"));
+		//		funcInfoList.add(new FuncInfo(FUNC_MEIZHUAN, R.drawable.mine_icon_address, "美妆"));
+		//		funcInfoList.add(new FuncInfo(FUNC_HAIWAIGOU, R.drawable.mine_icon_care, "海外购"));
+		//		funcInfoList.add(new FuncInfo(FUNC_GUANFANZHIYIN, R.drawable.mine_icon_website, "官方直营"));
+		//		funcInfoList.add(new FuncInfo(FUNC_TECHANG, R.drawable.mine_icon_shipped, "特产"));
+		//		funcInfoList.add(new FuncInfo(FUNC_FUZHUAN, R.drawable.mine_icon_changps, "服装"));
+		//		funcInfoList.add(new FuncInfo(FUNC_SHUMA, R.drawable.mine_icon_wallet, "数码"));
+		//		funcInfoList.add(new FuncInfo(FUNC_DATA_TRAFFIC, R.drawable.mine_icon_changps, "充值中心"));
+		//		funcInfoList.add(new FuncInfo(FUNC_JIFENSANCHENG, R.drawable.mine_icon_wallet, "积分商城"));
+		IndexFuncsAdapter indexFuncsAdapter = new IndexFuncsAdapter(this.getContext(), list, new IndexFuncsAdapter.IItemClicked()
 		{
 			@Override
-			public void onFuncClicked(FuncInfo funcInfo)
+			public void onFuncClicked(ClientIndexFuncInfo clientIndexFuncInfo)
 			{
-				switch (funcInfo.getId())
+				if (clientIndexFuncInfo != null)
 				{
-					case FUNC_SHENXIAN:
+					com.lrcall.appbst.models.ClientFuncType clientClientFuncType = GsonTools.getObject(clientIndexFuncInfo.getContent(), com.lrcall.appbst.models.ClientFuncType.class);
+					if (clientClientFuncType != null)
 					{
-						break;
-					}
-					case FUNC_MEISHI:
-					{
-						break;
-					}
-					case FUNC_MEIZHUAN:
-					{
-						break;
-					}
-					case FUNC_HAIWAIGOU:
-					{
-						break;
-					}
-					case FUNC_GUANFANZHIYIN:
-					{
-						startActivity(new Intent(FragmentIndex.this.getContext(), ActivityShopProducts.class));
-						break;
-					}
-					case FUNC_TECHANG:
-					{
-						break;
-					}
-					case FUNC_FUZHUAN:
-					{
-						break;
-					}
-					case FUNC_SHUMA:
-					{
-						break;
-					}
-					case FUNC_DATA_TRAFFIC:
-					{
-						if (UserService.isLogin())
+						if (clientClientFuncType.getType().equalsIgnoreCase(ClientFuncType.OPEN_URL.getType()))
 						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityRechargeDataTraffic.class));
+							ActivityWebView.startWebActivity(FragmentIndex.this.getContext(), clientIndexFuncInfo.getName(), clientClientFuncType.getContent());
 						}
-						else
+						else if (clientClientFuncType.getType().equalsIgnoreCase(ClientFuncType.OPEN_ACTIIVTY.getType()))
 						{
-							startActivity(new Intent(FragmentIndex.this.getContext(), ActivityLogin.class));
+							if (clientClientFuncType.getContent().equalsIgnoreCase("ActivityShopProducts"))
+							{
+								startActivity(new Intent(FragmentIndex.this.getContext(), ActivityShopProducts.class));
+							}
+							else if (clientClientFuncType.getContent().equalsIgnoreCase("ActivityRechargeDataTraffic"))
+							{
+								if (UserService.isLogin())
+								{
+									startActivity(new Intent(FragmentIndex.this.getContext(), ActivityRechargeDataTraffic.class));
+								}
+								else
+								{
+									startActivity(new Intent(FragmentIndex.this.getContext(), ActivityLogin.class));
+								}
+							}
+							else if (clientClientFuncType.getContent().equalsIgnoreCase("ActivityPointProductShop"))
+							{
+								startActivity(new Intent(FragmentIndex.this.getContext(), ActivityPointProductShop.class));
+							}
 						}
-						break;
-					}
-					case FUNC_JIFENSANCHENG:
-					{
-						startActivity(new Intent(FragmentIndex.this.getContext(), ActivityPointProductShop.class));
-						break;
-					}
-					default:
-					{
-						Toast.makeText(FragmentIndex.this.getContext(), "点击" + funcInfo.getLabel(), Toast.LENGTH_LONG).show();
-						break;
 					}
 				}
 			}
@@ -451,6 +434,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	@Override
 	synchronized public void refreshData()
 	{
+		mClientService.getIndexFuncList(null, true);
 		mBannerService.getBannerInfoList(ClientBannerType.PAGE_INDEX.getType(), 0, RECOMMEND_COUNT, null, true);
 		//获取新闻
 		mNewsService.getNewsInfoList(0, SHOW_NEWS_COUNT, null, null, null, true);
@@ -860,14 +844,27 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		}
 		else if (url.endsWith(ApiConfig.GET_BANNER_LIST))
 		{
+			List<BannerInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<BannerInfo> bannerInfoList = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<BannerInfo>>()
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<BannerInfo>>()
 				{
 				}.getType());
-				setViewPagerAdapter(bannerInfoList);
 			}
+			setViewPagerAdapter(list);
+		}
+		else if (url.endsWith(ApiConfig.GET_INDEX_FUNC_LIST))
+		{
+			List<ClientIndexFuncInfo> list = null;
+			TableData tableData = GsonTools.getObject(result, TableData.class);
+			if (tableData != null)
+			{
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<ClientIndexFuncInfo>>()
+				{
+				}.getType());
+			}
+			initFuncData(list);
 		}
 		return false;
 	}

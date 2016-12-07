@@ -4,13 +4,18 @@
  */
 package com.lrcall.appbst.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by libit on 2016/11/16.
  */
 public class CallbackNumberInfo
 {
+	@SerializedName("number")
 	private String number;
+	@SerializedName("name")
 	private String name;
+	@SerializedName("addDateLong")
 	private long addDateLong;
 
 	public CallbackNumberInfo()

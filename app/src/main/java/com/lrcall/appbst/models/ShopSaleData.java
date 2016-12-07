@@ -4,13 +4,18 @@
  */
 package com.lrcall.appbst.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by libit on 2016/11/8.
  */
 public class ShopSaleData
 {
+	@SerializedName("totalSaleAmount")
 	private long totalSaleAmount;// 总收入
+	@SerializedName("recent7SaleAmont")
 	private long recent7SaleAmont;// 最近7日营收
+	@SerializedName("recent7OrderCount")
 	private long recent7OrderCount;// 最近7日订单数
 
 	public ShopSaleData()

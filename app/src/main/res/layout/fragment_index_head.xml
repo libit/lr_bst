@@ -131,7 +131,6 @@
                 android:id="@+id/gv_new_data_traffic_products"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
                 android:fastScrollEnabled="false"
                 android:gravity="center"
                 android:numColumns="2"

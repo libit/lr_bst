@@ -4,15 +4,22 @@
  */
 package com.lrcall.appbst.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by libit on 2016/11/22.
  */
 public class PointLogInfo
 {
+	@SerializedName("userId")
 	private String userId;
+	@SerializedName("amount")
 	private int amount;
+	@SerializedName("logType")
 	private String logType;
+	@SerializedName("content")
 	private String content;
+	@SerializedName("addDateLong")
 	private long addDateLong;
 
 	public PointLogInfo()

@@ -11,19 +11,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lrcall.appbst.MyApplication;
 import com.lrcall.appbst.R;
-import com.lrcall.models.FuncInfo;
+import com.lrcall.appbst.models.ClientIndexFuncInfo;
+import com.lrcall.appbst.services.ApiConfig;
+import com.lrcall.appbst.services.PicService;
+import com.lrcall.utils.DisplayTools;
+import com.lrcall.utils.StringTools;
 
 import java.util.List;
 
 /**
  * Created by libit on 16/4/30.
  */
-public class IndexFuncsAdapter extends BaseFuncsAdapter
+public class IndexFuncsAdapter extends BaseUserAdapter<ClientIndexFuncInfo>
 {
-	public IndexFuncsAdapter(Context context, List<FuncInfo> list, IFuncsAdapterItemClicked funcsAdapterItemClicked)
+	private IItemClicked iItemClicked;
+
+	public IndexFuncsAdapter(Context context, List<ClientIndexFuncInfo> list, IItemClicked iItemClicked)
 	{
-		super(context, list, funcsAdapterItemClicked);
+		super(context, list);
+		this.iItemClicked = iItemClicked;
 	}
 
 	@Override
@@ -45,22 +53,34 @@ public class IndexFuncsAdapter extends BaseFuncsAdapter
 		{
 			viewHolder.clear();
 		}
-		final FuncInfo funcInfo = list.get(position);
-		viewHolder.ivHead.setImageResource(funcInfo.getImgRes());
-		//				BitmapCacheTools.loadBitmap(context, ivHead, funcInfo.getImgRes());
-		viewHolder.tvName.setText(funcInfo.getLabel());
-		if (funcsAdapterItemClicked != null)
+		final ClientIndexFuncInfo funcInfo = list.get(position);
+		int[] resList = {R.drawable.mine_icon_waitpay, R.drawable.mine_icon_ordrers, R.drawable.mine_icon_address, R.drawable.mine_icon_care, R.drawable.mine_icon_website, R.drawable.mine_icon_shipped, R.drawable.mine_icon_changps, R.drawable.mine_icon_wallet, R.drawable.mine_icon_changps, R.drawable.mine_icon_wallet};
+		if (StringTools.isNull(funcInfo.getPicId()))
+		{
+			viewHolder.ivHead.setImageResource(resList[position % 10]);
+		}
+		else
+		{
+			PicService.ajaxGetRoundPic(viewHolder.ivHead, ApiConfig.getServerPicUrl(funcInfo.getPicId()), DisplayTools.getWindowWidth(MyApplication.getContext()) / 8, resList[position % 10]);
+		}
+		viewHolder.tvName.setText(funcInfo.getName());
+		if (iItemClicked != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					funcsAdapterItemClicked.onFuncClicked(funcInfo);
+					iItemClicked.onFuncClicked(funcInfo);
 				}
 			});
 		}
 		return convertView;
+	}
+
+	public interface IItemClicked
+	{
+		void onFuncClicked(ClientIndexFuncInfo clientIndexFuncInfo);
 	}
 
 	public static class FuncViewHolder

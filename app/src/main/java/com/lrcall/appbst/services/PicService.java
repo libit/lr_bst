@@ -57,6 +57,15 @@ public class PicService extends BaseService
 	 */
 	public static void ajaxGetRoundPic(ImageView imageView, String url, int width)
 	{
+		ajaxGetRoundPic(imageView, url, width, null);
+	}
+
+	public static void ajaxGetRoundPic(ImageView imageView, String url, int width, Integer defaultImageRes)
+	{
+		if (defaultImageRes != null)
+		{
+			imageView.setImageResource(defaultImageRes);
+		}
 		AQuery aQuery = new AQuery(imageView);
 		Bitmap bitmap = aQuery.getCachedImage(url, width);
 		if (bitmap != null)
@@ -68,7 +77,14 @@ public class PicService extends BaseService
 		else
 		{
 			LogcatTools.debug("ajaxGetRoundPic", "图片地址:" + url);
-			aQuery.image(url, false, true);
+			if (defaultImageRes != null)
+			{
+				aQuery.image(url, false, true, width, defaultImageRes);
+			}
+			else
+			{
+				aQuery.image(url, false, true, 50 * width / DisplayTools.getWindowWidth(MyApplication.getContext()));
+			}
 		}
 	}
 

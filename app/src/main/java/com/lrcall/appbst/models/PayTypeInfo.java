@@ -4,6 +4,7 @@
  */
 package com.lrcall.appbst.models;
 
+import com.google.gson.annotations.SerializedName;
 import com.lrcall.enums.PayType;
 
 import java.io.Serializable;
@@ -14,9 +15,13 @@ import java.io.Serializable;
 public class PayTypeInfo implements Serializable
 {
 	private static final long serialVersionUID = -7404611634463340895L;
+	@SerializedName("payType")
 	private PayType payType;//需付款的类型
+	@SerializedName("price")
 	private int price;//付款金额,单位:分
+	@SerializedName("subject")
 	private String subject;//标题
+	@SerializedName("comment")
 	private String comment;//备注信息,可以是订单号或充值的账号
 
 	public PayTypeInfo()
