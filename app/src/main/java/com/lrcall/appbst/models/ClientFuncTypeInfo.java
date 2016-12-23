@@ -8,19 +8,21 @@ package com.lrcall.appbst.models;
  * 定义客户端可操作的类型
  * Created by libit on 2016/11/30.
  */
-public class ClientFuncType
+public class ClientFuncTypeInfo
 {
 	private String type;//操作类型
 	private String content;//内容
+	private String params;//参数
 
-	public ClientFuncType()
+	public ClientFuncTypeInfo()
 	{
 	}
 
-	public ClientFuncType(String type, String content)
+	public ClientFuncTypeInfo(String type, String content, String params)
 	{
 		this.type = type;
 		this.content = content;
+		this.params = params;
 	}
 
 	public String getType()
@@ -41,5 +43,15 @@ public class ClientFuncType
 	public void setContent(String content)
 	{
 		this.content = content;
+	}
+
+	public String getParams()
+	{
+		return params;
+	}
+
+	public void setParams(String params)
+	{
+		this.params = params;
 	}
 }

@@ -108,6 +108,14 @@
     <string name="title_activity_pay_by_shop_card">商城卡支付</string>
     <!-- 商城卡支付Activity -->
     <string name="title_activity_user_point_log">积分记录</string>
+    <!-- 余额提现Activity -->
+    <string name="title_activity_withdraw">余额提现</string>
+    <!-- 余额提现列表Activity -->
+    <string name="title_activity_withdraw_list">余额提现列表</string>
+    <!-- 银行卡列表Activity -->
+    <string name="title_activity_user_bank_list">银行卡列表</string>
+    <!-- 添加银行卡Activity -->
+    <string name="title_activity_user_bank_add">添加银行卡</string>
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="downloading">正在下载</string>

@@ -13,32 +13,32 @@ import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.PointLogInfo;
 import com.lrcall.appbst.models.TableData;
+import com.lrcall.appbst.models.UserWithdrawInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
-import com.lrcall.appbst.services.PointLogService;
-import com.lrcall.ui.adapter.UserPointLogAdapter;
+import com.lrcall.appbst.services.WithdrawService;
+import com.lrcall.ui.adapter.UserWithdrawAdapter;
 import com.lrcall.utils.GsonTools;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDataResponse
+public class ActivityWithdrawList extends MyBasePageActivity implements IAjaxDataResponse
 {
-	private static final String TAG = ActivityUserPointLog.class.getSimpleName();
+	private static final String TAG = ActivityWithdrawList.class.getSimpleName();
 	private View layoutLogList, layoutNoLog;
-	private UserPointLogAdapter mUserPointLogAdapter;
-	private PointLogService mPointLogService;
-	private final List<PointLogInfo> mPointLogInfoList = new ArrayList<>();
+	private UserWithdrawAdapter mUserWithdrawAdapter;
+	private WithdrawService mWithdrawService;
+	private final List<UserWithdrawInfo> mUserWithdrawInfoList = new ArrayList<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_user_point_log);
-		mPointLogService = new PointLogService(this);
-		mPointLogService.addDataResponse(this);
+		setContentView(R.layout.activity_withdraw_list);
+		mWithdrawService = new WithdrawService(this);
+		mWithdrawService.addDataResponse(this);
 		viewInit();
 		onRefresh();
 	}
@@ -46,7 +46,7 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.menu_activity_balance_log_list, menu);
+		getMenuInflater().inflate(R.menu.menu_activity_withdraw_list, menu);
 		return true;
 	}
 
@@ -79,25 +79,25 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 	@Override
 	public void refreshData()
 	{
-		mPointLogInfoList.clear();
-		mUserPointLogAdapter = null;
+		mUserWithdrawInfoList.clear();
+		mUserWithdrawAdapter = null;
 		loadMoreData();
 	}
 
-	//加载更多商品
+	//加载更多
 	@Override
 	public void loadMoreData()
 	{
 		String tips = (mDataStart == 0 ? "请稍后..." : "");
-		mPointLogService.getPointLogInfoList(mDataStart, getPageSize(), tips, true);
+		mWithdrawService.getUserWithdrawInfoList(mDataStart, getPageSize(), null, null, tips, true);
 	}
 
-	synchronized private void refreshPointLogInfos(List<PointLogInfo> pointLogInfoList)
+	synchronized private void refreshUserWithdrawInfos(List<UserWithdrawInfo> userWithdrawInfoList)
 	{
-		if (pointLogInfoList == null || pointLogInfoList.size() < 1)
+		if (userWithdrawInfoList == null || userWithdrawInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
-			if (mPointLogInfoList.size() < 1)
+			if (mUserWithdrawInfoList.size() < 1)
 			{
 				layoutLogList.setVisibility(View.GONE);
 				layoutNoLog.setVisibility(View.VISIBLE);
@@ -106,31 +106,28 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 		}
 		layoutLogList.setVisibility(View.VISIBLE);
 		layoutNoLog.setVisibility(View.GONE);
-		if (pointLogInfoList.size() < getPageSize())
+		if (userWithdrawInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
 		}
-		for (PointLogInfo pointLogInfo : pointLogInfoList)
+		for (UserWithdrawInfo userWithdrawInfo : userWithdrawInfoList)
 		{
-			mPointLogInfoList.add(pointLogInfo);
+			mUserWithdrawInfoList.add(userWithdrawInfo);
 		}
-		if (mUserPointLogAdapter == null)
+		if (mUserWithdrawAdapter == null)
 		{
-			mUserPointLogAdapter = new UserPointLogAdapter(this, mPointLogInfoList, new UserPointLogAdapter.IItemClicked()
+			mUserWithdrawAdapter = new UserWithdrawAdapter(this, mUserWithdrawInfoList, new UserWithdrawAdapter.IItemClicked()
 			{
 				@Override
-				public void onPointLogInfoClicked(PointLogInfo pointLogInfo)
+				public void onWithdrawClicked(UserWithdrawInfo userWithdrawInfo)
 				{
-					if (pointLogInfo != null)
-					{
-					}
 				}
 			});
-			xListView.setAdapter(mUserPointLogAdapter);
+			xListView.setAdapter(mUserWithdrawAdapter);
 		}
 		else
 		{
-			mUserPointLogAdapter.notifyDataSetChanged();
+			mUserWithdrawAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -139,17 +136,17 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 	{
 		xListView.stopRefresh();
 		xListView.stopLoadMore();
-		if (url.endsWith(ApiConfig.GET_USER_POINT_LOG_LIST))
+		if (url.endsWith(ApiConfig.USER_WITHDRAW_LIST))
 		{
-			List<PointLogInfo> list = null;
+			List<UserWithdrawInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<PointLogInfo>>()
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<UserWithdrawInfo>>()
 				{
 				}.getType());
 			}
-			refreshPointLogInfos(list);
+			refreshUserWithdrawInfos(list);
 		}
 		return false;
 	}

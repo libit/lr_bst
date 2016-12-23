@@ -153,7 +153,7 @@
             android:name="com.lrcall.ui.ActivityProductStarList"
             android:label="@string/title_activity_star_list"/>
         <activity
-            android:name="com.lrcall.ui.ActivityBalanceLog"
+            android:name="com.lrcall.ui.ActivityBalanceLogList"
             android:label="@string/title_activity_balance_log"/>
         <activity
             android:name="com.lrcall.ui.ActivityUserAgentInfo"
@@ -293,6 +293,18 @@
         <activity
             android:name="com.lrcall.ui.ActivityUserPointLog"
             android:label="@string/title_activity_user_point_log"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityWithdraw"
+            android:label="@string/title_activity_withdraw"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityWithdrawList"
+            android:label="@string/title_activity_withdraw_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityUserBankList"
+            android:label="@string/title_activity_user_bank_list"/>
+        <activity
+            android:name="com.lrcall.ui.ActivityUserBankAdd"
+            android:label="@string/title_activity_user_bank_add"/>
         <!-- 商家 -->
         <activity
             android:name="com.lrcall.ui.shop.ActivityShopRegister"

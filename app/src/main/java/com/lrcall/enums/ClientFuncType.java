@@ -45,11 +45,11 @@ public enum ClientFuncType
 	public static String getTypeDesc(String type)
 	{
 		ClientFuncType[] list = ClientFuncType.values();
-		for (ClientFuncType clientClientFuncType : list)
+		for (ClientFuncType clientFuncType : list)
 		{
-			if (clientClientFuncType.getType().equals(type))
+			if (clientFuncType.getType().equals(type))
 			{
-				return clientClientFuncType.getDesc();
+				return clientFuncType.getDesc();
 			}
 		}
 		return "";
@@ -59,9 +59,9 @@ public enum ClientFuncType
 	{
 		ClientFuncType[] list = ClientFuncType.values();
 		Map<String, Object> map = new HashMap<>();
-		for (ClientFuncType clientClientFuncType : list)
+		for (ClientFuncType clientFuncType : list)
 		{
-			map.put(clientClientFuncType.getType(), clientClientFuncType.getDesc());
+			map.put(clientFuncType.getType(), clientFuncType.getDesc());
 		}
 		return map;
 	}

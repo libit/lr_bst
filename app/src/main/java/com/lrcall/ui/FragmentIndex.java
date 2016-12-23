@@ -32,6 +32,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.zxing.client.android.CaptureActivity;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.BannerInfo;
+import com.lrcall.appbst.models.ClientFuncTypeInfo;
 import com.lrcall.appbst.models.ClientIndexFuncInfo;
 import com.lrcall.appbst.models.DataTrafficInfo;
 import com.lrcall.appbst.models.NewsInfo;
@@ -47,6 +48,7 @@ import com.lrcall.appbst.services.ProductService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbBannerInfoFactory;
 import com.lrcall.enums.ClientBannerType;
+import com.lrcall.enums.ClientFuncActivityType;
 import com.lrcall.enums.ClientFuncType;
 import com.lrcall.ui.adapter.IndexDataTrafficProductsAdapter;
 import com.lrcall.ui.adapter.IndexFuncsAdapter;
@@ -393,20 +395,20 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			{
 				if (clientIndexFuncInfo != null)
 				{
-					com.lrcall.appbst.models.ClientFuncType clientClientFuncType = GsonTools.getObject(clientIndexFuncInfo.getContent(), com.lrcall.appbst.models.ClientFuncType.class);
-					if (clientClientFuncType != null)
+					ClientFuncTypeInfo clientClientFuncTypeInfo = GsonTools.getObject(clientIndexFuncInfo.getContent(), ClientFuncTypeInfo.class);
+					if (clientClientFuncTypeInfo != null)
 					{
-						if (clientClientFuncType.getType().equalsIgnoreCase(ClientFuncType.OPEN_URL.getType()))
+						if (clientClientFuncTypeInfo.getType().equalsIgnoreCase(ClientFuncType.OPEN_URL.getType()))
 						{
-							ActivityWebView.startWebActivity(FragmentIndex.this.getContext(), clientIndexFuncInfo.getName(), clientClientFuncType.getContent());
+							ActivityWebView.startWebActivity(FragmentIndex.this.getContext(), clientIndexFuncInfo.getName(), clientClientFuncTypeInfo.getContent());
 						}
-						else if (clientClientFuncType.getType().equalsIgnoreCase(ClientFuncType.OPEN_ACTIIVTY.getType()))
+						else if (clientClientFuncTypeInfo.getType().equalsIgnoreCase(ClientFuncType.OPEN_ACTIIVTY.getType()))
 						{
-							if (clientClientFuncType.getContent().equalsIgnoreCase("ActivityShopProducts"))
+							if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.SHOP_PRODUCTS.getType()))
 							{
 								startActivity(new Intent(FragmentIndex.this.getContext(), ActivityShopProducts.class));
 							}
-							else if (clientClientFuncType.getContent().equalsIgnoreCase("ActivityRechargeDataTraffic"))
+							else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.RECHARGE_DATA_TRAFFIC.getType()))
 							{
 								if (UserService.isLogin())
 								{
@@ -417,11 +419,20 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 									startActivity(new Intent(FragmentIndex.this.getContext(), ActivityLogin.class));
 								}
 							}
-							else if (clientClientFuncType.getContent().equalsIgnoreCase("ActivityPointProductShop"))
+							else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.POINT_PRODUCT_SHOP.getType()))
 							{
 								startActivity(new Intent(FragmentIndex.this.getContext(), ActivityPointProductShop.class));
 							}
+							else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.PRODUCTS.getType()))
+							{
+								Intent intent = new Intent(FragmentIndex.this.getContext(), ActivitySearchProducts.class);
+								intent.putExtra(ConstValues.DATA_PRODUCT_SORT_ID, clientClientFuncTypeInfo.getParams());
+								startActivity(intent);
+							}
 						}
+					}
+					else
+					{
 					}
 				}
 			}

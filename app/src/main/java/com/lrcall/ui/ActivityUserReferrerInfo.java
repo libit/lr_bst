@@ -75,6 +75,7 @@ public class ActivityUserReferrerInfo extends MyBaseActivity implements View.OnC
 		ivHead = (ImageView) findViewById(R.id.iv_head);
 		btnUpgrade = (Button) findViewById(R.id.btn_upgrade);
 		btnUpgrade.setOnClickListener(this);
+		findViewById(R.id.layout_manage_bankcard).setOnClickListener(this);
 		findViewById(R.id.layout_my_fans).setOnClickListener(this);
 		findViewById(R.id.layout_my_performance).setOnClickListener(this);
 	}
@@ -84,6 +85,11 @@ public class ActivityUserReferrerInfo extends MyBaseActivity implements View.OnC
 	{
 		switch (v.getId())
 		{
+			case R.id.layout_manage_bankcard:
+			{
+				startActivity(new Intent(this, ActivityUserBankList.class));
+				break;
+			}
 			case R.id.layout_my_fans:
 			{
 				startActivity(new Intent(this, ActivityReferrerUserList.class));

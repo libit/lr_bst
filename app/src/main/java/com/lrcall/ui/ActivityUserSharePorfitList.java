@@ -36,7 +36,7 @@ public class ActivityUserSharePorfitList extends MyBasePageActivity implements I
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_balance_log);
+		setContentView(R.layout.activity_balance_log_list);
 		mUserBalanceLogService = new UserBalanceLogService(this);
 		mUserBalanceLogService.addDataResponse(this);
 		viewInit();
@@ -46,7 +46,7 @@ public class ActivityUserSharePorfitList extends MyBasePageActivity implements I
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.menu_activity_balance_log, menu);
+		getMenuInflater().inflate(R.menu.menu_activity_balance_log_list, menu);
 		return true;
 	}
 

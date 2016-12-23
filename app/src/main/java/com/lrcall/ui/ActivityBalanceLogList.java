@@ -24,9 +24,9 @@ import com.lrcall.utils.GsonTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataResponse
+public class ActivityBalanceLogList extends MyBasePageActivity implements IAjaxDataResponse
 {
-	private static final String TAG = ActivityBalanceLog.class.getSimpleName();
+	private static final String TAG = ActivityBalanceLogList.class.getSimpleName();
 	private View layoutLogList, layoutNoLog;
 	private UserBalanceLogAdapter mUserBalanceLogAdapter;
 	private UserBalanceLogService mUserBalanceLogService;
@@ -36,7 +36,7 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_balance_log);
+		setContentView(R.layout.activity_balance_log_list);
 		mUserBalanceLogService = new UserBalanceLogService(this);
 		mUserBalanceLogService.addDataResponse(this);
 		viewInit();
@@ -46,7 +46,7 @@ public class ActivityBalanceLog extends MyBasePageActivity implements IAjaxDataR
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.menu_activity_balance_log, menu);
+		getMenuInflater().inflate(R.menu.menu_activity_balance_log_list, menu);
 		return true;
 	}
 

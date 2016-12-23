@@ -4,6 +4,7 @@
  */
 package com.lrcall.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,32 +14,32 @@ import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
-import com.lrcall.appbst.models.PointLogInfo;
 import com.lrcall.appbst.models.TableData;
+import com.lrcall.appbst.models.UserBankInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
-import com.lrcall.appbst.services.PointLogService;
-import com.lrcall.ui.adapter.UserPointLogAdapter;
+import com.lrcall.appbst.services.UserBankService;
+import com.lrcall.ui.adapter.UserBankAdapter;
 import com.lrcall.utils.GsonTools;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDataResponse
+public class ActivityUserBankList extends MyBasePageActivity implements IAjaxDataResponse
 {
-	private static final String TAG = ActivityUserPointLog.class.getSimpleName();
+	private static final String TAG = ActivityUserBankList.class.getSimpleName();
 	private View layoutLogList, layoutNoLog;
-	private UserPointLogAdapter mUserPointLogAdapter;
-	private PointLogService mPointLogService;
-	private final List<PointLogInfo> mPointLogInfoList = new ArrayList<>();
+	private UserBankAdapter mUserBankAdapter;
+	private UserBankService mUserBankService;
+	private final List<UserBankInfo> mUserBankInfoList = new ArrayList<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_user_point_log);
-		mPointLogService = new PointLogService(this);
-		mPointLogService.addDataResponse(this);
+		setContentView(R.layout.activity_user_bank_list);
+		mUserBankService = new UserBankService(this);
+		mUserBankService.addDataResponse(this);
 		viewInit();
 		onRefresh();
 	}
@@ -46,7 +47,7 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.menu_activity_balance_log_list, menu);
+		getMenuInflater().inflate(R.menu.menu_activity_user_bank_list, menu);
 		return true;
 	}
 
@@ -57,6 +58,11 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 		if (id == R.id.action_refresh)
 		{
 			onRefresh();
+			return true;
+		}
+		else if (id == R.id.action_add)
+		{
+			startActivity(new Intent(this, ActivityUserBankAdd.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -79,25 +85,25 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 	@Override
 	public void refreshData()
 	{
-		mPointLogInfoList.clear();
-		mUserPointLogAdapter = null;
+		mUserBankInfoList.clear();
+		mUserBankAdapter = null;
 		loadMoreData();
 	}
 
-	//加载更多商品
+	//加载更多
 	@Override
 	public void loadMoreData()
 	{
 		String tips = (mDataStart == 0 ? "请稍后..." : "");
-		mPointLogService.getPointLogInfoList(mDataStart, getPageSize(), tips, true);
+		mUserBankService.getUserBankInfoList(mDataStart, getPageSize(), null, null, tips, true);
 	}
 
-	synchronized private void refreshPointLogInfos(List<PointLogInfo> pointLogInfoList)
+	synchronized private void refreshUserBankInfos(List<UserBankInfo> userBankInfoList)
 	{
-		if (pointLogInfoList == null || pointLogInfoList.size() < 1)
+		if (userBankInfoList == null || userBankInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
-			if (mPointLogInfoList.size() < 1)
+			if (mUserBankInfoList.size() < 1)
 			{
 				layoutLogList.setVisibility(View.GONE);
 				layoutNoLog.setVisibility(View.VISIBLE);
@@ -106,31 +112,28 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 		}
 		layoutLogList.setVisibility(View.VISIBLE);
 		layoutNoLog.setVisibility(View.GONE);
-		if (pointLogInfoList.size() < getPageSize())
+		if (userBankInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
 		}
-		for (PointLogInfo pointLogInfo : pointLogInfoList)
+		for (UserBankInfo userBankInfo : userBankInfoList)
 		{
-			mPointLogInfoList.add(pointLogInfo);
+			mUserBankInfoList.add(userBankInfo);
 		}
-		if (mUserPointLogAdapter == null)
+		if (mUserBankAdapter == null)
 		{
-			mUserPointLogAdapter = new UserPointLogAdapter(this, mPointLogInfoList, new UserPointLogAdapter.IItemClicked()
+			mUserBankAdapter = new UserBankAdapter(this, mUserBankInfoList, new UserBankAdapter.IItemClicked()
 			{
 				@Override
-				public void onPointLogInfoClicked(PointLogInfo pointLogInfo)
+				public void onUserBankClicked(UserBankInfo userBankInfo)
 				{
-					if (pointLogInfo != null)
-					{
-					}
 				}
 			});
-			xListView.setAdapter(mUserPointLogAdapter);
+			xListView.setAdapter(mUserBankAdapter);
 		}
 		else
 		{
-			mUserPointLogAdapter.notifyDataSetChanged();
+			mUserBankAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -139,18 +142,28 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 	{
 		xListView.stopRefresh();
 		xListView.stopLoadMore();
-		if (url.endsWith(ApiConfig.GET_USER_POINT_LOG_LIST))
+		if (url.endsWith(ApiConfig.USER_USER_BANK_LIST))
 		{
-			List<PointLogInfo> list = null;
+			List<UserBankInfo> list = null;
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<PointLogInfo>>()
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<UserBankInfo>>()
 				{
 				}.getType());
 			}
-			refreshPointLogInfos(list);
+			refreshUserBankInfos(list);
 		}
 		return false;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent)
+	{
+		super.onActivityResult(requestCode, resultCode, intent);
+		if (resultCode == RESULT_OK)
+		{
+			onRefresh();
+		}
 	}
 }

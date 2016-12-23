@@ -48,6 +48,7 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 		findViewById(R.id.btn_duihuan).setOnClickListener(this);
 		findViewById(R.id.layout_user_balance).setOnClickListener(this);
 		findViewById(R.id.layout_user_point).setOnClickListener(this);
+		findViewById(R.id.btn_withdraw).setOnClickListener(this);
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 		int id = item.getItemId();
 		if (id == R.id.action_balance_log)
 		{
-			startActivity(new Intent(this, ActivityBalanceLog.class));
+			startActivity(new Intent(this, ActivityBalanceLogList.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -111,13 +112,19 @@ public class ActivityUserWallet extends MyBaseActivity implements IAjaxDataRespo
 			}
 			case R.id.layout_user_balance:
 			{
-				Intent intent = new Intent(this, ActivityBalanceLog.class);
+				Intent intent = new Intent(this, ActivityBalanceLogList.class);
 				startActivity(intent);
 				break;
 			}
 			case R.id.layout_user_point:
 			{
 				Intent intent = new Intent(this, ActivityUserPointLog.class);
+				startActivity(intent);
+				break;
+			}
+			case R.id.btn_withdraw:
+			{
+				Intent intent = new Intent(this, ActivityWithdraw.class);
 				startActivity(intent);
 				break;
 			}
