@@ -22,7 +22,7 @@ public enum DataTrafficType
 	private String type;
 	private String desc;
 
-	private DataTrafficType(String type, String desc)
+	 DataTrafficType(String type, String desc)
 	{
 		this.type = type;
 		this.desc = desc;

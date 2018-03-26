@@ -11,7 +11,6 @@ import android.os.Message;
 
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.services.WxPayService;
-import com.lrcall.ui.ActivityPayList;
 import com.lrcall.ui.customer.ToastView;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
@@ -26,13 +25,12 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler
 {
 	private static final String TAG = WXPayEntryActivity.class.getSimpleName();
 	public static final int WX_PAY_FLAG = 4;
-	private IWXAPI api;
+	public static IWXAPI api;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		api = ActivityPayList.api;
 		if (api == null)
 		{
 			api = WXAPIFactory.createWXAPI(this, WxPayService.getWeixinAppId());

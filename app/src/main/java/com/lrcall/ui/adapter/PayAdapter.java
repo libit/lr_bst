@@ -62,6 +62,7 @@ public class PayAdapter extends BaseUserAdapter<PayInfo>
 		else
 		{
 			viewHolder.ivLogo.setImageBitmap(null);
+			viewHolder.ivLogo.setVisibility(View.GONE);
 		}
 		if (iItemClick != null)
 		{

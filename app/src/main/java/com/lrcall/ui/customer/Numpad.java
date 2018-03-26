@@ -5,7 +5,6 @@
 package com.lrcall.ui.customer;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,31 +18,31 @@ import java.util.Collection;
 
 public class Numpad extends LinearLayout implements AddressAware
 {
-	private boolean mPlayDtmf;
+//	private boolean mPlayDtmf;
 
-	public Numpad(Context context, boolean playDtmf)
-	{
-		super(context);
-		mPlayDtmf = playDtmf;
-		LayoutInflater.from(context).inflate(R.layout.layout_numpad, this);
-		setLongClickable(true);
-		onFinishInflate();
-	}
+//	public Numpad(Context context, boolean playDtmf)
+//	{
+//		super(context);
+////		mPlayDtmf = playDtmf;
+//		LayoutInflater.from(context).inflate(R.layout.layout_numpad, this);
+//		setLongClickable(true);
+//		onFinishInflate();
+//	}
 
 	public Numpad(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Numpad);
-		mPlayDtmf = 1 == a.getInt(R.styleable.Numpad_play_dtmf, 1);
-		a.recycle();
+//		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Numpad);
+//		mPlayDtmf = 1 == a.getInt(R.styleable.Numpad_play_dtmf, 1);
+//		a.recycle();
 		LayoutInflater.from(context).inflate(R.layout.layout_numpad, this);
 		setLongClickable(true);
 	}
 
-	public void setPlayDtmf(boolean sendDtmf)
-	{
-		this.mPlayDtmf = sendDtmf;
-	}
+//	public void setPlayDtmf(boolean sendDtmf)
+//	{
+//		this.mPlayDtmf = sendDtmf;
+//	}
 
 	public void setAddressWidget(AddressText address)
 	{

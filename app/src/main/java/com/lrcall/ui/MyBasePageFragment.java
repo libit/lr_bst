@@ -8,8 +8,8 @@ import com.external.xlistview.XListView;
 
 public abstract class MyBasePageFragment extends MyBaseFragment implements XListView.IXListViewListener
 {
-	protected static final int PAGE_SIZE = 10;//每页获取多少数据
 	private static final String TAG = MyBasePageFragment.class.getSimpleName();
+	protected static final int PAGE_SIZE = 10;//每页获取多少数据
 	protected int mDataStart = 0;//开始位置
 	protected int mDataTotal = 0;//总记录数
 	protected XListView xListView;

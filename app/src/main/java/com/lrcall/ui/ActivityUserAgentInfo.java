@@ -81,6 +81,7 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 		ivHead = (ImageView) findViewById(R.id.iv_head);
 		btnUpgrade = (Button) findViewById(R.id.btn_upgrade);
 		btnUpgrade.setOnClickListener(this);
+		findViewById(R.id.layout_query_balance).setOnClickListener(this);
 		findViewById(R.id.layout_my_fans).setOnClickListener(this);
 		findViewById(R.id.layout_my_performance).setOnClickListener(this);
 	}
@@ -90,6 +91,11 @@ public class ActivityUserAgentInfo extends MyBaseActivity implements View.OnClic
 	{
 		switch (v.getId())
 		{
+			case R.id.layout_query_balance:
+			{
+				startActivity(new Intent(this, ActivityQueryUserBalance.class));
+				break;
+			}
 			case R.id.layout_my_fans:
 			{
 				startActivity(new Intent(this, ActivityAgentUserList.class));

@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -22,10 +20,6 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.androidquery.callback.AjaxStatus;
 import com.external.xlistview.XListView;
 import com.google.gson.reflect.TypeToken;
@@ -46,65 +40,38 @@ import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.NewsService;
 import com.lrcall.appbst.services.ProductService;
 import com.lrcall.appbst.services.UserService;
-import com.lrcall.db.DbBannerInfoFactory;
 import com.lrcall.enums.ClientBannerType;
 import com.lrcall.enums.ClientFuncActivityType;
 import com.lrcall.enums.ClientFuncType;
 import com.lrcall.ui.adapter.IndexDataTrafficProductsAdapter;
 import com.lrcall.ui.adapter.IndexFuncsAdapter;
-import com.lrcall.ui.adapter.IndexNewProductsAdapter;
+import com.lrcall.ui.adapter.IndexNewProductAdapter;
 import com.lrcall.ui.adapter.IndexRecommendProducts4Adapter;
-import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LocationTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
-public class FragmentIndex extends MyBasePageFragment implements View.OnClickListener, AbsListView.OnScrollListener, IAjaxDataResponse, AMapLocationListener
+public class FragmentIndex extends MyBaseBannerPageFragment implements View.OnClickListener, AbsListView.OnScrollListener, IAjaxDataResponse
 {
 	private static final String TAG = FragmentIndex.class.getSimpleName();
-	public static final int MSG_LOCATION_START = 113;//开始定位
-	public static final int MSG_LOCATION_FINISH = 114;//定位完成
-	private static final int SCROLL_VIEW_PAGE = 111;
 	private static final int SCROLL_NEWS = 112;
-	private static final int FUNC_COLUMNS_NUM = 5;
-	private static final int NEW_PRODUCT_COLUMNS_NUM = 2;
+	private static final int NEW_PRODUCT_COLUMNS_NUM = 1;
 	private static final int NEW_DATA_TRAFFIC_PRODUCT_COLUMNS_NUM = 2;
 	private static final int SHOW_NEWS_COUNT = 3;
-	private static final int FUNC_SHENXIAN = 1;
-	private static final int FUNC_MEISHI = 2;
-	private static final int FUNC_MEIZHUAN = 3;
-	private static final int FUNC_HAIWAIGOU = 4;
-	private static final int FUNC_GUANFANZHIYIN = 5;
-	private static final int FUNC_TECHANG = 6;
-	private static final int FUNC_FUZHUAN = 7;
-	private static final int FUNC_SHUMA = 8;
-	private static final int FUNC_DATA_TRAFFIC = 9;
-	private static final int FUNC_JIFENSANCHENG = 10;
-	private static final long SCROLL_TIME = 5;
-	private static final int DATA_TRAFFIC_COUNT = 4;
+//	private static final int DATA_TRAFFIC_COUNT = 4;
 	private static final int RECOMMEND_COUNT = 4;
 	private static final int REQ_SCAN_QR = 1200;
-	private View layoutSearch, headView;
+	private View layoutSearch, headView, layoutHuodong;
 	private EditText etSearch;
-	private TextView tvLoaction, tvAddress, tvNews;
+	private TextView tvNews;
 	private GridView gvFuncs/*功能区*/, gvNewProducts/*最新商品*/, gvDataTrafficProducts/*最新流量商品*/;
-	private ViewPager viewPager;
-	private ListView lvRecommendProducts/*推荐商品*/, lvConcessionProducts/*促销商品*/;
-	private ScheduledExecutorService scheduledExecutorService = null;
-	private ScheduledFuture scheduledFuture = null;
+	private ListView lvRecommendProducts/*推荐商品*/, lvConcessionProducts/*促销商品*/, lvNewProducts;
 	private NewsService mNewsService;
 	private ProductService mProductService;
 	private DataTrafficService mDataTrafficService;
@@ -112,17 +79,14 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	private ClientService mClientService;
 	private IndexRecommendProducts4Adapter mIndexRecommendProducts4Adapter;
 	private IndexRecommendProducts4Adapter mIndexConcessionProductsAdapter;
-	private IndexNewProductsAdapter mIndexNewProductsAdapter;
+	private IndexNewProductAdapter mIndexNewProductAdapter;
 	private IndexDataTrafficProductsAdapter mIndexDataTrafficProductsAdapter;
-	private final List<Fragment> mFragmentRecommendList = new ArrayList<>();
 	private final List<NewsInfo> mNewsInfoList = new ArrayList<>();
 	private final List<DataTrafficInfo> mDataTrafficProductInfoList = new ArrayList<>();
 	private final List<ProductInfo> mNewProductInfoList = new ArrayList<>();
 	private final List<ProductInfo> mRecommendProductInfoList = new ArrayList<>();
 	private final List<ProductInfo> mConcessionProductInfoList = new ArrayList<>();
-	private SmartTabLayout viewPagerTab;
-	private SectionsPagerAdapter sectionsPagerAdapter;
-	private final Handler mHandler = new Handler()
+	protected final Handler mHandler = new Handler()
 	{
 		@Override
 		public void handleMessage(Message msg)
@@ -132,8 +96,8 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			{
 				case SCROLL_VIEW_PAGE:
 				{
-					int index = viewPager.getCurrentItem();
-					if (index < mFragmentRecommendList.size() - 1)
+					int index = bannerViewPager.getCurrentItem();
+					if (index < mFragmentBannerList.size() - 1)
 					{
 						index++;
 					}
@@ -141,7 +105,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 					{
 						index = 0;
 					}
-					viewPager.setCurrentItem(index);
+					bannerViewPager.setCurrentItem(index);
 					break;
 				}
 				case SCROLL_NEWS:
@@ -175,78 +139,9 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 					}
 					break;
 				}
-				case MSG_LOCATION_START:
-				{
-					tvLoaction.setText("正在定位...");
-					tvAddress.setVisibility(View.GONE);
-					break;
-				}
-				case MSG_LOCATION_FINISH:
-				{
-					AMapLocation loc = (AMapLocation) msg.obj;
-					tvLoaction.setText(LocationTools.getLocationCityStr(loc));
-					//					String address = LocationTools.getLocationAddressStr(loc);
-					//					if (!StringTools.isNull(address))
-					//					{
-					//						tvAddress.setText("您当前位置：" + address);
-					//						tvAddress.setVisibility(View.VISIBLE);
-					//					}
-					break;
-				}
 			}
 		}
 	};
-	private AMapLocationClient locationClient = null;
-	private AMapLocationClientOption locationOption = null;
-
-	synchronized private void updateView()
-	{
-		if (scheduledExecutorService == null)
-		{
-			scheduledExecutorService = Executors.newScheduledThreadPool(1);
-		}
-		else
-		{
-			cancelScheduledFuture();
-		}
-		try
-		{
-			scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(new Thread("updateView")
-			{
-				@Override
-				public void run()
-				{
-					super.run();
-					//					LogcatTools.debug(TAG, "ScheduledFuture,时间:" + DateTimeTools.getCurrentTime());
-					mHandler.sendEmptyMessage(SCROLL_VIEW_PAGE);
-					mHandler.sendEmptyMessage(SCROLL_NEWS);
-				}
-			}, SCROLL_TIME, SCROLL_TIME, TimeUnit.SECONDS);
-		}
-		catch (RejectedExecutionException e)
-		{
-			LogcatTools.debug(TAG, "ScheduledFuture->RejectedExecutionException:" + e.getMessage());
-		}
-	}
-
-	synchronized private void cancelScheduledFuture()
-	{
-		if (scheduledFuture != null)// && !scheduledFuture.isCancelled())
-		{
-			scheduledFuture.cancel(true);
-			scheduledFuture = null;
-		}
-	}
-
-	synchronized private void stopScheduledFuture()
-	{
-		cancelScheduledFuture();
-		if (scheduledExecutorService != null)
-		{
-			scheduledExecutorService.shutdown();
-			scheduledExecutorService = null;
-		}
-	}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState)
@@ -269,10 +164,8 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	{
 		View rootView = inflater.inflate(R.layout.fragment_index, container, false);
 		viewInit(rootView);
-		//		initFuncData();
 		updateView();
-		//		beginLocation();
-		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList(ClientBannerType.PAGE_INDEX.getType()));
+		//		setViewPagerAdapter(DbBannerInfoFactory.getInstance().getBannerInfoList(ClientBannerType.PAGE_INDEX.getType()));
 		onRefresh();
 		return rootView;
 	}
@@ -291,7 +184,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			{
 				if (v.getId() == etSearch.getId() && hasFocus)
 				{
-					startActivity(new Intent(FragmentIndex.this.getContext(), ActivitySearchProducts.class));
+					startActivity(new Intent(FragmentIndex.this.getContext(), ActivityProductsSearch.class));
 					v.clearFocus();
 				}
 			}
@@ -304,69 +197,34 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		xListView.setAdapter(null);
 		xListView.setXListViewListener(this);
 		xListView.setOnScrollListener(this);
-		tvLoaction = (TextView) rootView.findViewById(R.id.tv_location);
-		tvAddress = (TextView) rootView.findViewById(R.id.tv_address);
 		tvNews = (TextView) rootView.findViewById(R.id.tv_news);
 		tvNews.setOnClickListener(this);
 		rootView.findViewById(R.id.iv_more_news).setOnClickListener(this);
 		rootView.findViewById(R.id.tv_more_news).setOnClickListener(this);
 		gvFuncs = (GridView) headView.findViewById(R.id.gv_func);
-		gvFuncs.setNumColumns(FUNC_COLUMNS_NUM);
-		viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-		//设置图片的长宽，这里便于制作图片
-		ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
-		layoutParams.width = DisplayTools.getWindowWidth(this.getContext());
-		layoutParams.height = DisplayTools.getWindowWidth(this.getContext()) * 1 / 2;
-		viewPager.setLayoutParams(layoutParams);
-		viewPagerTab = (SmartTabLayout) rootView.findViewById(R.id.viewpagertab);
-		viewPager.setOnTouchListener(new View.OnTouchListener()
-		{
-			@Override
-			public boolean onTouch(View v, MotionEvent event)
-			{
-				int action = event.getAction();
-				if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE)
-				{
-					cancelScheduledFuture();
-				}
-				else
-				{
-					updateView();
-				}
-				return false;
-			}
-		});
+		bannerViewPager = (ViewPager) rootView.findViewById(R.id.banner_viewpager);
+		bannerViewPagerTab = (SmartTabLayout) rootView.findViewById(R.id.banner_viewpagertab);
+		setBannerWidthAndHeight(DisplayTools.getWindowWidth(this.getContext()), DisplayTools.getWindowWidth(this.getContext()) * 1 / 2);
+		initBannerView();
 		lvRecommendProducts = (ListView) rootView.findViewById(R.id.list_recommend_products);
 		lvConcessionProducts = (ListView) rootView.findViewById(R.id.list_concession_products);
 		gvNewProducts = (GridView) rootView.findViewById(R.id.gv_new_products);
 		gvNewProducts.setNumColumns(NEW_PRODUCT_COLUMNS_NUM);
 		gvDataTrafficProducts = (GridView) rootView.findViewById(R.id.gv_new_data_traffic_products);
 		gvDataTrafficProducts.setNumColumns(NEW_DATA_TRAFFIC_PRODUCT_COLUMNS_NUM);
-		locationClient = new AMapLocationClient(this.getContext());
-		locationOption = new AMapLocationClientOption();
-		// 设置定位模式为低功耗模式
-		locationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
-		// 设置定位监听
-		locationClient.setLocationListener(this);
 		rootView.findViewById(R.id.tv_new_product_more).setOnClickListener(this);
 		rootView.findViewById(R.id.tv_data_traffic_product_more).setOnClickListener(this);
+		layoutHuodong = rootView.findViewById(R.id.layout_huodong);
+		//设置图片的长宽，这里便于制作图片
+		ViewGroup.LayoutParams layoutParams = layoutHuodong.getLayoutParams();
+		layoutParams.width = DisplayTools.getWindowWidth(this.getContext());
+		layoutParams.height = layoutParams.width / 3 - DisplayTools.dip2px(this.getContext(), 20);
+		layoutHuodong.setLayoutParams(layoutParams);
+		rootView.findViewById(R.id.layout_product_today_new).setOnClickListener(this);
+		rootView.findViewById(R.id.layout_product_panic_buying).setOnClickListener(this);
+		rootView.findViewById(R.id.layout_product_recommend).setOnClickListener(this);
+		lvNewProducts = (ListView) rootView.findViewById(R.id.list_new_products);
 		super.viewInit(rootView);
-	}
-
-	//设置图片适配器
-	private void setViewPagerAdapter(List<BannerInfo> bannerInfoList)
-	{
-		if (bannerInfoList != null && bannerInfoList.size() > 0)
-		{
-			mFragmentRecommendList.clear();
-			for (BannerInfo bannerInfo : bannerInfoList)
-			{
-				mFragmentRecommendList.add(FragmentServerImage.newInstance(ApiConfig.getServerPicUrl(bannerInfo.getPicUrl()), DisplayTools.getWindowWidth(this.getContext()), bannerInfo.getContent()));
-			}
-			sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), mFragmentRecommendList);
-			viewPager.setAdapter(sectionsPagerAdapter);
-			viewPagerTab.setViewPager(viewPager);
-		}
 	}
 
 	//初始化数据
@@ -377,17 +235,6 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			gvFuncs.setVisibility(View.GONE);
 			return;
 		}
-		//		List<FuncInfo> funcInfoList = new ArrayList<>();
-		//		funcInfoList.add(new FuncInfo(FUNC_SHENXIAN, R.drawable.mine_icon_waitpay, "生鲜"));
-		//		funcInfoList.add(new FuncInfo(FUNC_MEISHI, R.drawable.mine_icon_ordrers, "美食"));
-		//		funcInfoList.add(new FuncInfo(FUNC_MEIZHUAN, R.drawable.mine_icon_address, "美妆"));
-		//		funcInfoList.add(new FuncInfo(FUNC_HAIWAIGOU, R.drawable.mine_icon_care, "海外购"));
-		//		funcInfoList.add(new FuncInfo(FUNC_GUANFANZHIYIN, R.drawable.mine_icon_website, "官方直营"));
-		//		funcInfoList.add(new FuncInfo(FUNC_TECHANG, R.drawable.mine_icon_shipped, "特产"));
-		//		funcInfoList.add(new FuncInfo(FUNC_FUZHUAN, R.drawable.mine_icon_changps, "服装"));
-		//		funcInfoList.add(new FuncInfo(FUNC_SHUMA, R.drawable.mine_icon_wallet, "数码"));
-		//		funcInfoList.add(new FuncInfo(FUNC_DATA_TRAFFIC, R.drawable.mine_icon_changps, "充值中心"));
-		//		funcInfoList.add(new FuncInfo(FUNC_JIFENSANCHENG, R.drawable.mine_icon_wallet, "积分商城"));
 		IndexFuncsAdapter indexFuncsAdapter = new IndexFuncsAdapter(this.getContext(), list, new IndexFuncsAdapter.IItemClicked()
 		{
 			@Override
@@ -425,7 +272,13 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 							}
 							else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.PRODUCTS.getType()))
 							{
-								Intent intent = new Intent(FragmentIndex.this.getContext(), ActivitySearchProducts.class);
+								Intent intent = new Intent(FragmentIndex.this.getContext(), ActivityProductsSearch.class);
+								intent.putExtra(ConstValues.DATA_PRODUCT_SORT_ID, clientClientFuncTypeInfo.getParams());
+								startActivity(intent);
+							}
+							else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.SHENGXIAN.getType()))
+							{
+								Intent intent = new Intent(FragmentIndex.this.getContext(), ActivityShengxian.class);
 								intent.putExtra(ConstValues.DATA_PRODUCT_SORT_ID, clientClientFuncTypeInfo.getParams());
 								startActivity(intent);
 							}
@@ -438,7 +291,9 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			}
 		});
 		gvFuncs.setAdapter(indexFuncsAdapter);
-		ViewHeightCalTools.setGridViewHeight(gvFuncs, FUNC_COLUMNS_NUM, true);
+		int size = (list.size() / 2) + (list.size() % 2 == 0 ? 0 : 1);
+		gvFuncs.setNumColumns(size);
+		ViewHeightCalTools.setGridViewHeight(gvFuncs, size, true);
 	}
 
 	//刷新数据
@@ -447,11 +302,9 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	{
 		mClientService.getIndexFuncList(null, true);
 		mBannerService.getBannerInfoList(ClientBannerType.PAGE_INDEX.getType(), 0, RECOMMEND_COUNT, null, true);
+		//		mDataTrafficService.getNewDataTrafficInfoList(0, DATA_TRAFFIC_COUNT, null, true);
 		//获取新闻
 		mNewsService.getNewsInfoList(0, SHOW_NEWS_COUNT, null, null, null, true);
-		mDataTrafficService.getNewDataTrafficInfoList(mDataStart, DATA_TRAFFIC_COUNT, null, true);
-		mProductService.getRecommendProductList(mDataStart, RECOMMEND_COUNT, null, true);
-		mProductService.getConcessionProductList(mDataStart, RECOMMEND_COUNT, null, true);
 		//获取商品
 		loadMoreData();
 	}
@@ -460,29 +313,33 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	@Override
 	synchronized public void loadMoreData()
 	{
-		mProductService.getNewProductList(mDataStart, getPageSize(), null, true);
+		mProductService.getNewProductList(mDataStart, 6, null, true);
 	}
 
 	@Override
 	synchronized public void onRefresh()
 	{
 		mNewProductInfoList.clear();
-		mIndexNewProductsAdapter = null;
+		if (mIndexNewProductAdapter != null)
+		{
+			mIndexNewProductAdapter.notifyDataSetChanged();
+		}
+		mIndexNewProductAdapter = null;
 		super.onRefresh();
 	}
 
-	synchronized private void refreshDataTrafficProducts(List<DataTrafficInfo> productInfoList)
+	synchronized private void refreshDataTrafficProducts(List<DataTrafficInfo> dataTrafficInfoList)
 	{
-		if (productInfoList == null || productInfoList.size() < 1)
+		if (dataTrafficInfoList == null || dataTrafficInfoList.size() < 1)
 		{
 			xListView.setPullLoadEnable(false);
 			return;
 		}
-		if (productInfoList.size() < getPageSize())
+		if (dataTrafficInfoList.size() < getPageSize())
 		{
 			xListView.setPullLoadEnable(false);
 		}
-		for (DataTrafficInfo dataTrafficInfo : productInfoList)
+		for (DataTrafficInfo dataTrafficInfo : dataTrafficInfoList)
 		{
 			mDataTrafficProductInfoList.add(dataTrafficInfo);
 		}
@@ -529,9 +386,9 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		{
 			mNewProductInfoList.add(productInfo);
 		}
-		if (mIndexNewProductsAdapter == null)
+		if (mIndexNewProductAdapter == null)
 		{
-			mIndexNewProductsAdapter = new IndexNewProductsAdapter(this.getContext(), mNewProductInfoList, new IndexNewProductsAdapter.IItemClick()
+			mIndexNewProductAdapter = new IndexNewProductAdapter(this.getContext(), mNewProductInfoList, new IndexNewProductAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(ProductInfo productInfo)
@@ -541,13 +398,14 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 					startActivity(intent);
 				}
 			});
-			gvNewProducts.setAdapter(mIndexNewProductsAdapter);
+			lvNewProducts.setAdapter(mIndexNewProductAdapter);
 		}
 		else
 		{
-			mIndexNewProductsAdapter.notifyDataSetChanged();
+			mIndexNewProductAdapter.notifyDataSetChanged();
 		}
-		ViewHeightCalTools.setGridViewHeight(gvNewProducts, NEW_PRODUCT_COLUMNS_NUM, true);
+		//		ViewHeightCalTools.setGridViewHeight(gvNewProducts, NEW_PRODUCT_COLUMNS_NUM, true);
+		ViewHeightCalTools.setListViewHeight(lvNewProducts, false);
 	}
 
 	synchronized private void refreshRecommendProducts(List<ProductInfo> productInfoList)
@@ -668,33 +526,8 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 	public void fragmentShow()
 	{
 		super.fragmentShow();
-		updateView();
 		//获取新闻
 		mNewsService.getNewsInfoList(0, SHOW_NEWS_COUNT, null, null, null, true);
-	}
-
-	@Override
-	public void fragmentHide()
-	{
-		super.fragmentHide();
-		cancelScheduledFuture();
-	}
-
-	@Override
-	public void onDestroyView()
-	{
-		stopScheduledFuture();
-		if (null != locationClient)
-		{
-			/**
-			 * 如果AMapLocationClient是在当前Activity实例化的，
-			 * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
-			 */
-			locationClient.onDestroy();
-			locationClient = null;
-			locationOption = null;
-		}
-		super.onDestroyView();
 	}
 
 	@Override
@@ -754,7 +587,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 			}
 			case R.id.tv_new_product_more:
 			{
-				startActivity(new Intent(this.getContext(), ActivitySearchProducts.class));
+				startActivity(new Intent(this.getContext(), ActivityProductsSearch.class));
 				break;
 			}
 			case R.id.tv_data_traffic_product_more:
@@ -767,6 +600,27 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 				{
 					startActivity(new Intent(this.getContext(), ActivityLogin.class));
 				}
+				break;
+			}
+			case R.id.layout_product_today_new:
+			{
+				Intent intent = new Intent(this.getContext(), ActivityHuodong.class);
+				intent.putExtra(ConstValues.DATA_INDEX, 0);
+				startActivity(intent);
+				break;
+			}
+			case R.id.layout_product_panic_buying:
+			{
+				Intent intent = new Intent(this.getContext(), ActivityHuodong.class);
+				intent.putExtra(ConstValues.DATA_INDEX, 1);
+				startActivity(intent);
+				break;
+			}
+			case R.id.layout_product_recommend:
+			{
+				Intent intent = new Intent(this.getContext(), ActivityHuodong.class);
+				intent.putExtra(ConstValues.DATA_INDEX, 2);
+				startActivity(intent);
 				break;
 			}
 		}
@@ -817,6 +671,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 				}.getType());
 				refreshRecommendProducts(productInfoList);
 			}
+			mProductService.getConcessionProductList(0, RECOMMEND_COUNT, null, true);
 		}
 		else if (url.endsWith(ApiConfig.GET_CONCESSION_PRODUCT_LIST))
 		{
@@ -852,6 +707,7 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 				mDataTrafficProductInfoList.clear();
 				refreshDataTrafficProducts(dataTrafficInfoList);
 			}
+			mProductService.getRecommendProductList(0, RECOMMEND_COUNT, null, true);
 		}
 		else if (url.endsWith(ApiConfig.GET_BANNER_LIST))
 		{
@@ -879,57 +735,4 @@ public class FragmentIndex extends MyBasePageFragment implements View.OnClickLis
 		}
 		return false;
 	}
-
-	private void beginLocation()
-	{
-		initOption();
-		// 设置定位参数
-		locationClient.setLocationOption(locationOption);
-		// 启动定位
-		locationClient.startLocation();
-		mHandler.sendEmptyMessage(MSG_LOCATION_START);
-	}
-
-	// 根据控件的选择，重新设置定位参数
-	private void initOption()
-	{
-		// 设置是否需要显示地址信息
-		locationOption.setNeedAddress(true);
-		// 设置是否开启缓存
-		locationOption.setLocationCacheEnable(true);
-		//设置是否等待设备wifi刷新，如果设置为true,会自动变为单次定位，持续定位时不要使用
-		locationOption.setOnceLocationLatest(false);
-		/**
-		 *  设置发送定位请求的时间间隔,最小值为1000，如果小于1000，按照1000算
-		 *  只有持续定位设置定位间隔才有效，单次定位无效
-		 */
-		locationOption.setInterval(1000);
-	}
-
-	// 定位监听
-	@Override
-	public void onLocationChanged(AMapLocation loc)
-	{
-		if (null != loc)
-		{
-			Message msg = mHandler.obtainMessage();
-			msg.obj = loc;
-			msg.what = MSG_LOCATION_FINISH;
-			mHandler.sendMessage(msg);
-		}
-	}
-	//	@Override
-	//	public void onActivityResult(int requestCode, int resultCode, Intent data)
-	//	{
-	//		super.onActivityResult(requestCode, resultCode, data);
-	//		if (requestCode == REQ_SCAN_QR)
-	//		{
-	//			if (resultCode == RESULT_OK)
-	//			{
-	//				Bundle bundle = data.getExtras();
-	//				String scanResult = bundle.getString("result");
-	//				ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, "扫描结果：" + scanResult);
-	//			}
-	//		}
-	//	}
 }

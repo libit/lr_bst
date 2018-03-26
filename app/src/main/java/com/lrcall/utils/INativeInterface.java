@@ -26,7 +26,7 @@ public class INativeInterface
 		{
 			for (String str : param)
 			{
-				if (str.indexOf("[") > -1 && str.indexOf(",") > str.indexOf("[") && str.indexOf("]") > str.indexOf(","))
+				if (str.contains("[") && str.indexOf(",") > str.indexOf("[") && str.indexOf("]") > str.indexOf(","))
 				{
 					String key = str.substring(str.indexOf("[") + 1, str.indexOf(","));
 					String value = str.substring(str.indexOf(",") + 1, str.indexOf("]"));
@@ -37,9 +37,9 @@ public class INativeInterface
 		return HttpTools.doPost(url, map);
 	}
 
-	public native String getUrl(String key);
-
-	public native String login(String number, String pwd, String agentId, String signKey, String key);
-
-	public native String getUpdate(String number, String pwd, String agentId, String signedData, String platformInfo, String key);
+//	public native String getUrl(String key);
+//
+//	public native String login(String number, String pwd, String agentId, String signKey, String key);
+//
+//	public native String getUpdate(String number, String pwd, String agentId, String signedData, String platformInfo, String key);
 }

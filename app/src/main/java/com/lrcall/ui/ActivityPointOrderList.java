@@ -87,6 +87,10 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 	public void refreshData()
 	{
 		mPointOrderInfoList.clear();
+		if (mPointOrderAdapter != null)
+		{
+			mPointOrderAdapter.notifyDataSetChanged();
+		}
 		mPointOrderAdapter = null;
 		loadMoreData();
 	}
@@ -113,10 +117,7 @@ public class ActivityPointOrderList extends MyBasePageActivity implements IAjaxD
 		}
 		layoutOrderList.setVisibility(View.VISIBLE);
 		layoutNoOrder.setVisibility(View.GONE);
-		if (pointOrderInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(pointOrderInfoList.size() >= getPageSize());
 		for (PointOrderInfo pointOrderInfo : pointOrderInfoList)
 		{
 			mPointOrderInfoList.add(pointOrderInfo);

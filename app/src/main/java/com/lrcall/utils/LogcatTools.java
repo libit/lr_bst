@@ -6,9 +6,7 @@ package com.lrcall.utils;
 
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.lrcall.appbst.MyApplication;
 import com.lrcall.enums.LogLevel;
 import com.lrcall.utils.apptools.AppFactory;
 
@@ -109,7 +107,7 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 		saveCrashFile(ex);
 		//        android.os.Process.killProcess(android.os.Process.myPid());
 		//        new DialogCommon(context, null, "提示", "哦哦，出错了！", true, false, false).show();
-		Toast.makeText(MyApplication.getContext(), "哦哦，出错了！", Toast.LENGTH_LONG).show();
+		//Toast.makeText(MyApplication.getContext(), "哦哦，出错了！", Toast.LENGTH_LONG).show();
 		return false;
 	}
 
@@ -183,7 +181,7 @@ public class LogcatTools implements Thread.UncaughtExceptionHandler
 						saveFiles.get(i).delete();
 					}
 				}
-				if (AppConfig.isDebug())//如果是调试模式，则将所有的日志都保存
+//				if (AppConfig.isDebug())//如果是调试模式，则将所有的日志都保存
 				{
 					PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE_NAME, saveFiles.get(0).getName());
 				}

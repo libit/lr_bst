@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Libit保留所有版权，如有疑问联系QQ：308062035
+  ~ Copyright (c) 2016.
+  -->
+<android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar_title"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="?attr/colorPrimary"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
+    app:title=" ">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_return"/>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="22sp"/>
+        <ImageButton
+            android:id="@+id/btn_more"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginRight="8dp"
+            android:background="@color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_menu_more"/>
+    </FrameLayout>
+</android.support.v7.widget.Toolbar>

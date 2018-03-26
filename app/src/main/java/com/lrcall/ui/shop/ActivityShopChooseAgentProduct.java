@@ -25,7 +25,7 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ShopProductService;
 import com.lrcall.ui.MyBasePageActivity;
-import com.lrcall.ui.adapter.SearchProductsAdapter;
+import com.lrcall.ui.adapter.ProductAdapter;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
 
@@ -37,7 +37,7 @@ public class ActivityShopChooseAgentProduct extends MyBasePageActivity implement
 	private static final String TAG = ActivityShopChooseAgentProduct.class.getSimpleName();
 	private View layoutProductList, layoutNoProduct;
 	private EditText etSearch;
-	private SearchProductsAdapter searchProductsAdapter;
+	private ProductAdapter searchProductsAdapter;
 	private ShopProductService mProductService;
 	private final List<ProductInfo> mProductInfoList = new ArrayList<>();
 
@@ -105,6 +105,10 @@ public class ActivityShopChooseAgentProduct extends MyBasePageActivity implement
 	public void refreshData()
 	{
 		mProductInfoList.clear();
+		if (searchProductsAdapter != null)
+		{
+			searchProductsAdapter.notifyDataSetChanged();
+		}
 		searchProductsAdapter = null;
 		loadMoreData();
 	}
@@ -164,7 +168,7 @@ public class ActivityShopChooseAgentProduct extends MyBasePageActivity implement
 		}
 		if (searchProductsAdapter == null)
 		{
-			searchProductsAdapter = new SearchProductsAdapter(this, mProductInfoList, new SearchProductsAdapter.IItemClick()
+			searchProductsAdapter = new ProductAdapter(this, mProductInfoList, new ProductAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(ProductInfo productInfo)

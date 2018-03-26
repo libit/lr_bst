@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public enum ClientBannerType
 {
-	PAGE_INDEX("PAGE_INDEX", "首页Banner"), USER_UPGRADE("USER_UPGRADE", "用户升级页面"), POINT_PRODUCT("POINT_PRODUCT", "积分商城页面");
+	PAGE_INDEX("PAGE_INDEX", "首页Banner"), USER_UPGRADE("USER_UPGRADE", "用户升级页面"), POINT_PRODUCT("POINT_PRODUCT", "积分商城页面"), DIAL_WAITING("DIAL_WAITING", "回拨呼叫页面"), SHENGXIAN("SHENGXIAN", "生鲜页面"), MEISHI("MEISHI", "美食页面"), MEIZHUAN("MEIZHUAN", "美妆页面"), HAIWAIGOU("HAIWAIGOU", "海外购页面"), TECHAN("TECHAN", "特产页面"), FUZHUANG("FUZHUANG", "服装页面"), ZHIYING("ZHIYING", "自营页面");
 	private String type;
 	private String desc;
 

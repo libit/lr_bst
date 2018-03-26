@@ -13,6 +13,7 @@ public abstract class MyBasePageActivity extends MyBaseActivity implements XList
 	protected int mDataStart = 0;//开始位置
 	protected int mDataTotal = 0;//总记录数
 	protected XListView xListView;
+	//	protected boolean isRefresh = false;//是否刷新,这里是为了保证数据刷新时如果少于原先的个数会FC的问题
 
 	/**
 	 * 获取每页加载的数据数量
@@ -72,7 +73,7 @@ public abstract class MyBasePageActivity extends MyBaseActivity implements XList
 	@Override
 	public void onRefresh()
 	{
-		xListView.setPullLoadEnable(true);
+		xListView.setPullLoadEnable(false);
 		resetDataStart();
 		refreshData();
 	}

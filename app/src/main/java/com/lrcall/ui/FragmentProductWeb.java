@@ -27,7 +27,6 @@ import com.lrcall.db.DbProductInfoFactory;
 import com.lrcall.enums.ProductType;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.apptools.AppFactory;
 
 public class FragmentProductWeb extends MyBaseFragment implements IAjaxDataResponse

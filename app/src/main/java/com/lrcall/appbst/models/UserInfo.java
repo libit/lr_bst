@@ -12,6 +12,8 @@ public class UserInfo
 	private String userId;
 	@SerializedName("sessionId")
 	private String sessionId;
+	@SerializedName("imToken")
+	private String imToken;
 	@SerializedName("number")
 	private String number;
 	@SerializedName("userType")
@@ -53,11 +55,14 @@ public class UserInfo
 	{
 	}
 
-	public UserInfo(String userId, String sessionId, String number, String name, String nickname, byte sex, String picId, Long birthday, String country, String province, String city, String address, String subscribe, Long subscribeTime, String language, String remark, PicInfo picInfo)
+	public UserInfo(String userId, String sessionId, String imToken, String number, byte userType, byte userLevel, String name, String nickname, byte sex, String picId, Long birthday, String country, String province, String city, String address, String subscribe, Long subscribeTime, String language, String remark, long addDateLong, PicInfo picInfo)
 	{
 		this.userId = userId;
 		this.sessionId = sessionId;
+		this.imToken = imToken;
 		this.number = number;
+		this.userType = userType;
+		this.userLevel = userLevel;
 		this.name = name;
 		this.nickname = nickname;
 		this.sex = sex;
@@ -71,6 +76,7 @@ public class UserInfo
 		this.subscribeTime = subscribeTime;
 		this.language = language;
 		this.remark = remark;
+		this.addDateLong = addDateLong;
 		this.picInfo = picInfo;
 	}
 
@@ -92,6 +98,16 @@ public class UserInfo
 	public void setSessionId(String sessionId)
 	{
 		this.sessionId = sessionId;
+	}
+
+	public String getImToken()
+	{
+		return imToken;
+	}
+
+	public void setImToken(String imToken)
+	{
+		this.imToken = imToken;
 	}
 
 	public String getNumber()

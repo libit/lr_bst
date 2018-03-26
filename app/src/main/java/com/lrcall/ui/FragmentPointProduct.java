@@ -26,11 +26,12 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.PointProductService;
 import com.lrcall.appbst.services.ProductService;
+import com.lrcall.appbst.services.UserService;
 import com.lrcall.enums.ProductPicType;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.FloatProductSelectCount;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -243,6 +244,14 @@ public class FragmentPointProduct extends MyBaseFragment implements View.OnClick
 			}
 			case R.id.btn_kefu:
 			{
+				if (UserService.isLogin())
+				{
+					startActivity(new Intent(getActivity(), ActivityImKefuList.class));
+				}
+				else
+				{
+					startActivity(new Intent(this.getContext(), ActivityLogin.class));
+				}
 				break;
 			}
 		}

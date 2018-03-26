@@ -8,7 +8,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.androidquery.AQuery;
-import com.androidquery.callback.AbstractAjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ErrorInfo;
@@ -134,7 +133,7 @@ public abstract class BaseService
 				OnDataResponse(url, result, status);
 			}
 		};
-		AbstractAjaxCallback.setReuseHttpClient(false);
+//		AbstractAjaxCallback.setReuseHttpClient(false);
 		params = buildParams(params);
 		LogcatTools.debug("ajaxStringCallback", "url:" + url + " , params:" + GsonTools.toJson(params));
 		cb.url(url).type(String.class).params(params);
@@ -351,7 +350,7 @@ public abstract class BaseService
 		else
 		{
 			//如果是密码错误,则需要登出
-			if (returnInfo.getErrcode() == ErrorInfo.getPasswordErrorId())
+			if (returnInfo.getCode() == ErrorInfo.getPasswordErrorId())
 			{
 				PreferenceUtils.getInstance().setSessionId("");
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGOUT));

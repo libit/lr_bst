@@ -127,6 +127,10 @@ public class ActivityProductStarList extends MyBasePageActivity implements IAjax
 	public void refreshData()
 	{
 		mProductStarInfoList.clear();
+		if (mProductStarAdapter != null)
+		{
+			mProductStarAdapter.notifyDataSetChanged();
+		}
 		mProductStarAdapter = null;
 		loadMoreData();
 	}
@@ -152,10 +156,7 @@ public class ActivityProductStarList extends MyBasePageActivity implements IAjax
 		}
 		layoutStarList.setVisibility(View.VISIBLE);
 		layoutNoStar.setVisibility(View.GONE);
-		if (productStarInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(productStarInfoList.size() >= getPageSize());
 		for (ProductStarInfo productStarInfo : productStarInfoList)
 		{
 			mProductStarInfoList.add(productStarInfo);

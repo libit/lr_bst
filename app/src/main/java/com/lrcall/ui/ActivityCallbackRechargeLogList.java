@@ -80,6 +80,10 @@ public class ActivityCallbackRechargeLogList extends MyBasePageActivity implemen
 	public void refreshData()
 	{
 		mCallbackRechargeLogInfoList.clear();
+		if (mCallbackRechargeLogsAdapter != null)
+		{
+			mCallbackRechargeLogsAdapter.notifyDataSetChanged();
+		}
 		mCallbackRechargeLogsAdapter = null;
 		loadMoreData();
 	}
@@ -106,10 +110,7 @@ public class ActivityCallbackRechargeLogList extends MyBasePageActivity implemen
 		}
 		layoutRechargeLogList.setVisibility(View.VISIBLE);
 		layoutNoRechargeLog.setVisibility(View.GONE);
-		if (callbackRechargeLogInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(callbackRechargeLogInfoList.size() >= getPageSize());
 		for (CallbackRechargeLogInfo callbackRechargeLogInfo : callbackRechargeLogInfoList)
 		{
 			mCallbackRechargeLogInfoList.add(callbackRechargeLogInfo);

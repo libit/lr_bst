@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public enum ClientFuncActivityType
 {
-	SHOP_PRODUCTS("ActivityShopProducts", "微店"), RECHARGE_DATA_TRAFFIC("ActivityRechargeDataTraffic", "流量充值"), POINT_PRODUCT_SHOP("ActivityPointProductShop", "积分商城"), PRODUCTS("ActivityProducts", "分类商品");
+	SHOP_PRODUCTS("ActivityShopProducts", "微店"), RECHARGE_DATA_TRAFFIC("ActivityRechargeDataTraffic", "流量充值"), POINT_PRODUCT_SHOP("ActivityPointProductShop", "积分商城"), PRODUCTS("ActivityProducts", "分类商品"), SHENGXIAN("ActivityShengxian", "生鲜"), PRODUCT("ActivityProduct", "商品");
 	private String type;
 	private String desc;
 

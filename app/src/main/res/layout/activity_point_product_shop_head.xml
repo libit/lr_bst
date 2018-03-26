@@ -23,7 +23,7 @@
             android:paddingBottom="6dp"
             android:paddingRight="10dp"
             app:stl_clickable="false"
-            app:stl_customTabTextLayoutId="@layout/custom_tab_circle"
+            app:stl_customTabTextLayoutId="@layout/item_tab_circle"
             app:stl_dividerColor="@color/transparent"
             app:stl_dividerThickness="0dp"
             app:stl_indicatorColor="@color/accent"

@@ -12,17 +12,18 @@ public class ClientConfigInfo
 	private String kefuNumber;// 客服电话
 	@SerializedName("officalWeb")
 	private String officalWeb;// 官方网站
-
+	@SerializedName("imKefus")
+	private String imKefus;// 手购IM客服
 	public ClientConfigInfo()
 	{
 		super();
 	}
 
-	public ClientConfigInfo(String kefuNumber, String officalWeb)
+	public ClientConfigInfo(String kefuNumber, String officalWeb, String imKefus)
 	{
-		super();
 		this.kefuNumber = kefuNumber;
 		this.officalWeb = officalWeb;
+		this.imKefus = imKefus;
 	}
 
 	public String getKefuNumber()
@@ -43,5 +44,15 @@ public class ClientConfigInfo
 	public void setOfficalWeb(String officalWeb)
 	{
 		this.officalWeb = officalWeb;
+	}
+
+	public String getImKefus()
+	{
+		return imKefus;
+	}
+
+	public void setImKefus(String imKefus)
+	{
+		this.imKefus = imKefus;
 	}
 }

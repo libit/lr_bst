@@ -85,7 +85,7 @@ public class FragmentCategory extends MyBaseFragment implements View.OnClickList
 				{
 					if (hasFocus)
 					{
-						startActivity(new Intent(FragmentCategory.this.getContext(), ActivitySearchProducts.class));
+						startActivity(new Intent(FragmentCategory.this.getContext(), ActivityProductsSearch.class));
 						v.clearFocus();
 					}
 				}
@@ -158,7 +158,7 @@ public class FragmentCategory extends MyBaseFragment implements View.OnClickList
 			@Override
 			public void onClick(View v)
 			{
-				Intent intent = new Intent(FragmentCategory.this.getContext(), ActivitySearchProducts.class);
+				Intent intent = new Intent(FragmentCategory.this.getContext(), ActivityProductsSearch.class);
 				intent.putExtra(ConstValues.DATA_PRODUCT_SORT_ID, productSortInfo.getSortId());
 				startActivity(intent);
 			}
@@ -173,7 +173,7 @@ public class FragmentCategory extends MyBaseFragment implements View.OnClickList
 			@Override
 			public void onProductSortClicked(ProductSortInfo productSortInfo)
 			{
-				Intent intent = new Intent(FragmentCategory.this.getContext(), ActivitySearchProducts.class);
+				Intent intent = new Intent(FragmentCategory.this.getContext(), ActivityProductsSearch.class);
 				intent.putExtra(ConstValues.DATA_PRODUCT_SORT_ID, productSortInfo.getSortId());
 				startActivity(intent);
 			}

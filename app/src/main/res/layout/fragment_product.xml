@@ -29,7 +29,7 @@
                     android:layout_height="16dp"
                     android:layout_gravity="bottom|center_horizontal"
                     app:stl_clickable="false"
-                    app:stl_customTabTextLayoutId="@layout/custom_tab_circle"
+                    app:stl_customTabTextLayoutId="@layout/item_tab_circle"
                     app:stl_dividerColor="@color/transparent"
                     app:stl_dividerThickness="0dp"
                     app:stl_indicatorColor="@color/accent"
@@ -69,7 +69,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
@@ -90,7 +89,29 @@
                         android:gravity="center_vertical"
                         android:text="￥100.00"
                         android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/tv_express"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="#ff0000"
+                        android:textSize="16sp"/>
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_shop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/gray_normal"
+                    android:textSize="14sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

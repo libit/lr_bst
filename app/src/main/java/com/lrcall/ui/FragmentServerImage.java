@@ -4,6 +4,7 @@
  */
 package com.lrcall.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lrcall.appbst.R;
+import com.lrcall.appbst.models.ClientFuncTypeInfo;
 import com.lrcall.appbst.services.PicService;
+import com.lrcall.appbst.services.UserService;
+import com.lrcall.enums.ClientFuncActivityType;
+import com.lrcall.enums.ClientFuncType;
+import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
 
 public class FragmentServerImage extends Fragment
@@ -74,7 +81,61 @@ public class FragmentServerImage extends Fragment
 				@Override
 				public void onClick(View v)
 				{
-					ActivityWebView.startWebActivity(FragmentServerImage.this.getContext(), "", mClickUrl);
+					if (mClickUrl.startsWith("http"))
+					{
+						ActivityWebView.startWebActivity(FragmentServerImage.this.getContext(), "", mClickUrl);
+					}
+					else
+					{
+						ClientFuncTypeInfo clientClientFuncTypeInfo = GsonTools.getObject(mClickUrl, ClientFuncTypeInfo.class);
+						if (clientClientFuncTypeInfo != null)
+						{
+							if (clientClientFuncTypeInfo.getType().equalsIgnoreCase(ClientFuncType.OPEN_URL.getType()))
+							{
+								ActivityWebView.startWebActivity(FragmentServerImage.this.getContext(), "", clientClientFuncTypeInfo.getContent());
+							}
+							else if (clientClientFuncTypeInfo.getType().equalsIgnoreCase(ClientFuncType.OPEN_ACTIIVTY.getType()))
+							{
+								if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.SHOP_PRODUCTS.getType()))
+								{
+									startActivity(new Intent(FragmentServerImage.this.getContext(), ActivityShopProducts.class));
+								}
+								else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.RECHARGE_DATA_TRAFFIC.getType()))
+								{
+									if (UserService.isLogin())
+									{
+										startActivity(new Intent(FragmentServerImage.this.getContext(), ActivityRechargeDataTraffic.class));
+									}
+									else
+									{
+										startActivity(new Intent(FragmentServerImage.this.getContext(), ActivityLogin.class));
+									}
+								}
+								else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.POINT_PRODUCT_SHOP.getType()))
+								{
+									startActivity(new Intent(FragmentServerImage.this.getContext(), ActivityPointProductShop.class));
+								}
+								else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.PRODUCTS.getType()))
+								{
+									Intent intent = new Intent(FragmentServerImage.this.getContext(), ActivityProductsSearch.class);
+									intent.putExtra(ConstValues.DATA_PRODUCT_SORT_ID, clientClientFuncTypeInfo.getParams());
+									startActivity(intent);
+								}
+								else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.SHENGXIAN.getType()))
+								{
+									Intent intent = new Intent(FragmentServerImage.this.getContext(), ActivityShengxian.class);
+									intent.putExtra(ConstValues.DATA_PRODUCT_SORT_ID, clientClientFuncTypeInfo.getParams());
+									startActivity(intent);
+								}
+								else if (clientClientFuncTypeInfo.getContent().equalsIgnoreCase(ClientFuncActivityType.PRODUCT.getType()))
+								{
+									Intent intent = new Intent(FragmentServerImage.this.getContext(), ActivityProduct.class);
+									intent.putExtra(ConstValues.DATA_PRODUCT_ID, clientClientFuncTypeInfo.getParams());
+									startActivity(intent);
+								}
+							}
+						}
+					}
 				}
 			});
 		}

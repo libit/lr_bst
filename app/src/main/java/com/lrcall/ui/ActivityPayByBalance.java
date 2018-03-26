@@ -168,7 +168,7 @@ public class ActivityPayByBalance extends MyBaseActivity implements View.OnClick
 				ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 				if (returnInfo != null)
 				{
-					msg = returnInfo.getErrmsg();
+					msg = returnInfo.getMsg();
 				}
 				tvBalance.setText(msg);
 			}

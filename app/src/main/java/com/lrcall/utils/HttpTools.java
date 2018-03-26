@@ -136,12 +136,12 @@ public class HttpTools
 		}
 		String result = htmlContent.trim();
 		String comp = "<body>";
-		if (result.indexOf(comp) >= 0)
+		if (result.contains(comp))
 		{
 			result = result.substring(result.indexOf(comp) + comp.length());
 		}
 		comp = "</body>";
-		if (result.indexOf(comp) >= 0)
+		if (result.contains(comp))
 		{
 			result = result.substring(0, result.indexOf(comp));
 		}

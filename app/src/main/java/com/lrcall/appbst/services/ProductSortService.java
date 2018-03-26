@@ -23,6 +23,14 @@ import java.util.Map;
  */
 public class ProductSortService extends BaseService
 {
+	public static final String SHENGXIAN = "shengxian";
+	public static final String MEISHI = "meishi";
+	public static final String MEIZHUAN = "meizhuan";
+	public static final String HAIWAIGOU = "haiwaigou";
+	public static final String TECHAN = "techan";
+	public static final String FUZHUANG = "fuzhuang";
+	public static final String ZHIYING = "zhiying";
+
 	public ProductSortService(Context context)
 	{
 		super(context);
@@ -37,6 +45,20 @@ public class ProductSortService extends BaseService
 	public void getProductSortList(String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.GET_PRODUCT_SORT_LIST, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 获取子分类列表
+	 *
+	 * @param sortId                 分类ID
+	 * @param tips                   提示信息
+	 * @param needServiceProcessData
+	 */
+	public void getProductSortList(String sortId, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("sortId", sortId);
 		ajaxStringCallback(ApiConfig.GET_PRODUCT_SORT_LIST, params, tips, needServiceProcessData);
 	}
 

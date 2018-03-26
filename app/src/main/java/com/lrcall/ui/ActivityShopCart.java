@@ -83,6 +83,10 @@ public class ActivityShopCart extends MyBasePageActivity implements View.OnClick
 	public void refreshData()
 	{
 		mShopCartInfoList.clear();
+		if (mShopCartProductsAdapter != null)
+		{
+			mShopCartProductsAdapter.notifyDataSetChanged();
+		}
 		mShopCartProductsAdapter = null;
 		loadMoreData();
 	}
@@ -124,10 +128,7 @@ public class ActivityShopCart extends MyBasePageActivity implements View.OnClick
 		//				mMenu.findItem(R.id.action_shop_cart_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		//			}
 		//		}
-		if (shopCartInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(shopCartInfoList.size() >= getPageSize());
 		mTotalPrice = 0;
 		for (ShopCartInfo shopCartInfo : shopCartInfoList)
 		{

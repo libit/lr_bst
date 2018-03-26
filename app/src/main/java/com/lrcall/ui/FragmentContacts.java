@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ public class FragmentContacts extends MyBaseFragment implements View.OnClickList
 	private QuickAlphabeticBar alpha;
 	private EditText etSearch;
 	private View vList;
+	private Handler mHandler = new Handler();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -67,7 +69,6 @@ public class FragmentContacts extends MyBaseFragment implements View.OnClickList
 		xListView.setXListViewListener(this);
 		xListView.setOnItemClickListener(this);
 		alpha = (QuickAlphabeticBar) rootView.findViewById(R.id.fast_scroller);
-		alpha.init(vList);
 		etSearch = (EditText) rootView.findViewById(R.id.edit_input_number);
 		etSearch.addTextChangedListener(new TextWatcher()
 		{
@@ -88,29 +89,9 @@ public class FragmentContacts extends MyBaseFragment implements View.OnClickList
 				getContacts(condition);
 			}
 		});
-		//		etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener()
-		//		{
-		//			@Override
-		//			public void onFocusChange(View v, boolean hasFocus)
-		//			{
-		//				if (isInit && hasFocus)
-		//				{
-		//					startActivity(new Intent(FragmentContacts.this.getContext(), ActivitySearchContacts.class));
-		//				}
-		//			}
-		//		});
 		rootView.findViewById(R.id.search_del).setOnClickListener(this);
 		getContacts(null);
-		//		xListView.setOnTouchListener(new View.OnTouchListener()
-		//		{
-		//			@Override
-		//			public boolean onTouch(View v, MotionEvent event)
-		//			{
-		//				LogcatTools.debug("onTouch", "xListView->action:" + event.getAction() + ",y:" + event.getY());
-		//				alpha.onTansferTouch(event);
-		//				return false;
-		//			}
-		//		});
+		alpha.init(vList);
 		super.viewInit(rootView);
 	}
 
@@ -199,20 +180,28 @@ public class FragmentContacts extends MyBaseFragment implements View.OnClickList
 	// 隐藏软键盘
 	private void hideSoftPad()
 	{
-		//		((InputMethodManager) getActivity().getSystemService(getContext().INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(etSearch.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		etSearch.clearFocus();
 		((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
-		// 隐藏软键盘
-		//		((InputMethodManager) getActivity().getSystemService(getContext().INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	@Subscribe
-	public void onEventMainThread(ContactEvent contactEvent)
+	public void onEventMainThread(final ContactEvent contactEvent)
 	{
-		if (contactEvent.getEventType().equalsIgnoreCase(ContactEvent.EVENT_CONTACT_ADD) || contactEvent.getEventType().equalsIgnoreCase(ContactEvent.EVENT_CONTACT_UPDATE) || contactEvent.getEventType().equalsIgnoreCase(ContactEvent.EVENT_CONTACT_DELETE))
+		mHandler.post(new Thread()
 		{
-			onRefresh();
-		}
+			@Override
+			public void run()
+			{
+				super.run();
+				if (contactEvent != null)
+				{
+					if (contactEvent.getEventType().equalsIgnoreCase(ContactEvent.EVENT_CONTACT_ADD) || contactEvent.getEventType().equalsIgnoreCase(ContactEvent.EVENT_CONTACT_UPDATE) || contactEvent.getEventType().equalsIgnoreCase(ContactEvent.EVENT_CONTACT_DELETE))
+					{
+						onRefresh();
+					}
+				}
+			}
+		});
 	}
 
 	/**
@@ -249,7 +238,13 @@ public class FragmentContacts extends MyBaseFragment implements View.OnClickList
 			super.onPostExecute(contactInfoList);
 			xListView.stopRefresh();
 			setAdapter(contactInfoList);
-			etSearch.setHint(getString(R.string.contacts_num, contactInfoList.size()));
+			try
+			{
+				etSearch.setHint(getString(R.string.contacts_num, contactInfoList.size()));
+			}
+			catch (Exception e)
+			{
+			}
 		}
 	}
 }

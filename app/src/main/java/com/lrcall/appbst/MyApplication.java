@@ -2,7 +2,10 @@ package com.lrcall.appbst;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
+import com.easemob.redpacketsdk.RedPacket;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.lrcall.appbst.services.BugService;
 import com.lrcall.utils.LogcatTools;
 
@@ -26,9 +29,10 @@ public class MyApplication extends Application
 	@Override
 	public void onCreate()
 	{
+//		MultiDex.install(this);
 		super.onCreate();
 		instance = this;
-		new Thread("splash")
+		new Thread("startLogcat")
 		{
 			@Override
 			public void run()
@@ -39,6 +43,21 @@ public class MyApplication extends Application
 		}.start();
 		//提交日志
 		new BugService(this).uploadLogFile(null, true);
+		//=====================配置环信===============================
+		//init demo helper
+		DemoHelper.getInstance().init(this);
+		//red packet code : 初始化红包上下文，开启日志输出开关
+		RedPacket.getInstance().initContext(this);
+		RedPacket.getInstance().setDebugMode(true);
+		//end of red packet code
+		//=====================配置环信结束=============================
+	}
+
+	@Override
+	protected void attachBaseContext(Context base)
+	{
+		super.attachBaseContext(base);
+		MultiDex.install(this);
 	}
 
 	@Override
@@ -48,33 +67,4 @@ public class MyApplication extends Application
 		instance = null;
 		super.onTerminate();
 	}
-	//	public String sHA1(Context context)
-	//	{
-	//		try
-	//		{
-	//			PackageInfo info = getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
-	//			byte[] cert = info.signatures[0].toByteArray();
-	//			MessageDigest md = MessageDigest.getInstance("SHA1");
-	//			byte[] publicKey = md.digest(cert);
-	//			StringBuilder hexString = new StringBuilder();
-	//			for (int i = 0; i < publicKey.length; i++)
-	//			{
-	//				String appendString = Integer.toHexString(0xFF & publicKey[i]).toUpperCase(Locale.US);
-	//				if (appendString.length() == 1)
-	//					hexString.append("0");
-	//				hexString.append(appendString);
-	//				hexString.append(":");
-	//			}
-	//			return hexString.toString();
-	//		}
-	//		catch (PackageManager.NameNotFoundException e)
-	//		{
-	//			e.printStackTrace();
-	//		}
-	//		catch (NoSuchAlgorithmException e)
-	//		{
-	//			e.printStackTrace();
-	//		}
-	//		return null;
-	//	}
 }

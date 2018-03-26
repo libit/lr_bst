@@ -32,8 +32,6 @@
     <string name="text_time_no_second">已拨</string>
     <string name="activity_title_contact_detail">联系人详情</string>
     <string name="activity_title_search">搜索</string>
-    <string name="cancel">取消</string>
-    <string name="ok">确定</string>
     <string name="title_warning">提示</string>
     <string name="action_refresh">刷新</string>
     <string name="action_back">后退</string>
@@ -116,6 +114,20 @@
     <string name="title_activity_user_bank_list">银行卡列表</string>
     <!-- 添加银行卡Activity -->
     <string name="title_activity_user_bank_add">添加银行卡</string>
+    <!-- 查询客户余额Activity -->
+    <string name="title_activity_query_user_balance">查询余额</string>
+    <!-- 支付宝支付Activity -->
+    <string name="title_activity_pay_by_alipay">支付宝支付</string>
+    <!-- 微信支付Activity -->
+    <string name="title_activity_pay_by_wxpay">微信支付</string>
+    <!-- 回拨充值列表Activity -->
+    <string name="title_activity_callback_recharge_list">回拨充值方式</string>
+    <!-- 生鲜Activity -->
+    <string name="title_activity_shengxian">生鲜</string>
+    <!-- 活动Activity -->
+    <string name="title_activity_huodong">活动</string>
+    <!-- 用户编辑Activity -->
+    <string name="title_activity_user_edit">实名认证</string>
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="downloading">正在下载</string>
@@ -167,7 +179,6 @@
     <string name="button_add_calendar">添加至日程表</string>
     <string name="button_add_contact">添加联系人</string>
     <string name="button_book_search">打开图书搜索</string>
-    <string name="button_cancel">取消</string>
     <string name="button_custom_product_search">自定义搜索</string>
     <string name="button_dial">拨打电话</string>
     <string name="button_email">发送 E-mail</string>
@@ -311,4 +322,6 @@
     <string name="title_activity_shop_agent_products_manage">分销商品管理</string>
     <!-- 商家选择代理商品Activity -->
     <string name="title_activity_choose_agent_product">选择分销商品</string>
+    <string name="kefu_chat">手购客服</string>
+    <string name="title_activity_im_kefu_list">手购客服</string>
 </resources>

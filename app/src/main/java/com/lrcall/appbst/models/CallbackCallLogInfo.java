@@ -16,10 +16,14 @@ public class CallbackCallLogInfo
 	private String platform;
 	@SerializedName("versionCode")
 	private Integer versionCode;
-	@SerializedName("duration")
-	private int duration;
 	@SerializedName("callDateLong")
 	private long callDateLong;
+	@SerializedName("endDateLong")
+	private long endDateLong;
+	@SerializedName("duration")
+	private int duration;
+	@SerializedName("money")
+	private int money;
 	@SerializedName("status")
 	private byte status;
 	@SerializedName("remark")
@@ -107,5 +111,25 @@ public class CallbackCallLogInfo
 	public void setRemark(String remark)
 	{
 		this.remark = remark;
+	}
+
+	public long getEndDateLong()
+	{
+		return endDateLong;
+	}
+
+	public void setEndDateLong(long endDateLong)
+	{
+		this.endDateLong = endDateLong;
+	}
+
+	public int getMoney()
+	{
+		return money;
+	}
+
+	public void setMoney(int money)
+	{
+		this.money = money;
 	}
 }

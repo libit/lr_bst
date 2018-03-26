@@ -24,7 +24,7 @@ import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ShopProductService;
 import com.lrcall.ui.MyBasePageActivity;
-import com.lrcall.ui.adapter.SearchProductsAdapter;
+import com.lrcall.ui.adapter.ProductAdapter;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.StringTools;
@@ -39,7 +39,7 @@ public class ActivityShopProductManage extends MyBasePageActivity implements Vie
 	public static final int REQ_ADD = 301;
 	private View layoutProductList, layoutNoProduct;
 	private EditText etSearch;
-	private SearchProductsAdapter mSearchProductsAdapter;
+	private ProductAdapter mSearchProductsAdapter;
 	private ShopProductService mShopProductService;
 	private final List<ProductInfo> mProductInfoList = new ArrayList<>();
 
@@ -113,6 +113,10 @@ public class ActivityShopProductManage extends MyBasePageActivity implements Vie
 	public void refreshData()
 	{
 		mProductInfoList.clear();
+		if (mSearchProductsAdapter != null)
+		{
+			mSearchProductsAdapter.notifyDataSetChanged();
+		}
 		mSearchProductsAdapter = null;
 		loadMoreData();
 	}
@@ -177,7 +181,7 @@ public class ActivityShopProductManage extends MyBasePageActivity implements Vie
 		}
 		if (mSearchProductsAdapter == null)
 		{
-			mSearchProductsAdapter = new SearchProductsAdapter(this, mProductInfoList, new SearchProductsAdapter.IItemClick()
+			mSearchProductsAdapter = new ProductAdapter(this, mProductInfoList, new ProductAdapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(ProductInfo productInfo)

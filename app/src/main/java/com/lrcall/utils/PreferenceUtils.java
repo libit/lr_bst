@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.lrcall.appbst.MyApplication;
+import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.enums.AutoAnswerType;
 import com.lrcall.enums.CallbackLineType;
 import com.lrcall.enums.LogLevel;
@@ -36,6 +37,7 @@ public class PreferenceUtils
 	public static final String PREF_CALLBACK_AUTO_ANSWER_KEY = "pref_callback_answer_key";//自动接听
 	public static final String PREF_CALLBACK_LINE_KEY = "pref_callback_line_key";//语音通道
 	public static final String PREF_LAST_READ_NEWS_TIME = "pref_last_read_news_time";// 上次阅读新闻的时间
+	public static final String PREF_SERVER_URL = "server_url";// 服务器URL
 	private final static HashMap<String, String> STRING_PREFS = new HashMap<String, String>()
 	{
 		private static final long serialVersionUID = 1L;
@@ -51,8 +53,9 @@ public class PreferenceUtils
 			put(WX_APP_ID, "");
 			put(CLIENT_CONFIG, "");
 			put(PREF_CALLBACK_AUTO_ANSWER_KEY, AutoAnswerType.ANSWER_USER.getType() + "");
-			put(PREF_CALLBACK_LINE_KEY, CallbackLineType.LINE_1.getType() + "");
+			put(PREF_CALLBACK_LINE_KEY, CallbackLineType.LINE_2.getType() + "");
 			put(PREF_LAST_READ_NEWS_TIME, "");
+			put(PREF_SERVER_URL, ApiConfig.RELEASE_URL);
 		}
 	};
 	private final static HashMap<String, Boolean> BOOLEAN_PREFS = new HashMap<String, Boolean>()

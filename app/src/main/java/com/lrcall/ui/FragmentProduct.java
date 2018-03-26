@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.androidquery.callback.AjaxStatus;
 import com.google.gson.reflect.TypeToken;
+import com.hyphenate.chatuidemo.ui.ChatActivity;
+import com.hyphenate.easeui.EaseConstant;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.ProductInfo;
 import com.lrcall.appbst.models.ProductPicInfo;
@@ -28,6 +30,7 @@ import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ProductService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbProductInfoFactory;
+import com.lrcall.enums.NeedExpress;
 import com.lrcall.enums.ProductPicType;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
 import com.lrcall.ui.customer.FloatProductSelectCount;
@@ -47,7 +50,7 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 	private ViewPager viewPager;
 	private SectionsPagerAdapter sectionsPagerAdapter;
 	private SmartTabLayout viewPagerTab;
-	private TextView tvTitle, tvDesc, tvPrice, tvMarketPrice, tvPoint;
+	private TextView tvTitle, tvDesc, tvPrice, tvMarketPrice, tvPoint, tvExpress, tvShop;
 	public TextView tvAmount;
 	private String productId;
 	private ProductInfo mProductInfo;
@@ -122,6 +125,8 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 		tvMarketPrice = (TextView) rootView.findViewById(R.id.tv_market_price);
 		tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 		tvAmount = (TextView) rootView.findViewById(R.id.tv_amount);
+		tvExpress = (TextView) rootView.findViewById(R.id.tv_express);
+		tvShop = (TextView) rootView.findViewById(R.id.tv_shop);
 		rootView.findViewById(R.id.layout_show_choose_amount).setOnClickListener(this);
 		rootView.findViewById(R.id.btn_show_choose_amount).setOnClickListener(this);
 		rootView.findViewById(R.id.layout_comment).setOnClickListener(this);
@@ -183,6 +188,29 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 			tvPrice.setText("￥" + StringTools.getPrice(mProductInfo.getPrice()));
 			tvMarketPrice.setText("￥" + StringTools.getPrice(mProductInfo.getMarketPrice()));
 			tvPoint.setText(String.format("购买此商品赠送%d积分。", (int) Math.floor(mProductInfo.getPrice() / 100)));
+			if (mProductInfo.getNeedExpress() == NeedExpress.NEED.getStatus())
+			{
+				if (mProductInfo.getExpressPrice() == 0)
+				{
+					tvExpress.setText("包邮");
+				}
+				else
+				{
+					tvExpress.setText(String.format("快递费%s元", StringTools.getPrice(mProductInfo.getExpressPrice())));
+				}
+			}
+			else
+			{
+				tvExpress.setText("");
+			}
+			if (StringTools.isNull(mProductInfo.getShopId()))
+			{
+				tvShop.setText("自营商品");
+			}
+			else
+			{
+				tvShop.setText("来自商家" + mProductInfo.getShopId());
+			}
 		}
 	}
 
@@ -251,6 +279,21 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 			}
 			case R.id.btn_kefu:
 			{
+				if (UserService.isLogin())
+				{
+					if (StringTools.isNull(mProductInfo.getShopId()))
+					{
+						startActivity(new Intent(getActivity(), ActivityImKefuList.class));
+					}
+					else
+					{
+						startActivity(new Intent(this.getContext(), ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID, mProductInfo.getShopId()));
+					}
+				}
+				else
+				{
+					startActivity(new Intent(this.getContext(), ActivityLogin.class));
+				}
 				break;
 			}
 			case R.id.tv_share:
@@ -306,7 +349,7 @@ public class FragmentProduct extends MyBaseFragment implements View.OnClickListe
 				Intent intent = new Intent(this.getContext(), ActivityShare.class);
 				String data = ApiConfig.getServerProductUrl(productId);
 				intent.putExtra(ConstValues.DATA_SHARE_DATA, data);
-				intent.putExtra(ConstValues.DATA_SHARE_CONTENT, returnInfo.getErrmsg());
+				intent.putExtra(ConstValues.DATA_SHARE_CONTENT, returnInfo.getMsg());
 				startActivity(intent);
 			}
 			else

@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lrcall.appbst.R;
@@ -63,7 +62,7 @@ public class ActivityBackups extends MyBaseActivity
 		mTabInfoList.add(new TabInfo(1, "通话记录", FragmentBackupHistory.class));
 		ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
 		//加载tab布局
-		tab.addView(LayoutInflater.from(this).inflate(R.layout.layout_dial_tab, tab, false));
+		tab.addView(LayoutInflater.from(this).inflate(R.layout.layout_tab_text, tab, false));
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		final SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 		viewPagerTab.setCustomTabView(new SmartTabLayout.TabProvider()
@@ -72,12 +71,9 @@ public class ActivityBackups extends MyBaseActivity
 			public View createTabView(ViewGroup container, int position, PagerAdapter adapter)
 			{
 				TabInfo tabInfo = mTabInfoList.get(position);
-				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_dial_tab, container, false);
-				ImageView imageView = (ImageView) view.findViewById(R.id.tab_icon);
+				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_tab_text, container, false);
 				TextView textView = (TextView) view.findViewById(R.id.tab_label);
-				imageView.setImageResource(tabInfo.getImgResId());
 				textView.setText(tabInfo.getLabel());
-				tabInfo.setImgIcon(imageView);
 				tabInfo.setTvLabel(textView);
 				return view;
 			}
@@ -98,11 +94,11 @@ public class ActivityBackups extends MyBaseActivity
 					TabInfo tabInfo = mTabInfoList.get(i);
 					if (i == position)
 					{
-						tabInfo.getTvLabel().setTextColor(getResources().getColor(R.color.icon_enabled));
+						tabInfo.getTvLabel().setTextColor(getResources().getColor(R.color.tab_text_enabled));
 					}
 					else
 					{
-						tabInfo.getTvLabel().setTextColor(getResources().getColor(R.color.icon_disabled));
+						tabInfo.getTvLabel().setTextColor(getResources().getColor(R.color.tab_text_disabled));
 					}
 				}
 			}
@@ -120,7 +116,7 @@ public class ActivityBackups extends MyBaseActivity
 		FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getSupportFragmentManager(), pages);
 		viewPager.setAdapter(adapter);
 		viewPagerTab.setViewPager(viewPager);
-		mTabInfoList.get(0).getTvLabel().setTextColor(getResources().getColor(R.color.icon_enabled));
+		mTabInfoList.get(0).getTvLabel().setTextColor(getResources().getColor(R.color.tab_text_enabled));
 	}
 
 	/**

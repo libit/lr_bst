@@ -11,8 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.lrcall.utils.LogcatTools;
-
 /**
  * Created by libit on 16/5/7.
  */

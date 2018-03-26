@@ -31,6 +31,7 @@ public class ProductInfo extends DbObject
 	public static final String FIELD_SHARE_PRICE = "share_price";
 	public static final String FIELD_SHARE_ADD_PRICE = "share_add_price";
 	public static final String FIELD_SORT_INDEX = "sort_index";
+	public static final String FIELD_SHOP_ID = "shop_id";
 	@SerializedName("productId")
 	private String productId;//ID
 	@SerializedName("name")
@@ -63,12 +64,33 @@ public class ProductInfo extends DbObject
 	private byte needExpress;//是否需要快递
 	@SerializedName("sortIndex")
 	private int sortIndex;
+	@SerializedName("shopId")
+	private String shopId;
 
 	public ProductInfo()
 	{
 	}
+	//	public ProductInfo(String productId, String name, String sortId, String brandId, String picId, int price, int sharePrice, int shareAddPrice, int marketPrice, int expressPrice, int count, String description, String config, String content, byte needExpress, int sortIndex)
+	//	{
+	//		this.productId = productId;
+	//		this.name = name;
+	//		this.sortId = sortId;
+	//		this.brandId = brandId;
+	//		this.picId = picId;
+	//		this.price = price;
+	//		this.sharePrice = sharePrice;
+	//		this.shareAddPrice = shareAddPrice;
+	//		this.marketPrice = marketPrice;
+	//		this.expressPrice = expressPrice;
+	//		this.count = count;
+	//		this.description = description;
+	//		this.config = config;
+	//		this.content = content;
+	//		this.needExpress = needExpress;
+	//		this.sortIndex = sortIndex;
+	//	}
 
-	public ProductInfo(String productId, String name, String sortId, String brandId, String picId, int price, int sharePrice, int shareAddPrice, int marketPrice, int expressPrice, int count, String description, String config, String content, byte needExpress, int sortIndex)
+	public ProductInfo(String productId, String name, String sortId, String brandId, String picId, int price, int sharePrice, int shareAddPrice, int marketPrice, int expressPrice, int count, String description, String config, String content, byte needExpress, int sortIndex, String shopId)
 	{
 		this.productId = productId;
 		this.name = name;
@@ -86,6 +108,7 @@ public class ProductInfo extends DbObject
 		this.content = content;
 		this.needExpress = needExpress;
 		this.sortIndex = sortIndex;
+		this.shopId = shopId;
 	}
 
 	/**
@@ -95,7 +118,7 @@ public class ProductInfo extends DbObject
 	 */
 	public static final String getCreateTableSQL()
 	{
-		return String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL,%s TEXT NOT NULL,%s TEXT,%s INTEGER,%s INTEGER,%s INTEGER,%s INTEGER,%s TEXT NOT NULL,%s TEXT,%s TEXT,%s INTEGER,%s INTEGER,%s INTEGER,%s INTEGER);", DbConstant.TABLE_NAME_PRODUCT, FIELD_ID, FIELD_PRODUCT_ID, FIELD_NAME, FIELD_SORT_ID, FIELD_BRAND_ID, FIELD_PIC_ID, FIELD_PRICE, FIELD_MARKET_PRICE, FIELD_EXPRESS_PRICE, FIELD_COUNT, FIELD_DESC, FIELD_CONFIG, FIELD_CONTENT, FIELD_NEED_EXPRESS, FIELD_SHARE_PRICE, FIELD_SHARE_ADD_PRICE, FIELD_SORT_INDEX);
+		return String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL UNIQUE,%s TEXT NOT NULL,%s TEXT NOT NULL,%s TEXT,%s INTEGER,%s INTEGER,%s INTEGER,%s INTEGER,%s TEXT NOT NULL,%s TEXT,%s TEXT,%s INTEGER,%s INTEGER,%s INTEGER,%s INTEGER,%s TEXT);", DbConstant.TABLE_NAME_PRODUCT, FIELD_ID, FIELD_PRODUCT_ID, FIELD_NAME, FIELD_SORT_ID, FIELD_BRAND_ID, FIELD_PIC_ID, FIELD_PRICE, FIELD_MARKET_PRICE, FIELD_EXPRESS_PRICE, FIELD_COUNT, FIELD_DESC, FIELD_CONFIG, FIELD_CONTENT, FIELD_NEED_EXPRESS, FIELD_SHARE_PRICE, FIELD_SHARE_ADD_PRICE, FIELD_SORT_INDEX, FIELD_SHOP_ID);
 	}
 
 	/**
@@ -123,6 +146,7 @@ public class ProductInfo extends DbObject
 		productInfo.setSharePrice(cursor.getInt(cursor.getColumnIndex(FIELD_SHARE_PRICE)));
 		productInfo.setShareAddPrice(cursor.getInt(cursor.getColumnIndex(FIELD_SHARE_ADD_PRICE)));
 		productInfo.setSortIndex(cursor.getInt(cursor.getColumnIndex(FIELD_SORT_INDEX)));
+		productInfo.setShopId(cursor.getString(cursor.getColumnIndex(FIELD_SHOP_ID)));
 		return productInfo;
 	}
 
@@ -150,6 +174,7 @@ public class ProductInfo extends DbObject
 		contentValues.put(FIELD_SHARE_PRICE, sharePrice);
 		contentValues.put(FIELD_SHARE_ADD_PRICE, shareAddPrice);
 		contentValues.put(FIELD_SORT_INDEX, sortIndex);
+		contentValues.put(FIELD_SHOP_ID, shopId);
 		return contentValues;
 	}
 
@@ -311,5 +336,15 @@ public class ProductInfo extends DbObject
 	public void setSortIndex(int sortIndex)
 	{
 		this.sortIndex = sortIndex;
+	}
+
+	public String getShopId()
+	{
+		return shopId;
+	}
+
+	public void setShopId(String shopId)
+	{
+		this.shopId = shopId;
 	}
 }

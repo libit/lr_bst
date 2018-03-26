@@ -208,7 +208,7 @@ public abstract class MyBaseActivity extends SwipeBackActivity
 		{
 			if (StringTools.isNull(successMsg))
 			{
-				successMsg = returnInfo.getErrmsg();
+				successMsg = returnInfo.getMsg();
 			}
 			ToastView.showCenterToast(this, R.drawable.ic_done, successMsg);
 		}
@@ -217,7 +217,7 @@ public abstract class MyBaseActivity extends SwipeBackActivity
 			String msg = jsonResult;
 			if (returnInfo != null)
 			{
-				msg = returnInfo.getErrmsg();
+				msg = returnInfo.getMsg();
 			}
 			ToastView.showCenterToast(this, R.drawable.ic_do_fail, msg);
 		}

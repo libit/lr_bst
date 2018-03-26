@@ -87,6 +87,10 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 	public void refreshData()
 	{
 		mDataTrafficOrderInfoList.clear();
+		if (mDataTrafficOrderAdapter != null)
+		{
+			mDataTrafficOrderAdapter.notifyDataSetChanged();
+		}
 		mDataTrafficOrderAdapter = null;
 		loadMoreData();
 	}
@@ -113,10 +117,7 @@ public class ActivityRechargeDataTrafficList extends MyBasePageActivity implemen
 		}
 		layoutRechargeDataTrafficList.setVisibility(View.VISIBLE);
 		layoutNoRechargeDataTraffic.setVisibility(View.GONE);
-		if (dataTrafficInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(dataTrafficInfoList.size() >= getPageSize());
 		for (DataTrafficOrderInfo dataTrafficInfo : dataTrafficInfoList)
 		{
 			mDataTrafficOrderInfoList.add(dataTrafficInfo);

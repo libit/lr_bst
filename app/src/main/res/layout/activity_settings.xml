@@ -67,7 +67,8 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="@dimen/margin15"
                 android:layout_marginRight="@dimen/margin15"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <RelativeLayout
                 android:id="@+id/layout_debug"
                 android:layout_width="match_parent"
@@ -105,6 +106,37 @@
                     android:layout_toLeftOf="@id/app_setting_item_tag31"
                     android:src="@drawable/btn_checked"/>
             </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/layout_debug_input"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/app_setting_relativeLayout_h"
+                android:layout_marginLeft="@dimen/margin0"
+                android:layout_marginRight="@dimen/margin0"
+                android:background="@color/white"
+                android:contentDescription="@null"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                <EditText
+                    android:id="@+id/et_debug_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/margin15"
+                    android:layout_marginRight="@dimen/margin5"
+                    android:layout_weight="1"
+                    android:text="http://115.29.140.222:8088/lr_bst/user"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize18"/>
+                <Button
+                    android:id="@+id/btn_submit_debug_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/et_debug_url"
+                    android:layout_marginRight="@dimen/margin10"
+                    android:text="提交"
+                    android:textSize="16sp"/>
+            </LinearLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -155,8 +187,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="@dimen/margin15"
                 android:layout_marginRight="@dimen/margin15"
-                android:background="@color/line"
-                android:visibility="gone"/>
+                android:background="@color/line"/>
             <RelativeLayout
                 android:id="@+id/layout_backup"
                 android:layout_width="match_parent"
@@ -164,8 +195,7 @@
                 android:layout_marginLeft="@dimen/margin0"
                 android:layout_marginRight="@dimen/margin0"
                 android:background="@color/white"
-                android:contentDescription="@null"
-                android:visibility="gone">
+                android:contentDescription="@null">
                 <TextView
                     android:id="@+id/app_setting_backup"
                     android:layout_width="wrap_content"
@@ -345,7 +375,8 @@
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="@dimen/margin15"
                 android:layout_marginRight="@dimen/margin15"
-                android:background="@color/line"/>
+                android:background="@color/line"
+                android:visibility="gone"/>
             <RelativeLayout
                 android:id="@+id/layout_advice"
                 android:layout_width="match_parent"
@@ -449,8 +480,7 @@
                 android:layout_height="@dimen/app_setting_relativeLayout_h"
                 android:layout_marginLeft="@dimen/margin0"
                 android:layout_marginRight="@dimen/margin0"
-                android:background="@color/white"
-                android:contentDescription="@null">
+                android:background="@color/white">
                 <TextView
                     android:id="@+id/app_setting_update"
                     android:layout_width="wrap_content"
@@ -483,104 +513,6 @@
                     android:text="1.0.0"
                     android:textColor="@color/setting_gray"
                     android:textSize="@dimen/textsize18"/>
-            </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="@dimen/margin15"
-                android:layout_marginRight="@dimen/margin15"
-                android:background="@color/line"/>
-            <RelativeLayout
-                android:id="@+id/layout_share"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/app_setting_relativeLayout_h"
-                android:layout_marginLeft="@dimen/margin0"
-                android:layout_marginRight="@dimen/margin0"
-                android:layout_marginTop="@dimen/margin10"
-                android:background="@color/white"
-                android:contentDescription="@null"
-                android:visibility="gone">
-                <TextView
-                    android:id="@+id/app_setting_share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin15"
-                    android:text="@string/func_share"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/textsize18"/>
-                <ImageView
-                    android:id="@id/app_setting_item_tag3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/margin15"
-                    android:contentDescription="@null"
-                    android:src="@drawable/setting_right_arrow"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/app_setting_share"
-                    android:layout_alignBottom="@id/app_setting_share"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/margin20"
-                    android:layout_toLeftOf="@id/app_setting_item_tag3"
-                    android:text=""
-                    android:textColor="@color/setting_gray"
-                    android:textSize="@dimen/textsize18"
-                    android:visibility="invisible"/>
-            </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="@dimen/margin15"
-                android:layout_marginRight="@dimen/margin15"
-                android:background="@color/line"
-                android:visibility="gone"/>
-            <RelativeLayout
-                android:id="@+id/layout_more_app"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/app_setting_relativeLayout_h"
-                android:layout_marginLeft="@dimen/margin0"
-                android:layout_marginRight="@dimen/margin0"
-                android:background="@color/white"
-                android:contentDescription="@null"
-                android:visibility="gone">
-                <TextView
-                    android:id="@+id/app_setting_more_app"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin15"
-                    android:text="@string/func_more_app"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/textsize18"/>
-                <ImageView
-                    android:id="@id/app_setting_item_tag3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/margin15"
-                    android:contentDescription="@null"
-                    android:src="@drawable/setting_right_arrow"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/app_setting_more_app"
-                    android:layout_alignBottom="@id/app_setting_more_app"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/margin20"
-                    android:layout_toLeftOf="@id/app_setting_item_tag3"
-                    android:text=""
-                    android:textColor="@color/setting_gray"
-                    android:textSize="@dimen/textsize18"
-                    android:visibility="invisible"/>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

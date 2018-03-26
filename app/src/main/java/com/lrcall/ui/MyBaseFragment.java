@@ -72,7 +72,7 @@ public abstract class MyBaseFragment extends Fragment
 		{
 			if (StringTools.isNull(successMsg))
 			{
-				successMsg = returnInfo.getErrmsg();
+				successMsg = returnInfo.getMsg();
 			}
 			ToastView.showCenterToast(this.getContext(), R.drawable.ic_done, successMsg);
 		}
@@ -81,7 +81,7 @@ public abstract class MyBaseFragment extends Fragment
 			String msg = jsonResult;
 			if (returnInfo != null)
 			{
-				msg = returnInfo.getErrmsg();
+				msg = returnInfo.getMsg();
 			}
 			ToastView.showCenterToast(this.getContext(), R.drawable.ic_do_fail, msg);
 		}

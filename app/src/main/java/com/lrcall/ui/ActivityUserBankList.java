@@ -86,6 +86,10 @@ public class ActivityUserBankList extends MyBasePageActivity implements IAjaxDat
 	public void refreshData()
 	{
 		mUserBankInfoList.clear();
+		if (mUserBankAdapter != null)
+		{
+			mUserBankAdapter.notifyDataSetChanged();
+		}
 		mUserBankAdapter = null;
 		loadMoreData();
 	}
@@ -112,10 +116,7 @@ public class ActivityUserBankList extends MyBasePageActivity implements IAjaxDat
 		}
 		layoutLogList.setVisibility(View.VISIBLE);
 		layoutNoLog.setVisibility(View.GONE);
-		if (userBankInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(userBankInfoList.size() >= getPageSize());
 		for (UserBankInfo userBankInfo : userBankInfoList)
 		{
 			mUserBankInfoList.add(userBankInfo);

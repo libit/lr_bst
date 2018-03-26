@@ -95,6 +95,10 @@ public class ActivityAddressManage extends MyBasePageActivity implements IAjaxDa
 	public void refreshData()
 	{
 		mUserAddressInfoList.clear();
+		if (mAddressAdapter != null)
+		{
+			mAddressAdapter.notifyDataSetChanged();
+		}
 		mAddressAdapter = null;
 		loadMoreData();
 	}
@@ -120,10 +124,7 @@ public class ActivityAddressManage extends MyBasePageActivity implements IAjaxDa
 		}
 		layoutAddressList.setVisibility(View.VISIBLE);
 		layoutNoAddress.setVisibility(View.GONE);
-		if (userAddressInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(userAddressInfoList.size() >= getPageSize());
 		for (UserAddressInfo userAddressInfo : userAddressInfoList)
 		{
 			mUserAddressInfoList.add(userAddressInfo);

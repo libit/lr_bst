@@ -11,7 +11,7 @@ public enum UserBalanceLogType
 	private int type;
 	private String desc;
 
-	private UserBalanceLogType(int type, String desc)
+	 UserBalanceLogType(int type, String desc)
 	{
 		this.type = type;
 		this.desc = desc;

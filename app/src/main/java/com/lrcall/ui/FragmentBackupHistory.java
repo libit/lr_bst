@@ -161,7 +161,7 @@ public class FragmentBackupHistory extends MyBaseFragment implements IAjaxDataRe
 			String netCount = "";
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				netCount = returnInfo.getErrmsg();
+				netCount = returnInfo.getMsg();
 			}
 			tvHistoryCount.setText(String.format("通话记录：手机%d/网络%s", callLogInfoList.size(), netCount));
 			return true;

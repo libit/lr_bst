@@ -133,7 +133,7 @@ public class BackupService extends BaseService
 			{
 				if (returnInfo != null)
 				{
-					ToastView.showCenterToast(context, R.drawable.ic_do_fail, "备份失败：" + returnInfo.getErrmsg());
+					ToastView.showCenterToast(context, R.drawable.ic_do_fail, "备份失败：" + returnInfo.getMsg());
 				}
 				else
 				{
@@ -180,7 +180,7 @@ public class BackupService extends BaseService
 				// 获取失败
 				if (returnInfo != null)
 				{
-					ToastView.showCenterToast(context, R.drawable.ic_do_fail, "同步失败：" + returnInfo.getErrmsg());
+					ToastView.showCenterToast(context, R.drawable.ic_do_fail, "同步失败：" + returnInfo.getMsg());
 				}
 				else
 				{

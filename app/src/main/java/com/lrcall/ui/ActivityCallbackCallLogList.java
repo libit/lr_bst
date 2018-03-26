@@ -107,6 +107,10 @@ public class ActivityCallbackCallLogList extends MyBasePageActivity implements I
 	public void refreshData()
 	{
 		mCallbackCallLogInfoList.clear();
+		if (mCallbackCallLogsAdapter != null)
+		{
+			mCallbackCallLogsAdapter.notifyDataSetChanged();
+		}
 		mCallbackCallLogsAdapter = null;
 		loadMoreData();
 	}
@@ -133,10 +137,7 @@ public class ActivityCallbackCallLogList extends MyBasePageActivity implements I
 		}
 		layoutCalllogList.setVisibility(View.VISIBLE);
 		layoutNoCalllog.setVisibility(View.GONE);
-		if (callbackCallLogInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(callbackCallLogInfoList.size() >= getPageSize());
 		for (CallbackCallLogInfo callbackCallLogInfo : callbackCallLogInfoList)
 		{
 			mCallbackCallLogInfoList.add(callbackCallLogInfo);
@@ -158,7 +159,7 @@ public class ActivityCallbackCallLogList extends MyBasePageActivity implements I
 						ReturnInfo returnInfo = CallTools.makeCall(ActivityCallbackCallLogList.this, callLogInfo.getNumber());
 						if (!ReturnInfo.isSuccess(returnInfo))
 						{
-							Toast.makeText(ActivityCallbackCallLogList.this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+							Toast.makeText(ActivityCallbackCallLogList.this, returnInfo.getMsg(), Toast.LENGTH_LONG).show();
 						}
 					}
 				}

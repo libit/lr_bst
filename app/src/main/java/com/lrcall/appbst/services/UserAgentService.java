@@ -128,14 +128,14 @@ public class UserAgentService extends BaseService
 			//			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			//			if (ReturnInfo.isSuccess(returnInfo))
 			//			{
-			//				ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getErrmsg());
+			//				ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getMsg());
 			//			}
 			//			else
 			//			{
 			//				String msg = "申请失败：" + result;
 			//				if (returnInfo != null)
 			//				{
-			//					msg = "申请失败：" + returnInfo.getErrmsg();
+			//					msg = "申请失败：" + returnInfo.getMsg();
 			//				}
 			//				ToastView.showCenterToast(context, R.drawable.ic_do_fail, msg);
 			//			}

@@ -239,4 +239,11 @@ public class DateTimeTools
 		// calendar.set(Calendar.MILLISECOND, 999);
 		return calendar.getTime().getTime();
 	}
+
+	public static long getDateTimeLong(int year, int month, int day)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day, 0, 0, 0);
+		return calendar.getTime().getTime();
+	}
 }

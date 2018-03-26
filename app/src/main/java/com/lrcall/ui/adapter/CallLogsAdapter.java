@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.lrcall.appbst.R;
 import com.lrcall.models.CallLogInfo;
-import com.lrcall.utils.LocalTools;
 import com.lrcall.utils.DateTimeTools;
+import com.lrcall.utils.LocalTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.List;
@@ -51,42 +51,49 @@ public class CallLogsAdapter extends BaseUserAdapter<CallLogInfo>
 		{
 			viewHolder.clear();
 		}
-		final CallLogInfo callLogInfo = list.get(position);
-		String name = callLogInfo.getName();
-		if (StringTools.isNull(name))
+		try
 		{
-			name = "未知号码";
-		}
-		else if (name.startsWith("("))
-		{
-			name = "未知号码" + name;
-		}
-		String number = callLogInfo.getNumber();
-		viewHolder.ivType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
-		viewHolder.tvName.setText(name);
-		viewHolder.tvNumber.setText(number);
-		viewHolder.tvDuration.setText(CallLogInfo.getDurationString(callLogInfo.getDuration()));
-		viewHolder.tvTime.setText(DateTimeTools.getRelativeTimeSpanString(callLogInfo.getDate()));
-		if (iItemClick != null)
-		{
-			convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
+			final CallLogInfo callLogInfo = list.get(position);
+			String name = callLogInfo.getName();
+			if (StringTools.isNull(name))
 			{
-				@Override
-				public void onClick(View v)
-				{
-					iItemClick.onCallClicked(callLogInfo);
-				}
-			});
-			convertView.setOnClickListener(new View.OnClickListener()
+				name = "未知号码";
+			}
+			else if (name.startsWith("("))
 			{
-				@Override
-				public void onClick(View v)
+				name = "未知号码" + name;
+			}
+			String number = callLogInfo.getNumber();
+			viewHolder.ivType.setImageResource(CallLogInfo.getTypeRes(callLogInfo.getType()));
+			viewHolder.tvName.setText(name);
+			viewHolder.tvNumber.setText(number);
+			viewHolder.tvDuration.setText(CallLogInfo.getDurationString(callLogInfo.getDuration()));
+			viewHolder.tvTime.setText(DateTimeTools.getRelativeTimeSpanString(callLogInfo.getDate()));
+			if (iItemClick != null)
+			{
+				convertView.findViewById(R.id.v_call).setOnClickListener(new View.OnClickListener()
 				{
-					iItemClick.onItemClicked(callLogInfo);
-				}
-			});
+					@Override
+					public void onClick(View v)
+					{
+						iItemClick.onCallClicked(callLogInfo);
+					}
+				});
+				convertView.setOnClickListener(new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						iItemClick.onItemClicked(callLogInfo);
+					}
+				});
+			}
+			LocalTools.setLocal(context, viewHolder.tvLocal, number, true);
 		}
-		LocalTools.setLocal(context, viewHolder.tvLocal, number, true);
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		return convertView;
 	}
 

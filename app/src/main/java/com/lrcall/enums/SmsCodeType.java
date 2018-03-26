@@ -11,7 +11,7 @@ public enum SmsCodeType
 	private int type;
 	private String desc;
 
-	private SmsCodeType(int type, String desc)
+	 SmsCodeType(int type, String desc)
 	{
 		this.type = type;
 		this.desc = desc;

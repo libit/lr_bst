@@ -167,7 +167,7 @@ public class ActivitySearchContacts extends MyBaseActivity implements View.OnCli
 						ReturnInfo returnInfo = CallTools.makeCall(ActivitySearchContacts.this, callLogInfo.getNumber());
 						if (!ReturnInfo.isSuccess(returnInfo))
 						{
-							Toast.makeText(ActivitySearchContacts.this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+							Toast.makeText(ActivitySearchContacts.this, returnInfo.getMsg(), Toast.LENGTH_LONG).show();
 						}
 					}
 				}

@@ -6,6 +6,7 @@ package com.lrcall.appbst.services;
 
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.PreferenceUtils;
+import com.lrcall.utils.StringTools;
 
 /**
  * Created by libit on 16/4/6.
@@ -14,18 +15,21 @@ public class ApiConfig
 {
 	public static final String API_VERSION = "1";
 	//	private static final String RELEASE_URL = "http://115.29.140.222:8088/lr_bst/user";
-	//	private static final String DEBUG_URL = "http://192.168.0.103:8080/lr_bst/user";
-	private static final String RELEASE_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
-	public static final String SUBMIT_BUG = RELEASE_URL + "/ajaxAddClientBugInfo";//BUG日志提交
-	public static final String CHECK_UPDATE = RELEASE_URL + "/ajaxGetLastClientInfo";//检查更新
-	public static final String UPLOAD_DEBUG_FILE = RELEASE_URL + "/uploadDebugFile";//上传BUG文件
+	//	private static final String DEBUG_URL = "http://192.168.168.3:8080/lr_bst/user";
+	//	private static final String DEBUG_URL = "http://115.29.140.222:8088/lr_bst/user";
+	public static final String RELEASE_URL = "http://www.wp520.top:8080/sgqq/user";
+	//	private static final String DEBUG_URL = "http://ht.dyp8.com:8080/sgqq/user";
+	public static final String SUBMIT_BUG = getServerUrl() + "/ajaxAddClientBugInfo";//BUG日志提交
+	public static final String CHECK_UPDATE = getServerUrl() + "/ajaxGetLastClientInfo";//检查更新
+	public static final String UPLOAD_DEBUG_FILE = getServerUrl() + "/uploadDebugFile";//上传BUG文件
 	public static final String SUBMIT_ADVICE = getServerUrl() + "/ajaxAddAdviceInfo";//提交意见反馈
 	public static final String USER_LOGIN = getServerUrl() + "/ajaxLogin";//用户登录
 	public static final String GET_SMS_CODE = getServerUrl() + "/../ajaxGetSmsCode";//获取手机验证码
 	public static final String USER_CHANGE_PWD = getServerUrl() + "/ajaxChangePwd";//用户修改密码
 	public static final String USER_RESET_PWD = getServerUrl() + "/ajaxResetPwd";//用户重置密码
 	public static final String USER_REGISTER = getServerUrl() + "/ajaxRegister";//用户注册
+	public static final String UPDATE_USER_INFO = getServerUrl() + "/ajaxUpdateUserInfo";//用户更新资料
+	public static final String GET_USER_NEED_UPDATE = getServerUrl() + "/ajaxGetUserNeedUpdate";//用户是否需要更新资料
 	public static final String GET_USER_INFO = getServerUrl() + "/ajaxGetUserInfo";//获取用户信息
 	public static final String GET_USER_BALANCE_INFO = getServerUrl() + "/ajaxGetUserBalanceInfo";//获取用户余额信息
 	public static final String UPDATE_PIC = getServerUrl() + "/uploadPic";//用户上传图片
@@ -43,6 +47,8 @@ public class ApiConfig
 	public static final String USER_UPGRADE_PRICE = getServerUrl() + "/ajaxGetUserUpgradePrice";//用户升级费用
 	public static final String USER_UPGRADE_BY_SHOP_CARD = getServerUrl() + "/ajaxUserUpgradeByShopCard";//用户商城卡升级
 	public static final String USER_UPGRADE_BY_BALANCE = getServerUrl() + "/ajaxUserUpgradeByBalance";//用户通过余额升级
+	//IM
+	public static final String IM_REGISTER = getServerUrl() + "/ajaxImRegister";//IM注册
 	//用户提现
 	public static final String USER_ADD_WITHDRAW = getServerUrl() + "/ajaxAddWithdraw";//用户提现
 	public static final String USER_WITHDRAW_LIST = getServerUrl() + "/ajaxGetWithdrawList";//用户提现列表
@@ -66,6 +72,7 @@ public class ApiConfig
 	public static final String GET_RECOMMEND_PRODUCT_LIST = getServerUrl() + "/ajaxGetRecommendProductList";//获取推荐商品列表
 	public static final String GET_CONCESSION_PRODUCT_LIST = getServerUrl() + "/ajaxGetConcessionProductList";//获取促销商品列表
 	public static final String GET_NEW_PRODUCT_LIST = getServerUrl() + "/ajaxGetNewProductList";//获取最新商品列表
+	public static final String GET_PANIC_BUYING_PRODUCT_LIST = getServerUrl() + "/ajaxGetPanicBuyingProductList";//获取抢购商品列表
 	public static final String GET_PRODUCT_INFO = getServerUrl() + "/ajaxGetProductInfo";//获取商品信息
 	public static final String GET_PRODUCT_PIC_LIST = getServerUrl() + "/ajaxGetProductPicList";//获取商品图片信息列表
 	//消息
@@ -113,7 +120,7 @@ public class ApiConfig
 	public static final String GET_ALIPAY_CONIFG = getServerUrl() + "/ajaxGetAlipayConfigInfo";//获取支付宝配置信息
 	//微信
 	public static final String WX_PRE_PAY = getServerUrl() + "/../wechart/ajaxGetWxPrePay";//获取微信预支付信息
-	public static final String GET_WX_PAY_INFO = getServerUrl() + "/../wechart/ajaxGetWxPayInfo";//获取微信预支付信息
+	//	public static final String GET_WX_PAY_INFO = getServerUrl() + "/../wechart/ajaxGetWxPayInfo";//获取微信配置信息
 	//流量充值商品
 	public static final String GET_DATA_TRAFFIC_LIST = getServerUrl() + "/ajaxGetDataTrafficInfoList";//获取流量充值商品列表
 	public static final String GET_NEW_DATA_TRAFFIC_LIST = getServerUrl() + "/ajaxGetNewDataTrafficInfoList";//获取最新流量充值商品列表
@@ -128,12 +135,13 @@ public class ApiConfig
 	public static final String GET_PACKAGE_DATA_TRAFFIC = getServerUrl() + "/ajaxUserGetPackageDataTraffic";//套餐用户每月领取流量卡
 	//回拨接口
 	public static final String CALLBACK_REGISTER = getServerUrl() + "/ajaxCallbackRegister";//回拨注册
-	public static final String CALLBACK_GET_BALANCE_INFO = getServerUrl() + "/ajaxCallbackGetBalance";//回拨查余额
-	public static final String CALLBACK_RECHARGE = getServerUrl() + "/ajaxCallbackRecharge";//回拨充值
+	public static final String CALLBACK_GET_BALANCE_INFO = getServerUrl() + "/ajaxGetCallbackBalance";//回拨查余额
+	public static final String CALLBACK_RECHARGE = getServerUrl() + "/ajaxCallbackShopCardRecharge";//回拨充值
 	public static final String CALLBACK_MAKE_CALL = getServerUrl() + "/ajaxCallbackMakecall";//回拨呼叫
 	public static final String CALLBACK_GET_CALL_LOG_LIST = getServerUrl() + "/ajaxCallbackCallList";//回拨呼叫记录列表
 	public static final String CALLBACK_GET_RECHARGE_LOG_LIST = getServerUrl() + "/ajaxCallbackRechargeList";//回拨充值记录列表
 	public static final String CALLBACK_GET_NUMBER_LIST = getServerUrl() + "/ajaxGetCallbackNumbers";//回拨回铃号码列表
+	public static final String GET_USER_CALLBACK_INFO = getServerUrl() + "/ajaxGetUserCallbackInfo";//获取回拨信息
 	//商品积分抵扣
 	public static final String GET_PRICE_POINT_INFO = getServerUrl() + "/ajaxGetProductPricePointInfo";//获取商品积分抵扣信息
 	public static final String GET_PRICE_POINT_INFO_LIST = getServerUrl() + "/ajaxGetProductPricePointInfoList";//批量获取商品积分抵扣信息
@@ -193,18 +201,27 @@ public class ApiConfig
 	//微店
 	public static final String GET_LOCATION_SHOP_PRODUCT_LIST = getServerUrl() + "/ajaxGetShopProductList";//获取附近商家商品列表
 	public static final String GET_SHOP_LIST = getServerUrl() + "/ajaxGetShopList";//获取商家列表
+	//回拨VIP
+	public static final String GET_CALLBACK_VIP_PRICE_INFO = getServerUrl() + "/ajaxGetCallbackVipPriceInfo";//获取VIP价格信息
+	public static final String GET_CALLBACK_VIP_PRICE_INFO_LIST = getServerUrl() + "/ajaxGetCallbackVipPriceInfoList";//获取VIP价格信息列表
 
 	//获取服务器地址
 	public static String getServerUrl()
 	{
-		if (AppConfig.isDebug())
+		//		if (AppConfig.isDebug())
+		//		{
+		//			return DEBUG_URL;
+		//		}
+		//		else
+		//		{
+		//			return RELEASE_URL;
+		//		}
+		String url = PreferenceUtils.getInstance().getStringValue(PreferenceUtils.PREF_SERVER_URL);
+		if (!AppConfig.isDebug() || StringTools.isNull(url))
 		{
-			return DEBUG_URL;
+			url = RELEASE_URL;
 		}
-		else
-		{
-			return RELEASE_URL;
-		}
+		return url;
 	}
 
 	/**

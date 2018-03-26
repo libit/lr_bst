@@ -93,7 +93,7 @@ public class ActivityContactDetail extends MyBaseActivity
 							ReturnInfo returnInfo = CallTools.makeCall(ActivityContactDetail.this, phoneInfo.getNumber());
 							if (!ReturnInfo.isSuccess(returnInfo))
 							{
-								Toast.makeText(ActivityContactDetail.this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+								Toast.makeText(ActivityContactDetail.this, returnInfo.getMsg(), Toast.LENGTH_LONG).show();
 							}
 						}
 					}
@@ -132,7 +132,7 @@ public class ActivityContactDetail extends MyBaseActivity
 								ReturnInfo returnInfo = CallTools.makeCall(ActivityContactDetail.this, callLogInfo.getNumber());
 								if (!ReturnInfo.isSuccess(returnInfo))
 								{
-									Toast.makeText(ActivityContactDetail.this, returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+									Toast.makeText(ActivityContactDetail.this, returnInfo.getMsg(), Toast.LENGTH_LONG).show();
 								}
 							}
 						}

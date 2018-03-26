@@ -76,8 +76,6 @@ public class PayDemoActivity extends FragmentActivity
 					break;
 			}
 		}
-
-		;
 	};
 
 	@Override

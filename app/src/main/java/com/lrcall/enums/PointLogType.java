@@ -13,7 +13,7 @@ public enum PointLogType
 	private int type;
 	private String desc;
 
-	private PointLogType(int type, String desc)
+	 PointLogType(int type, String desc)
 	{
 		this.type = type;
 		this.desc = desc;

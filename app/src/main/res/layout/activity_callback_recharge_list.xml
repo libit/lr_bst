@@ -1,0 +1,76 @@
+<!--
+  ~ Libit保留所有版权，如有疑问联系QQ：308062035
+  ~ Copyright (c) 2016.
+  -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/layout_title"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|right"
+            android:minWidth="120dp"
+            android:text="充值金额："
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+        <Spinner
+            android:id="@+id/sp_amount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dropDownWidth="match_parent"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line"/>
+    <LinearLayout
+        android:id="@+id/layout_paytype_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ListView
+            android:id="@+id/xlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:divider="@color/line"
+            android:dividerHeight="0.7dp"
+            android:fadingEdge="none"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false"
+            android:scrollbars="none">
+        </ListView>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_no_paytype"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="暂时没有支付方式"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+        <Button
+            android:id="@+id/btn_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_btn_common"
+            android:text="刷新"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+    </LinearLayout>
+</LinearLayout>

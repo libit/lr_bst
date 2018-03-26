@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -48,12 +49,13 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 	private XListView xListView;
 	private EraseButton erase;
 	private AddressText mAddress;
-	private View vPad, vDigitPad, layoutInput, layoutSwitchPad;
+	private View vPad, vDigitPad, layoutInput;//, layoutSwitchPad
 	private DraftImageView vSwitchPad;
 	private ContactsSearchAdapter mContactsSearchAdapter = null;
 	private int start = 0;
 	private final List<CallLogInfo> mCallLogInfoList = new ArrayList<>();
 	private CallLogsAdapter mCallLogsAdapter = null;
+	private Handler mHandler = new Handler();
 
 	//设置号码
 	public static void setAddressNumber(String number)
@@ -102,8 +104,8 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 		vSwitchPad = (DraftImageView) rootView.findViewById(R.id.btn_switch_pad);
 		vSwitchPad.setOnTouchListener(DisplayTools.getWindowHeight(this.getContext()) - rootView.findViewById(R.id.layout_root).getHeight());
 		vSwitchPad.setOnClickListener(this);
-		layoutSwitchPad = rootView.findViewById(R.id.layout_switch);
-		layoutSwitchPad.setOnClickListener(this);
+//		layoutSwitchPad = rootView.findViewById(R.id.layout_switch);
+//		layoutSwitchPad.setOnClickListener(this);
 		rootView.findViewById(R.id.btn_add_contact).setOnClickListener(this);
 		xListView.setOnTouchListener(new View.OnTouchListener()
 		{
@@ -179,7 +181,7 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 				//				ReturnInfo returnInfo = CallTools.makeCall(this.getContext(), number);
 				//				if (!ReturnInfo.isSuccess(returnInfo))
 				//				{
-				//					Toast.makeText(this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+				//					Toast.makeText(this.getContext(), returnInfo.getMsg(), Toast.LENGTH_LONG).show();
 				//				}
 				//				mAddress.setText("");
 				makeCall(number);
@@ -190,11 +192,11 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 				switchPad();
 				break;
 			}
-			case R.id.layout_switch:
-			{
-				setPadVisible(false);
-				break;
-			}
+//			case R.id.layout_switch:
+//			{
+//				setPadVisible(false);
+//				break;
+//			}
 			case R.id.btn_add_contact:
 			{
 				//				String number = mAddress.getText().toString();
@@ -292,12 +294,23 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 	}
 
 	@Subscribe
-	public void onEventMainThread(CallLogEvent callLogEvent)
+	public void onEventMainThread(final CallLogEvent callLogEvent)
 	{
-		if (callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_ADD) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_UPDATE) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_DELETE))
+		mHandler.post(new Thread()
 		{
-			onRefresh();
-		}
+			@Override
+			public void run()
+			{
+				super.run();
+				if (callLogEvent != null)
+				{
+					if (callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_ADD) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_UPDATE) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_DELETE))
+					{
+						onRefresh();
+					}
+				}
+			}
+		});
 	}
 
 	/**
@@ -360,7 +373,7 @@ public class FragmentDialer extends MyBaseFragment implements XListView.IXListVi
 							//							ReturnInfo returnInfo = CallTools.makeCall(FragmentDialer.this.getContext(), callLogInfo.getNumber());
 							//							if (!ReturnInfo.isSuccess(returnInfo))
 							//							{
-							//								Toast.makeText(FragmentDialer.this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+							//								Toast.makeText(FragmentDialer.this.getContext(), returnInfo.getMsg(), Toast.LENGTH_LONG).show();
 							//							}
 							//							mAddress.setText("");
 							makeCall(callLogInfo.getNumber());

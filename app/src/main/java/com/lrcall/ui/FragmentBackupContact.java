@@ -207,7 +207,7 @@ public class FragmentBackupContact extends MyBaseFragment implements IAjaxDataRe
 			String netCount = "";
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				netCount = returnInfo.getErrmsg();
+				netCount = returnInfo.getMsg();
 			}
 			tvContactCount.setText(String.format("通讯录：手机%d/网络%s", contactInfoList.size(), netCount));
 			return true;

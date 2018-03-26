@@ -70,7 +70,7 @@ public class ActivityShare extends MyBaseActivity implements View.OnClickListene
 					ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 					if (ReturnInfo.isSuccess(returnInfo))
 					{
-						String tips = returnInfo.getErrmsg();
+						String tips = returnInfo.getMsg();
 						tips = tips.replace("<br>", "\r\n");
 						tips = tips.replace("<br/>", "\r\n");
 						tips = tips.replace("<br />", "\r\n");

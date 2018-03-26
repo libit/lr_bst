@@ -60,7 +60,7 @@ public class ActivityAddressList extends MyBasePageActivity implements IAjaxData
 	}
 
 	@Subscribe
-	public void onEventMainThread(AddressEvent addressEvent)
+	public void onEventMainThread(final AddressEvent addressEvent)
 	{
 		if (addressEvent != null)
 		{
@@ -89,6 +89,10 @@ public class ActivityAddressList extends MyBasePageActivity implements IAjaxData
 	public void refreshData()
 	{
 		mUserAddressInfoList.clear();
+		if (mAddressAdapter != null)
+		{
+			mAddressAdapter.notifyDataSetChanged();
+		}
 		mAddressAdapter = null;
 		loadMoreData();
 	}
@@ -114,10 +118,7 @@ public class ActivityAddressList extends MyBasePageActivity implements IAjaxData
 		}
 		layoutAddressList.setVisibility(View.VISIBLE);
 		layoutNoAddress.setVisibility(View.GONE);
-		if (userAddressInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(userAddressInfoList.size() >= getPageSize());
 		for (UserAddressInfo userAddressInfo : userAddressInfoList)
 		{
 			mUserAddressInfoList.add(userAddressInfo);

@@ -11,7 +11,7 @@ public enum DataTrafficStatus
 	private byte status;
 	private String desc;
 
-	private DataTrafficStatus(byte status, String desc)
+	 DataTrafficStatus(byte status, String desc)
 	{
 		this.status = status;
 		this.desc = desc;

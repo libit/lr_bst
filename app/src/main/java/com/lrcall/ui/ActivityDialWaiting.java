@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,28 +17,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.callback.AjaxStatus;
+import com.google.gson.reflect.TypeToken;
 import com.lrcall.appbst.R;
+import com.lrcall.appbst.models.BannerInfo;
 import com.lrcall.appbst.models.ReturnInfo;
+import com.lrcall.appbst.models.TableData;
 import com.lrcall.appbst.services.ApiConfig;
+import com.lrcall.appbst.services.BannerService;
 import com.lrcall.appbst.services.CallbackService;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.contacts.ContactsFactory;
 import com.lrcall.enums.AutoAnswerType;
+import com.lrcall.enums.ClientBannerType;
+import com.lrcall.events.CallLogEvent;
 import com.lrcall.models.ContactInfo;
 import com.lrcall.services.AutoAnswerIntentService;
 import com.lrcall.services.AutoAnswerIntentService2;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
-public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickListener, IAjaxDataResponse
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
+
+public class ActivityDialWaiting extends MyBaseBannerActivity implements View.OnClickListener, IAjaxDataResponse
 {
 	private static final String TAG = ActivityDialWaiting.class.getSimpleName();
 	private ImageView ivHead;
 	private TextView tvName, tvNumber, tvResult;
 	private CallbackService mCallbackService;
 	private String number = "";
+	private BannerService mBannerService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -50,26 +64,38 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 			finish();
 			Toast.makeText(this, "呼叫号码为空!", Toast.LENGTH_LONG).show();
 		}
+		mBannerService = new BannerService(this);
+		mBannerService.addDataResponse(this);
 		mCallbackService = new CallbackService(this);
 		mCallbackService.addDataResponse(this);
 		viewInit();
 		tvNumber.setText(number);
-		ContactInfo contactInfo = ContactsFactory.getInstance().getFirstContactInfoByNumber(this, number, true);
-		String name = "陌生号码";
-		if (contactInfo != null)
-		{
-			name = contactInfo.getName();
-			if (contactInfo.getContactPhoto() != null)
-			{
-				ivHead.setImageBitmap(contactInfo.getContactPhoto());
-			}
-		}
-		tvName.setText(name);
 		tvResult.setText("正在呼叫,请稍后...");
-		mCallbackService.makeCall(number, null, true);
 		IntentFilter filter = new IntentFilter("android.intent.action.PHONE_STATE");
 		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 		registerReceiver(receiver, filter);
+		updateView();
+		runOnUiThread(new Thread()
+		{
+			@Override
+			public void run()
+			{
+				super.run();
+				mCallbackService.makeCall(number, null, true);
+				ContactInfo contactInfo = ContactsFactory.getInstance().getFirstContactInfoByNumber(ActivityDialWaiting.this, number, true);
+				String name = "陌生号码";
+				if (contactInfo != null)
+				{
+					name = contactInfo.getName();
+					if (contactInfo.getContactPhoto() != null)
+					{
+						ivHead.setImageBitmap(contactInfo.getContactPhoto());
+					}
+				}
+				tvName.setText(name);
+				refreshData();
+			}
+		});
 	}
 
 	@Override
@@ -82,6 +108,16 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 		tvNumber = (TextView) findViewById(R.id.tv_number);
 		tvResult = (TextView) findViewById(R.id.tv_result);
 		findViewById(R.id.btn_end_call).setOnClickListener(this);
+		bannerViewPager = (ViewPager) findViewById(R.id.banner_viewpager);
+		bannerViewPagerTab = (SmartTabLayout) findViewById(R.id.banner_viewpagertab);
+		setBannerWidthAndHeight(DisplayTools.getWindowWidth(this), DisplayTools.getWindowWidth(this));
+		initBannerView();
+	}
+
+	//刷新数据
+	synchronized public void refreshData()
+	{
+		mBannerService.getBannerInfoList(ClientBannerType.DIAL_WAITING.getType(), 0, 4, null, true);
 	}
 
 	@Override
@@ -105,18 +141,30 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				tvResult.setText(returnInfo.getErrmsg());
+				tvResult.setText(returnInfo.getMsg());
 			}
 			else
 			{
 				String msg = result;
 				if (returnInfo != null)
 				{
-					msg = returnInfo.getErrmsg();
+					msg = returnInfo.getMsg();
 				}
-				tvResult.setText("呼叫失败：" + msg);
+				tvResult.setText(msg);
 			}
 			return true;
+		}
+		else if (url.endsWith(ApiConfig.GET_BANNER_LIST))
+		{
+			List<BannerInfo> list = null;
+			TableData tableData = GsonTools.getObject(result, TableData.class);
+			if (tableData != null)
+			{
+				list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<BannerInfo>>()
+				{
+				}.getType());
+			}
+			setViewPagerAdapter(list);
 		}
 		return false;
 	}
@@ -143,6 +191,7 @@ public class ActivityDialWaiting extends MyBaseActivity implements View.OnClickL
 			{
 				//				CallLogsFactory.deletePrivateCallLog(context);
 			}
+			EventBus.getDefault().post(new CallLogEvent(CallLogEvent.EVENT_CALLLOG_ADD));
 			ActivityDialWaiting.this.finish();
 		}
 	};

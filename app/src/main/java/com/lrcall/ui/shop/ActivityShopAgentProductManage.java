@@ -118,6 +118,10 @@ public class ActivityShopAgentProductManage extends MyBasePageActivity implement
 	public void refreshData()
 	{
 		mShopProductAgentInfoList.clear();
+		if (mAgentProductsAdapter != null)
+		{
+			mAgentProductsAdapter.notifyDataSetChanged();
+		}
 		mAgentProductsAdapter = null;
 		loadMoreData();
 	}

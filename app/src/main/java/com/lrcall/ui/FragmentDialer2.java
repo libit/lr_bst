@@ -4,18 +4,22 @@
  */
 package com.lrcall.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.services.UserService;
@@ -24,14 +28,18 @@ import com.lrcall.contacts.ContactsFactory;
 import com.lrcall.events.CallLogEvent;
 import com.lrcall.models.CallLogInfo;
 import com.lrcall.models.ContactInfo;
+import com.lrcall.models.FuncInfo;
 import com.lrcall.ui.adapter.CallLogsAdapter;
 import com.lrcall.ui.adapter.ContactsSearchAdapter;
+import com.lrcall.ui.adapter.FuncsHorizontalAdapter;
+import com.lrcall.ui.adapter.FuncsVerticalAdapter;
 import com.lrcall.ui.customer.AddressAware;
 import com.lrcall.ui.customer.AddressText;
-import com.lrcall.utils.DisplayTools;
-import com.lrcall.ui.customer.DraftImageView;
 import com.lrcall.ui.customer.EraseButton;
+import com.lrcall.ui.dialog.DialogList;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.DisplayTools;
+import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,28 +53,37 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 	private static final String TAG = FragmentDialer2.class.getSimpleName();
 	private static final int count = 200;
 	private static FragmentDialer2 instance = null;
+	private TextView tvTitle;
 	private ListView xListView;
 	private EraseButton erase;
 	private AddressText mAddress;
-	private View vPad, vDigitPad, layoutInput, layoutSwitchPad;
-	private DraftImageView vSwitchPad;
+	private View vPad, vDigitPad, layoutInput;//, layoutSwitchPad
+	//	private DraftImageView vSwitchPad;
 	private ContactsSearchAdapter mContactsSearchAdapter = null;
 	private int start = 0;
 	private final List<CallLogInfo> mCallLogInfoList = new ArrayList<>();
 	private CallLogsAdapter mCallLogsAdapter = null;
-
+	private Handler mHandler = new Handler();
 	//设置号码
-	public static void setAddressNumber(String number)
-	{
-		if (instance != null)
-		{
-			instance.mAddress.setText(number);
-		}
-	}
+	//	public static void setAddressNumber(String number)
+	//	{
+	//		if (instance != null)
+	//		{
+	//			instance.mAddress.setText(number);
+	//		}
+	//	}
 
 	public static FragmentDialer2 getInstance()
 	{
 		return instance;
+	}
+
+	public void setTitle(String title)
+	{
+		if (tvTitle != null)
+		{
+			tvTitle.setText(title);
+		}
 	}
 
 	@Override
@@ -78,12 +95,22 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 		setPadVisible(true);
 		instance = this;
 		EventBus.getDefault().register(this);
+		IntentFilter filter = new IntentFilter("android.intent.action.PHONE_STATE");
+		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+		getActivity().registerReceiver(receiver, filter);
+		onRefresh();
 		return rootView;
 	}
 
 	@Override
 	protected void viewInit(View rootView)
 	{
+		tvTitle = (TextView) rootView.findViewById(R.id.tv_title);
+		rootView.findViewById(R.id.btn_back).setVisibility(View.INVISIBLE);
+		setTitle("电话");
+		ImageButton btnMore = (ImageButton) rootView.findViewById(R.id.btn_more);
+		btnMore.setImageResource(R.drawable.contact);
+		btnMore.setOnClickListener(this);
 		xListView = (ListView) rootView.findViewById(R.id.xlist);
 		mAddress = (AddressText) rootView.findViewById(R.id.tv_number);
 		erase = (EraseButton) rootView.findViewById(R.id.btn_delete);
@@ -96,11 +123,11 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 		vPad = rootView.findViewById(R.id.number_pad);
 		vDigitPad = rootView.findViewById(R.id.layout_digit_pad);
 		layoutInput = rootView.findViewById(R.id.layout_input);
-		vSwitchPad = (DraftImageView) rootView.findViewById(R.id.btn_switch_pad);
-		vSwitchPad.setOnTouchListener(DisplayTools.getWindowHeight(this.getContext()) - rootView.findViewById(R.id.layout_root).getHeight());
-		vSwitchPad.setOnClickListener(this);
-		layoutSwitchPad = rootView.findViewById(R.id.layout_switch);
-		layoutSwitchPad.setOnClickListener(this);
+		//		vSwitchPad = (DraftImageView) rootView.findViewById(R.id.btn_switch_pad);
+		//		vSwitchPad.setOnTouchListener(DisplayTools.getWindowHeight(this.getContext()) - rootView.findViewById(R.id.layout_root).getHeight());
+		//		vSwitchPad.setOnClickListener(this);
+		//		layoutSwitchPad = rootView.findViewById(R.id.layout_switch);
+		//		layoutSwitchPad.setOnClickListener(this);
 		rootView.findViewById(R.id.btn_add_contact).setOnClickListener(this);
 		xListView.setOnTouchListener(new View.OnTouchListener()
 		{
@@ -119,14 +146,13 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 		vDigitPad.setLayoutParams(layoutParams);
 		super.viewInit(rootView);
 	}
-
-	@Override
-	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-	{
-		super.onViewCreated(view, savedInstanceState);
-		//		LogcatTools.debug(TAG, "fragment onViewCreated,start=" + start);
-		onRefresh();
-	}
+	//	@Override
+	//	public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+	//	{
+	//		super.onViewCreated(view, savedInstanceState);
+	//		//		LogcatTools.debug(TAG, "fragment onViewCreated,start=" + start);
+	//		onRefresh();
+	//	}
 
 	@Override
 	public void fragmentShow()
@@ -143,6 +169,7 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 			mCallLogInfoList.clear();
 			mCallLogsAdapter = null;
 		}
+		getActivity().unregisterReceiver(receiver);
 		EventBus.getDefault().unregister(this);
 		instance = null;
 		super.onDestroyView();
@@ -168,13 +195,25 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 	{
 		switch (v.getId())
 		{
+			case R.id.btn_more:
+			{
+				if (UserService.isLogin())
+				{
+					startActivity(new Intent(this.getContext(), ActivityCallbackInfo.class));
+				}
+				else
+				{
+					startActivityForResult(new Intent(this.getContext(), ActivityLogin.class), ConstValues.REQUEST_LOGIN_USER);
+				}
+				break;
+			}
 			case R.id.layout_make_call:
 			{
 				String number = mAddress.getText().toString();
 				//				ReturnInfo returnInfo = CallTools.makeCall(this.getContext(), number);
 				//				if (!ReturnInfo.isSuccess(returnInfo))
 				//				{
-				//					Toast.makeText(this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+				//					Toast.makeText(this.getContext(), returnInfo.getMsg(), Toast.LENGTH_LONG).show();
 				//				}
 				//				mAddress.setText("");
 				makeCall(number);
@@ -185,11 +224,11 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 				switchPad();
 				break;
 			}
-			case R.id.layout_switch:
-			{
-				setPadVisible(false);
-				break;
-			}
+			//			case R.id.layout_switch:
+			//			{
+			//				setPadVisible(false);
+			//				break;
+			//			}
 			case R.id.btn_add_contact:
 			{
 				//				String number = mAddress.getText().toString();
@@ -285,12 +324,23 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 	}
 
 	@Subscribe
-	public void onEventMainThread(CallLogEvent callLogEvent)
+	public void onEventMainThread(final CallLogEvent callLogEvent)
 	{
-		if (callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_ADD) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_UPDATE) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_DELETE))
+		mHandler.post(new Thread()
 		{
-			onRefresh();
-		}
+			@Override
+			public void run()
+			{
+				super.run();
+				if (callLogEvent != null)
+				{
+					if (callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_ADD) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_UPDATE) || callLogEvent.getEvent().equalsIgnoreCase(CallLogEvent.EVENT_CALLLOG_DELETE))
+					{
+						onRefresh();
+					}
+				}
+			}
+		});
 	}
 
 	/**
@@ -302,7 +352,6 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 		{
 		}
 
-		// Decode image in background.
 		@Override
 		protected Boolean doInBackground(Long... params)
 		{
@@ -332,13 +381,48 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 				mCallLogsAdapter = new CallLogsAdapter(FragmentDialer2.this.getContext(), mCallLogInfoList, new CallLogsAdapter.IItemClick()
 				{
 					@Override
-					public void onItemClicked(CallLogInfo callLogInfo)
+					public void onItemClicked(final CallLogInfo callLogInfo)
 					{
 						setPadVisible(true);
 						if (callLogInfo != null)
 						{
-							mAddress.setText(callLogInfo.getNumber());
-							setAddressCursorIndex();
+							//							mAddress.setText(callLogInfo.getNumber());
+							//							setAddressCursorIndex();
+							final List<FuncInfo> list = new ArrayList<>();
+							list.add(new FuncInfo(R.drawable.ic_done_grey600_18dp, "拨打此号码"));
+							list.add(new FuncInfo(R.drawable.ic_done_grey600_18dp, "删除通话记录"));
+							if (StringTools.isNull(callLogInfo.getName()) || callLogInfo.getName().contains(callLogInfo.getNumber()))
+							{
+								list.add(new FuncInfo(R.drawable.ic_done_grey600_18dp, "添加到联系人"));
+							}
+							final DialogList dialogList = new DialogList(FragmentDialer2.this.getContext());
+							FuncsHorizontalAdapter adapter = new FuncsHorizontalAdapter(FragmentDialer2.this.getContext(), list, new FuncsVerticalAdapter.IFuncsAdapterItemClicked()
+							{
+								@Override
+								public void onFuncClicked(FuncInfo funcInfo)
+								{
+									dialogList.dismiss();
+									if (funcInfo.getLabel().equalsIgnoreCase(list.get(0).getLabel()))
+									{
+										makeCall(callLogInfo.getNumber());
+									}
+									else if (funcInfo.getLabel().equalsIgnoreCase(list.get(1).getLabel()))
+									{
+										CallLogsFactory.getInstance().deleteNumberCallLogs(FragmentDialer2.this.getContext(), callLogInfo.getNumber());
+										EventBus.getDefault().post(new CallLogEvent(CallLogEvent.EVENT_CALLLOG_DELETE));
+									}
+									else if (funcInfo.getLabel().equalsIgnoreCase(list.get(2).getLabel()))
+									{
+										String number = callLogInfo.getNumber();
+										if (!StringTools.isNull(number))
+										{
+											ContactsFactory.getInstance().toSystemAddContactActivity(FragmentDialer2.this.getContext(), number);
+										}
+									}
+								}
+							});
+							dialogList.setAdapter(adapter);
+							dialogList.show();
 						}
 					}
 
@@ -351,7 +435,7 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 							//							ReturnInfo returnInfo = CallTools.makeCall(FragmentDialer.this.getContext(), callLogInfo.getNumber());
 							//							if (!ReturnInfo.isSuccess(returnInfo))
 							//							{
-							//								Toast.makeText(FragmentDialer.this.getContext(), returnInfo.getErrmsg(), Toast.LENGTH_LONG).show();
+							//								Toast.makeText(FragmentDialer.this.getContext(), returnInfo.getMsg(), Toast.LENGTH_LONG).show();
 							//							}
 							//							mAddress.setText("");
 							makeCall(callLogInfo.getNumber());
@@ -427,4 +511,30 @@ public class FragmentDialer2 extends MyBaseFragment implements View.OnClickListe
 			startActivity(new Intent(this.getContext(), ActivityLogin.class));
 		}
 	}
+
+	private BroadcastReceiver receiver = new BroadcastReceiver()
+	{
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			LogcatTools.debug("onReceive", "来电状态改变！");
+			mHandler.post(new Thread()
+			{
+				@Override
+				public void run()
+				{
+					super.run();
+					try
+					{
+						Thread.sleep(5000);
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+					EventBus.getDefault().post(new CallLogEvent(CallLogEvent.EVENT_CALLLOG_ADD));
+				}
+			});
+		}
+	};
 }

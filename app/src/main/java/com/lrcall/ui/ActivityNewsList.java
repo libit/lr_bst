@@ -64,6 +64,10 @@ public class ActivityNewsList extends MyBasePageActivity implements IAjaxDataRes
 	public void refreshData()
 	{
 		mNewsInfoList.clear();
+		if (mNewsAdapter != null)
+		{
+			mNewsAdapter.notifyDataSetChanged();
+		}
 		mNewsAdapter = null;
 		loadMoreData();
 	}
@@ -89,10 +93,7 @@ public class ActivityNewsList extends MyBasePageActivity implements IAjaxDataRes
 		}
 		layoutNewsList.setVisibility(View.VISIBLE);
 		layoutNoNews.setVisibility(View.GONE);
-		if (newsInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(newsInfoList.size() >= getPageSize());
 		for (NewsInfo newsInfo : newsInfoList)
 		{
 			mNewsInfoList.add(newsInfo);

@@ -26,7 +26,6 @@ import android.view.View;
 
 import com.androidquery.AQuery;
 import com.androidquery.auth.AccountHandle;
-import com.androidquery.auth.GoogleHandle;
 import com.androidquery.util.AQUtility;
 import com.androidquery.util.Common;
 import com.androidquery.util.Constants;
@@ -1918,22 +1917,7 @@ public abstract class AbstractAjaxCallback<T, K> implements Runnable
 		AQUtility.copy(is, os, max, p);
 	}
 
-	/**
-	 * Set the authentication type of this request. This method requires API 5+.
-	 *
-	 * @param act     the current activity
-	 * @param type    the auth type
-	 * @param account the account, such as someone@gmail.com
-	 * @return self
-	 */
-	public K auth(Activity act, String type, String account)
-	{
-		if (android.os.Build.VERSION.SDK_INT >= 5 && type.startsWith("g."))
-		{
-			ah = new GoogleHandle(act, type, account);
-		}
-		return self();
-	}
+
 
 	/**
 	 * Set the authentication account handle.

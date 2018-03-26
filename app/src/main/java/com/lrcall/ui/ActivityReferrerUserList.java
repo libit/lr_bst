@@ -83,6 +83,10 @@ public class ActivityReferrerUserList extends MyBasePageActivity implements IAja
 	public void refreshData()
 	{
 		mUserInfoList.clear();
+		if (mReferrerUserAdapter != null)
+		{
+			mReferrerUserAdapter.notifyDataSetChanged();
+		}
 		mReferrerUserAdapter = null;
 		loadMoreData();
 	}
@@ -109,10 +113,7 @@ public class ActivityReferrerUserList extends MyBasePageActivity implements IAja
 		}
 		layoutUserList.setVisibility(View.VISIBLE);
 		layoutNoUser.setVisibility(View.GONE);
-		if (userInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(userInfoList.size() >= getPageSize());
 		for (UserInfo userInfo : userInfoList)
 		{
 			mUserInfoList.add(userInfo);

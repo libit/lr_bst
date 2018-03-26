@@ -14,6 +14,7 @@ import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.CallbackRechargeLogInfo;
 import com.lrcall.enums.CallbackRechargeType;
 import com.lrcall.utils.DateTimeTools;
+import com.lrcall.utils.StringTools;
 
 import java.util.List;
 
@@ -53,9 +54,10 @@ public class CallbackRechargeLogsAdapter extends BaseUserAdapter<CallbackRecharg
 		}
 		final CallbackRechargeLogInfo callbackRechargeLogInfo = list.get(position);
 		viewHolder.tvType.setText("充值类型:" + CallbackRechargeType.getTypeDesc(callbackRechargeLogInfo.getRechargeType()));
-		viewHolder.tvAmount.setText("充值金额:" + callbackRechargeLogInfo.getAmount() + "(充值卡充值默认为0)");
+		viewHolder.tvAmount.setText("充值金额:" + StringTools.getPrice(callbackRechargeLogInfo.getAmount()) + "元");
 		viewHolder.tvRechargeDate.setText("充值时间:" + DateTimeTools.getRelativeTimeSpanString(callbackRechargeLogInfo.getRechargeDateLong()));
-		viewHolder.tvRemark.setText("备注:" + callbackRechargeLogInfo.getRemark());
+		viewHolder.tvRemark.setVisibility(View.GONE);
+		//		viewHolder.tvRemark.setText("备注:" + callbackRechargeLogInfo.getRemark());
 		if (iItemClick != null)
 		{
 			convertView.setOnClickListener(new View.OnClickListener()

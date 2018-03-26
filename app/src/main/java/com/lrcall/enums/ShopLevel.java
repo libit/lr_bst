@@ -15,7 +15,7 @@ public enum ShopLevel
 	private byte level;
 	private String desc;
 
-	private ShopLevel(byte level, String desc)
+	 ShopLevel(byte level, String desc)
 	{
 		this.level = level;
 		this.desc = desc;

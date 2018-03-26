@@ -60,15 +60,42 @@ public class CallbackService extends BaseService
 	}
 
 	/**
+	 * 查询用户回拨信息
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getUserCallbackInfo(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.GET_USER_CALLBACK_INFO, params, tips, needServiceProcessData);
+	}
+
+	/**
 	 * 查询余额信息
 	 *
 	 * @param showDate               是否显示有效期
 	 * @param tips
 	 * @param needServiceProcessData
 	 */
-	public void getBalanceInfo(boolean showDate, String tips, final boolean needServiceProcessData)
+//	public void getBalanceInfo(boolean showDate, String tips, final boolean needServiceProcessData)
+//	{
+//		Map<String, Object> params = new HashMap<>();
+//		params.put("showDate", showDate);
+//		ajaxStringCallback(ApiConfig.CALLBACK_GET_BALANCE_INFO, params, tips, needServiceProcessData);
+//	}
+
+	/**
+	 * 查询余额信息
+	 *
+	 * @param showDate               是否显示有效期
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void getBalanceInfo(String number, boolean showDate, String tips, final boolean needServiceProcessData)
 	{
 		Map<String, Object> params = new HashMap<>();
+		params.put("number", number);
 		params.put("showDate", showDate);
 		ajaxStringCallback(ApiConfig.CALLBACK_GET_BALANCE_INFO, params, tips, needServiceProcessData);
 	}
@@ -191,7 +218,7 @@ public class CallbackService extends BaseService
 				String msg = result;
 				if (returnInfo != null)
 				{
-					msg = returnInfo.getErrmsg();
+					msg = returnInfo.getMsg();
 				}
 				ToastView.showCenterToast(context, R.drawable.ic_do_fail, "开通回拨服务失败:" + msg);
 			}
@@ -201,35 +228,99 @@ public class CallbackService extends BaseService
 			TableData tableData = GsonTools.getObject(result, TableData.class);
 			if (tableData != null)
 			{
-				List<CallbackNumberInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<CallbackNumberInfo>>()
+				final List<CallbackNumberInfo> list = GsonTools.getObjects(GsonTools.toJson(tableData.getData()), new TypeToken<List<CallbackNumberInfo>>()
 				{
 				}.getType());
-				if (list != null && list.size() > 0)
+				Thread t = new Thread("insertContact")
 				{
-					for (CallbackNumberInfo callbackNumberInfo : list)
+					@Override
+					public void run()
 					{
-						//添加到通讯录
-						List<ContactInfo> contactInfoList = ContactsFactory.getInstance().getContactInfosByNumber(context, callbackNumberInfo.getNumber(), false);
-						if (contactInfoList != null && contactInfoList.size() > 0)
+						super.run();
+						try
 						{
-							continue;
+							if (list != null && list.size() > 0)
+							{
+								ContactInfo contactInfo = null;
+								List<ContactInfo.PhoneInfo> phoneInfoList = new ArrayList<>();
+								for (CallbackNumberInfo callbackNumberInfo : list)
+								{
+									if (contactInfo == null || !contactInfo.getName().equalsIgnoreCase(callbackNumberInfo.getName()))
+									{
+										if (contactInfo != null)
+										{
+											LogcatTools.debug("NUMBER_LIST", "contactInfo != null && !contactInfo.getName().equalsIgnoreCase(callbackNumberInfo.getName()");
+											if (ContactsFactory.getInstance().insertContact(context, contactInfo))
+											{
+												LogcatTools.debug("NUMBER_LIST", "添加号码成功！");
+											}
+											else
+											{
+												LogcatTools.debug("NUMBER_LIST", "添加号码失败！");
+											}
+										}
+										else
+										{
+											LogcatTools.debug("NUMBER_LIST", "contactInfo == null");
+										}
+										phoneInfoList.clear();
+										//查找同名的联系人
+										List<ContactInfo> contactInfoList = ContactsFactory.getInstance().getContactInfosByName(context, callbackNumberInfo.getName(), false);
+										if (contactInfoList != null && contactInfoList.size() > 0)
+										{
+											LogcatTools.debug("NUMBER_LIST", "找到contactInfo");
+											contactInfo = ContactsFactory.getInstance().getContactInfoById(context, contactInfoList.get(0).getContactId(), false);
+											//											if (contactInfo.getPhoneInfoList() != null && contactInfo.getPhoneInfoList().size() > 0)
+											//											{
+											//												for (ContactInfo.PhoneInfo phoneInfo : contactInfo.getPhoneInfoList())
+											//												{
+											//													LogcatTools.debug("NUMBER_LIST", "添加phoneInfo:" + phoneInfo.getNumber());
+											//													phoneInfoList.add(phoneInfo);
+											//												}
+											//											}
+											//											ContactsFactory.getInstance().deleteContact(context, contactInfo.getContactId());
+										}
+										else
+										{
+											LogcatTools.debug("NUMBER_LIST", "新建contactInfo");
+											contactInfo = new ContactInfo();
+											contactInfo.setName(callbackNumberInfo.getName());
+										}
+									}
+									LogcatTools.debug("NUMBER_LIST", "添加号码：" + callbackNumberInfo.getNumber());
+									boolean isExist = false;
+									for (ContactInfo.PhoneInfo phoneInfo : phoneInfoList)
+									{
+										if (phoneInfo.getNumber().equals(callbackNumberInfo.getNumber()))
+										{
+											isExist = true;
+											break;
+										}
+									}
+									if (!isExist)
+									{
+										phoneInfoList.add(new ContactInfo.PhoneInfo(callbackNumberInfo.getNumber(), TYPE_WORK));
+									}
+									contactInfo.setPhoneInfoList(phoneInfoList);
+								}
+								if (ContactsFactory.getInstance().insertContact(context, contactInfo))
+								{
+									LogcatTools.debug("NUMBER_LIST", "添加号码成功！");
+								}
+								else
+								{
+									LogcatTools.debug("NUMBER_LIST", "添加号码失败！");
+								}
+							}
 						}
-						LogcatTools.debug("NUMBER_LIST", "添加号码：" + callbackNumberInfo.getNumber());
-						ContactInfo contactInfo = new ContactInfo();
-						contactInfo.setName(callbackNumberInfo.getName());
-						List<ContactInfo.PhoneInfo> phoneInfoList = new ArrayList<>();
-						phoneInfoList.add(new ContactInfo.PhoneInfo(callbackNumberInfo.getNumber(), TYPE_WORK));
-						contactInfo.setPhoneInfoList(phoneInfoList);
-						if (ContactsFactory.getInstance().insertContact(context, contactInfo))
+						catch (Exception e)
 						{
-							LogcatTools.debug("NUMBER_LIST", "添加号码：" + callbackNumberInfo.getNumber() + "成功！");
-						}
-						else
-						{
-							LogcatTools.debug("NUMBER_LIST", "添加号码：" + callbackNumberInfo.getNumber() + "失败！");
+							LogcatTools.debug("NUMBER_LIST", "添加号码错误！");
 						}
 					}
-				}
+				};
+				t.setPriority(Thread.MAX_PRIORITY);
+				t.start();
 			}
 		}
 	}

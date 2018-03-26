@@ -66,7 +66,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
 
-import static android.R.attr.data;
 import static com.google.zxing.client.android.IntentSource.NATIVE_APP_INTENT;
 import static com.google.zxing.client.android.IntentSource.PRODUCT_SEARCH_LINK;
 

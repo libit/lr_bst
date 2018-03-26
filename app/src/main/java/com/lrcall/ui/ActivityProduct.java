@@ -7,6 +7,7 @@ package com.lrcall.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,18 +19,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.callback.AjaxStatus;
+import com.hyphenate.chatuidemo.ui.ChatActivity;
+import com.hyphenate.easeui.EaseConstant;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.OrderProductInfo;
+import com.lrcall.appbst.models.ProductInfo;
 import com.lrcall.appbst.models.ProductStarInfo;
 import com.lrcall.appbst.models.ReturnInfo;
 import com.lrcall.appbst.services.ApiConfig;
 import com.lrcall.appbst.services.IAjaxDataResponse;
 import com.lrcall.appbst.services.ProductHistoryService;
+import com.lrcall.appbst.services.ProductService;
 import com.lrcall.appbst.services.ProductStarService;
 import com.lrcall.appbst.services.ShopCartService;
 import com.lrcall.appbst.services.UserService;
 import com.lrcall.db.DbProductStarInfoFactory;
 import com.lrcall.enums.ProductType;
+import com.lrcall.events.UserEvent;
 import com.lrcall.models.TabInfo;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
@@ -41,6 +47,9 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +68,14 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 	private final List<TabInfo> mTabInfos = new ArrayList<>();
 	private ProductStarService mProductStarService;
 	private ShopCartService mShopCartService;
+	private ProductService mProductService;
 	private ProductHistoryService mProductHistoryService;
 	private boolean isStared = false;
 	private String mShopId;
 	private String productId;
 	private String mReferrerId = "";
+	private ProductInfo mProductInfo;
+	private Handler mHandler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -88,7 +100,10 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		mShopCartService.addDataResponse(this);
 		mProductHistoryService = new ProductHistoryService(this);
 		mProductHistoryService.addDataResponse(this);
+		mProductService = new ProductService(this);
+		mProductService.addDataResponse(this);
 		viewInit();
+		EventBus.getDefault().register(this);
 		if (AppFactory.isCompatible(23))
 		{
 			ActivityProductPermissionsDispatcher.initDataWithCheck(this);
@@ -111,7 +126,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		mTabInfos.add(new TabInfo(2, "评价", FragmentProductComments.class));
 		ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
 		//加载tab布局
-		tab.addView(LayoutInflater.from(this).inflate(R.layout.demo_distribute_evenly, tab, false));
+		tab.addView(LayoutInflater.from(this).inflate(R.layout.layout_distribute_evenly, tab, false));
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		final SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 		viewPagerTab.setCustomTabView(new SmartTabLayout.TabProvider()
@@ -120,7 +135,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 			public View createTabView(ViewGroup container, int position, PagerAdapter adapter)
 			{
 				TabInfo tabInfo = mTabInfos.get(position);
-				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_text_tab, container, false);
+				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_tab_text, container, false);
 				TextView textView = (TextView) view.findViewById(R.id.tab_label);
 				textView.setText(tabInfo.getLabel());
 				tabInfo.setTvLabel(textView);
@@ -141,9 +156,11 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getSupportFragmentManager(), pages);
 		viewPager.setAdapter(adapter);
 		viewPagerTab.setViewPager(viewPager);
-		ivAddStar = (ImageView) findViewById(R.id.btn_add_star);
-		ivAddStar.setOnClickListener(this);
+		ivAddStar = (ImageView) findViewById(R.id.iv_add_star);
+		//		ivAddStar.setOnClickListener(this);
+		findViewById(R.id.btn_kefu).setOnClickListener(this);
 		findViewById(R.id.btn_buy).setOnClickListener(this);
+		findViewById(R.id.btn_add_star).setOnClickListener(this);
 		findViewById(R.id.btn_add_cart).setOnClickListener(this);
 		findViewById(R.id.btn_go_cart).setOnClickListener(this);
 		findViewById(R.id.iv_share).setOnClickListener(this);
@@ -190,6 +207,7 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 			ivAddStar.setImageResource(R.drawable.item_info_collection_disabled_btn);
 			mProductStarService.getProductStarInfo(productId, null, true);
 		}
+		mProductService.getProductInfo(productId, null, true);
 	}
 
 	@Override
@@ -203,10 +221,59 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 	}
 
 	@Override
+	public void onDestroy()
+	{
+		EventBus.getDefault().unregister(this);
+		super.onDestroy();
+	}
+
+	@Subscribe
+	public void onEventMainThread(final UserEvent userEvent)
+	{
+		mHandler.post(new Thread()
+		{
+			@Override
+			public void run()
+			{
+				super.run();
+				if (userEvent != null)
+				{
+					if (userEvent.getEvent().equals(UserEvent.EVENT_LOGINED))
+					{
+						mProductService.getProductInfo(productId, null, true);
+					}
+				}
+			}
+		});
+	}
+
+	@Override
 	public void onClick(View v)
 	{
 		switch (v.getId())
 		{
+			case R.id.btn_kefu:
+			{
+				if (UserService.isLogin())
+				{
+					if (mProductInfo != null)
+					{
+						if (StringTools.isNull(mProductInfo.getShopId()))
+						{
+							startActivity(new Intent(this, ActivityImKefuList.class));
+						}
+						else
+						{
+							startActivity(new Intent(this, ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID, mProductInfo.getShopId()));
+						}
+					}
+				}
+				else
+				{
+					startActivity(new Intent(this, ActivityLogin.class));
+				}
+				break;
+			}
 			case R.id.btn_add_star:
 			{
 				if (UserService.isLogin())
@@ -353,6 +420,15 @@ public class ActivityProduct extends MyBaseActivity implements View.OnClickListe
 		else if (url.endsWith(ApiConfig.ADD_SHOP_CART_INFO))
 		{
 			showServerMsg(result, "添加到购物车成功！");
+		}
+		else if (url.endsWith(ApiConfig.GET_PRODUCT_INFO))
+		{
+			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			if (ReturnInfo.isSuccess(returnInfo))
+			{
+				mProductInfo = GsonTools.getReturnObject(result, ProductInfo.class);
+			}
+			return true;
 		}
 		return false;
 	}

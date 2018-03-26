@@ -45,21 +45,21 @@ public class BugService extends BaseService
 		}
 		File file = new File(FileTools.getDir(AppConfig.getLogcatFolder()) + "/" + path);
 		File file1 = new File(FileTools.getDir(AppConfig.getLogcatFolder()) + "/" + path + ".err");
-		if (file.exists())
-		{
-			Map<String, Object> params = new HashMap<>();
-			params.put("upload", file);
-			ajaxStringCallback(ApiConfig.UPLOAD_DEBUG_FILE, params, tips, needServiceProcessData);
-		}
-		else
-		{
-			PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE_NAME, "");
-		}
 		if (file1.exists())
 		{
-			Map<String, Object> params = new HashMap<>();
-			params.put("upload", file1);
-			ajaxStringCallback(ApiConfig.UPLOAD_DEBUG_FILE, params, tips, needServiceProcessData);
+			Map<String, Object> params1 = new HashMap<>();
+			params1.put("upload", file1);
+			ajaxStringCallback(ApiConfig.UPLOAD_DEBUG_FILE, params1, tips, needServiceProcessData);
+			if (file.exists())
+			{
+				Map<String, Object> params = new HashMap<>();
+				params.put("upload", file);
+				ajaxStringCallback(ApiConfig.UPLOAD_DEBUG_FILE, params, tips, needServiceProcessData);
+			}
+			else
+			{
+				PreferenceUtils.getInstance().setStringValue(PreferenceUtils.PREF_CRASH_FILE_NAME, "");
+			}
 		}
 	}
 
@@ -116,7 +116,7 @@ public class BugService extends BaseService
 					return;
 				}
 				File file = new File(FileTools.getDir(AppConfig.getLogcatFolder()) + "/" + path);
-				uploadLog(file, returnInfo.getErrmsg(), null, true);
+				uploadLog(file, returnInfo.getMsg(), null, true);
 			}
 		}
 	}

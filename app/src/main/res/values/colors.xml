@@ -4,21 +4,21 @@
   ~ Copyright (c) 2016.
   -->
 <resources>
-    <color name="colorPrimary">#319C8B</color>
-    <color name="colorPrimaryDark">#319C8B</color>
-    <color name="colorAccent">#3f59f9</color>
     <color name="white_20">#33008866</color>
     <color name="transparent">#00000000</color>
-    <color name="main_icon_enabled">#319C8B</color>
-    <color name="main_icon_disabled">#ffffff</color>
-    <color name="icon_enabled">#ff000001</color>
-    <color name="icon_disabled">#ffffff</color>
+    <color name="tab_icon_text_enabled">#319C8B</color>
+    <color name="tab_icon_text_disabled">#000000</color>
+    <color name="tab_icon_enabled">#319C8B</color>
+    <color name="tab_icon_disabled">#ffffff</color>
+    <color name="tab_text_enabled">#319C8B</color>
+    <color name="tab_text_disabled">#000000</color>
     <color name="line">#aac4c4c4</color>
     <color name="line_height">#ffeeebeb</color>
     <color name="black">#ff000001</color>
     <color name="white">#ffffffff</color>
     <color name="red">#ffff0000</color>
     <color name="accent">#40C4FF</color>
+    <color name="index_text_line">#319C8B</color>
     <color name="view_bg_primary_normal">#fff5f5f5</color>
     <color name="setting_gray">#ffaaaaaa</color>
     <color name="wallet_balance_color">#ff0000</color>

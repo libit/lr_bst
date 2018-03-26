@@ -8,8 +8,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class CallbackBalanceInfo
 {
+	@SerializedName("number")
+	private String number;
 	@SerializedName("balance")
 	private double balance;
+	@SerializedName("registerDate")
+	private String registerDate;
 	@SerializedName("validateDate")
 	private String validateDate;
 
@@ -18,10 +22,11 @@ public class CallbackBalanceInfo
 		super();
 	}
 
-	public CallbackBalanceInfo(double balance, String validateDate)
+	public CallbackBalanceInfo(String number, double balance, String registerDate, String validateDate)
 	{
-		super();
+		this.number = number;
 		this.balance = balance;
+		this.registerDate = registerDate;
 		this.validateDate = validateDate;
 	}
 
@@ -43,5 +48,25 @@ public class CallbackBalanceInfo
 	public void setValidateDate(String validateDate)
 	{
 		this.validateDate = validateDate;
+	}
+
+	public String getNumber()
+	{
+		return number;
+	}
+
+	public void setNumber(String number)
+	{
+		this.number = number;
+	}
+
+	public String getRegisterDate()
+	{
+		return registerDate;
+	}
+
+	public void setRegisterDate(String registerDate)
+	{
+		this.registerDate = registerDate;
 	}
 }

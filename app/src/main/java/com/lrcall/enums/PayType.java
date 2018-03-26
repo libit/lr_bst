@@ -10,7 +10,7 @@ package com.lrcall.enums;
  */
 public enum PayType
 {
-	PAY_ORDER("pay_order", "普通订单"), PAY_DATA_TRAFFIC_ORDER("pay_data_traffic_order", "流量订单"), PAY_BALANCE("pay_balance", "余额充值"), PAY_UPGRADE("pay_upgrade", "用户升级"), PAY_POINT_ORDER("pay_point_order", "积分商品订单");
+	PAY_ORDER("pay_order", "普通订单"), PAY_DATA_TRAFFIC_ORDER("pay_data_traffic_order", "流量订单"), PAY_BALANCE("pay_balance", "余额充值"), PAY_UPGRADE("pay_upgrade", "用户升级"), PAY_POINT_ORDER("pay_point_order", "积分商品订单"), PAY_CALLBACK_RECHARGE("pay_callback_recharge", "回拨充值");
 	private String type;
 	private String desc;
 

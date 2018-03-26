@@ -16,7 +16,7 @@ public enum WithdrawStatus
 	private byte status;
 	private String desc;
 
-	private WithdrawStatus(byte status, String desc)
+	 WithdrawStatus(byte status, String desc)
 	{
 		this.status = status;
 		this.desc = desc;

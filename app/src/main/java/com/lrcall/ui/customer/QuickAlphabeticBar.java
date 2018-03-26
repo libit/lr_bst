@@ -15,7 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lrcall.appbst.R;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.apptools.AppFactory;
 
 import java.util.HashMap;
@@ -123,6 +122,10 @@ public class QuickAlphabeticBar extends ImageButton
 
 	public void onTouch(int action, int selectIndex)
 	{
+		if (alphaIndexer == null)
+		{
+			return;
+		}
 		if (selectIndex < count)
 		{
 			String key = letters[selectIndex];

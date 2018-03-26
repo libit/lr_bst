@@ -83,6 +83,10 @@ public class ActivityAgentUserList extends MyBasePageActivity implements IAjaxDa
 	public void refreshData()
 	{
 		mUserInfoList.clear();
+		if (mReferrerUserAdapter != null)
+		{
+			mReferrerUserAdapter.notifyDataSetChanged();
+		}
 		mReferrerUserAdapter = null;
 		loadMoreData();
 	}
@@ -109,10 +113,7 @@ public class ActivityAgentUserList extends MyBasePageActivity implements IAjaxDa
 		}
 		layoutUserList.setVisibility(View.VISIBLE);
 		layoutNoUser.setVisibility(View.GONE);
-		if (userInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(userInfoList.size() >= getPageSize());
 		for (UserInfo userInfo : userInfoList)
 		{
 			mUserInfoList.add(userInfo);

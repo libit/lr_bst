@@ -133,6 +133,10 @@ public class FragmentProductComments extends MyBasePageFragment implements View.
 	public void refreshData()
 	{
 		mProductCommentInfoList.clear();
+		if (mProductCommentAdapter != null)
+		{
+			mProductCommentAdapter.notifyDataSetChanged();
+		}
 		mProductCommentAdapter = null;
 		loadMoreData();
 	}

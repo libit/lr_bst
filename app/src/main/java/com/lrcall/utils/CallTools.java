@@ -34,6 +34,15 @@ public class CallTools
 	 */
 	public static String[] parseSqlNumber(String number)
 	{
+		LogcatTools.debug("deleteNumberCallLogs", "parseSqlNumber number=" + number);
+		if (StringTools.isNull(number))
+		{
+			return new String[]{"-"};
+		}
+		else if (number.startsWith("-"))
+		{
+			return new String[]{"-"};
+		}
 		number = convertToCallPhoneNumber(number);
 		int len = number.length();
 		if (len > 8)
@@ -50,6 +59,10 @@ public class CallTools
 			nums[0] = number.substring(0, len - 4);
 			nums[1] = number.substring(len - 4, len);
 			return new String[]{number, String.format("%s %s", nums[0], nums[1]), String.format("%s-%s", nums[0], nums[1])};
+		}
+		else if (len == 8)
+		{
+			return new String[]{number};
 		}
 		else
 		{

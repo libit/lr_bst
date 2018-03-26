@@ -183,7 +183,7 @@ public class AddressService extends BaseService
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				DbUserAddressInfoFactory.getInstance().deleteUserAddressInfo(returnInfo.getErrmsg());
+				DbUserAddressInfoFactory.getInstance().deleteUserAddressInfo(returnInfo.getMsg());
 				EventBus.getDefault().post(new AddressEvent(AddressEvent.EVENT_DELETED));
 			}
 		}

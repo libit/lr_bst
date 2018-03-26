@@ -6,8 +6,13 @@ package com.lrcall.appbst.services;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.androidquery.callback.AjaxStatus;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.lrcall.appbst.R;
 import com.lrcall.appbst.models.PicInfo;
 import com.lrcall.appbst.models.ReturnInfo;
@@ -18,6 +23,7 @@ import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.AppConfig;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
+import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.StringTools;
 
@@ -73,6 +79,11 @@ public class UserService extends BaseService
 	 */
 	public void login(String username, String password, String tips, final boolean needServiceProcessData)
 	{
+		// After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
+		// close it before login to make sure DemoDB not overlap
+		DemoDBManager.getInstance().closeDB();
+		// reset current user name before login
+		DemoHelper.getInstance().setCurrentUserName(username);
 		Map<String, Object> params = new HashMap<>();
 		params.put("userId", username);
 		params.put("password", password);
@@ -95,6 +106,7 @@ public class UserService extends BaseService
 	 */
 	public void register(String username, String password, String payPassword, String name, String nickname, String number, String email, String referrerId, Byte sex, String picId, String code, String tips, final boolean needServiceProcessData)
 	{
+		DemoHelper.getInstance().setCurrentUserName(username);
 		Map<String, Object> params = new HashMap<>();
 		params.put("userId", username);
 		params.put("password", password);
@@ -108,6 +120,35 @@ public class UserService extends BaseService
 		params.put("picId", picId);
 		params.put("code", code);
 		ajaxStringCallback(ApiConfig.USER_REGISTER, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 用户是否需要更新资料
+	 *
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void needUpdateInfo(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.GET_USER_NEED_UPDATE, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 用户更新资料
+	 *
+	 * @param name
+	 * @param registerDate
+	 * @param tips
+	 * @param needServiceProcessData
+	 */
+	public void updateUserInfo(String name, String identifityNumber, long registerDate, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("name", name);
+		params.put("identifityNumber", identifityNumber);
+		params.put("registerDate", registerDate);
+		ajaxStringCallback(ApiConfig.UPDATE_USER_INFO, params, tips, needServiceProcessData);
 	}
 
 	/**
@@ -147,6 +188,28 @@ public class UserService extends BaseService
 	{
 		PreferenceUtils.getInstance().setSessionId("");
 		EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGOUT));
+		//环信注销登录
+		DemoHelper.getInstance().logout(true, null);
+		//		EMClient.getInstance().logout(true, new EMCallBack()
+		//		{
+		//			@Override
+		//			public void onSuccess()
+		//			{
+		//				// TODO Auto-generated method stub
+		//			}
+		//
+		//			@Override
+		//			public void onProgress(int progress, String status)
+		//			{
+		//				// TODO Auto-generated method stub
+		//			}
+		//
+		//			@Override
+		//			public void onError(int code, String message)
+		//			{
+		//				// TODO Auto-generated method stub
+		//			}
+		//		});
 	}
 
 	/**
@@ -284,13 +347,22 @@ public class UserService extends BaseService
 		ajaxStringCallback(ApiConfig.USER_SIGN_TODAY, params, tips, needServiceProcessData);
 	}
 
+	/**
+	 * 用户注册IM
+	 */
+	public void userRegisterIM(String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		ajaxStringCallback(ApiConfig.IM_REGISTER, params, tips, needServiceProcessData);
+	}
+
 	@Override
 	public void parseData(String url, String result, AjaxStatus status)
 	{
 		if (url.endsWith(ApiConfig.USER_LOGIN))
 		{
 			//登录成功，保存账号和SessionId
-			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
+			final UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
 			if (userInfo != null)
 			{
 				PreferenceUtils.getInstance().setUserId(userInfo.getUserId());
@@ -300,6 +372,42 @@ public class UserService extends BaseService
 					getUserHead(userInfo.getPicInfo().getPicUrl(), null, true);
 				}
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
+				//登录到环信服务器
+				EMClient.getInstance().login(userInfo.getUserId(), userInfo.getImToken(), new EMCallBack()
+				{
+					//回调
+					@Override
+					public void onSuccess()
+					{
+						// ** manually load all local groups and conversation
+						EMClient.getInstance().groupManager().loadAllGroups();
+						EMClient.getInstance().chatManager().loadAllConversations();
+						// get user's info (this should be get from App's server or 3rd party service)
+						DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+						Log.d("main", "登录聊天服务器成功！");
+					}
+
+					@Override
+					public void onProgress(int progress, String status)
+					{
+					}
+
+					@Override
+					public void onError(int code, String message)
+					{
+						Log.d("main", "登录聊天服务器失败！");
+						//客户端注册，注册这部分最好是放到服务器端注册
+						//						try
+						//						{
+						//							EMClient.getInstance().createAccount(userInfo.getUserId(), userInfo.getImToken());//同步方法
+						//						}
+						//						catch (Exception e)
+						//						{
+						//							Log.d("main", "注册聊天服务器失败！");
+						//						}
+						userRegisterIM(null, true);
+					}
+				});
 			}
 			else
 			{
@@ -319,12 +427,48 @@ public class UserService extends BaseService
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGINED));
 				//注册回拨功能
 				registerCallback(null, true);
+				//注册IM
+				userRegisterIM(null, true);
 			}
 			else
 			{
 				// 注册失败，清空SessionId
 				PreferenceUtils.getInstance().setSessionId("");
 				EventBus.getDefault().post(new UserEvent(UserEvent.EVENT_LOGOUT));
+			}
+		}
+		else if (url.endsWith(ApiConfig.IM_REGISTER))
+		{
+			LogcatTools.info("IM注册结果", "IM注册结果：" + result);
+			UserInfo userInfo = GsonTools.getReturnObject(result, UserInfo.class);
+			if (userInfo != null)
+			{
+				//登录到环信服务器
+				EMClient.getInstance().login(userInfo.getUserId(), userInfo.getImToken(), new EMCallBack()
+				{
+					//回调
+					@Override
+					public void onSuccess()
+					{
+						// ** manually load all local groups and conversation
+						EMClient.getInstance().groupManager().loadAllGroups();
+						EMClient.getInstance().chatManager().loadAllConversations();
+						// get user's info (this should be get from App's server or 3rd party service)
+						DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+						Log.d("main", "登录聊天服务器成功！");
+					}
+
+					@Override
+					public void onProgress(int progress, String status)
+					{
+					}
+
+					@Override
+					public void onError(int code, String message)
+					{
+						Log.d("main", "登录聊天服务器失败！");
+					}
+				});
 			}
 		}
 		else if (url.endsWith(ApiConfig.GET_USER_INFO))
@@ -342,7 +486,7 @@ public class UserService extends BaseService
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				String msg = returnInfo.getErrmsg();
+				String msg = returnInfo.getMsg();
 				Intent intent = new Intent(Intent.ACTION_SEND); // 启动分享发送到属性
 				intent.setType("text/plain"); // 分享发送到数据类型
 				intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); // 分享的主题
@@ -385,14 +529,14 @@ public class UserService extends BaseService
 			//			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			//			if (ReturnInfo.isSuccess(returnInfo))
 			//			{
-			//				ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getErrmsg());
+			//				ToastView.showCenterToast(context, R.drawable.ic_done, returnInfo.getMsg());
 			//			}
 			//			else
 			//			{
 			//				String msg = "签到失败！";
 			//				if (returnInfo != null)
 			//				{
-			//					msg = returnInfo.getErrmsg();
+			//					msg = returnInfo.getMsg();
 			//				}
 			//				ToastView.showCenterToast(context, R.drawable.ic_do_fail, msg);
 			//			}
@@ -421,7 +565,7 @@ public class UserService extends BaseService
 			{
 				Intent intent = new Intent(context, ActivityShare.class);
 				String data = ApiConfig.getServerRegisterUrl(PreferenceUtils.getInstance().getUserId());
-				String content = returnInfo.getErrmsg();
+				String content = returnInfo.getMsg();
 				if (!StringTools.isNull(content) && content.contains("{appName}"))
 				{
 					content = content.replace("{appName}", context.getText(R.string.app_name));
@@ -433,6 +577,14 @@ public class UserService extends BaseService
 			else
 			{
 				ToastView.showCenterToast(context, R.drawable.ic_do_fail, "暂时无法分享！");
+			}
+		}
+		else if (url.endsWith(ApiConfig.GET_CLIENT_CONFIG))
+		{
+			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
+			if (ReturnInfo.isSuccess(returnInfo))
+			{
+				PreferenceUtils.getInstance().setStringValue(PreferenceUtils.CLIENT_CONFIG, result);
 			}
 		}
 	}

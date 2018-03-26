@@ -479,7 +479,7 @@ public class ActivityWebView extends MyBaseActivity implements XListView.IXListV
 		catch (Exception e)
 		{
 			String msg = e.getMessage();
-			if (msg.indexOf("No Activity found") > -1)
+			if (msg.contains("No Activity found"))
 			{
 				msg = "没有找到浏览器！";
 			}

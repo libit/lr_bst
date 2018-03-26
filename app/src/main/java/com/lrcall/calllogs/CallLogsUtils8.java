@@ -16,6 +16,7 @@ import com.lrcall.contacts.ContactsFactory;
 import com.lrcall.models.CallLogInfo;
 import com.lrcall.models.ContactInfo;
 import com.lrcall.utils.CallTools;
+import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.ArrayList;
@@ -32,6 +33,10 @@ public class CallLogsUtils8 extends CallLogsFactory
 	@Override
 	public Cursor getCallLogs(Context context)
 	{
+		if (context == null)
+		{
+			return null;
+		}
 		return context.getContentResolver().query(CALLLOG_URL, logs_projection, null, null, DEFAULT_SORT_ORDER);
 	}
 
@@ -45,6 +50,10 @@ public class CallLogsUtils8 extends CallLogsFactory
 	@Override
 	public Cursor getCallLogs(Context context, String selection)
 	{
+		if (context == null)
+		{
+			return null;
+		}
 		return context.getContentResolver().query(CALLLOG_URL, logs_projection, selection, null, DEFAULT_SORT_ORDER);
 	}
 
@@ -239,6 +248,11 @@ public class CallLogsUtils8 extends CallLogsFactory
 				}
 			}
 		}
+		if (StringTools.isNull(number))
+		{
+			where = NUMBER + " is null or " + NUMBER + " = '' or " + NUMBER + " like '-%'";
+		}
+		LogcatTools.debug("deleteNumberCallLogs", "where=" + where);
 		return context.getContentResolver().delete(CALLLOG_URL, where, null);
 	}
 
@@ -352,10 +366,10 @@ public class CallLogsUtils8 extends CallLogsFactory
 	{
 		for (CallLogInfo callLogInfo : callLogInfoList)
 		{
-			if (callLogInfo.getNumber().indexOf(number) > -1)
+			if (callLogInfo.getNumber().contains(number))
 			{
 				String cache_name = callLogInfo.getName();
-				if ((cache_name.indexOf("(") > -1) && (cache_name.indexOf(")") > -1) && (cache_name.lastIndexOf("(")) < (cache_name.lastIndexOf(")")))
+				if ((cache_name.contains("(")) && (cache_name.contains(")")) && (cache_name.lastIndexOf("(")) < (cache_name.lastIndexOf(")")))
 				{
 					String strCount = cache_name.substring(cache_name.lastIndexOf("(") + 1, cache_name.lastIndexOf(")"));
 					try

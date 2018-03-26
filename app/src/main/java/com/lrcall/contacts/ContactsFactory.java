@@ -31,17 +31,13 @@ public abstract class ContactsFactory
 	{
 		if (instance == null)
 		{
-			if (AppFactory.isCompatible(21))
+			if (AppFactory.isCompatible(19))
 			{
-				instance = new ContactsUtils21();
-			}
-			else if (AppFactory.isCompatible(14))
-			{
-				instance = new ContactsUtils14();
+				instance = new ContactsUtils19();
 			}
 			else
 			{
-				instance = new ContactsUtils8();
+				instance = new ContactsUtils14();
 			}
 		}
 		return instance;

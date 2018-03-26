@@ -177,6 +177,10 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 	public void refreshData()
 	{
 		mDataTrafficInfoList.clear();
+		if (mDataTrafficAdapter != null)
+		{
+			mDataTrafficAdapter.notifyDataSetChanged();
+		}
 		mDataTrafficAdapter = null;
 		loadMoreData();
 	}
@@ -195,10 +199,7 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 			xListView.setPullLoadEnable(false);
 			return;
 		}
-		if (dataTrafficInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(dataTrafficInfoList.size() >= getPageSize());
 		for (DataTrafficInfo dataTrafficInfo : dataTrafficInfoList)
 		{
 			mDataTrafficInfoList.add(dataTrafficInfo);
@@ -233,7 +234,7 @@ public class ActivityRechargeDataTraffic extends MyBasePageActivity implements I
 										if (ReturnInfo.isSuccess(returnInfo))
 										{
 											Intent intent = new Intent(ActivityRechargeDataTraffic.this, ActivityPayList.class);
-											intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_DATA_TRAFFIC_ORDER, dataTrafficInfo.getPrice(), "流量订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg())));
+											intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_DATA_TRAFFIC_ORDER, dataTrafficInfo.getPrice(), "流量订单" + returnInfo.getMsg() + "支付", returnInfo.getMsg())));
 											startActivity(intent);
 										}
 										else

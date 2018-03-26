@@ -28,14 +28,14 @@ public class ReturnListInfo extends ReturnInfo
 
 	public ReturnListInfo(ReturnInfo returnInfo)
 	{
-		super(returnInfo.getErrcode(), returnInfo.getErrmsg());
+		super(returnInfo.getCode(), returnInfo.getMsg());
 		this.count = 0;
 		this.totalCount = 0;
 	}
 
 	public ReturnListInfo(ReturnInfo returnInfo, long count, long totalCount)
 	{
-		super(returnInfo.getErrcode(), returnInfo.getErrmsg());
+		super(returnInfo.getCode(), returnInfo.getMsg());
 		this.count = count;
 		this.totalCount = totalCount;
 	}

@@ -9,11 +9,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,13 +68,23 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 {
 	private static final String TAG = FragmentMore.class.getSimpleName();
 	private XListView xListView;
-	private View headView, vLogined, vUnLogin, vReferrers, vIsReferrer, vNotReferrer, vAgents, vIsAgent, vNotAgent, vShops, vIsShop, vNotShop;
+	private View headView, vLogined, vUnLogin, vReferrers, vIsReferrer, vNotReferrer, vAgents, vIsAgent, vNotAgent, vShops, vIsShop, vNotShop, vLogoutLine, vLogout;
+	private TextView tvTitle;
 	private TextView tvName, tvUserLevel, tvRegisterDate, tvOfficalWeb, tvServerPhone, tvBalance, tvFreezeBalance, tvPoint, tvStarCount, tvHistoryCount, tvFansAmount, tvFansShareProfit, tvShareProfit, tvAgentAmount, tvAgentShareProfit, tvAgentShareProfit2, tvPeopleAmount, tvRecentOrderCount, tvSaleAmount;
 	private ImageView ivPhoto;
 	private UserService mUserService;
 	private UserAgentService mUserAgentService;
 	private ProductStarService mProductStarService;
 	private ShopService mShopService;
+	private Handler mHandler = new Handler();
+
+	public void setTitle(String title)
+	{
+		if (tvTitle != null)
+		{
+			tvTitle.setText(title);
+		}
+	}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState)
@@ -108,6 +120,12 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 	@Override
 	protected void viewInit(View rootView)
 	{
+		tvTitle = (TextView) rootView.findViewById(R.id.tv_title);
+		rootView.findViewById(R.id.btn_back).setVisibility(View.INVISIBLE);
+		setTitle("我的");
+		ImageButton btnMore = (ImageButton) rootView.findViewById(R.id.btn_more);
+		btnMore.setImageResource(R.drawable.ic_settings);
+		btnMore.setOnClickListener(this);
 		xListView = (XListView) rootView.findViewById(R.id.xlist);
 		headView = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_more_head, null);
 		xListView.setPullRefreshEnable(true);
@@ -172,6 +190,10 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 		rootView.findViewById(R.id.btn_upgrade).setOnClickListener(this);
 		rootView.findViewById(R.id.btn_sign).setOnClickListener(this);
 		rootView.findViewById(R.id.btn_share).setOnClickListener(this);
+		vLogoutLine = rootView.findViewById(R.id.layout_logout_line);
+		vLogout = rootView.findViewById(R.id.layout_logout);
+		vLogout.setOnClickListener(this);
+		rootView.findViewById(R.id.btn_exit).setOnClickListener(this);
 		ivPhoto.setOnClickListener(this);
 		super.viewInit(rootView);
 	}
@@ -198,20 +220,31 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 	}
 
 	@Subscribe
-	public void onEventMainThread(UserEvent userEvent)
+	public void onEventMainThread(final UserEvent userEvent)
 	{
-		if (userEvent.getEvent().equals(UserEvent.EVENT_LOGINED) || userEvent.getEvent().equals(UserEvent.EVENT_LOGOUT))
+		mHandler.post(new Thread()
 		{
-			setbLogin(isbLogin());
-			if (isbLogin())
+			@Override
+			public void run()
 			{
-				mUserService.getUserInfo(null, true);
+				super.run();
+				if (userEvent != null)
+				{
+					if (userEvent.getEvent().equals(UserEvent.EVENT_LOGINED) || userEvent.getEvent().equals(UserEvent.EVENT_LOGOUT))
+					{
+						setbLogin(isbLogin());
+						if (isbLogin())
+						{
+							mUserService.getUserInfo(null, true);
+						}
+					}
+					else
+					{
+						mUserService.getUserInfo(null, true);
+					}
+				}
 			}
-		}
-		else
-		{
-			mUserService.getUserInfo(null, true);
-		}
+		});
 	}
 
 	@Override
@@ -232,6 +265,11 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 	{
 		switch (v.getId())
 		{
+			case R.id.btn_more:
+			{
+				startActivity(new Intent(this.getContext(), ActivitySettings.class));
+				break;
+			}
 			case R.id.btn_upgrade:
 			{
 				if (isbLogin())
@@ -519,6 +557,20 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 				}
 				break;
 			}
+			case R.id.layout_logout:
+			{
+				new UserService(this.getContext()).logout();
+				startActivity(new Intent(this.getContext(), ActivityLogin.class));
+				break;
+			}
+			case R.id.btn_exit:
+			{
+				if (ActivityMain.getInstance() != null)
+				{
+					ActivityMain.getInstance().exit();
+				}
+				break;
+			}
 		}
 	}
 
@@ -702,7 +754,7 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				tvStarCount.setText(returnInfo.getErrmsg());
+				tvStarCount.setText(returnInfo.getMsg());
 			}
 			else
 			{
@@ -736,6 +788,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			}
 			vUnLogin.setVisibility(View.GONE);
 			vLogined.setVisibility(View.VISIBLE);
+			vLogoutLine.setVisibility(View.VISIBLE);
+			vLogout.setVisibility(View.VISIBLE);
 			mUserService.getUserBalanceInfo(null, false);
 			mProductStarService.getProductStarInfoListCount(null, false);
 		}
@@ -745,6 +799,8 @@ public class FragmentMore extends MyBaseFragment implements XListView.IXListView
 			tvUserLevel.setText("");
 			vLogined.setVisibility(View.GONE);
 			vUnLogin.setVisibility(View.VISIBLE);
+			vLogoutLine.setVisibility(View.GONE);
+			vLogout.setVisibility(View.GONE);
 			tvBalance.setText("0");
 			tvFreezeBalance.setText("0");
 			tvPoint.setText("0");

@@ -406,25 +406,25 @@ public class ActivityOrderAdd extends MyBaseActivity implements View.OnClickList
 				//				if (payType == PAY_ALIPAY)
 				//				{
 				//					Intent intent = new Intent(this, ActivityPayByBalance.class);
-				//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
+				//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getMsg());
 				//					startActivity(intent);
 				//				}
 				//				else if (payType == PAY_WX)
 				//				{
 				//					Intent intent = new Intent(this, ActivityPayByBalance.class);
-				//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
+				//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getMsg());
 				//					startActivity(intent);
 				//				}
 				//				else if (payType == DATA_PAY_AMOUNT)
 				//				{
 				//					Intent intent = new Intent(this, ActivityPayByBalance.class);
-				//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getErrmsg());
+				//					intent.putExtra(ConstValues.DATA_ORDER_ID, returnInfo.getMsg());
 				//					startActivity(intent);
 				//				}
 				//				else
 				{
 					Intent intent = new Intent(this, ActivityPayList.class);
-					PayTypeInfo payTypeInfo = new PayTypeInfo(PayType.PAY_ORDER, totalPrice, "订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg());
+					PayTypeInfo payTypeInfo = new PayTypeInfo(PayType.PAY_ORDER, totalPrice, "订单" + returnInfo.getMsg() + "支付", returnInfo.getMsg());
 					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(payTypeInfo));
 					startActivity(intent);
 				}

@@ -152,32 +152,40 @@ public class BitmapTools
 	 */
 	public static Bitmap createRoundConerImage(Bitmap source, int width, int height, int radiusX, int radiusY)
 	{
-		final Paint paint = new Paint();
-		/**开启抗锯齿**/
-		paint.setAntiAlias(true);
-		/****/
-		Bitmap target = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		/**
-		 * Construct a canvas with the specified bitmap to draw into. The bitmapmust be mutable
-		 * 以bitmap对象创建一个画布，则将内容都绘制在bitmap上，bitmap不得为null;
-		 */
-		Canvas canvas = new Canvas(target);
-		/**新建一个矩形绘制区域,并给出左上角和右下角的坐标**/
-		RectF rect = new RectF(0, 0, width, height);
-		/**
-		 * 把图片缩放成我们想要的大小
-		 */
-		source = Bitmap.createScaledBitmap(source, width, height, false);
-		/**在绘制矩形区域绘制用画笔绘制一个圆角矩形**/
-		canvas.drawRoundRect(rect, radiusX, radiusY, paint);
-		/**
-		 * 我简单理解为设置画笔在绘制时图形堆叠时候的显示模式
-		 * SRC_IN:取两层绘制交集。显示上层。
-		 */
-		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-		canvas.drawBitmap(source, 0, 0, paint);
-		/****/
-		return target;
+		try
+		{
+			final Paint paint = new Paint();
+			/**开启抗锯齿**/
+			paint.setAntiAlias(true);
+			/****/
+			Bitmap target = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			/**
+			 * Construct a canvas with the specified bitmap to draw into. The bitmapmust be mutable
+			 * 以bitmap对象创建一个画布，则将内容都绘制在bitmap上，bitmap不得为null;
+			 */
+			Canvas canvas = new Canvas(target);
+			/**新建一个矩形绘制区域,并给出左上角和右下角的坐标**/
+			RectF rect = new RectF(0, 0, width, height);
+			/**
+			 * 把图片缩放成我们想要的大小
+			 */
+			source = Bitmap.createScaledBitmap(source, width, height, false);
+			/**在绘制矩形区域绘制用画笔绘制一个圆角矩形**/
+			canvas.drawRoundRect(rect, radiusX, radiusY, paint);
+			/**
+			 * 我简单理解为设置画笔在绘制时图形堆叠时候的显示模式
+			 * SRC_IN:取两层绘制交集。显示上层。
+			 */
+			paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+			canvas.drawBitmap(source, 0, 0, paint);
+			/****/
+			return target;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static final int ALL = 347120;

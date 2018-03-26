@@ -14,7 +14,7 @@ public enum SexType
 	private byte sex;
 	private String desc;
 
-	private SexType(byte sex, String desc)
+	 SexType(byte sex, String desc)
 	{
 		this.sex = sex;
 		this.desc = desc;

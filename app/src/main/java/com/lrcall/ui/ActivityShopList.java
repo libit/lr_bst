@@ -81,6 +81,10 @@ public class ActivityShopList extends MyBasePageActivity implements IAjaxDataRes
 	public void refreshData()
 	{
 		mShopInfoList.clear();
+		if (mShopAdapter != null)
+		{
+			mShopAdapter.notifyDataSetChanged();
+		}
 		mShopAdapter = null;
 		loadMoreData();
 	}
@@ -106,10 +110,7 @@ public class ActivityShopList extends MyBasePageActivity implements IAjaxDataRes
 		}
 		layoutShopList.setVisibility(View.VISIBLE);
 		layoutNoShop.setVisibility(View.GONE);
-		if (shopInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(shopInfoList.size() >= getPageSize());
 		for (ShopInfo shopInfo : shopInfoList)
 		{
 			mShopInfoList.add(shopInfo);

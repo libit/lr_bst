@@ -11,7 +11,7 @@ public enum UserLevel
 	private byte level;
 	private String desc;
 
-	private UserLevel(byte level, String desc)
+	 UserLevel(byte level, String desc)
 	{
 		this.level = level;
 		this.desc = desc;

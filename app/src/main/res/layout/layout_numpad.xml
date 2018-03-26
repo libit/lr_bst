@@ -121,47 +121,53 @@
         android:layout_height="55dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
-        <LinearLayout
-            android:id="@+id/layout_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:visibility="gone">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="6dp"
-                android:layout_marginTop="6dp"
-                android:src="@drawable/ic_tab_dialer_pressed"/>
-        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/layout_switch"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:visibility="gone">-->
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginBottom="6dp"-->
+                <!--android:layout_marginTop="6dp"-->
+                <!--android:src="@drawable/ic_tab_dialer_pressed"/>-->
+        <!--</LinearLayout>-->
         <ImageView
             android:id="@+id/btn_add_contact"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:paddingBottom="4dp"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
             android:paddingTop="4dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_tab_more_normal"/>
+            android:src="@drawable/btn_contacts"/>
         <ImageButton
             android:id="@+id/layout_make_call"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="2"
             android:background="@drawable/bg_btn_call"
-            android:src="@drawable/dial_phone"/>
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_dial"/>
         <com.lrcall.ui.customer.EraseButton
             android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
             android:scaleType="centerInside"
-            android:src="@drawable/btn_delete"/>
+            android:src="@drawable/btn_delete2"/>
     </LinearLayout>
 </LinearLayout>

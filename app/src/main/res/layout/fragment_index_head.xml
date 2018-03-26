@@ -7,33 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v4.view.ViewPager
-            android:id="@id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <com.ogaclejapan.smarttablayout.SmartTabLayout
-            android:id="@+id/viewpagertab"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="16dp"
-            android:layout_gravity="bottom|right"
-            android:paddingBottom="6dp"
-            android:paddingRight="10dp"
-            app:stl_clickable="false"
-            app:stl_customTabTextLayoutId="@layout/custom_tab_circle"
-            app:stl_dividerColor="@color/transparent"
-            app:stl_dividerThickness="0dp"
-            app:stl_indicatorColor="@color/accent"
-            app:stl_indicatorCornerRadius="4dp"
-            app:stl_indicatorGravity="center"
-            app:stl_indicatorInterpolation="linear"
-            app:stl_indicatorThickness="8dp"
-            app:stl_underlineColor="@color/transparent"
-            app:stl_underlineThickness="0dp"/>
-    </FrameLayout>
+    <include layout="@layout/layout_banner"/>
     <ScrollView
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
@@ -103,7 +77,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:background="#14CAE0">
+                android:background="#14CAE0"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -134,13 +109,15 @@
                 android:fastScrollEnabled="false"
                 android:gravity="center"
                 android:numColumns="2"
-                android:padding="0dp"/>
+                android:padding="0dp"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="20dp"
-                android:background="#FF6633">
+                android:background="#FF6633"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -157,13 +134,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="@color/line"
-                android:dividerHeight="0.5dp"/>
+                android:dividerHeight="0.5dp"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="20dp"
-                android:background="#99CC33">
+                android:background="#99CC33"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -180,12 +159,81 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="@color/line"
-                android:dividerHeight="0.5dp"/>
+                android:dividerHeight="0.5dp"
+                android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
+                android:background="#99CC33">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="活动专区"
+                    android:textColor="@color/text_title_primary"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_huodong"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:id="@+id/layout_product_today_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="0dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_product_today_new"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layout_product_panic_buying"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_product_panic_buying"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layout_product_recommend"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="0dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_product_recommend"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="0dp"
                 android:background="#FF6633">
                 <TextView
                     android:layout_width="match_parent"
@@ -210,6 +258,12 @@
                     android:textColor="@color/text_title_primary"
                     android:textSize="18sp"/>
             </LinearLayout>
+            <ListView
+                android:id="@+id/list_new_products"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#22666666"
+                android:dividerHeight="15dp"/>
             <GridView
                 android:id="@+id/gv_new_products"
                 android:layout_width="match_parent"
@@ -218,7 +272,8 @@
                 android:fastScrollEnabled="false"
                 android:gravity="center"
                 android:numColumns="2"
-                android:padding="0dp"/>
+                android:padding="0dp"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

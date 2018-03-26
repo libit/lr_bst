@@ -80,6 +80,10 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 	public void refreshData()
 	{
 		mPointLogInfoList.clear();
+		if (mUserPointLogAdapter != null)
+		{
+			mUserPointLogAdapter.notifyDataSetChanged();
+		}
 		mUserPointLogAdapter = null;
 		loadMoreData();
 	}
@@ -106,10 +110,7 @@ public class ActivityUserPointLog extends MyBasePageActivity implements IAjaxDat
 		}
 		layoutLogList.setVisibility(View.VISIBLE);
 		layoutNoLog.setVisibility(View.GONE);
-		if (pointLogInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(pointLogInfoList.size() >= getPageSize());
 		for (PointLogInfo pointLogInfo : pointLogInfoList)
 		{
 			mPointLogInfoList.add(pointLogInfo);

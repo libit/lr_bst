@@ -104,11 +104,11 @@ public class ActivityAdvice extends MyBaseActivity implements View.OnClickListen
 		else if (url.endsWith(ApiConfig.SUBMIT_ADVICE))
 		{
 			showServerMsg(result, "提交反馈成功！");
-			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
-			if (ReturnInfo.isSuccess(returnInfo))
+			if (ReturnInfo.isSuccess(GsonTools.getReturnInfo(result)))
 			{
-				etNumber.setText("");
-				etContent.setText("");
+				//				etNumber.setText("");
+				//				etContent.setText("");
+				finish();
 			}
 			return true;
 		}

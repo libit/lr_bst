@@ -72,7 +72,7 @@ public class GsonTools
 		{
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				return getBuildGson().fromJson(returnInfo.getErrmsg(), classOfT);
+				return getBuildGson().fromJson(returnInfo.getMsg(), classOfT);
 			}
 		}
 		catch (Exception e)
@@ -94,7 +94,7 @@ public class GsonTools
 			ReturnInfo returnInfo = getBuildGson().fromJson(json, ReturnInfo.class);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				return getBuildGson().fromJson(returnInfo.getErrmsg(), classOfT);
+				return getBuildGson().fromJson(returnInfo.getMsg(), classOfT);
 			}
 		}
 		catch (Exception e)
@@ -139,7 +139,7 @@ public class GsonTools
 			ReturnInfo returnInfo = getBuildGson().fromJson(json, ReturnInfo.class);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				return getBuildGson().fromJson(returnInfo.getErrmsg(), classOfT);
+				return getBuildGson().fromJson(returnInfo.getMsg(), classOfT);
 			}
 		}
 		catch (Exception e)
@@ -159,7 +159,7 @@ public class GsonTools
 		{
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				return getBuildGson().fromJson(returnInfo.getErrmsg(), classOfT);
+				return getBuildGson().fromJson(returnInfo.getMsg(), classOfT);
 			}
 		}
 		catch (Exception e)
@@ -180,7 +180,7 @@ public class GsonTools
 			ReturnListInfo returnInfo = getBuildGson().fromJson(json, ReturnListInfo.class);
 			if (ReturnListInfo.isSuccess(returnInfo))
 			{
-				return getBuildGson().fromJson(returnInfo.getErrmsg(), classOfT);
+				return getBuildGson().fromJson(returnInfo.getMsg(), classOfT);
 			}
 		}
 		catch (Exception e)
@@ -200,7 +200,7 @@ public class GsonTools
 		{
 			if (ReturnListInfo.isSuccess(returnListInfo))
 			{
-				return getBuildGson().fromJson(returnListInfo.getErrmsg(), classOfT);
+				return getBuildGson().fromJson(returnListInfo.getMsg(), classOfT);
 			}
 		}
 		catch (Exception e)

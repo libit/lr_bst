@@ -77,9 +77,9 @@ public class ViewHeightCalTools
 		{
 			for (int i = 0; i < listAdapter.getCount(); i++)
 			{
-				// listAdapter.getCount()返回数据项的数目
 				View listItem = listAdapter.getView(i, null, listView);
 				listItem.measure(0, 0); // 计算子项View 的宽高
+				LogcatTools.debug("setListViewHeight", "当前item高度：" + listItem.getMeasuredHeight());
 				totalHeight += listItem.getMeasuredHeight(); // 统计所有子项的总高度
 			}
 		}

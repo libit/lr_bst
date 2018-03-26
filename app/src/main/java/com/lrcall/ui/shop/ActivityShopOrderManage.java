@@ -109,6 +109,10 @@ public class ActivityShopOrderManage extends MyBasePageActivity implements View.
 	public void refreshData()
 	{
 		mOrderInfoList.clear();
+		if (mShopOrdersAdapter != null)
+		{
+			mShopOrdersAdapter.notifyDataSetChanged();
+		}
 		mShopOrdersAdapter = null;
 		loadMoreData();
 	}

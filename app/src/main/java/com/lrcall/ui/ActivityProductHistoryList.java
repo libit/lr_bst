@@ -116,10 +116,7 @@ public class ActivityProductHistoryList extends MyBasePageActivity implements IA
 		}
 		layoutHistoryList.setVisibility(View.VISIBLE);
 		layoutNoHistory.setVisibility(View.GONE);
-		if (productHistoryInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(productHistoryInfoList.size() >= getPageSize());
 		for (ProductHistoryInfo productHistoryInfo : productHistoryInfoList)
 		{
 			mProductHistoryInfoList.add(productHistoryInfo);
@@ -151,6 +148,10 @@ public class ActivityProductHistoryList extends MyBasePageActivity implements IA
 	public void refreshData()
 	{
 		mProductHistoryInfoList.clear();
+		if (mProductHistoryAdapter != null)
+		{
+			mProductHistoryAdapter.notifyDataSetChanged();
+		}
 		mProductHistoryAdapter = null;
 		loadMoreData();
 	}

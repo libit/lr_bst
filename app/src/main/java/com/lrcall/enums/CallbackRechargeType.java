@@ -15,7 +15,7 @@ public enum CallbackRechargeType
 	private String type;
 	private String desc;
 
-	private CallbackRechargeType(String type, String desc)
+	 CallbackRechargeType(String type, String desc)
 	{
 		this.type = type;
 		this.desc = desc;

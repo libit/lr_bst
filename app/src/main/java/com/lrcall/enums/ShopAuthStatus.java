@@ -15,7 +15,7 @@ public enum ShopAuthStatus
 	private byte status;
 	private String desc;
 
-	private ShopAuthStatus(byte status, String desc)
+	 ShopAuthStatus(byte status, String desc)
 	{
 		this.status = status;
 		this.desc = desc;

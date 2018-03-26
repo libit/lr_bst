@@ -17,6 +17,7 @@ public class TabInfo
 	private int imgResId;
 	private Class loadClass;
 	private ImageView imgIcon;
+	private TextView viewNotificationMark;
 	private TextView tvLabel;
 
 	public TabInfo()
@@ -30,29 +31,12 @@ public class TabInfo
 		this.loadClass = loadClass;
 	}
 
-	public TabInfo(int index, int imgResId, Class loadClass)
-	{
-		this.index = index;
-		this.imgResId = imgResId;
-		this.loadClass = loadClass;
-	}
-
 	public TabInfo(int index, String label, int imgResId, Class loadClass)
 	{
 		this.index = index;
 		this.label = label;
 		this.imgResId = imgResId;
 		this.loadClass = loadClass;
-	}
-
-	public TabInfo(int index, String label, int imgResId, Class loadClass, ImageView imgIcon, TextView tvLabel)
-	{
-		this.index = index;
-		this.label = label;
-		this.imgResId = imgResId;
-		this.loadClass = loadClass;
-		this.imgIcon = imgIcon;
-		this.tvLabel = tvLabel;
 	}
 
 	public int getIndex()
@@ -103,6 +87,16 @@ public class TabInfo
 	public void setImgIcon(ImageView imgIcon)
 	{
 		this.imgIcon = imgIcon;
+	}
+
+	public TextView getViewNotificationMark()
+	{
+		return viewNotificationMark;
+	}
+
+	public void setViewNotificationMark(TextView viewNotificationMark)
+	{
+		this.viewNotificationMark = viewNotificationMark;
 	}
 
 	public TextView getTvLabel()

@@ -60,7 +60,7 @@ public class ActivityOrders extends MyBaseActivity
 			public View createTabView(ViewGroup container, int position, PagerAdapter adapter)
 			{
 				TabInfo tabInfo = mTabInfoList.get(position);
-				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_text_tab, container, false);
+				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_tab_text, container, false);
 				TextView textView = (TextView) view.findViewById(R.id.tab_label);
 				textView.setText(tabInfo.getLabel());
 				tabInfo.setTvLabel(textView);

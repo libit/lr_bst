@@ -146,7 +146,7 @@ public class ProductStarService extends BaseService
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				String starId = returnInfo.getErrmsg();
+				String starId = returnInfo.getMsg();
 				DbProductStarInfoFactory.getInstance().deleteProductStarInfo(starId);
 				EventBus.getDefault().post(new ProductEvent(ProductEvent.EVENT_STAR_CANCEL));
 			}

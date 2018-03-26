@@ -16,6 +16,10 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.ui.VideoCallActivity;
+import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
+import com.hyphenate.util.EasyUtils;
 import com.lrcall.appbst.R;
 import com.lrcall.utils.PreferenceUtils;
 import com.lrcall.utils.apptools.AppFactory;
@@ -47,7 +51,29 @@ public class ActivitySplash extends Activity
 					}
 					else
 					{
-						startActivity(new Intent(ActivitySplash.this, ActivityMain.class));
+						//						new Thread(new Runnable()
+						//						{
+						//							public void run()
+						//							{
+						//								if (DemoHelper.getInstance().isLoggedIn())
+						//								{
+						//									// auto login mode, make sure all group and conversation is loaed before enter the main screen
+						//									EMClient.getInstance().chatManager().loadAllConversations();
+						//									EMClient.getInstance().groupManager().loadAllGroups();
+						//								}
+						//							}
+						//						}).start();
+						String topActivityName = EasyUtils.getTopActivityName(EMClient.getInstance().getContext());
+						if (topActivityName != null && (topActivityName.equals(VideoCallActivity.class.getName()) || topActivityName.equals(VoiceCallActivity.class.getName())))
+						{
+							// nop
+							// avoid main screen overlap Calling Activity
+						}
+						else
+						{
+							//enter main screen
+							startActivity(new Intent(ActivitySplash.this, ActivityMain.class));
+						}
 					}
 					finish();
 					break;
@@ -72,7 +98,8 @@ public class ActivitySplash extends Activity
 		}
 	}
 
-	@NeedsPermission({Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.FLASHLIGHT, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE})
+	@NeedsPermission({Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE})
+	//Manifest.permission.FLASHLIGHT,
 	protected void initView(View rootView)
 	{
 		//		tvStart = (TextView) findViewById(R.id.tv_start);
@@ -99,7 +126,8 @@ public class ActivitySplash extends Activity
 		});
 	}
 
-	@OnPermissionDenied({Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.FLASHLIGHT, Manifest.permission.ACCESS_COARSE_LOCATION})
+	@OnPermissionDenied({Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_COARSE_LOCATION})
+		//Manifest.permission.FLASHLIGHT,
 	void initViewDenied()
 	{
 		Toast.makeText(this, "您拒绝了应用所需的权限，应用将不能工作！", Toast.LENGTH_LONG).show();

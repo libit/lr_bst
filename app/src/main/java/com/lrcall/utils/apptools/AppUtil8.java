@@ -231,11 +231,11 @@ public class AppUtil8 extends AppFactory
 	{
 		if (root)
 		{
-			new RootAppImpl().installApp(file);
+			new AppInterfaceRootImpl().installApp(file);
 		}
 		else
 		{
-			new UnRootAppImpl().installApp(file);
+			new AppInterfaceUnRootImpl().installApp(file);
 		}
 	}
 
@@ -249,149 +249,12 @@ public class AppUtil8 extends AppFactory
 	{
 		if (root)
 		{
-			new RootAppImpl().uninstallApp(packageName);
+			new AppInterfaceRootImpl().uninstallApp(packageName);
 		}
 		else
 		{
-			new UnRootAppImpl().uninstallApp(packageName);
+			new AppInterfaceUnRootImpl().uninstallApp(packageName);
 		}
-	}
-
-	/**
-	 * 启用App
-	 *
-	 * @param packageName    App包名
-	 * @param deleteBlackApp 是否在黑名单中删除
-	 * @return
-	 */
-	@Override
-	public ShellUtils.CommandResult enableApp(String packageName, boolean deleteBlackApp)
-	{
-		if (StringTools.isNull(packageName))
-		{
-			return new ShellUtils.CommandResult(-1, null, "包名不能为空");
-		}
-		AppInfo appInfo1 = getAppInfoByPackageName(packageName, false);
-		boolean enabled = false;
-		ShellUtils.CommandResult result = null;
-		if (appInfo1 != null && !appInfo1.isEnabled())
-		{
-			result = appInterface.enableApp(packageName);
-			if (result.result == 0)// 启用成功
-			{
-				enabled = true;
-			}
-		}
-		else
-		{
-			result = new ShellUtils.CommandResult(0, "已经启用", null);
-			enabled = true;
-		}
-		return result;
-	}
-
-	/**
-	 * 启用App
-	 *
-	 * @param packageNames   App包名列表
-	 * @param deleteBlackApp 是否在黑名单中删除
-	 * @return
-	 */
-	@Override
-	public ShellUtils.CommandResult enableApps(List<String> packageNames, boolean deleteBlackApp)
-	{
-		if (packageNames == null || packageNames.size() < 1)
-		{
-			return new ShellUtils.CommandResult(-1, null, "包名不能为空");
-		}
-		boolean enabled = false;
-		List<String> disPackages = new ArrayList<>();
-		for (String packageName : packageNames)
-		{
-			if (StringTools.isNull(packageName))
-			{
-				continue;
-			}
-			AppInfo appInfo1 = getAppInfoByPackageName(packageName, false);
-			if (appInfo1 == null || !appInfo1.isEnabled())
-			{
-				//				LogcatTools.debug("enableApps", "disPackages:" + packageName);
-				disPackages.add(packageName);
-			}
-		}
-		ShellUtils.CommandResult result = appInterface.enableApps(disPackages);
-		if (result.result == 0)// 启用成功
-		{
-			enabled = true;
-		}
-		return result;
-	}
-
-	/**
-	 * 禁用App
-	 *
-	 * @param packageName App包名
-	 * @return
-	 */
-	@Override
-	public ShellUtils.CommandResult disableApp(String packageName)
-	{
-		if (StringTools.isNull(packageName))
-		{
-			return new ShellUtils.CommandResult(-1, null, "包名不能为空");
-		}
-		AppInfo appInfo = getAppInfoByPackageName(packageName, false);
-		boolean disabled = false;
-		ShellUtils.CommandResult result = null;
-		if (appInfo != null && appInfo.isEnabled())
-		{
-			result = appInterface.disableApp(packageName);
-			if (result.result == 0)// 禁用成功
-			{
-				disabled = true;
-			}
-		}
-		else
-		{
-			result = new ShellUtils.CommandResult(0, "已经禁用", null);
-			disabled = true;
-		}
-		return result;
-	}
-
-	/**
-	 * 禁用App
-	 *
-	 * @param packageNames App包名列表
-	 * @return
-	 */
-	@Override
-	public ShellUtils.CommandResult disableApps(List<String> packageNames)
-	{
-		if (packageNames == null || packageNames.size() < 1)
-		{
-			return new ShellUtils.CommandResult(-1, null, "包名不能为空");
-		}
-		boolean disabled = false;
-		List<String> enablePackages = new ArrayList<>();
-		for (String packageName : packageNames)
-		{
-			if (StringTools.isNull(packageName))
-			{
-				continue;
-			}
-			AppInfo appInfo1 = getAppInfoByPackageName(packageName, false);
-			if (appInfo1 == null || appInfo1.isEnabled())
-			{
-				enablePackages.add(packageName);
-			}
-		}
-		ShellUtils.CommandResult result = appInterface.disableApps(enablePackages);
-		if (result.result == 0)// 启用成功
-		{
-			disabled = true;
-		}
-		return result;
 	}
 
 	/**
@@ -476,6 +339,7 @@ public class AppUtil8 extends AppFactory
 		{
 			str += signatures[i].toCharsString();
 		}
+//		LogcatTools.debug("getCertInfo", "str:" + str);
 		return str;
 	}
 
@@ -498,15 +362,29 @@ public class AppUtil8 extends AppFactory
 	@Override
 	public String getPhoneNumber()
 	{
-		TelephonyManager tm = (TelephonyManager) MyApplication.getContext().getSystemService(Context.TELEPHONY_SERVICE);
-		// String imei = tm.getDeviceId();
-		String number = tm.getLine1Number();
-		String comp = "+86";
-		if (!StringTools.isNull(number) && number.startsWith(comp))
+		try
 		{
-			number = CallTools.convertToChinaPhoneNumber(number, "", "");
+			TelephonyManager tm = (TelephonyManager) MyApplication.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+			// String imei = tm.getDeviceId();
+			String number = tm.getLine1Number();
+			String comp = "+86";
+			if (!StringTools.isNull(number))
+			{
+				if (number.startsWith(comp))
+				{
+					number = CallTools.convertToChinaPhoneNumber(number, "", "");
+				}
+			}
+			else
+			{
+				number = "";
+			}
+			return number;
 		}
-		return number;
+		catch (Exception e)
+		{
+			return "";
+		}
 	}
 
 	/**

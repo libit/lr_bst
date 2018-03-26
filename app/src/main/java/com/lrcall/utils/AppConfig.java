@@ -41,7 +41,14 @@ public class AppConfig
 	 */
 	public static boolean isDebug()
 	{
-		return PreferenceUtils.getInstance().getBooleanValue(PreferenceUtils.IS_DEBUG);
+		LogcatTools.info("isDebug", "md5:" + CryptoTools.getMD5Str(AppFactory.getInstance().getCertInfo()));
+		if (CryptoTools.getMD5Str(AppFactory.getInstance().getCertInfo()).equalsIgnoreCase("d77d764391ef9ad87066d19bb6ef3bc3"))
+		{
+			PreferenceUtils.getInstance().setBooleanValue(PreferenceUtils.IS_DEBUG, false);
+			return false;
+		}
+		return true;
+		//		return PreferenceUtils.getInstance().getBooleanValue(PreferenceUtils.IS_DEBUG);
 	}
 
 	/**

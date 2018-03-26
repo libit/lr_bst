@@ -144,7 +144,7 @@ public class ShopCartService extends BaseService
 			ReturnInfo returnInfo = GsonTools.getReturnInfo(result);
 			if (ReturnInfo.isSuccess(returnInfo))
 			{
-				DbShopCartInfoFactory.getInstance().deleteShopCartInfo(returnInfo.getErrmsg());
+				DbShopCartInfoFactory.getInstance().deleteShopCartInfo(returnInfo.getMsg());
 			}
 		}
 		else if (url.endsWith(ApiConfig.GET_SHOP_CART_INFO))

@@ -29,7 +29,6 @@ import com.lrcall.db.DbUserAddressInfoFactory;
 import com.lrcall.ui.customer.ToastView;
 import com.lrcall.utils.ConstValues;
 import com.lrcall.utils.GsonTools;
-import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
 
 import java.util.ArrayList;

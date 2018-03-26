@@ -80,6 +80,10 @@ public class ActivityUserAgentSharePorfitList extends MyBasePageActivity impleme
 	public void refreshData()
 	{
 		mUserBalanceLogInfoList.clear();
+		if (mUserBalanceLogAdapter != null)
+		{
+			mUserBalanceLogAdapter.notifyDataSetChanged();
+		}
 		mUserBalanceLogAdapter = null;
 		loadMoreData();
 	}
@@ -106,10 +110,7 @@ public class ActivityUserAgentSharePorfitList extends MyBasePageActivity impleme
 		}
 		layoutLogList.setVisibility(View.VISIBLE);
 		layoutNoLog.setVisibility(View.GONE);
-		if (userBalanceLogInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(userBalanceLogInfoList.size() >= getPageSize());
 		for (UserBalanceLogInfo userBalanceLogInfo : userBalanceLogInfoList)
 		{
 			mUserBalanceLogInfoList.add(userBalanceLogInfo);

@@ -24,9 +24,9 @@ public abstract class AppFactory
 	protected AppFactory()
 	{
 		//		if (ShellUtils.checkRootPermission())
-		//			appInterface = new RootAppImpl();
+		//			appInterface = new AppInterfaceRootImpl();
 		//		else
-		appInterface = new UnRootAppImpl();
+		appInterface = new AppInterfaceUnRootImpl();
 	}
 
 	synchronized public static AppFactory getInstance()
@@ -65,40 +65,6 @@ public abstract class AppFactory
 	{
 		return android.os.Build.VERSION.SDK_INT;
 	}
-
-	/**
-	 * 启用App
-	 *
-	 * @param packageName    App包名
-	 * @param deleteBlackApp 是否在黑名单中删除
-	 * @return
-	 */
-	public abstract ShellUtils.CommandResult enableApp(String packageName, boolean deleteBlackApp);
-
-	/**
-	 * 启用App
-	 *
-	 * @param packageNames   App包名列表
-	 * @param deleteBlackApp 是否在黑名单中删除
-	 * @return
-	 */
-	public abstract ShellUtils.CommandResult enableApps(List<String> packageNames, boolean deleteBlackApp);
-
-	/**
-	 * 禁用App
-	 *
-	 * @param packageName App包名
-	 * @return
-	 */
-	public abstract ShellUtils.CommandResult disableApp(String packageName);
-
-	/**
-	 * 禁用App
-	 *
-	 * @param packageNames App包名列表
-	 * @return
-	 */
-	public abstract ShellUtils.CommandResult disableApps(List<String> packageNames);
 
 	/**
 	 * 安装App

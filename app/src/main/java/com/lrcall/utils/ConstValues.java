@@ -59,6 +59,11 @@ public class ConstValues
 	public static final String DATA_SHOP_ID = "shop_id";
 	public static final String DATA_SHARE_DATA = "share_data";
 	public static final String DATA_SHARE_CONTENT = "share_content";
-	public static final String DATA_USER_ID = "user_id";
+	//	public static final String DATA_USER_ID = "userId";
 	public static final String DATA_REFERRER_ID = "referrer_id";
+	public static final int REQ_PAY = 1002;
+	public static final int REQ_PAY_BY_ALIPAY = 2002;
+	public static final int REQ_PAY_BY_WXPAY = 3002;
+	public static final int SDK_PAY_FLAG = 1;
+	public static final String DATA_INDEX = "index";
 }

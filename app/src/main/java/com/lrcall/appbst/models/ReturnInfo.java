@@ -9,26 +9,26 @@ import com.lrcall.utils.GsonTools;
 
 public class ReturnInfo
 {
-	@SerializedName("errcode")
-	private int errcode;
-	@SerializedName("errmsg")
-	private String errmsg;
+	@SerializedName("code")
+	private int code;
+	@SerializedName("msg")
+	private String msg;
 
 	public ReturnInfo()
 	{
 		super();
 	}
 
-	public ReturnInfo(int errcode, String errmsg)
+	public ReturnInfo(int code, String msg)
 	{
 		super();
-		this.errcode = errcode;
-		this.errmsg = errmsg;
+		this.code = code;
+		this.msg = msg;
 	}
 
 	public static boolean isSuccess(ReturnInfo info)
 	{
-		if (info != null && info.getErrcode() == ErrorInfo.getSuccessId())
+		if (info != null && info.getCode() == ErrorInfo.getSuccessId())
 		{
 			return true;
 		}
@@ -38,24 +38,24 @@ public class ReturnInfo
 		}
 	}
 
-	public int getErrcode()
+	public int getCode()
 	{
-		return errcode;
+		return code;
 	}
 
-	public void setErrcode(int errcode)
+	public void setCode(int code)
 	{
-		this.errcode = errcode;
+		this.code = code;
 	}
 
-	public String getErrmsg()
+	public String getMsg()
 	{
-		return errmsg;
+		return msg;
 	}
 
-	public void setErrmsg(String errmsg)
+	public void setMsg(String msg)
 	{
-		this.errmsg = errmsg;
+		this.msg = msg;
 	}
 
 	@Override

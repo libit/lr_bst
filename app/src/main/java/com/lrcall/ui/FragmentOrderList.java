@@ -121,6 +121,10 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 	public void refreshData()
 	{
 		mOrderInfoList.clear();
+		if (mOrderAdapter != null)
+		{
+			mOrderAdapter.notifyDataSetChanged();
+		}
 		mOrderAdapter = null;
 		loadMoreData();
 	}
@@ -149,10 +153,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 		}
 		layoutNoOrder.setVisibility(View.GONE);
 		xListView.setVisibility(View.VISIBLE);
-		if (orderInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(orderInfoList.size() >= getPageSize());
 		for (OrderInfo orderInfo : orderInfoList)
 		{
 			mOrderInfoList.add(orderInfo);
@@ -267,7 +268,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 			{
 				for (OrderInfo orderInfo : mOrderInfoList)
 				{
-					if (orderInfo.getOrderId().equals(returnInfo.getErrmsg()))
+					if (orderInfo.getOrderId().equals(returnInfo.getMsg()))
 					{
 						mOrderInfoList.remove(orderInfo);
 						mOrderAdapter.notifyDataSetChanged();
@@ -284,7 +285,7 @@ public class FragmentOrderList extends MyBasePageFragment implements IAjaxDataRe
 			{
 				for (OrderInfo orderInfo : mOrderInfoList)
 				{
-					if (orderInfo.getOrderId().equals(returnInfo.getErrmsg()))
+					if (orderInfo.getOrderId().equals(returnInfo.getMsg()))
 					{
 						mOrderInfoList.remove(orderInfo);
 						mOrderAdapter.notifyDataSetChanged();

@@ -301,7 +301,7 @@ public class ActivityPointOrderAdd extends MyBaseActivity implements View.OnClic
 				{
 					//这里转到支付界面
 					Intent intent = new Intent(this, ActivityPayList.class);
-					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_POINT_ORDER, totalPrice, "订单" + returnInfo.getErrmsg() + "支付", returnInfo.getErrmsg())));
+					intent.putExtra(ConstValues.DATA_PAY_TYPE_INFO, GsonTools.toJson(new PayTypeInfo(PayType.PAY_POINT_ORDER, totalPrice, "订单" + returnInfo.getMsg() + "支付", returnInfo.getMsg())));
 					startActivity(intent);
 				}
 			}

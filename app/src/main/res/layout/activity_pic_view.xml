@@ -18,7 +18,7 @@
         android:layout_height="16dp"
         android:layout_gravity="bottom|center_horizontal"
         app:stl_clickable="false"
-        app:stl_customTabTextLayoutId="@layout/custom_tab_circle"
+        app:stl_customTabTextLayoutId="@layout/item_tab_circle"
         app:stl_dividerColor="@color/transparent"
         app:stl_dividerThickness="0dp"
         app:stl_indicatorColor="@color/accent"

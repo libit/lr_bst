@@ -73,6 +73,20 @@ public class ProductService extends BaseService
 	}
 
 	/**
+	 * 获取抢购商品列表
+	 *
+	 * @param tips                   提示信息
+	 * @param needServiceProcessData
+	 */
+	public void getPanicBuyingProductList(int start, int size, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		ajaxStringCallback(ApiConfig.GET_PANIC_BUYING_PRODUCT_LIST, params, tips, needServiceProcessData);
+	}
+
+	/**
 	 * 获取商品列表
 	 *
 	 * @param tips                   提示信息
@@ -84,6 +98,21 @@ public class ProductService extends BaseService
 		params.put("start", start);
 		params.put("length", size);
 		params.put("search[value]", condition);
+		ajaxStringCallback(ApiConfig.GET_PRODUCT_LIST, params, tips, needServiceProcessData);
+	}
+
+	/**
+	 * 获取商品列表
+	 *
+	 * @param tips                   提示信息
+	 * @param needServiceProcessData
+	 */
+	public void getProductListBySortId(String sortId, int start, int size, String tips, final boolean needServiceProcessData)
+	{
+		Map<String, Object> params = new HashMap<>();
+		params.put("start", start);
+		params.put("length", size);
+		params.put("sortId", sortId);
 		ajaxStringCallback(ApiConfig.GET_PRODUCT_LIST, params, tips, needServiceProcessData);
 	}
 

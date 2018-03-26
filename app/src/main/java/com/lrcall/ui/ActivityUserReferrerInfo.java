@@ -144,7 +144,7 @@ public class ActivityUserReferrerInfo extends MyBaseActivity implements View.OnC
 					tvStatus.setText("您现在是" + UserLevel.L5.getDesc() + "。");
 					btnUpgrade.setVisibility(View.GONE);
 				}
-				if (userInfo.getUserLevel() < UserLevel.L2.getLevel())
+				if (userInfo.getUserLevel() < UserLevel.L1.getLevel())
 				{
 					findViewById(R.id.layout_funcs).setVisibility(View.GONE);
 				}

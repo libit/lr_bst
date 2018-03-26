@@ -171,7 +171,7 @@ public class ActivityOrderDetail extends MyBaseActivity implements View.OnClickL
 				String msg = "";
 				if (returnInfo != null)
 				{
-					msg = returnInfo.getErrmsg();
+					msg = returnInfo.getMsg();
 				}
 				ToastView.showCenterToast(this, R.drawable.ic_do_fail, msg);
 			}

@@ -80,6 +80,10 @@ public class ActivityWithdrawList extends MyBasePageActivity implements IAjaxDat
 	public void refreshData()
 	{
 		mUserWithdrawInfoList.clear();
+		if (mUserWithdrawAdapter != null)
+		{
+			mUserWithdrawAdapter.notifyDataSetChanged();
+		}
 		mUserWithdrawAdapter = null;
 		loadMoreData();
 	}
@@ -106,10 +110,7 @@ public class ActivityWithdrawList extends MyBasePageActivity implements IAjaxDat
 		}
 		layoutLogList.setVisibility(View.VISIBLE);
 		layoutNoLog.setVisibility(View.GONE);
-		if (userWithdrawInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(userWithdrawInfoList.size() >= getPageSize());
 		for (UserWithdrawInfo userWithdrawInfo : userWithdrawInfoList)
 		{
 			mUserWithdrawInfoList.add(userWithdrawInfo);

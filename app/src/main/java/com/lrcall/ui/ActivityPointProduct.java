@@ -102,7 +102,7 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 		mTabInfoList.add(new TabInfo(2, "评价", FragmentProductComments.class));
 		ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
 		//加载tab布局
-		tab.addView(LayoutInflater.from(this).inflate(R.layout.demo_distribute_evenly, tab, false));
+		tab.addView(LayoutInflater.from(this).inflate(R.layout.layout_distribute_evenly, tab, false));
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		final SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 		viewPagerTab.setCustomTabView(new SmartTabLayout.TabProvider()
@@ -111,7 +111,7 @@ public class ActivityPointProduct extends MyBaseActivity implements View.OnClick
 			public View createTabView(ViewGroup container, int position, PagerAdapter adapter)
 			{
 				TabInfo tabInfo = mTabInfoList.get(position);
-				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_text_tab, container, false);
+				View view = LayoutInflater.from(viewPagerTab.getContext()).inflate(R.layout.item_tab_text, container, false);
 				TextView textView = (TextView) view.findViewById(R.id.tab_label);
 				textView.setText(tabInfo.getLabel());
 				tabInfo.setTvLabel(textView);

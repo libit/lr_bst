@@ -40,11 +40,11 @@ import com.lrcall.appbst.services.PointProductService;
 import com.lrcall.db.DbBannerInfoFactory;
 import com.lrcall.enums.ClientBannerType;
 import com.lrcall.ui.adapter.IndexRecommendProducts4Adapter;
-import com.lrcall.ui.adapter.PointProductsAdapter;
+import com.lrcall.ui.adapter.PointProduct2Adapter;
 import com.lrcall.ui.adapter.SectionsPagerAdapter;
-import com.lrcall.utils.DisplayTools;
 import com.lrcall.ui.customer.ViewHeightCalTools;
 import com.lrcall.utils.ConstValues;
+import com.lrcall.utils.DisplayTools;
 import com.lrcall.utils.GsonTools;
 import com.lrcall.utils.LogcatTools;
 import com.lrcall.utils.StringTools;
@@ -79,7 +79,7 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 	private PointProductService mPointProductService;
 	private BannerService mBannerService;
 	private IndexRecommendProducts4Adapter indexRecommendProductsAdapter;
-	private PointProductsAdapter mPointProductsAdapter;
+	private PointProduct2Adapter mPointProduct2Adapter;
 	private final List<Fragment> mFragmentRecommendList = new ArrayList<>();
 	private final List<NewsInfo> mNewsInfoList = new ArrayList<>();
 	private final List<PointProductInfo> mNewProductInfoList = new ArrayList<>();
@@ -312,7 +312,11 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 	synchronized public void refreshData()
 	{
 		mNewProductInfoList.clear();
-		mPointProductsAdapter = null;
+		if (mPointProduct2Adapter != null)
+		{
+			mPointProduct2Adapter.notifyDataSetChanged();
+		}
+		mPointProduct2Adapter = null;
 		mBannerService.getBannerInfoList(ClientBannerType.POINT_PRODUCT.getType(), 0, RECOMMEND_COUNT, null, true);
 		//获取新闻
 		//		mNewsService.getNewsInfoList(null, true);
@@ -343,17 +347,14 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 		}
 		gvNewProducts.setVisibility(View.VISIBLE);
 		layoutNoProduct.setVisibility(View.GONE);
-		if (pointProductInfoList.size() < getPageSize())
-		{
-			xListView.setPullLoadEnable(false);
-		}
+		xListView.setPullLoadEnable(pointProductInfoList.size() >= getPageSize());
 		for (PointProductInfo pointProductInfo : pointProductInfoList)
 		{
 			mNewProductInfoList.add(pointProductInfo);
 		}
-		if (mPointProductsAdapter == null)
+		if (mPointProduct2Adapter == null)
 		{
-			mPointProductsAdapter = new PointProductsAdapter(this, mNewProductInfoList, new PointProductsAdapter.IItemClick()
+			mPointProduct2Adapter = new PointProduct2Adapter(this, mNewProductInfoList, new PointProduct2Adapter.IItemClick()
 			{
 				@Override
 				public void onProductClicked(PointProductInfo pointProductInfo)
@@ -366,11 +367,11 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 					}
 				}
 			});
-			gvNewProducts.setAdapter(mPointProductsAdapter);
+			gvNewProducts.setAdapter(mPointProduct2Adapter);
 		}
 		else
 		{
-			mPointProductsAdapter.notifyDataSetChanged();
+			mPointProduct2Adapter.notifyDataSetChanged();
 		}
 		ViewHeightCalTools.setGridViewHeight(gvNewProducts, NEW_PRODUCT_COLUMNS_NUM, true);
 	}
@@ -490,7 +491,7 @@ public class ActivityPointProductShop extends MyBasePageActivity implements View
 			}
 			case R.id.tv_new_product_more:
 			{
-				startActivity(new Intent(this, ActivitySearchProducts.class));
+				startActivity(new Intent(this, ActivityProductsSearch.class));
 				break;
 			}
 			case R.id.btn_search:

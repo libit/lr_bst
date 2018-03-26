@@ -14,7 +14,7 @@ public enum UserApplyStatus
 	private byte status;
 	private String desc;
 
-	private UserApplyStatus(byte status, String desc)
+	 UserApplyStatus(byte status, String desc)
 	{
 		this.status = status;
 		this.desc = desc;
@@ -57,7 +57,7 @@ public enum UserApplyStatus
 
 	public static Map<String, Byte> getMap()
 	{
-		Map<String, Byte> map = new HashMap<String, Byte>();
+		Map<String, Byte> map = new HashMap<>();
 		map.put("APPLY", UserApplyStatus.APPLY.getStatus());
 		map.put("VERIFY_SUCCESS", UserApplyStatus.VERIFY_SUCCESS.getStatus());
 		map.put("VERIFY_FAIL", UserApplyStatus.VERIFY_FAIL.getStatus());
